@@ -23,4 +23,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_KEY }}
-          script: whoami
+          script: |
+            echo "SSH connection successful!"
+            hostname
+            date
