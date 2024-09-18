@@ -1,4 +1,4 @@
-name: deploy new image version to vps
+name: Deploy new image version to vps
 
 on:
   workflow_dispatch:
