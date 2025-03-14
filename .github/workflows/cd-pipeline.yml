@@ -1,8 +1,6 @@
-name: Deploy new image version to vps
-
+name: Deploy latest image version to vps
 on:
   workflow_dispatch:
-
 jobs:
   pull-docker-image:
     runs-on: ubuntu-latest
