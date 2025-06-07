@@ -1,4 +1,4 @@
-name: Deploy latest image version to vps
+name: cd-pipeline
 on:
   workflow_dispatch:
 jobs:

@@ -1,4 +1,4 @@
-name: Build and Publish Docker imgage on register
+name: ci-pipeline
 
 on:
   workflow_dispatch:
