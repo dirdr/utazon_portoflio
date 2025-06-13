@@ -46,8 +46,8 @@ jobs:
             VERSION="${{ github.event.inputs.version }}"
             ENVIRONMENT="${{ github.event.inputs.environment }}"
             DOCKER_USERNAME="${{ secrets.DOCKER_USERNAME }}"
-            APP_NAME="${{ secrets.APP_NAME }}"
-            BASE_DIR="${{ secrets.BASE_DIR }}"
+            APP_NAME="${{ vars.APP_NAME }}"
+            BASE_DIR="${{ vars.BASE_DIR }}"
 
             # Set project directory based on environment
             PROJECT_DIR="$BASE_DIR/$ENVIRONMENT"
