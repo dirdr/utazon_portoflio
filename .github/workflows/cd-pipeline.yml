@@ -3,8 +3,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Docker image version to deploy (semver)"
+        description: "semver"
         required: true
+        default: "latest"
         type: string
       environment:
         description: "Deployment environment"
