@@ -62,6 +62,8 @@ jobs:
             # Navigate to environment-specific directory
             cd "$PROJECT_DIR" || { echo "💥 Project directory not found: $PROJECT_DIR"; exit 1; }
 
+            ls -la
+
             # Check if required files exist
             if [ ! -f "docker-compose.yml" ]; then
               echo "💥 docker-compose.yml not found in $PROJECT_DIR"
