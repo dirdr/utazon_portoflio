@@ -59,6 +59,24 @@ jobs:
             echo "   Project Directory: $PROJECT_DIR"
             echo "=================================="
 
+            # Expand tilde and set project directory based on environment
+            BASE_DIR_EXPANDED="${BASE_DIR/#\~/$HOME}"
+            PROJECT_DIR="$BASE_DIR_EXPANDED/$ENVIRONMENT"
+
+            echo "📋 Deployment Configuration:"
+            echo "   Version: $VERSION"
+            echo "   Environment: $ENVIRONMENT"
+            echo "   App Name: $APP_NAME"
+            echo "   Project Directory: $PROJECT_DIR"
+            echo "=================================="
+
+            echo "🔍 Debugging directory structure..."
+            echo "HOME directory: $HOME"
+            echo "BASE_DIR: $BASE_DIR"
+            echo "BASE_DIR_EXPANDED: $BASE_DIR_EXPANDED"
+            echo "TARGET PROJECT_DIR: $PROJECT_DIR"
+            echo ""
+
 
             # Check if base directory exists
             if [ -d "$BASE_DIR_EXPANDED" ]; then
