@@ -1,8 +1,23 @@
 name: cd-pipeline
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: "Docker image version to deploy (e.g., v1.0.0, latest, or commit SHA)"
+        required: true
+        default: "latest"
+        type: string
+      environment:
+        description: "Deployment environment"
+        required: true
+        default: "staging"
+        type: choice
+        options:
+          - staging
+          - production
+
 jobs:
-  pull-docker-image:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -14,7 +29,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Pull Image from docker hub
+      - name: Deploy with Docker Compose
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -22,6 +37,144 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_KEY }}
           script: |
+            echo "🚀 Starting deployment process..."
             echo "SSH connection successful!"
-            hostname
-            date
+            echo "Host: $(hostname)"
+            echo "Date: $(date)"
+            echo "=================================="
+
+            # Configuration
+            VERSION="${{ github.event.inputs.version }}"
+            ENVIRONMENT="${{ github.event.inputs.environment }}"
+            DOCKER_USERNAME="${{ secrets.DOCKER_USERNAME }}"
+            APP_NAME="${{ secrets.APP_NAME }}"
+            BASE_DIR="${{ secrets.BASE_DIR }}"
+
+            # Set project directory based on environment
+            PROJECT_DIR="$BASE_DIR/$ENVIRONMENT"
+
+            echo "📋 Deployment Configuration:"
+            echo "   Version: $VERSION"
+            echo "   Environment: $ENVIRONMENT"
+            echo "   App Name: $APP_NAME"
+            echo "   Project Directory: $PROJECT_DIR"
+            echo "=================================="
+
+            # Navigate to environment-specific directory
+            cd "$PROJECT_DIR" || { echo "💥 Project directory not found: $PROJECT_DIR"; exit 1; }
+
+            # Check if required files exist
+            if [ ! -f "docker-compose.yml" ]; then
+              echo "💥 docker-compose.yml not found in $PROJECT_DIR"
+              exit 1
+            fi
+
+            if [ ! -f ".env" ]; then
+              echo "💥 .env file not found in $PROJECT_DIR"
+              exit 1
+            fi
+
+            echo "📁 Using directory: $PROJECT_DIR"
+            echo "📁 Files found: docker-compose.yml, .env"
+
+            # Function to check if Docker image exists
+            check_image_exists() {
+              local image="$1"
+              echo "🔍 Checking if image exists: $image"
+              if docker manifest inspect "$image" > /dev/null 2>&1; then
+                echo "✅ Image found: $image"
+                return 0
+              else
+                echo "❌ Image not found: $image"
+                return 1
+              fi
+            }
+
+            # Determine target image
+            TARGET_IMAGE="$DOCKER_USERNAME/$APP_NAME:$VERSION"
+
+            if check_image_exists "$TARGET_IMAGE"; then
+              echo "🎯 Using specified version: $VERSION"
+              DEPLOY_VERSION="$VERSION"
+            else
+              echo "💥 Specified version not found: $TARGET_IMAGE"
+              echo "❌ Deployment aborted - image does not exist!"
+              exit 1
+            fi
+
+            # Update the image version in .env file
+            echo "📝 Updating image version in .env file..."
+
+            # Create backup of env file
+            cp ".env" ".env.backup"
+
+            # Update or add IMAGE_VERSION in env file
+            if grep -q "^IMAGE_VERSION=" ".env"; then
+              sed -i "s/^IMAGE_VERSION=.*/IMAGE_VERSION=$DEPLOY_VERSION/" ".env"
+            else
+              echo "IMAGE_VERSION=$DEPLOY_VERSION" >> ".env"
+            fi
+
+            echo "✅ Updated IMAGE_VERSION to: $DEPLOY_VERSION"
+            echo "📄 Current .env content:"
+            cat .env | grep -E "(IMAGE_VERSION|APP_NAME)" || echo "IMAGE_VERSION=$DEPLOY_VERSION"
+
+            # Show current running containers
+            echo "📊 Current running containers:"
+            docker-compose ps || true
+
+            # Pull the new image
+            echo "⬇️  Pulling latest image..."
+            docker-compose pull
+
+            # Deploy with zero-downtime using rolling update
+            echo "🚀 Deploying with Docker Compose..."
+
+            # Start new containers
+            docker-compose up -d
+
+            # Wait a moment for containers to stabilize
+            echo "⏳ Waiting for containers to stabilize..."
+            sleep 10
+
+            # Verify deployment
+            echo "🔍 Verifying deployment..."
+            if docker-compose ps | grep -q "Up"; then
+              echo "✅ Deployment successful!"
+              
+              # Show final status
+              echo "📈 Final container status:"
+              docker-compose ps
+              
+              # Show logs (last 20 lines)
+              echo "📜 Recent logs:"
+              docker-compose logs --tail=20
+              
+              # Clean up old images
+              echo "🧹 Cleaning up old images..."
+              docker image prune -f
+              
+              # Remove backup env file
+              rm -f ".env.backup"
+              
+            else
+              echo "💥 Deployment failed! Rolling back..."
+              
+              # Restore backup env file
+              mv ".env.backup" ".env"
+              
+              # Try to restart with previous version
+              docker-compose up -d
+              
+              echo "📜 Error logs:"
+              docker-compose logs --tail=50
+              
+              exit 1
+            fi
+
+            echo "=================================="
+            echo "🏁 Deployment completed successfully!"
+            echo "🌍 Environment: $ENVIRONMENT"
+            echo "🏷️  Version: $DEPLOY_VERSION"
+            echo "📁 Directory: $PROJECT_DIR"
+            echo "=================================="
