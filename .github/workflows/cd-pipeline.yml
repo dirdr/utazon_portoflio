@@ -59,61 +59,13 @@ jobs:
             echo "   Project Directory: $PROJECT_DIR"
             echo "=================================="
 
-            # Expand tilde and set project directory based on environment
-            BASE_DIR_EXPANDED="${BASE_DIR/#\~/$HOME}"
-            PROJECT_DIR="$BASE_DIR_EXPANDED/$ENVIRONMENT"
-
-            echo "📋 Deployment Configuration:"
-            echo "   Version: $VERSION"
-            echo "   Environment: $ENVIRONMENT"
-            echo "   App Name: $APP_NAME"
-            echo "   Project Directory: $PROJECT_DIR"
-            echo "=================================="
-
-            echo "🔍 Debugging directory structure..."
-            echo "HOME directory: $HOME"
-            echo "BASE_DIR: $BASE_DIR"
-            echo "BASE_DIR_EXPANDED: $BASE_DIR_EXPANDED"
-            echo "TARGET PROJECT_DIR: $PROJECT_DIR"
-            echo ""
-
-
-            # Check if base directory exists
-            if [ -d "$BASE_DIR_EXPANDED" ]; then
-              echo "✅ Base directory exists: $BASE_DIR_EXPANDED"
-              echo "📁 Contents of base directory:"
-              ls -la "$BASE_DIR_EXPANDED"
-              echo ""
-            else
-              echo "❌ Base directory NOT found: $BASE_DIR_EXPANDED"
-              echo "🔍 Let's check what's in HOME:"
-              ls -la "$HOME"
-              echo ""
-              echo "🔍 Looking for 'services' folder:"
-              find "$HOME" -name "services" -type d 2>/dev/null || echo "No 'services' folder found"
-              echo ""
-            fi
-
-            # Check if project directory exists
-            if [ -d "$PROJECT_DIR" ]; then
-              echo "✅ Project directory exists: $PROJECT_DIR"
-              echo "📁 Contents of project directory:"
-              ls -la "$PROJECT_DIR"
-              echo ""
-            else
-              echo "❌ Project directory NOT found: $PROJECT_DIR"
-              echo "🔍 Available directories in base:"
-              ls -la "$BASE_DIR_EXPANDED" 2>/dev/null || echo "Base directory not accessible"
-              echo ""
-            fi
-
             # Navigate to environment-specific directory
             cd "$PROJECT_DIR" || { echo "💥 Project directory not found: $PROJECT_DIR"; exit 1; }
 
 
             # Check if required files exist
-            if [ ! -f "docker-compose.yml" ]; then
-              echo "💥 docker-compose.yml not found in $PROJECT_DIR"
+            if [ ! -f "docker-compose.yaml" ]; then
+              echo "💥 docker-compose.yaml not found in $PROJECT_DIR"
               exit 1
             fi
 
@@ -123,7 +75,7 @@ jobs:
             fi
 
             echo "📁 Using directory: $PROJECT_DIR"
-            echo "📁 Files found: docker-compose.yml, .env"
+            echo "📁 Files found: docker-compose.yaml, .env"
 
             # Function to check if Docker image exists
             check_image_exists() {
