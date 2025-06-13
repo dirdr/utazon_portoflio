@@ -5,7 +5,6 @@ on:
       version:
         description: "semver"
         required: true
-        default: "latest"
         type: string
       environment:
         description: "Deployment environment"
