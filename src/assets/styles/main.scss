@@ -1,7 +1,14 @@
-@import "01-settings/fonts";
-@import "02-tools/mixins";
-@import "03-generic/fonts";
-@import "04-elements/typography";
-@import "05-objects/layout";
-@import "06-components/button";
-@import "07-utilities/typography";
+// Import variables first
+@import "./utils/variables";
+
+// Reset and base styles (BEFORE Tailwind base)
+@import "./base/reset";
+@import "./base/fonts";
+
+// Tailwind imports
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+// Typography (AFTER Tailwind base to override)
+@import "./base/typography";

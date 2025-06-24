@@ -1,13 +1,11 @@
+import "./index.scss";
 import { Route, Switch } from "wouter";
-import "./App.css";
-import LandingPage from "./component/Pages/LandingPage/LandingPage.tsx";
 
 function App() {
   return (
     <>
-      <Switch>
-        <Route path="/" component={LandingPage}></Route>
-      </Switch>
+      <h1>Bonjour!</h1>
+      <p>Ceci est un paragraphe juste en dessous</p>
     </>
   );
 }

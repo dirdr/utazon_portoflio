@@ -1,0 +1,29 @@
+@import "../utils/variables";
+
+// Default body font
+body {
+  font-family: $font-body;
+  font-weight: #{$font-weight-normal};
+}
+
+// Default heading font
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $font-heading;
+  font-weight: #{$font-weight-bold};
+}
+
+// Improve text rendering
+html {
+  text-rendering: optimizeLegibility;
+}
+
+// Better focus styles
+:focus-visible {
+  outline: 2px solid theme("colors.blue.500");
+  outline-offset: 2px;
+}

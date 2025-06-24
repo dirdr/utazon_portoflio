@@ -1,0 +1,103 @@
+@import "../utils/variables";
+
+/* Neue Montreal Font Family */
+@font-face {
+  font-family: "NeueMontreal";
+  src:
+    url("../../fonts/neue/NeueMontreal-Light.woff2") format("woff2"),
+    url("../../fonts/neue/NeueMontreal-Light.woff") format("woff");
+  font-weight: #{$font-weight-light};
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NeueMontreal";
+  src:
+    url("../../fonts/neue/NeueMontreal-LightItalic.woff2") format("woff2"),
+    url("../../fonts/neue/NeueMontreal-LightItalic.woff") format("woff");
+  font-weight: #{$font-weight-light};
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NeueMontreal";
+  src:
+    url("../../fonts/neue/NeueMontreal-Regular.woff2") format("woff2"),
+    url("../../fonts/neue/NeueMontreal-Regular.woff") format("woff");
+  font-weight: #{$font-weight-normal};
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NeueMontreal";
+  src:
+    url("../../fonts/neue/NeueMontreal-Italic.woff2") format("woff2"),
+    url("../../fonts/neue/NeueMontreal-Italic.woff") format("woff");
+  font-weight: #{$font-weight-normal};
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NeueMontreal";
+  src:
+    url("../../fonts/neue/NeueMontreal-Medium.woff2") format("woff2"),
+    url("../../fonts/neue/NeueMontreal-Medium.woff") format("woff");
+  font-weight: #{$font-weight-medium};
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NeueMontreal";
+  src:
+    url("../../fonts/neue/NeueMontreal-MediumItalic.woff2") format("woff2"),
+    url("../../fonts/neue/NeueMontreal-MediumItalic.woff") format("woff");
+  font-weight: #{$font-weight-medium};
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NeueMontreal";
+  src:
+    url("../../fonts/neue/NeueMontreal-Bold.woff2") format("woff2"),
+    url("../../fonts/neue/NeueMontreal-Bold.woff") format("woff");
+  font-weight: #{$font-weight-bold};
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NeueMontreal";
+  src:
+    url("../../fonts/neue/NeueMontreal-BoldItalic.woff2") format("woff2"),
+    url("../../fonts/neue/NeueMontreal-BoldItalic.woff") format("woff");
+  font-weight: #{$font-weight-bold};
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Nord Font Family */
+@font-face {
+  font-family: "Nord";
+  src:
+    url("../../fonts/nord/Nord-Regular.woff2") format("woff2"),
+    url("../../fonts/nord/Nord-Regular.woff") format("woff");
+  font-weight: #{$font-weight-normal};
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nord";
+  src:
+    url("../../fonts/nord/Nord-BoldItalic.woff2") format("woff2"),
+    url("../../fonts/nord/Nord-BoldItalic.woff") format("woff");
+  font-weight: #{$font-weight-bold};
+  font-style: italic;
+  font-display: swap;
+}
