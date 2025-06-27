@@ -1,14 +1,10 @@
-// Import variables first
-@import "./utils/variables";
+@use "./utils/variables";
 
-// Reset and base styles (BEFORE Tailwind base)
-@import "./base/reset";
-@import "./base/fonts";
+@use "./base/reset";
+@use "./base/fonts";
 
-// Tailwind imports
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@use "tailwindcss/base";
+@use "tailwindcss/components";
+@use "tailwindcss/utilities";
 
-// Typography (AFTER Tailwind base to override)
-@import "./base/typography";
+@use "./base/typography";

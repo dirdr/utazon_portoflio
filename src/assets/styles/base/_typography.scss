@@ -1,9 +1,9 @@
-@import "../utils/variables";
+@use "../utils/variables" as vars;
 
 // Default body font
 body {
-  font-family: $font-body;
-  font-weight: #{$font-weight-normal};
+  font-family: vars.$font-body;
+  font-weight: #{vars.$font-weight-normal};
 }
 
 // Default heading font
@@ -13,8 +13,8 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: $font-heading;
-  font-weight: #{$font-weight-bold};
+  font-family: vars.$font-heading;
+  font-weight: #{vars.$font-weight-bold};
 }
 
 // Improve text rendering

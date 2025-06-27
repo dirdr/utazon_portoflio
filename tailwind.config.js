@@ -6,7 +6,6 @@ export default {
       fontFamily: {
         heading: ["NeueMontreal", "Inter", "system-ui", "sans-serif"],
         body: ["Nord", "Inter", "system-ui", "sans-serif"],
-        // Override Tailwind defaults
         sans: ["Nord", "Inter", "system-ui", "sans-serif"],
       },
       fontWeight: {
