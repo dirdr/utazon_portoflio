@@ -1,7 +1,7 @@
 import { Layout } from "./component/layout/Layout";
 import { About } from "./component/Pages/About";
 import { Home } from "./component/Pages/Home";
-import "./index.scss";
+import "./index.css";
 import { Route, Switch } from "wouter";
 
 function App() {

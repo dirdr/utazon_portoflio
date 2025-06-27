@@ -1,0 +1,4 @@
+@import url("./assets/styles/main");
+
+@import "tailwindcss";
+@plugin "daisyui";
