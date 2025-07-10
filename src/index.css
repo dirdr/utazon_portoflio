@@ -1,4 +1,90 @@
-@import url("./assets/styles/main");
-
 @import "tailwindcss";
-@plugin "daisyui";
+
+@theme {
+  --color-background: oklch(0% 0 0); /* Black */
+  --color-foreground: oklch(100% 0 0); /* White */
+  --color-muted: oklch(65.2% 0 0); /* #9B9B9B */
+  --color-gray: oklch(85.5% 0 0);
+  --color-muted-foreground: oklch(15.5% 0 0); /* Dark Grey */
+
+  --container-8xl: 88rem;
+
+  --font-neue: "NeueMontreal", sans-serif;
+  --font-nord: "Nord", serif;
+
+  --width-150: 37.5rem; /* 600px */
+  --width-180: 45rem; /* 720px */
+}
+
+@font-face {
+  font-family: "NeueMontreal";
+  src: url("/fonts/neue/NeueMontreal-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NeueMontreal";
+  src: url("/fonts/neue/NeueMontreal-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nord";
+  src: url("/fonts/nord/Nord-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nord";
+  src: url("/fonts/nord/Nord-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nord";
+  src: url("/fonts/nord/Nord-Light.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nord";
+  src: url("/fonts/nord/Nord-BoldItalic.woff2") format("woff2");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground font-neue;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-nord font-bold;
+  }
+}
+
+@layer utilities {
+  .w-150 {
+    width: var(--width-150);
+  }
+  
+  .w-180 {
+    width: var(--width-180);
+  }
+}
