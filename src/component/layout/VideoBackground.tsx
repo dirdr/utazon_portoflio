@@ -17,6 +17,7 @@ export const VideoBackground = () => {
         playsInline
         src={introSrc}
       />
+      <div className="absolute inset-0 bg-black/25" />
     </div>
   );
 };

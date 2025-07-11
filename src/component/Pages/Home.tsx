@@ -15,9 +15,9 @@ export const Home = () => {
 
   return (
     <div className="relative w-full h-screen">
-      <section className="absolute bottom-0 pl-12 pb-12 w-180">
+      <section className="absolute bottom-0 pl-12 pb-16 w-180">
         <address className="not-italic">
-          <p className="text-muted text-lg mb-6">Paris, France</p>
+          <p className="text-muted text-xl mb-6">Paris, France</p>
         </address>
         <LightSweepText
           className="font-nord text-6xl italic text-muted"
@@ -27,7 +27,7 @@ export const Home = () => {
         </LightSweepText>{" "}
       </section>
 
-      <section className="absolute bottom-0 right-0 w-150 pb-12 pr-12">
+      <section className="absolute bottom-0 right-0 w-140 pb-16 pr-12">
         <div className="space-y-4">
           <p className="text-xl text-gray mb-10">
             Depuis plus de 4 ans, je conçois des expériences visuelles
