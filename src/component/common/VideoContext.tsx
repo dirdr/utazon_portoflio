@@ -6,16 +6,18 @@ import {
   useEffect,
   ReactNode,
 } from "react";
+import { ANIMATION_CONFIG } from "../../constants/animations";
 
 interface VideoContextProps {
   videoRef: React.RefObject<HTMLVideoElement>;
   handleVideoEnded: () => void;
   introSrc: string;
   isLoading: boolean;
-  isMuted: boolean;
-  toggleMute: () => void;
   startVideo: () => void;
   hasUserInteracted: boolean;
+  shouldPlayVideo: boolean;
+  setCurrentPage: (page: string) => void;
+  shouldShowLayout: boolean;
 }
 
 export const VideoContext = createContext<VideoContextProps | undefined>(
@@ -33,10 +35,12 @@ export const useVideo = () => {
 export const VideoProvider = ({ children }: { children: ReactNode }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isMuted, setIsMuted] = useState(true); // Start muted for autoplay compliance
   const [hasUserInteracted, setHasUserInteracted] = useState(false);
+  const [currentPage, setCurrentPage] = useState("/");
+  const [shouldShowLayout, setShouldShowLayout] = useState(false);
 
   const introSrc = "/videos/intro.webm";
+  const shouldPlayVideo = currentPage === "/";
 
   useEffect(() => {
     const videoElement = videoRef.current;
@@ -44,11 +48,23 @@ export const VideoProvider = ({ children }: { children: ReactNode }) => {
 
     const handleIntroCanPlay = async () => {
       setIsLoading(false);
-      try {
-        await videoElement.play();
-        setHasUserInteracted(true);
-      } catch (error) {
-        console.warn("Video autoplay failed:", error);
+      if (shouldPlayVideo) {
+        try {
+          await videoElement.play();
+          setHasUserInteracted(true);
+          
+          // Show layout after video starts with configured delay
+          setTimeout(() => {
+            setShouldShowLayout(true);
+          }, ANIMATION_CONFIG.FADE_IN_DELAY);
+        } catch (error) {
+          console.warn("Video autoplay failed:", error);
+          // Show layout immediately if video fails
+          setShouldShowLayout(true);
+        }
+      } else {
+        // Show layout immediately on non-home pages
+        setShouldShowLayout(true);
       }
     };
 
@@ -60,35 +76,32 @@ export const VideoProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       videoElement.removeEventListener("canplaythrough", handleIntroCanPlay);
     };
-  }, [introSrc]);
+  }, [introSrc, shouldPlayVideo]);
 
-  // Global click handler to enable sound after user interaction
   useEffect(() => {
-    const enableSoundOnInteraction = () => {
-      const videoElement = videoRef.current;
-      if (!videoElement || !isMuted) return;
+    const videoElement = videoRef.current;
+    if (!videoElement) return;
 
-      setIsMuted(false);
-      videoElement.muted = false;
-      
-      // Remove listener after first interaction
-      document.removeEventListener('click', enableSoundOnInteraction);
-      document.removeEventListener('keydown', enableSoundOnInteraction);
-    };
+    if (shouldPlayVideo && !isLoading) {
+      videoElement.play().catch((error) => {
+        console.warn("Video play failed:", error);
+      });
+    } else {
+      videoElement.pause();
+      videoElement.currentTime = 0;
+      setShouldShowLayout(true); // Show layout immediately on non-home pages
+    }
+  }, [shouldPlayVideo, isLoading]);
 
-    // Listen for any user interaction
-    document.addEventListener('click', enableSoundOnInteraction);
-    document.addEventListener('keydown', enableSoundOnInteraction);
+  // Reset layout visibility when page changes
+  useEffect(() => {
+    setShouldShowLayout(currentPage !== "/");
+  }, [currentPage]);
 
-    return () => {
-      document.removeEventListener('click', enableSoundOnInteraction);
-      document.removeEventListener('keydown', enableSoundOnInteraction);
-    };
-  }, [isMuted]);
 
   const startVideo = async () => {
     const videoElement = videoRef.current;
-    if (!videoElement || hasUserInteracted) return;
+    if (!videoElement || hasUserInteracted || !shouldPlayVideo) return;
 
     try {
       setHasUserInteracted(true);
@@ -98,14 +111,6 @@ export const VideoProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const toggleMute = () => {
-    const videoElement = videoRef.current;
-    if (!videoElement) return;
-
-    const newMutedState = !isMuted;
-    setIsMuted(newMutedState);
-    videoElement.muted = newMutedState;
-  };
 
   const handleVideoEnded = () => {
     // Video ends naturally without looping
@@ -118,10 +123,11 @@ export const VideoProvider = ({ children }: { children: ReactNode }) => {
         handleVideoEnded,
         introSrc,
         isLoading,
-        isMuted,
-        toggleMute,
         startVideo,
         hasUserInteracted,
+        shouldPlayVideo,
+        setCurrentPage,
+        shouldShowLayout,
       }}
     >
       {children}
