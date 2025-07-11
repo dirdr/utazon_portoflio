@@ -1,7 +1,5 @@
 export const ANIMATION_CONFIG = {
   FADE_IN_DELAY: 2000, // Wait 2 seconds after video starts
-  FADE_IN_DURATION: 1000, // 1 second fade-in duration
-  FADE_IN_EASING: 'ease-out',
 } as const;
 
 export const ANIMATION_CLASSES = {

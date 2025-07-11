@@ -1,4 +1,4 @@
-import VideoBackground from "./VideoBackground";
+import { VideoBackground } from "./VideoBackground";
 import { VideoProvider, useVideo } from "../common/VideoContext";
 import { Navbar } from "./Navbar";
 import { FadeInContainer } from "../common/FadeInContainer";

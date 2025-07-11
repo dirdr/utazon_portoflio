@@ -14,9 +14,6 @@
 
   --width-150: 37.5rem; /* 600px */
   --width-180: 45rem; /* 720px */
-
-  --animate-fade-in: fadeIn 1s ease-out forwards;
-  --animate-slide-up: slideUp 1s ease-out forwards;
 }
 
 @font-face {
@@ -101,24 +98,4 @@
   }
 }
 
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(1rem);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
-@keyframes slideUp {
-  0% {
-    opacity: 0;
-    transform: translateY(2rem);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}

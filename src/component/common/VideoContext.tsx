@@ -10,7 +10,6 @@ import { ANIMATION_CONFIG } from "../../constants/animations";
 
 interface VideoContextProps {
   videoRef: React.RefObject<HTMLVideoElement>;
-  handleVideoEnded: () => void;
   introSrc: string;
   isLoading: boolean;
   startVideo: () => void;
@@ -89,7 +88,6 @@ export const VideoProvider = ({ children }: { children: ReactNode }) => {
     } else {
       videoElement.pause();
       videoElement.currentTime = 0;
-      setShouldShowLayout(true); // Show layout immediately on non-home pages
     }
   }, [shouldPlayVideo, isLoading]);
 
@@ -112,15 +110,10 @@ export const VideoProvider = ({ children }: { children: ReactNode }) => {
   };
 
 
-  const handleVideoEnded = () => {
-    // Video ends naturally without looping
-  };
-
   return (
     <VideoContext.Provider
       value={{
         videoRef,
-        handleVideoEnded,
         introSrc,
         isLoading,
         startVideo,
