@@ -10,3 +10,4 @@ export const usePageTracker = () => {
     setCurrentPage(location);
   }, [location, setCurrentPage]);
 };
+

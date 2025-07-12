@@ -37,7 +37,7 @@ export const Navbar = () => {
                 {label}
               </a>
             ))}
-            <Button variant="glint" glintSpeed={4} href={ROUTES.CONTACT}>
+            <Button href={ROUTES.CONTACT}>
               ME CONTACTER
             </Button>
           </nav>

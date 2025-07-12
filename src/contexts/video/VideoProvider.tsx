@@ -1,10 +1,4 @@
-import {
-  useRef,
-  useState,
-  useEffect,
-  ReactNode,
-  useCallback,
-} from "react";
+import { useRef, useState, useEffect, ReactNode, useCallback } from "react";
 import { VideoContext } from "./VideoContext";
 import { ANIMATION_CONFIG } from "../../constants/animations";
 
@@ -44,7 +38,7 @@ export const VideoProvider = ({ children }: VideoProviderProps) => {
         try {
           await videoElement.play();
           setHasUserInteracted(true);
-          
+
           setTimeout(() => {
             setShouldShowLayout(true);
           }, ANIMATION_CONFIG.FADE_IN_DELAY);
@@ -98,8 +92,7 @@ export const VideoProvider = ({ children }: VideoProviderProps) => {
   };
 
   return (
-    <VideoContext.Provider value={value}>
-      {children}
-    </VideoContext.Provider>
+    <VideoContext.Provider value={value}>{children}</VideoContext.Provider>
   );
 };
+

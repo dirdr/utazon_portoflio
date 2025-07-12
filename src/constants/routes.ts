@@ -1,6 +1,6 @@
 export const ROUTES = {
   HOME: "/",
-  ABOUT: "/about", 
+  ABOUT: "/about",
   PROJECTS: "/projects",
   CONTACT: "/contact",
   SHOWREEL: "/showreel",
@@ -12,4 +12,5 @@ export const NAVIGATION_ITEMS = [
 ] as const;
 
 export type RouteKey = keyof typeof ROUTES;
-export type RoutePath = typeof ROUTES[RouteKey];
+export type RoutePath = (typeof ROUTES)[RouteKey];
+

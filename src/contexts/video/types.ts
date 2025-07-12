@@ -13,4 +13,7 @@ export interface VideoContextActions {
   setCurrentPage: (page: string) => void;
 }
 
-export interface VideoContextProps extends VideoContextState, VideoContextActions {}
+export interface VideoContextProps
+  extends VideoContextState,
+    VideoContextActions {}
+

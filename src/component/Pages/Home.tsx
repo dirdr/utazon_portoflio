@@ -16,12 +16,14 @@ export const Home = () => {
 
   return (
     <main className="relative w-full h-screen">
-      <section 
+      <section
         className="absolute bottom-0 pl-12 pb-16 w-180"
         aria-labelledby="location-heading"
       >
         <address className="not-italic">
-          <p id="location-heading" className="text-muted text-xl mb-6">Paris, France</p>
+          <p id="location-heading" className="text-muted text-xl mb-6">
+            Paris, France
+          </p>
         </address>
         <LineSweepText
           className="font-nord text-6xl italic text-muted"
@@ -31,7 +33,7 @@ export const Home = () => {
         </LineSweepText>
       </section>
 
-      <section 
+      <section
         className="absolute bottom-0 right-0 w-140 pb-16 pr-12"
         aria-labelledby="intro-heading"
       >
