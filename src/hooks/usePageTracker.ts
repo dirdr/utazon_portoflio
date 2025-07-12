@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useLocation } from "wouter";
-import { useVideo } from "../component/common/VideoContext";
+import { useVideo } from "../contexts/video";
 
 export const usePageTracker = () => {
   const [location] = useLocation();

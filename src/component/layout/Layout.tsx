@@ -1,5 +1,5 @@
 import { VideoBackground } from "./VideoBackground";
-import { VideoProvider, useVideo } from "../common/VideoContext";
+import { VideoProvider, useVideo } from "../../contexts/video";
 import { Navbar } from "./Navbar";
 import { FadeInContainer } from "../common/FadeInContainer";
 import { usePageTracker } from "../../hooks/usePageTracker";

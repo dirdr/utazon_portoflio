@@ -1,4 +1,4 @@
-import { useVideo } from "../common/VideoContext";
+import { useVideo } from "../../contexts/video";
 
 export const VideoBackground = () => {
   const { videoRef, introSrc, shouldPlayVideo } = useVideo();

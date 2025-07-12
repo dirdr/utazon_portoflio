@@ -1,6 +1,7 @@
-import { useVideo } from "../common/VideoContext";
+import { useVideo } from "../../contexts/video";
 import { Button } from "../common/Button";
-import { LightSweepText } from "../common/LineSweepText";
+import { LineSweepText } from "../common/LineSweepText";
+import { ROUTES } from "../../constants/routes";
 
 export const Home = () => {
   const { isLoading } = useVideo();
@@ -14,32 +15,38 @@ export const Home = () => {
   }
 
   return (
-    <div className="relative w-full h-screen">
-      <section className="absolute bottom-0 pl-12 pb-16 w-180">
+    <main className="relative w-full h-screen">
+      <section 
+        className="absolute bottom-0 pl-12 pb-16 w-180"
+        aria-labelledby="location-heading"
+      >
         <address className="not-italic">
-          <p className="text-muted text-xl mb-6">Paris, France</p>
+          <p id="location-heading" className="text-muted text-xl mb-6">Paris, France</p>
         </address>
-        <LightSweepText
+        <LineSweepText
           className="font-nord text-6xl italic text-muted"
           duration={6}
         >
           3D Artist and Motion Designer
-        </LightSweepText>{" "}
+        </LineSweepText>
       </section>
 
-      <section className="absolute bottom-0 right-0 w-140 pb-16 pr-12">
+      <section 
+        className="absolute bottom-0 right-0 w-140 pb-16 pr-12"
+        aria-labelledby="intro-heading"
+      >
         <div className="space-y-4">
-          <p className="text-xl text-gray mb-10">
+          <p id="intro-heading" className="text-xl text-gray mb-10">
             Depuis plus de 4 ans, je conçois des expériences visuelles
             immersives et percutantes pour des marques, des agences et des
             artistes.
           </p>
-          <nav className="flex gap-8">
-            <Button href="/projects">PROJETS</Button>
-            <Button href="/showreel">SHOWREEL</Button>
+          <nav className="flex gap-8" aria-label="Actions principales">
+            <Button href={ROUTES.PROJECTS}>PROJETS</Button>
+            <Button href={ROUTES.SHOWREEL}>SHOWREEL</Button>
           </nav>
         </div>
       </section>
-    </div>
+    </main>
   );
 };

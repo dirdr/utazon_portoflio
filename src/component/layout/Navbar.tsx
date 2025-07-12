@@ -1,6 +1,7 @@
 import { Button } from "../common/Button";
 import logo from "../../assets/images/logo.svg";
 import { useState } from "react";
+import { NAVIGATION_ITEMS, ROUTES } from "../../constants/routes";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -26,15 +27,20 @@ export const Navbar = () => {
             </a>
           </div>
 
-          <div className="hidden lg:flex items-center space-x-16">
-            <a href="/projets" className="hover:text-muted font-nord">
-              PROJETS
-            </a>
-            <a href="/about" className="hover:text-muted font-nord">
-              À PROPOS
-            </a>
-            <Button href="/contact">ME CONTACTER</Button>
-          </div>
+          <nav className="hidden lg:flex items-center space-x-16" role="navigation" aria-label="Navigation principale">
+            {NAVIGATION_ITEMS.map(({ label, href }) => (
+              <a 
+                key={href}
+                href={href} 
+                className="hover:text-muted font-nord transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-sm"
+              >
+                {label}
+              </a>
+            ))}
+            <Button variant="glint" glintSpeed={4} href={ROUTES.CONTACT}>
+              ME CONTACTER
+            </Button>
+          </nav>
 
           <button
             onClick={toggleMenu}
@@ -79,23 +85,19 @@ export const Navbar = () => {
           }`}
         >
           <div className="flex flex-col space-y-4 pt-4">
-            <nav className="flex flex-col space-y-4" role="navigation">
-              <a
-                href="/projets"
-                className="hover:text-muted font-nord text-center py-2 transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                PROJETS
-              </a>
-              <a
-                href="/about"
-                className="hover:text-muted font-nord text-center py-2 transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                À PROPOS
-              </a>
+            <nav className="flex flex-col space-y-4" role="navigation" aria-label="Navigation mobile">
+              {NAVIGATION_ITEMS.map(({ label, href }) => (
+                <a
+                  key={href}
+                  href={href}
+                  className="hover:text-muted font-nord text-center py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-sm"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {label}
+                </a>
+              ))}
               <div className="flex justify-center pt-2">
-                <Button href="/contact" onClick={() => setIsMenuOpen(false)}>
+                <Button href={ROUTES.CONTACT} onClick={() => setIsMenuOpen(false)}>
                   ME CONTACTER
                 </Button>
               </div>

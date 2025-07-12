@@ -1,13 +1,13 @@
 import React, { ReactNode } from "react";
 
-interface LightSweepTextProps {
+interface LineSweepTextProps {
   children: ReactNode;
   className?: string;
   duration?: number;
   animate?: boolean;
 }
 
-export const LightSweepText: React.FC<LightSweepTextProps> = ({
+export const LineSweepText: React.FC<LineSweepTextProps> = ({
   children,
   className = "",
   duration = 2,

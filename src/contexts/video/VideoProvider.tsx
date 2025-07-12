@@ -1,37 +1,18 @@
 import {
-  createContext,
-  useContext,
   useRef,
   useState,
   useEffect,
   ReactNode,
+  useCallback,
 } from "react";
+import { VideoContext } from "./VideoContext";
 import { ANIMATION_CONFIG } from "../../constants/animations";
 
-interface VideoContextProps {
-  videoRef: React.RefObject<HTMLVideoElement>;
-  introSrc: string;
-  isLoading: boolean;
-  startVideo: () => void;
-  hasUserInteracted: boolean;
-  shouldPlayVideo: boolean;
-  setCurrentPage: (page: string) => void;
-  shouldShowLayout: boolean;
+interface VideoProviderProps {
+  children: ReactNode;
 }
 
-export const VideoContext = createContext<VideoContextProps | undefined>(
-  undefined,
-);
-
-export const useVideo = () => {
-  const context = useContext(VideoContext);
-  if (!context) {
-    throw new Error("useVideo must be used within a VideoProvider");
-  }
-  return context;
-};
-
-export const VideoProvider = ({ children }: { children: ReactNode }) => {
+export const VideoProvider = ({ children }: VideoProviderProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [hasUserInteracted, setHasUserInteracted] = useState(false);
@@ -40,6 +21,18 @@ export const VideoProvider = ({ children }: { children: ReactNode }) => {
 
   const introSrc = "/videos/intro.webm";
   const shouldPlayVideo = currentPage === "/";
+
+  const startVideo = useCallback(async () => {
+    const videoElement = videoRef.current;
+    if (!videoElement || hasUserInteracted || !shouldPlayVideo) return;
+
+    try {
+      setHasUserInteracted(true);
+      await videoElement.play();
+    } catch (error) {
+      console.warn("Video autoplay failed:", error);
+    }
+  }, [hasUserInteracted, shouldPlayVideo]);
 
   useEffect(() => {
     const videoElement = videoRef.current;
@@ -52,17 +45,14 @@ export const VideoProvider = ({ children }: { children: ReactNode }) => {
           await videoElement.play();
           setHasUserInteracted(true);
           
-          // Show layout after video starts with configured delay
           setTimeout(() => {
             setShouldShowLayout(true);
           }, ANIMATION_CONFIG.FADE_IN_DELAY);
         } catch (error) {
           console.warn("Video autoplay failed:", error);
-          // Show layout immediately if video fails
           setShouldShowLayout(true);
         }
       } else {
-        // Show layout immediately on non-home pages
         setShouldShowLayout(true);
       }
     };
@@ -91,38 +81,24 @@ export const VideoProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [shouldPlayVideo, isLoading]);
 
-  // Reset layout visibility when page changes
   useEffect(() => {
     setShouldShowLayout(currentPage !== "/");
   }, [currentPage]);
 
-
-  const startVideo = async () => {
-    const videoElement = videoRef.current;
-    if (!videoElement || hasUserInteracted || !shouldPlayVideo) return;
-
-    try {
-      setHasUserInteracted(true);
-      await videoElement.play();
-    } catch (error) {
-      console.warn("Video autoplay failed:", error);
-    }
+  const value = {
+    videoRef,
+    introSrc,
+    isLoading,
+    startVideo,
+    hasUserInteracted,
+    shouldPlayVideo,
+    setCurrentPage,
+    shouldShowLayout,
+    currentPage,
   };
 
-
   return (
-    <VideoContext.Provider
-      value={{
-        videoRef,
-        introSrc,
-        isLoading,
-        startVideo,
-        hasUserInteracted,
-        shouldPlayVideo,
-        setCurrentPage,
-        shouldShowLayout,
-      }}
-    >
+    <VideoContext.Provider value={value}>
       {children}
     </VideoContext.Provider>
   );
