@@ -7,4 +7,3 @@ export const ANIMATION_CLASSES = {
   VISIBLE: "opacity-100 translate-y-0",
   TRANSITION: "transition-all duration-1000 ease-out",
 } as const;
-

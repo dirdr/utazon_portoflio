@@ -2,6 +2,7 @@ import { Button } from "../common/Button";
 import logo from "../../assets/images/logo.svg";
 import { useState } from "react";
 import { NAVIGATION_ITEMS, ROUTES } from "../../constants/routes";
+import { GlintButton } from "../common/GlintButton";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -27,19 +28,23 @@ export const Navbar = () => {
             </a>
           </div>
 
-          <nav className="hidden lg:flex items-center space-x-16" role="navigation" aria-label="Navigation principale">
+          <nav
+            className="hidden lg:flex items-center space-x-16"
+            role="navigation"
+            aria-label="Navigation principale"
+          >
             {NAVIGATION_ITEMS.map(({ label, href }) => (
-              <a 
+              <a
                 key={href}
-                href={href} 
+                href={href}
                 className="hover:text-muted font-nord transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-sm"
               >
                 {label}
               </a>
             ))}
-            <Button href={ROUTES.CONTACT}>
+            <GlintButton speed={4} href={ROUTES.CONTACT}>
               ME CONTACTER
-            </Button>
+            </GlintButton>
           </nav>
 
           <button
@@ -85,7 +90,11 @@ export const Navbar = () => {
           }`}
         >
           <div className="flex flex-col space-y-4 pt-4">
-            <nav className="flex flex-col space-y-4" role="navigation" aria-label="Navigation mobile">
+            <nav
+              className="flex flex-col space-y-4"
+              role="navigation"
+              aria-label="Navigation mobile"
+            >
               {NAVIGATION_ITEMS.map(({ label, href }) => (
                 <a
                   key={href}
@@ -97,7 +106,10 @@ export const Navbar = () => {
                 </a>
               ))}
               <div className="flex justify-center pt-2">
-                <Button href={ROUTES.CONTACT} onClick={() => setIsMenuOpen(false)}>
+                <Button
+                  href={ROUTES.CONTACT}
+                  onClick={() => setIsMenuOpen(false)}
+                >
                   ME CONTACTER
                 </Button>
               </div>

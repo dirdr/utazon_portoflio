@@ -13,4 +13,3 @@ export const NAVIGATION_ITEMS = [
 
 export type RouteKey = keyof typeof ROUTES;
 export type RoutePath = (typeof ROUTES)[RouteKey];
-

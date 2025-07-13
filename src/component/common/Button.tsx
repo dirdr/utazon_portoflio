@@ -25,18 +25,16 @@ interface ActionButtonProps extends BaseButtonProps {
 type ButtonProps = LinkButtonProps | ActionButtonProps;
 
 export const Button = (props: ButtonProps) => {
-  const {
-    children,
-    className,
-    disabled = false,
-    onClick,
-  } = props;
+  const { children, className, disabled = false, onClick } = props;
 
   const combinedClasses = [
-    BUTTON_STYLES.base,
+    BUTTON_STYLES.shared,
+    BUTTON_STYLES.standard,
     disabled && BUTTON_STYLES.disabled,
     className,
-  ].filter(Boolean).join(" ");
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   if (props.as === "button") {
     return (
