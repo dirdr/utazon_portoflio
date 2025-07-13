@@ -2,6 +2,7 @@ import { Layout } from "./component/layout/Layout";
 import { About } from "./component/Pages/About";
 import { Home } from "./component/Pages/Home";
 import { Projects } from "./component/Pages/Projects";
+import { ProjectDetail } from "./component/Pages/ProjectDetail";
 import { Contact } from "./component/Pages/Contact";
 import { Showreel } from "./component/Pages/Showreel";
 import { ROUTES } from "./constants/routes";
@@ -15,6 +16,7 @@ function App() {
         <Route path={ROUTES.HOME} component={Home} />
         <Route path={ROUTES.ABOUT} component={About} />
         <Route path={ROUTES.PROJECTS} component={Projects} />
+        <Route path="/projects/:id" component={ProjectDetail} />
         <Route path={ROUTES.CONTACT} component={Contact} />
         <Route path={ROUTES.SHOWREEL} component={Showreel} />
         <Route>
