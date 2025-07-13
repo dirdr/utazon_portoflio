@@ -52,7 +52,7 @@ jobs:
           release_name: Release v${{ github.event.inputs.tag }}
           body: |
             Release version ${{ github.event.inputs.tag }}
-            
+
             Changes in this release:
             - Docker image built and pushed: ${{ secrets.DOCKER_USERNAME }}/utazon-portfolio:${{ github.event.inputs.tag }}
           draft: false
