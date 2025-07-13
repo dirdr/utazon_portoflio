@@ -19,7 +19,7 @@ export const Home = () => {
   return (
     <main className="relative w-full h-screen">
       <section
-        className="absolute bottom-0 pl-12 pb-16 w-180"
+        className="absolute bottom-0 pl-12 pb-16 w-170"
         aria-labelledby="location-heading"
       >
         <address className="not-italic">
