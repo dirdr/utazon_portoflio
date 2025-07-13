@@ -14,7 +14,7 @@
   --container-8xl: 88rem;
 
   --font-neue: "NeueMontreal", sans-serif;
-  --font-nord: "Nord", serif;
+  --font-nord: "Nord", "Crimson Text", "Times New Roman", serif;
 }
 
 @font-face {
@@ -40,8 +40,8 @@
 @font-face {
   font-family: "Nord";
   src:
-    url("/fonts/nord/Nord-Regular.woff2") format("woff2"),
-    url("/fonts/nord/Nord-Regular.woff") format("woff");
+    url("/fonts/nord/NORD-Regular.woff2") format("woff2"),
+    url("/fonts/nord/NORD-Regular.woff") format("woff");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -50,8 +50,8 @@
 @font-face {
   font-family: "Nord";
   src:
-    url("/fonts/nord/Nord-BoldItalic.woff2") format("woff2"),
-    url("/fonts/nord/Nord-BoldItalic.woff") format("woff");
+    url("/fonts/nord/NORD-BoldItalic.woff2") format("woff2"),
+    url("/fonts/nord/NORD-BoldItalic.woff") format("woff");
   font-weight: 700;
   font-style: italic;
   font-display: swap;

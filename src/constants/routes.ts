@@ -8,7 +8,7 @@ export const ROUTES = {
 
 export const NAVIGATION_ITEMS = [
   { label: "PROJETS", href: ROUTES.PROJECTS },
-  { label: "À PROPOS", href: ROUTES.ABOUT },
+  { label: "à PROPOS", href: ROUTES.ABOUT },
 ] as const;
 
 export type RouteKey = keyof typeof ROUTES;

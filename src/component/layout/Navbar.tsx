@@ -14,17 +14,17 @@ export const Navbar = () => {
       <div className="mx-auto px-4 sm:px-16 py-4 sm:py-12">
         <div className="flex items-center justify-between h-16">
           <div className="flex flex-col items-start">
-            <a href="/" className="text-lg font-nord">
+            <a href="/" className="text font-nord">
               UTAZON
             </a>
-            <a href="/" className="font-nord text-muted text-sm">
+            <a href="/" className="font-nord text-muted text-xs">
               ANTOINE VERNEZ
             </a>
           </div>
 
           <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
             <a href="/">
-              <img src={logo} alt="Utazon Logo" className="h-12 w-auto" />
+              <img src={logo} alt="Utazon Logo" className="h-10 w-auto" />
             </a>
           </div>
 
@@ -37,7 +37,7 @@ export const Navbar = () => {
               <a
                 key={href}
                 href={href}
-                className="hover:text-muted font-nord transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-sm"
+                className="hover:text-muted font-nord text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-sm"
               >
                 {label}
               </a>
@@ -99,7 +99,7 @@ export const Navbar = () => {
                 <a
                   key={href}
                   href={href}
-                  className="hover:text-muted font-nord text-center py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-sm"
+                  className="hover:text-muted font-nord text-sm text-center py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-sm"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {label}

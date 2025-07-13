@@ -21,12 +21,12 @@ export const Home = () => {
         aria-labelledby="location-heading"
       >
         <address className="not-italic">
-          <p id="location-heading" className="text-muted text-xl mb-6">
+          <p id="location-heading" className="text-muted text-lg mb-6">
             Paris, France
           </p>
         </address>
         <LineSweepText
-          className="font-nord text-6xl italic text-muted"
+          className="font-nord text-5xl italic text-muted"
           duration={6}
         >
           3D Artist and Motion Designer
@@ -34,11 +34,11 @@ export const Home = () => {
       </section>
 
       <section
-        className="absolute bottom-0 right-0 w-140 pb-16 pr-12"
+        className="absolute bottom-0 right-0 w-125 pb-16 pr-12"
         aria-labelledby="intro-heading"
       >
         <div className="space-y-4">
-          <p id="intro-heading" className="text-xl text-gray mb-10">
+          <p id="intro-heading" className="text-lg text-gray mb-10">
             Depuis plus de 4 ans, je conçois des expériences visuelles
             immersives et percutantes pour des marques, des agences et des
             artistes.
