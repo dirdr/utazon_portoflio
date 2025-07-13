@@ -1,0 +1,17 @@
+{
+  "nav": {
+    "projects": "PROJETS",
+    "about": "À PROPOS",
+    "contact": "ME CONTACTER",
+    "showreel": "SHOWREEL"
+  },
+  "common": {
+    "utazon": "UTAZON",
+    "antoine_vernez": "ANTOINE VERNEZ"
+  },
+  "home": {
+    "description": "Artiste 3D et Motion Designer à Paris, je conçois avec grande précision des univers aux visuels soignés et percutants au service des marques, agences et artistes.",
+    "projects": "PROJETS"
+  }
+}
+

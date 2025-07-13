@@ -1,0 +1,16 @@
+{
+  "nav": {
+    "projects": "PROJECTS",
+    "about": "ABOUT",
+    "contact": "CONTACT ME"
+  },
+  "common": {
+    "utazon": "UTAZON",
+    "antoine_vernez": "ANTOINE VERNEZ"
+  },
+  "home": {
+    "description": "3D Artist and Motion Designer based in Paris, I craft precisely designed worlds with polished and impactful visuals for brands, agencies, and artists.",
+    "projects": "PROJECTS"
+  }
+}
+

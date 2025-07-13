@@ -19,10 +19,8 @@ export const LineSweepText: React.FC<LineSweepTextProps> = ({
 
   return (
     <span className={`relative inline-block ${className}`}>
-      {/* Base text with reduced opacity */}
-      <span className="opacity-50">{children}</span>
+      <span className="">{children}</span>
 
-      {/* Animated light sweep overlay */}
       <span
         className="absolute inset-0 text-white"
         style={{

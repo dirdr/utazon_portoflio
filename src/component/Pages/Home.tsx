@@ -2,9 +2,11 @@ import { useVideo } from "../../contexts/video";
 import { Button } from "../common/Button";
 import { LineSweepText } from "../common/LineSweepText";
 import { ROUTES } from "../../constants/routes";
+import { useTranslation } from "react-i18next";
 
 export const Home = () => {
   const { isLoading } = useVideo();
+  const { t } = useTranslation();
 
   if (isLoading) {
     return (
@@ -39,9 +41,7 @@ export const Home = () => {
       >
         <div className="space-y-4">
           <p id="intro-heading" className="text-lg text-gray mb-10">
-            Depuis plus de 4 ans, je conçois des expériences visuelles
-            immersives et percutantes pour des marques, des agences et des
-            artistes.
+            {t("home.description")}
           </p>
           <nav className="flex gap-8" aria-label="Actions principales">
             <Button href={ROUTES.PROJECTS}>PROJETS</Button>

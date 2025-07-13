@@ -3,9 +3,12 @@ import logo from "../../assets/images/logo.svg";
 import { useState } from "react";
 import { NAVIGATION_ITEMS, ROUTES } from "../../constants/routes";
 import { GlintButton } from "../common/GlintButton";
+import { LanguageSwitcher } from "../common/LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { t } = useTranslation();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -39,12 +42,17 @@ export const Navbar = () => {
                 href={href}
                 className="hover:text-muted font-nord text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-sm"
               >
-                {label}
+                {href === ROUTES.PROJECTS
+                  ? t("nav.projects")
+                  : href === ROUTES.ABOUT
+                    ? t("nav.about")
+                    : label}
               </a>
             ))}
             <GlintButton speed={4} href={ROUTES.CONTACT}>
-              ME CONTACTER
+              {t("nav.contact")}
             </GlintButton>
+            <LanguageSwitcher />
           </nav>
 
           <button
@@ -102,7 +110,11 @@ export const Navbar = () => {
                   className="hover:text-muted font-nord text-sm text-center py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-sm"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  {label}
+                  {href === ROUTES.PROJECTS
+                    ? t("nav.projects")
+                    : href === ROUTES.ABOUT
+                      ? t("nav.about")
+                      : label}
                 </a>
               ))}
               <div className="flex justify-center pt-2">
@@ -110,8 +122,11 @@ export const Navbar = () => {
                   href={ROUTES.CONTACT}
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  ME CONTACTER
+                  {t("nav.contact")}
                 </Button>
+              </div>
+              <div className="flex justify-center pt-2">
+                <LanguageSwitcher />
               </div>
             </nav>
           </div>
