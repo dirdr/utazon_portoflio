@@ -9,6 +9,7 @@
 
   --color-button-border: #565656;
   --color-button-bg: oklch(20% 0 0);
+  /* --color-button-bg: rgba(255, 255, 255, 0.04); */
   --color-button-hover: oklch(25% 0 0);
 
   --container-8xl: 88rem;

@@ -13,7 +13,7 @@ export const VideoProvider = ({ children }: VideoProviderProps) => {
   const [currentPage, setCurrentPage] = useState("/");
   const [shouldShowLayout, setShouldShowLayout] = useState(false);
 
-  const introSrc = "/videos/intro.webm";
+  const introSrc = "/videos/intro_small.webm";
   const shouldPlayVideo = currentPage === "/";
 
   const startVideo = useCallback(async () => {
@@ -95,4 +95,3 @@ export const VideoProvider = ({ children }: VideoProviderProps) => {
     <VideoContext.Provider value={value}>{children}</VideoContext.Provider>
   );
 };
-

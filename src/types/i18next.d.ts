@@ -11,15 +11,21 @@ declare module "react-i18next" {
           contact: string;
         };
         common: {
-          utazon: string;
-          antoine_vernez: string;
+          pseudo: string;
+          name: string;
         };
         home: {
           description: string;
           projects: string;
         };
+        projects: {
+          title: string;
+          header: string;
+          description: string;
+          role: string;
+          client: string;
+        }[];
       };
     };
   }
 }
-

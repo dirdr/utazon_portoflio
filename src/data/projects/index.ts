@@ -1,18 +1,7 @@
-import { ProjectDetail } from "../../types/project";
-import { exampleProject } from "./example-project";
-import { motionReel } from "./motion-reel";
-import { brandIdentity } from "./brand-identity";
+import { Project } from "../../types/project";
 
-export const allProjects: ProjectDetail[] = [
-  exampleProject,
-  motionReel,
-  brandIdentity,
-];
+export const allProjects: Project[] = [];
 
-export const getProjectById = (id: string): ProjectDetail | undefined => {
-  return allProjects.find(project => project.id === id);
-};
-
-export const getFeaturedProjects = (): ProjectDetail[] => {
-  return allProjects.filter(project => project.featured);
+export const getProjectById = (id: string): Project | undefined => {
+  return allProjects.find((project) => project.id === id);
 };

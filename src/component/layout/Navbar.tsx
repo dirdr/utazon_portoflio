@@ -17,7 +17,7 @@ export const Navbar = () => {
       <div className="mx-auto px-4 sm:px-16 py-4 sm:py-12">
         <div className="flex items-center justify-between h-16">
           <div className="flex flex-col items-start">
-            <a href="/" className="text font-nord">
+            <a href="/" className="text-sm font-nord">
               UTAZON
             </a>
             <a href="/" className="font-nord text-muted text-xs">
@@ -32,7 +32,7 @@ export const Navbar = () => {
           </div>
 
           <nav
-            className="hidden lg:flex items-center space-x-16"
+            className="hidden lg:flex items-center space-x-12"
             role="navigation"
             aria-label="Navigation principale"
           >

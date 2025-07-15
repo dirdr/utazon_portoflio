@@ -15,6 +15,7 @@ export const VideoBackground = () => {
         muted
         autoPlay
         playsInline
+        disablePictureInPicture
         src={introSrc}
       />
       <div className="absolute inset-0 bg-black/25" />

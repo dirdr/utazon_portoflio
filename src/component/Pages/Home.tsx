@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useVideo } from "../../contexts/video";
 import { Button } from "../common/Button";
 import { LineSweepText } from "../common/LineSweepText";
@@ -7,6 +8,24 @@ import { useTranslation } from "react-i18next";
 export const Home = () => {
   const { isLoading } = useVideo();
   const { t } = useTranslation();
+
+  useEffect(() => {
+    const style = document.createElement("style");
+    style.textContent = `
+      html {
+        overflow-x: hidden;
+        scrollbar-width: none; /* Firefox */
+      }
+      html::-webkit-scrollbar {
+        display: none; /* Chrome, Safari, Edge */
+      }
+    `;
+    document.head.appendChild(style);
+
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
 
   if (isLoading) {
     return (
@@ -19,7 +38,7 @@ export const Home = () => {
   return (
     <main className="relative w-full h-screen">
       <section
-        className="absolute bottom-0 pl-12 pb-16 w-170"
+        className="absolute bottom-0 pl-12 pb-16 w-165"
         aria-labelledby="location-heading"
       >
         <address className="not-italic">
@@ -28,7 +47,7 @@ export const Home = () => {
           </p>
         </address>
         <LineSweepText
-          className="font-nord text-5xl italic text-muted"
+          className="font-nord text-5xl italic text-muted tracking-tight leading-14"
           duration={6}
         >
           3D Artist and Motion Designer
@@ -40,7 +59,7 @@ export const Home = () => {
         aria-labelledby="intro-heading"
       >
         <div className="space-y-4">
-          <p id="intro-heading" className="text-lg text-gray mb-10">
+          <p id="intro-heading" className="text text-gray mb-10">
             {t("home.description")}
           </p>
           <nav className="flex gap-8" aria-label="Actions principales">
