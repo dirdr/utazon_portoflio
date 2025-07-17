@@ -182,4 +182,4 @@ jobs:
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
-          args: "@all The portfolio, with version ${{ github.event.inputs.version }} has been deployed to ${{ github.event.inputs.environment }}"
+          args: "@here The portfolio, with version ${{ github.event.inputs.version }} has been deployed to ${{ github.event.inputs.environment }}"
