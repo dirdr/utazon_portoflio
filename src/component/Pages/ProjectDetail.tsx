@@ -22,16 +22,17 @@ export const ProjectDetail = () => {
             alt={project.title}
             className="w-full aspect-video object-cover rounded-2xl mb-8"
           />
-          
+
           <h1 className="font-nord text-4xl md:text-6xl font-bold mb-6">
             {project.title}
           </h1>
-          
+
           <p className="font-neue text-lg text-muted leading-relaxed mb-8">
-            {project.longDescription}
+            {project.description}
           </p>
         </div>
       </div>
     </div>
   );
 };
+
