@@ -44,14 +44,12 @@ export const Button = (props: ButtonProps) => {
   const handleMouseEnter = () => setIsHovered(true);
   const handleMouseLeave = () => setIsHovered(false);
 
-  // Base button element classes
   const buttonClasses = cn(
     BUTTON_STYLES.base,
     shouldShowGlint && BUTTON_STYLES.glintOverrides,
-    className
+    className,
   );
 
-  // Render the actual button/link element
   const renderElement = () => {
     if (props.as === "button") {
       return (
@@ -78,24 +76,22 @@ export const Button = (props: ButtonProps) => {
     );
   };
 
-  // If no glint features, render simple button
   if (!hasGlintFeature) {
     return renderElement();
   }
 
-  // Glint feature enabled - wrap with glint container
-  const wrapperClasses = cn(
-    shouldShowGlint && "glint-button-wrapper"
-  );
+  const wrapperClasses = cn(shouldShowGlint && "glint-button-wrapper");
 
   const contentClasses = cn(
     shouldShowGlint && "glint-button-content",
-    "flex items-center justify-center transition-colors duration-300 hover:bg-button-hover"
+    "flex items-center justify-center transition-colors duration-200 hover:bg-button-hover",
   );
 
-  const wrapperStyle = shouldShowGlint ? {
-    "--animation-duration": `${speed}s`,
-  } as React.CSSProperties : undefined;
+  const wrapperStyle = shouldShowGlint
+    ? ({
+        "--animation-duration": `${speed}s`,
+      } as React.CSSProperties)
+    : undefined;
 
   return (
     <div
@@ -105,9 +101,7 @@ export const Button = (props: ButtonProps) => {
       onMouseLeave={handleMouseLeave}
     >
       {shouldShowGlint ? (
-        <div className={contentClasses}>
-          {renderElement()}
-        </div>
+        <div className={contentClasses}>{renderElement()}</div>
       ) : (
         renderElement()
       )}
