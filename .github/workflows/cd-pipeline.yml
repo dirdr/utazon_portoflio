@@ -42,14 +42,12 @@ jobs:
             echo "Date: $(date)"
             echo "=================================="
 
-            # Configuration
             VERSION="${{ github.event.inputs.version }}"
             ENVIRONMENT="${{ github.event.inputs.environment }}"
             DOCKER_USERNAME="${{ secrets.DOCKER_USERNAME }}"
             APP_NAME="${{ vars.APP_NAME }}"
             BASE_DIR="${{ vars.BASE_DIR }}"
 
-            # Set project directory based on environment
             PROJECT_DIR="$BASE_DIR/$ENVIRONMENT"
 
             echo "📋 Deployment Configuration:"
@@ -59,11 +57,9 @@ jobs:
             echo "   Project Directory: $PROJECT_DIR"
             echo "=================================="
 
-            # Navigate to environment-specific directory
             cd "$PROJECT_DIR" || { echo "💥 Project directory not found: $PROJECT_DIR"; exit 1; }
 
 
-            # Check if required files exist
             if [ ! -f "docker-compose.yaml" ]; then
               echo "💥 docker-compose.yaml not found in $PROJECT_DIR"
               exit 1
@@ -178,3 +174,13 @@ jobs:
             echo "🏷️  Version: $DEPLOY_VERSION"
             echo "📁 Directory: $PROJECT_DIR"
             echo "=================================="
+  notification:
+    name: Send discord notification
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: send custom message
+        uses: appleboy/discord-action@v1.2.0
+        with:
+          webhook_url: ${{ secrets.WEBHOOK_URL }}
+          message: "Portfolio with version : ${{ github.event.inputs.version }} has been deployed to ${{github.events.inputs.environment}}"

@@ -80,11 +80,6 @@ jobs:
           body: |
             Release version ${{ github.event.inputs.tag }}
 
-            ✅ All quality checks passed:
-            - Code compilation: ✅
-            - Tests: ✅  
-            - Linting: ✅
-
             📦 Docker image: ${{ secrets.DOCKER_USERNAME }}/utazon-portfolio:${{ github.event.inputs.tag }}
           draft: false
           prerelease: false
