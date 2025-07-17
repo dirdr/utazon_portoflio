@@ -57,6 +57,40 @@
 }
 
 @layer base {
+  @media screen and (min-width: 1200px) {
+    :root {
+      font-size: 12px;
+    }
+  }
+
+  /* Full HD (1920x1080) - Realistic viewport: ~1800px */
+  @media screen and (min-width: 1800px) {
+    :root {
+      font-size: 16px;
+    }
+  }
+
+  /* 2K/QHD (2560x1440) - Realistic viewport: ~2400px */
+  @media screen and (min-width: 2400px) {
+    :root {
+      font-size: 20px;
+    }
+  }
+
+  /* 4K/UHD (3840x2160) - Realistic viewport: ~3600px */
+  @media screen and (min-width: 3600px) {
+    :root {
+      font-size: 24px;
+    }
+  }
+
+  /* Ultra-wide 4K+ - Realistic viewport: ~3800px+ */
+  @media screen and (min-width: 3800px) {
+    :root {
+      font-size: 26px;
+    }
+  }
+
   body {
     @apply bg-background text-foreground font-neue;
   }
@@ -71,7 +105,9 @@
   }
 }
 
+/* ===== UTILITIES ===== */
 @layer utilities {
+  /* Animations */
   @keyframes lightSweep {
     0% {
       background-position: 200% 0;
@@ -95,11 +131,11 @@
   .glint-button-wrapper::before {
     content: "";
     position: absolute;
-    scale: 1.7;
-    left: -100%;
     top: -100%;
+    left: -100%;
     width: 300%;
     height: 300%;
+    scale: 1.7;
     background:
       conic-gradient(
         from 0deg,
@@ -111,7 +147,7 @@
       ),
       radial-gradient(circle, #565656 0%, #565656 100%);
     border-radius: 50%;
-    animation: border-spin var(--animation-duration, 5s) linear infinite;
+    animation: border-spin var(--animation-duration) linear infinite;
     z-index: 1;
   }
 
