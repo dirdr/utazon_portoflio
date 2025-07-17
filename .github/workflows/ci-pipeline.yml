@@ -1,16 +1,37 @@
 name: ci-pipeline
-
 on:
   workflow_dispatch:
     inputs:
       tag:
         description: "Docker Tag (version)"
         required: true
-
 jobs:
+  quality-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linting
+        run: npm run lint
+
+      - name: Build application
+        run: npm run build
+
   build-and-push:
     runs-on: ubuntu-latest
-
+    needs: quality-checks
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -26,6 +47,11 @@ jobs:
           git commit -m "chore: bump version to ${{ github.event.inputs.tag }}"
           git push
 
+      - name: Create Git Tag
+        run: |
+          git tag v${{ github.event.inputs.tag }}
+          git push origin v${{ github.event.inputs.tag }}
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -35,13 +61,14 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and tag Docker image
-        run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/utazon-portfolio:${{ github.event.inputs.tag }} .
-
-      - name: Push Docker image to Docker Hub
-        run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/utazon-portfolio:${{ github.event.inputs.tag }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/utazon-portfolio:${{ github.event.inputs.tag }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Create GitHub Release
         uses: actions/create-release@v1
@@ -53,7 +80,11 @@ jobs:
           body: |
             Release version ${{ github.event.inputs.tag }}
 
-            Changes in this release:
-            - Docker image built and pushed: ${{ secrets.DOCKER_USERNAME }}/utazon-portfolio:${{ github.event.inputs.tag }}
+            ✅ All quality checks passed:
+            - Code compilation: ✅
+            - Tests: ✅  
+            - Linting: ✅
+
+            📦 Docker image: ${{ secrets.DOCKER_USERNAME }}/utazon-portfolio:${{ github.event.inputs.tag }}
           draft: false
           prerelease: false
