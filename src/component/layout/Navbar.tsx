@@ -4,11 +4,14 @@ import { useState } from "react";
 import { NAVIGATION_ITEMS, ROUTES } from "../../constants/routes";
 import { LanguageSwitcher } from "../common/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
+import { useVideo } from "../../contexts/video";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { t } = useTranslation();
-
+  const { currentPage } = useVideo();
+  
+  const isHomePage = currentPage === ROUTES.HOME;
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
@@ -24,11 +27,13 @@ export const Navbar = () => {
             </a>
           </div>
 
-          <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <a href="/">
-              <img src={logo} alt="Utazon Logo" className="h-10 w-auto" />
-            </a>
-          </div>
+          {!isHomePage && (
+            <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+              <a href="/">
+                <img src={logo} alt="Utazon Logo" className="h-10 w-auto" />
+              </a>
+            </div>
+          )}
 
           <nav
             className="hidden lg:flex items-center space-x-8"
