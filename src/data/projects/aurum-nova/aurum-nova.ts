@@ -5,7 +5,7 @@ const t = useTranslation();
 
 export const AurumNova: Project = {
   id: "aurum-nova",
-  title: t(""),
+  title: "",
   cover: "",
   date: "",
   priority: 0,
