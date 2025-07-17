@@ -14,7 +14,6 @@ on:
         options:
           - staging
           - production
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -175,12 +174,12 @@ jobs:
             echo "📁 Directory: $PROJECT_DIR"
             echo "=================================="
   notification:
-    name: Send discord notification
+    needs: deploy
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - name: send custom message
-        uses: appleboy/discord-action@v1.2.0
+      - name: Send discord notification
+        uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
-          webhook_url: ${{ secrets.WEBHOOK_URL }}
-          message: "Portfolio with version : ${{ github.event.inputs.version }} has been deployed to ${{github.events.inputs.environment}}"
+          args: "The portfolio, with version ${{ github.actions.inputs.version }} has been deployed to ${{ github.actions.inputs.environment }}"
