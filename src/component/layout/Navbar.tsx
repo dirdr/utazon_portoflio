@@ -2,7 +2,6 @@ import { Button } from "../common/Button";
 import logo from "../../assets/images/logo.svg";
 import { useState } from "react";
 import { NAVIGATION_ITEMS, ROUTES } from "../../constants/routes";
-import { GlintButton } from "../common/GlintButton";
 import { LanguageSwitcher } from "../common/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
 
@@ -32,15 +31,15 @@ export const Navbar = () => {
           </div>
 
           <nav
-            className="hidden lg:flex items-center space-x-12"
+            className="hidden lg:flex items-center space-x-8"
             role="navigation"
-            aria-label="Navigation principale"
+            aria-label="Principle Nav"
           >
             {NAVIGATION_ITEMS.map(({ label, href }) => (
               <a
                 key={href}
                 href={href}
-                className="hover:text-muted font-nord text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-sm"
+                className="hover:text-muted font-nord text-xs transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-sm"
               >
                 {href === ROUTES.PROJECTS
                   ? t("nav.projects")
@@ -49,9 +48,14 @@ export const Navbar = () => {
                     : label}
               </a>
             ))}
-            <GlintButton speed={4} href={ROUTES.CONTACT}>
+            <Button
+              glint={true}
+              className="text-xs"
+              speed={4}
+              href={ROUTES.CONTACT}
+            >
               {t("nav.contact")}
-            </GlintButton>
+            </Button>
             <LanguageSwitcher />
           </nav>
 

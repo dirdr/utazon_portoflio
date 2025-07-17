@@ -42,7 +42,7 @@ export const Home = () => {
         aria-labelledby="location-heading"
       >
         <address className="not-italic">
-          <p id="location-heading" className="text-muted text-lg mb-6">
+          <p id="location-heading" className="text-muted mb-6">
             Paris, France
           </p>
         </address>
@@ -62,9 +62,13 @@ export const Home = () => {
           <p id="intro-heading" className="text text-gray mb-10">
             {t("home.description")}
           </p>
-          <nav className="flex gap-8" aria-label="Actions principales">
-            <Button href={ROUTES.PROJECTS}>PROJETS</Button>
-            <Button href={ROUTES.SHOWREEL}>SHOWREEL</Button>
+          <nav className="flex gap-4 text-xs" aria-label="Actions principales">
+            <Button as="link" glintOnHover={true} href={ROUTES.PROJECTS}>
+              PROJETS
+            </Button>
+            <Button as="link" glintOnHover={true} href={ROUTES.SHOWREEL}>
+              SHOWREEL
+            </Button>
           </nav>
         </div>
       </section>

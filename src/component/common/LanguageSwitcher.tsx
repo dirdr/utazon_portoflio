@@ -11,11 +11,10 @@ export const LanguageSwitcher = () => {
   return (
     <button
       onClick={toggleLanguage}
-      className="font-nord text-sm hover:text-muted transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-sm"
+      className="font-nord text-xs hover:text-muted transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-sm"
       aria-label={`Switch to ${i18n.language === "fr" ? "English" : "Français"}`}
     >
       {i18n.language === "fr" ? "FR" : "EN"}
     </button>
   );
 };
-
