@@ -6,11 +6,16 @@ import { Button } from "./Button";
 export const Card = ({ image, project, className, onClick, glintSpeed = "4s" }: CardProps) => {
   const { t } = useTranslation();
   
+  // Debug toggle - set to false to disable all effects for performance testing
+  const ENABLE_EFFECTS = true;
+  const ENABLE_GLINT = true;
+  const ENABLE_ANIMATED_BACKGROUND = true;
+  
   return (
     <div
       className={cn(
         "group relative cursor-pointer my-4",
-        "glint-card-wrapper",
+        ENABLE_EFFECTS ? "glint-card-wrapper" : "glint-card-wrapper-disabled",
         "w-full",
         className,
       )}
@@ -19,7 +24,7 @@ export const Card = ({ image, project, className, onClick, glintSpeed = "4s" }: 
     >
       <div className="glint-card-content border border-white/20 p-8 relative z-10">
         {/* Animated Background */}
-        <div className="animated-background"></div>
+        {ENABLE_ANIMATED_BACKGROUND && <div className="animated-background"></div>}
         
         {/* Content */}
         <div className="relative w-full rounded-xl overflow-hidden z-10">
@@ -59,7 +64,7 @@ export const Card = ({ image, project, className, onClick, glintSpeed = "4s" }: 
         {/* Glint button with swipe animation */}
         <div className="absolute bottom-4 right-4 transform translate-x-full opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 ease-out">
           <Button
-            glint={true}
+            glint={ENABLE_GLINT}
             className="text-xs"
             onClick={(e) => {
               e.stopPropagation();

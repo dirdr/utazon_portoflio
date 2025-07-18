@@ -1,6 +1,7 @@
 import { useRoute } from "wouter";
 import { getProjectById } from "../../data/projects";
 import { useTranslation } from "react-i18next";
+import { Container } from "../layout/Container";
 
 export const ProjectDetail = () => {
   const [, params] = useRoute("/projects/:id");
@@ -10,14 +11,16 @@ export const ProjectDetail = () => {
   if (!project) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <h1 className="font-nord text-2xl">Project not found</h1>
+        <Container>
+          <h1 className="font-nord text-2xl text-center">Project not found</h1>
+        </Container>
       </div>
     );
   }
 
   return (
     <div className="min-h-screen pt-32 pb-16">
-      <div className="container mx-auto px-4 sm:px-16">
+      <Container>
         <div className="max-w-4xl mx-auto">
           <img
             src={project.cover}
@@ -55,7 +58,7 @@ export const ProjectDetail = () => {
             </div>
           </div>
         </div>
-      </div>
+      </Container>
     </div>
   );
 };

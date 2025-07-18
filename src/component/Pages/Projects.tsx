@@ -2,6 +2,7 @@ import { useLocation } from "wouter";
 import { Card } from "../common/Card";
 import { allProjects, allProjectsSortedByPriority } from "../../data/projects";
 import { useTranslation } from "react-i18next";
+import { Container } from "../layout/Container";
 
 export const Projects = () => {
   const [, setLocation] = useLocation();
@@ -13,8 +14,8 @@ export const Projects = () => {
 
   return (
     <div className="min-h-screen">
-      <div className="w-full px-4 sm:px-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <Container>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 lg:gap-8">
           {allProjectsSortedByPriority.map((project) => (
             <Card
               key={project.id}
@@ -31,7 +32,7 @@ export const Projects = () => {
             />
           ))}
         </div>
-      </div>
+      </Container>
     </div>
   );
 };

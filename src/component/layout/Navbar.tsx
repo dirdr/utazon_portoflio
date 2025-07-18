@@ -5,6 +5,7 @@ import { NAVIGATION_ITEMS, ROUTES } from "../../constants/routes";
 import { LanguageSwitcher } from "../common/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
 import { useVideo } from "../../contexts/video";
+import { Container } from "./Container";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -14,9 +15,14 @@ export const Navbar = () => {
   const isHomePage = currentPage === ROUTES.HOME;
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
+  const WrapperComponent = isHomePage ? 'div' : Container;
+  const wrapperProps = isHomePage 
+    ? { className: "mx-auto px-4 sm:px-16 py-4 sm:py-12" }
+    : { className: "py-4 sm:py-12" };
+
   return (
     <nav className={`w-full z-50 ${isHomePage ? 'absolute top-0 left-0' : ''}`}>
-      <div className="mx-auto px-4 sm:px-16 py-4 sm:py-12">
+      <WrapperComponent {...wrapperProps}>
         <div className="flex items-center justify-between h-16">
           <div className="flex flex-col items-start">
             <a href="/" className="text-sm font-nord">
@@ -140,7 +146,7 @@ export const Navbar = () => {
             </nav>
           </div>
         </div>
-      </div>
+      </WrapperComponent>
     </nav>
   );
 };

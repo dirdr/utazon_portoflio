@@ -201,6 +201,93 @@
   .glint-card-wrapper:hover::before {
     opacity: 1;
   }
+  
+  .glint-card-wrapper-disabled::before {
+    display: none;
+  }
+
+  /* Optimized card styles */
+  .glint-card-wrapper-optimized {
+    @apply relative overflow-hidden rounded-3xl;
+    padding: 2px;
+    --glint-card-speed: 4s;
+  }
+
+  .glint-card-wrapper-optimized::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(
+      from 0deg,
+      transparent 70deg,
+      rgba(255, 255, 255, 0.4) 80deg,
+      rgba(255, 255, 255, 0.8) 90deg,
+      rgba(255, 255, 255, 0.4) 100deg,
+      transparent 110deg,
+      transparent 250deg,
+      rgba(255, 255, 255, 0.4) 260deg,
+      rgba(255, 255, 255, 0.8) 270deg,
+      rgba(255, 255, 255, 0.4) 280deg,
+      transparent 290deg
+    );
+    border-radius: 24px;
+    animation: border-spin var(--glint-card-speed) linear infinite;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  .glint-card-wrapper-static {
+    @apply relative overflow-hidden rounded-3xl;
+    padding: 2px;
+  }
+
+  .glint-card-wrapper-static::before {
+    display: none;
+  }
+
+  /* Optimized animated background */
+  .animated-background-optimized {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 24px;
+    overflow: hidden;
+    z-index: 1;
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  .animated-background-optimized::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background:
+      radial-gradient(
+        circle at 20% 20%,
+        rgba(120, 120, 120, 0.3) 0%,
+        transparent 15%
+      ),
+      radial-gradient(
+        circle at 80% 80%,
+        rgba(20, 20, 20, 0.5) 0%,
+        transparent 20%
+      );
+    border-radius: 50%;
+    animation: border-spin 8s linear infinite;
+    will-change: transform;
+    transform: translateZ(0);
+  }
 
   .glint-card-content {
     @apply relative w-full h-full rounded-3xl;
@@ -216,6 +303,12 @@
     border-radius: 24px;
     overflow: hidden;
     z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .group:hover .animated-background {
+    opacity: 1;
   }
 
   .animated-background::before {
