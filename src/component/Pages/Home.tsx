@@ -36,7 +36,7 @@ export const Home = () => {
   }
 
   return (
-    <main className="relative w-full h-screen">
+    <div className="relative w-full h-screen">
       <section
         className="absolute bottom-0 pl-12 pb-16 w-165"
         aria-labelledby="location-heading"
@@ -64,14 +64,14 @@ export const Home = () => {
           </p>
           <nav className="flex gap-4 text-xs" aria-label="Actions principales">
             <Button as="link" glintOnHover={true} href={ROUTES.PROJECTS}>
-              PROJETS
+              {t("home.projects")}
             </Button>
             <Button as="link" glintOnHover={true} href={ROUTES.SHOWREEL}>
-              SHOWREEL
+              {t("nav.showreel")}
             </Button>
           </nav>
         </div>
       </section>
-    </main>
+    </div>
   );
 };

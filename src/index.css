@@ -56,6 +56,16 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "Nord";
+  src:
+    url("/fonts/nord/NORD-Light.woff2") format("woff2"),
+    url("/fonts/nord/NORD-Light.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
 @layer base {
   @media screen and (min-width: 1200px) {
     :root {
@@ -153,5 +163,184 @@
 
   .glint-button-content {
     @apply relative h-full w-full rounded-full bg-button-bg z-10;
+  }
+
+  .glint-card-wrapper {
+    @apply relative overflow-hidden rounded-3xl;
+    padding: 2px;
+    --glint-card-speed: 4s;
+  }
+
+  .glint-card-wrapper::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(
+      from 0deg,
+      transparent 70deg,
+      rgba(255, 255, 255, 0.4) 80deg,
+      rgba(255, 255, 255, 0.8) 90deg,
+      rgba(255, 255, 255, 0.4) 100deg,
+      transparent 110deg,
+      transparent 250deg,
+      rgba(255, 255, 255, 0.4) 260deg,
+      rgba(255, 255, 255, 0.8) 270deg,
+      rgba(255, 255, 255, 0.4) 280deg,
+      transparent 290deg
+    );
+    border-radius: 24px;
+    animation: border-spin var(--glint-card-speed) linear infinite;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+  }
+
+  .glint-card-wrapper:hover::before {
+    opacity: 1;
+  }
+
+  .glint-card-content {
+    @apply relative w-full h-full rounded-3xl;
+  }
+
+  /* Animated Background Effect */
+  .animated-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 24px;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  .animated-background::before {
+    content: "";
+    position: absolute;
+    top: -100%;
+    left: -100%;
+    width: 300%;
+    height: 300%;
+    background:
+      radial-gradient(
+        circle at 15% 15%,
+        rgba(120, 120, 120, 0.4) 0%,
+        transparent 15%
+      ),
+      radial-gradient(
+        circle at 35% 35%,
+        rgba(20, 20, 20, 0.6) 0%,
+        transparent 20%
+      ),
+      radial-gradient(
+        circle at 55% 55%,
+        rgba(140, 140, 140, 0.35) 0%,
+        transparent 18%
+      ),
+      radial-gradient(
+        circle at 75% 75%,
+        rgba(10, 10, 10, 0.8) 0%,
+        transparent 12%
+      ),
+      radial-gradient(
+        circle at 85% 25%,
+        rgba(110, 110, 110, 0.3) 0%,
+        transparent 16%
+      ),
+      radial-gradient(
+        circle at 25% 85%,
+        rgba(0, 0, 0, 0.9) 0%,
+        transparent 14%
+      ),
+      radial-gradient(
+        circle at 50% 10%,
+        rgba(90, 90, 90, 0.4) 0%,
+        transparent 22%
+      ),
+      radial-gradient(
+        circle at 10% 50%,
+        rgba(5, 5, 5, 0.7) 0%,
+        transparent 18%
+      ),
+      radial-gradient(
+        circle at 90% 50%,
+        rgba(130, 130, 130, 0.25) 0%,
+        transparent 20%
+      ),
+      conic-gradient(
+        from 0deg,
+        rgba(0, 0, 0, 1) 0deg,
+        rgba(80, 80, 80, 1) 45deg,
+        rgba(0, 0, 0, 1) 90deg,
+        rgba(100, 100, 100, 1) 135deg,
+        rgba(0, 0, 0, 1) 180deg,
+        rgba(60, 60, 60, 1) 225deg,
+        rgba(0, 0, 0, 1) 270deg,
+        rgba(120, 120, 120, 1) 315deg,
+        rgba(0, 0, 0, 1) 360deg
+      );
+    animation: background-rotate 25s linear infinite;
+    scale: 1.2;
+    opacity: 0.6;
+  }
+
+  .animated-background::after {
+    content: "";
+    position: absolute;
+    top: -75%;
+    left: -75%;
+    width: 250%;
+    height: 250%;
+    background:
+      radial-gradient(
+        ellipse at 20% 20%,
+        rgba(0, 0, 0, 0.8) 0%,
+        transparent 25%
+      ),
+      radial-gradient(
+        ellipse at 40% 60%,
+        rgba(150, 150, 150, 0.45) 0%,
+        transparent 30%
+      ),
+      radial-gradient(
+        ellipse at 60% 40%,
+        rgba(10, 10, 10, 0.7) 0%,
+        transparent 28%
+      ),
+      radial-gradient(
+        ellipse at 80% 80%,
+        rgba(110, 110, 110, 0.4) 0%,
+        transparent 32%
+      ),
+      radial-gradient(
+        ellipse at 30% 90%,
+        rgba(0, 0, 0, 0.9) 0%,
+        transparent 20%
+      ),
+      radial-gradient(
+        ellipse at 70% 10%,
+        rgba(100, 100, 100, 0.5) 0%,
+        transparent 26%
+      ),
+      radial-gradient(
+        ellipse at 90% 50%,
+        rgba(15, 15, 15, 0.6) 0%,
+        transparent 24%
+      );
+    animation: background-rotate 30s linear infinite reverse;
+    opacity: 0.4;
+  }
+
+  @keyframes background-rotate {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 }

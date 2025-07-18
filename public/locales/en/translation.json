@@ -6,10 +6,125 @@
   },
   "common": {
     "utazon": "UTAZON",
-    "antoine_vernez": "ANTOINE VERNEZ"
+    "antoine_vernez": "ANTOINE VERNEZ",
+    "seeProject": "See project"
   },
   "home": {
     "description": "3D Artist and Motion Designer based in Paris, I craft precisely designed worlds with polished and impactful visuals for brands, agencies, and artists.",
     "projects": "PROJECTS"
+  },
+  "projects": {
+    "aurum-nova": {
+      "title": "AURUM NOVA",
+      "header": "Eco-luxury jewelry in motion",
+      "description": "A full 3D commercial imagined for a fictional sustainable jewelry brand. Visual identity, art direction, and sound design were all crafted to reflect both prestige and ecological commitment.",
+      "role": "Concept, art direction, 3D, sound – full solo production",
+      "client": "Student project",
+      "date": "2024"
+    },
+    "dune": {
+      "title": "DUNE – The Fremen Ambush",
+      "header": "A cinematic tribute to Dune's universe",
+      "description": "A personal 3D short film recreating the unique aesthetic of Dune. A micro-story with immersive storytelling centered around a tactical ambush.",
+      "role": "Full solo creation",
+      "client": "Personal project",
+      "date": "2024"
+    },
+    "eco-cleaner": {
+      "title": "ECOCLEANER",
+      "header": "Clean design for a clean world",
+      "description": "3D commercial for a high-end robotic vacuum. A sleek, minimalistic universe and fluid transitions to emphasize innovation and eco-consciousness.",
+      "role": "Full solo creation",
+      "client": "Student project",
+      "date": "2023"
+    },
+    "family-tech-drive": {
+      "title": "FAMILY TECH DRIVE",
+      "header": "Safety & comfort on the move",
+      "description": "3D ad made in a duo, highlighting onboard technology and family safety in vehicles. A mix of storytelling and product showcasing.",
+      "role": "Co-direction and production",
+      "client": "Student project",
+      "date": "2024"
+    },
+    "paris-music-2024": {
+      "title": "PARIS – Fête de la Musique 2024",
+      "header": "Immersive city vibes in UE5",
+      "description": "A 2-week short film built in Unreal Engine 5. The story follows a character exploring Paris during the Fête de la Musique, told through dynamic sequences and atmospheric cinematography.",
+      "role": "Full solo creation",
+      "client": "Student project",
+      "date": "2024"
+    },
+    "fooh": {
+      "title": "FOOH – Fake Out Of Home",
+      "header": "Urban illusions and immersive campaigns",
+      "description": "3D simulation projects seamlessly integrated into real-world environments, showcasing the visual power of fictional ad campaigns in public spaces. From full conceptual universe creation to core 3D assets for brands like Gérard Darel: modeling, texturing, particles and compositing for hyper-realistic staging.",
+      "role": "Full solo creation & core 3D assets",
+      "client": "Personal projects & Blackmotion / Gérard Darel",
+      "date": "2024"
+    },
+    "karmin-corp-lec-reveal": {
+      "title": "KARMINE CORP – LEC Reveal",
+      "header": "A tribute to an esport titan",
+      "description": "Epic 3D video celebrating Karmine Corp's entry into the LEC. A monumental, trophy-focused staging meant to capture the hype and emotion of the moment.",
+      "role": "Full solo creation",
+      "client": "Personal project",
+      "date": "2024"
+    },
+    "limova-movali": {
+      "title": "LIMOVA & MOVALI – Kaitonom.IA",
+      "header": "AI-powered motion design",
+      "description": "2D and 3D motion design work for Kaitonom.IA, a smart assistant solution aimed at professionals and associations. Designed to explain key features with clarity and visual appeal.",
+      "role": "Motion design 2D & 3D",
+      "client": "Blackmotion / Client: Kaitonom.IA",
+      "date": "2024"
+    },
+    "spiderman-timefreeze": {
+      "title": "SPIDERMAN – Time Freeze",
+      "header": "Suspending chaos in slow motion",
+      "description": "3D short film inspired by the Deadpool opening sequence. Time is frozen mid-action in a tense, highly detailed urban scene, where every element contributes to a sense of cinematic suspension.",
+      "role": "Full solo creation",
+      "client": "Personal project",
+      "date": "2024"
+    },
+    "lyner": {
+      "title": "LYNER",
+      "header": "Shining a light on dental innovation",
+      "description": "3D commercial made at Blackmotion for Lyner, a dental service offering custom aligners and full support. A clean and bright visual treatment to convey trust, simplicity and modernity.",
+      "role": "All 3D scenes",
+      "client": "Blackmotion / Client: Lyner",
+      "date": "2024"
+    },
+    "mr-help": {
+      "title": "MR. HELP",
+      "header": "Simplified installation, amplified service",
+      "description": "A series of 3D videos for Mr. Help, a company specializing in furniture and A/C installations. Each piece highlights the ease of use, service guarantees and the value of the 'Serenity Pack'.",
+      "role": "3D production at the agency",
+      "client": "Blackmotion / Client: Mr. Help",
+      "date": "2024"
+    },
+    "dals": {
+      "title": "DANCING WITH THE STARS – 3D Mapping",
+      "header": "Digital scenography for live emotion",
+      "description": "Creation of 3D-mapped stage visuals for the French TV show Danse avec les Stars (TF1), working with talents like Lénie, Jungeli, Claude Dartois, Florent Manaudou and Adil Rami. Each tableau was designed to enhance the choreography with bespoke visuals and real-time projection mapping.",
+      "role": "Design and creation of 3D stage visuals",
+      "client": "Blackmotion / Client: TF1 – Danse avec les Stars",
+      "date": "2024"
+    },
+    "yassencore": {
+      "title": "YASSENCORE – Twitch Waiting Screen",
+      "header": "A custom stream intro with style",
+      "description": "A tailor-made waiting screen for Twitch streamer YassEncore, reflecting his favorite universes: Breaking Bad, Dragon Ball, football... Designed to kick off streams with personality and atmosphere.",
+      "role": "Full concept and production",
+      "client": "Creator commission / Client: YassEncore",
+      "date": "2024"
+    },
+    "pixel-break": {
+      "title": "PIXEL BREAK",
+      "header": "A breach into the world of Invaders",
+      "description": "3D short film made in collaboration with Mario Sougoumarin. Starting from a Space Invader mosaic on a wall, the viewer is pulled into a hidden digital world where the pixel aliens prepare their uprising. A mix of photoreal urban textures and retro pixel aesthetics.",
+      "role": "Co-direction, 3D animation, visual dev",
+      "client": "Student project (duo with Mario Sougoumarin)",
+      "date": "2025"
+    }
   }
 }

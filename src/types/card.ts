@@ -5,8 +5,10 @@ export interface CardProps {
   };
   project: {
     name: string;
-    description: string;
+    header: string;
+    date: string;
   };
   className?: string;
   onClick?: () => void;
+  glintSpeed?: string;
 }

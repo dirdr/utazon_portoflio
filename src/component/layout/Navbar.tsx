@@ -15,7 +15,7 @@ export const Navbar = () => {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
-    <nav className="absolute top-0 left-0 w-full z-50">
+    <nav className={`w-full z-50 ${isHomePage ? 'absolute top-0 left-0' : ''}`}>
       <div className="mx-auto px-4 sm:px-16 py-4 sm:py-12">
         <div className="flex items-center justify-between h-16">
           <div className="flex flex-col items-start">
@@ -28,7 +28,7 @@ export const Navbar = () => {
           </div>
 
           {!isHomePage && (
-            <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <div className="absolute left-1/2 transform -translate-x-1/2">
               <a href="/">
                 <img src={logo} alt="Utazon Logo" className="h-10 w-auto" />
               </a>
