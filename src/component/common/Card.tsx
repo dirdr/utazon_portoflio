@@ -19,7 +19,7 @@ export const Card = ({
   return (
     <div
       className={cn(
-        "group relative cursor-pointer my-4",
+        "group relative cursor-pointer",
         ENABLE_EFFECTS ? "glint-card-wrapper" : "glint-card-wrapper-disabled",
         "w-full",
         className,
