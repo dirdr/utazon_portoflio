@@ -14,7 +14,7 @@ import { Dals } from "./dals/dals";
 import { Yassencore } from "./yassencore/yassencore";
 import { PixelBreak } from "./pixel-break/pixel-break";
 
-export const allProjects: Project[] = [
+const allProjects: Project[] = [
   AurumNova,
   Dune,
   EcoCleaner,

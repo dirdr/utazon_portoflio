@@ -1,6 +1,6 @@
 import { useLocation } from "wouter";
 import { Card } from "../common/Card";
-import { allProjects, allProjectsSortedByPriority } from "../../data/projects";
+import { allProjectsSortedByPriority } from "../../data/projects";
 import { useTranslation } from "react-i18next";
 import { Container } from "../layout/Container";
 
