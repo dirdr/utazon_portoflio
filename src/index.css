@@ -78,7 +78,7 @@
   }
 
   /* 4K/UHD (3840x2160) - Realistic viewport: ~3600px */
-  @media screen and (min-width: 3600px) {
+  @media screen and (min-width: 2800px) {
     :root {
       font-size: 24px;
     }
