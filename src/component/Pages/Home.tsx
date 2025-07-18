@@ -50,7 +50,15 @@ export const Home = () => {
           className="font-nord text-5xl italic text-muted tracking-tight leading-14"
           duration={6}
         >
-          3D Artist and Motion Designer
+          {t("home.title").includes('\n') ? (
+            t("home.title").split('\n').map((line, index) => (
+              <span key={index} className="block">
+                {line}
+              </span>
+            ))
+          ) : (
+            t("home.title")
+          )}
         </LineSweepText>
       </section>
 

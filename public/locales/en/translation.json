@@ -11,7 +11,8 @@
   },
   "home": {
     "description": "3D Artist and Motion Designer based in Paris, I craft precisely designed worlds with polished and impactful visuals for brands, agencies, and artists.",
-    "projects": "PROJECTS"
+    "projects": "PROJECTS",
+    "title": "3D ARTIST AND MOTION DESIGNER"
   },
   "projects": {
     "aurum-nova": {

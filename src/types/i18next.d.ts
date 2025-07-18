@@ -17,6 +17,7 @@ declare module "react-i18next" {
         home: {
           description: string;
           projects: string;
+          title: string;
         };
         projects: {
           title: string;

@@ -33,7 +33,7 @@ export const Button = (props: ButtonProps) => {
     className,
     glint = false,
     glintOnHover = false,
-    speed = 2,
+    speed = 4,
     onClick,
   } = props;
   const [isHovered, setIsHovered] = useState(false);

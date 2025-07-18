@@ -11,17 +11,17 @@ export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { t } = useTranslation();
   const { currentPage } = useVideo();
-  
+
   const isHomePage = currentPage === ROUTES.HOME;
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
-  const WrapperComponent = isHomePage ? 'div' : Container;
-  const wrapperProps = isHomePage 
+  const WrapperComponent = isHomePage ? "div" : Container;
+  const wrapperProps = isHomePage
     ? { className: "mx-auto px-4 sm:px-16 py-4 sm:py-12" }
     : { className: "py-4 sm:py-12" };
 
   return (
-    <nav className={`w-full z-50 ${isHomePage ? 'absolute top-0 left-0' : ''}`}>
+    <nav className={`w-full z-50 ${isHomePage ? "absolute top-0 left-0" : ""}`}>
       <WrapperComponent {...wrapperProps}>
         <div className="flex items-center justify-between h-16">
           <div className="flex flex-col items-start">
@@ -59,12 +59,7 @@ export const Navbar = () => {
                     : label}
               </a>
             ))}
-            <Button
-              glint={true}
-              className="text-xs"
-              speed={4}
-              href={ROUTES.CONTACT}
-            >
+            <Button glint={true} className="text-xs" href={ROUTES.CONTACT}>
               {t("nav.contact")}
             </Button>
             <LanguageSwitcher />
