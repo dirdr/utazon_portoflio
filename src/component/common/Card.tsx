@@ -26,12 +26,12 @@ export interface CardProps {
     alt: string;
   };
   project: {
+    id: string;
     name: string;
     header: string;
     date: string;
   };
   className?: string;
-  onClick?: () => void;
   glintSpeed?: string;
 }
 
@@ -40,7 +40,6 @@ export const Card = ({
   thumbnail,
   project,
   className,
-  onClick,
   glintSpeed = "6s",
 }: CardProps) => {
   const { t } = useTranslation();
@@ -75,7 +74,6 @@ export const Card = ({
         className,
       )}
       style={{ "--glint-card-speed": glintSpeed } as React.CSSProperties}
-      onClick={onClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -150,7 +148,14 @@ export const Card = ({
           </div>
 
           <div className="absolute bottom-8 right-8 transform translate-x-full opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 ease-out">
-            <Button glint className="text-base" as="button">
+            <Button
+              glint
+              proximityIntensity
+              maxDistance={200}
+              className="text-base"
+              as="link"
+              href={`/projects/${project.id}`}
+            >
               {t("common.seeProject")}
             </Button>
           </div>

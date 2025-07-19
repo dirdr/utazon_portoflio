@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useMemo } from "react";
 import { cn } from "../../utils/cn";
 import { BUTTON_STYLES } from "../../constants/buttonStyles";
+import { useCursorDistance } from "../../hooks/useCursorDistance";
 
 interface BaseButtonProps {
   children: React.ReactNode;
@@ -8,6 +9,8 @@ interface BaseButtonProps {
   glint?: boolean;
   glintOnHover?: boolean;
   speed?: number;
+  proximityIntensity?: boolean;
+  maxDistance?: number;
 }
 
 interface LinkButtonProps extends BaseButtonProps {
@@ -27,6 +30,43 @@ interface ActionButtonProps extends BaseButtonProps {
 
 type ButtonProps = LinkButtonProps | ActionButtonProps;
 
+const useGlintLogic = (
+  glint: boolean,
+  glintOnHover: boolean,
+  proximityIntensity: boolean,
+  isHovered: boolean,
+  intensity: number
+) => {
+  return useMemo(() => {
+    const hasGlintFeature = glint || glintOnHover || proximityIntensity;
+    const shouldShowGlint = glint || (glintOnHover && isHovered) || proximityIntensity;
+    
+    return { hasGlintFeature, shouldShowGlint };
+  }, [glint, glintOnHover, proximityIntensity, isHovered, intensity]);
+};
+
+const useGlintStyles = (
+  speed: number,
+  proximityIntensity: boolean,
+  intensity: number,
+  shouldShowGlint: boolean
+) => {
+  return useMemo(() => {
+    if (!shouldShowGlint) return undefined;
+
+    const baseOpacity = proximityIntensity ? 0.4 + (intensity * 0.4) : 0.6;
+    const peakOpacity = proximityIntensity ? 0.5 + (intensity * 0.5) : 0.7;
+    const scaleValue = proximityIntensity ? 1 + (intensity * 0.3) : 1;
+
+    return {
+      "--animation-duration": `${speed}s`,
+      "--glint-opacity": baseOpacity,
+      "--glint-opacity-peak": peakOpacity,
+      "--glint-scale": scaleValue,
+    } as React.CSSProperties;
+  }, [speed, proximityIntensity, intensity, shouldShowGlint]);
+};
+
 export const Button = (props: ButtonProps) => {
   const {
     children,
@@ -34,12 +74,28 @@ export const Button = (props: ButtonProps) => {
     glint = false,
     glintOnHover = false,
     speed = 4,
+    proximityIntensity = false,
+    maxDistance = 150,
     onClick,
   } = props;
-  const [isHovered, setIsHovered] = useState(false);
 
-  const shouldShowGlint = glint || (glintOnHover && isHovered);
-  const hasGlintFeature = glint || glintOnHover;
+  const [isHovered, setIsHovered] = useState(false);
+  const buttonRef = useRef<HTMLDivElement>(null);
+  
+  const { intensity } = useCursorDistance(buttonRef, { 
+    maxDistance,
+    throttleMs: 16 
+  });
+
+  const { hasGlintFeature, shouldShowGlint } = useGlintLogic(
+    glint,
+    glintOnHover,
+    proximityIntensity,
+    isHovered,
+    intensity
+  );
+
+  const wrapperStyle = useGlintStyles(speed, proximityIntensity, intensity, shouldShowGlint);
 
   const handleMouseEnter = () => setIsHovered(true);
   const handleMouseLeave = () => setIsHovered(false);
@@ -81,20 +137,14 @@ export const Button = (props: ButtonProps) => {
   }
 
   const wrapperClasses = cn(shouldShowGlint && "glint-button-wrapper");
-
   const contentClasses = cn(
     shouldShowGlint && "glint-button-content",
     "flex items-center justify-center transition-colors duration-200 hover:bg-button-hover",
   );
 
-  const wrapperStyle = shouldShowGlint
-    ? ({
-        "--animation-duration": `${speed}s`,
-      } as React.CSSProperties)
-    : undefined;
-
   return (
     <div
+      ref={buttonRef}
       className={wrapperClasses}
       style={wrapperStyle}
       onMouseEnter={handleMouseEnter}

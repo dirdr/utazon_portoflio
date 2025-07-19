@@ -2,6 +2,7 @@ import { useRoute } from "wouter";
 import { getProjectById } from "../../data/projects";
 import { useTranslation } from "react-i18next";
 import { Container } from "../layout/Container";
+import { ProjectHero } from "../ProjectDetail/ProjectHero";
 
 export const ProjectDetail = () => {
   const [, params] = useRoute("/projects/:id");
@@ -19,40 +20,8 @@ export const ProjectDetail = () => {
   }
 
   return (
-    <div className="min-h-screen pt-32 pb-16">
-      <Container>
-        <div className="max-w-4xl mx-auto">
-          <h1 className="font-nord text-4xl md:text-6xl font-bold mb-6">
-            {t(project.title)}
-          </h1>
-
-          <div className="space-y-6">
-            <div>
-              <h2 className="font-nord text-xl font-bold mb-2 text-muted">
-                {t(project.header)}
-              </h2>
-              <p className="font-neue text-lg leading-relaxed">
-                {t(project.description)}
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-              <div>
-                <h3 className="font-nord font-bold mb-2 text-muted">Client</h3>
-                <p className="font-neue">{t(project.client)}</p>
-              </div>
-              <div>
-                <h3 className="font-nord font-bold mb-2 text-muted">Role</h3>
-                <p className="font-neue">{t(project.role)}</p>
-              </div>
-              <div>
-                <h3 className="font-nord font-bold mb-2 text-muted">Date</h3>
-                <p className="font-neue">{t(project.date)}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Container>
+    <div>
+      <ProjectHero project={project} />
     </div>
   );
 };

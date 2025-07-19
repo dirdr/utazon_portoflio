@@ -5,12 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Container } from "../layout/Container";
 
 export const Projects = () => {
-  const [, setLocation] = useLocation();
   const { t } = useTranslation();
-
-  const handleProjectClick = (projectId: string) => {
-    setLocation(`/projects/${projectId}`);
-  };
 
   return (
     <div className="min-h-screen">
@@ -24,11 +19,11 @@ export const Projects = () => {
                 alt: t(project.title),
               }}
               project={{
+                id: project.id,
                 name: t(project.title),
                 header: t(project.header),
                 date: t(project.date),
               }}
-              onClick={() => handleProjectClick(project.id)}
               thumbnail={{
                 src: `/videos/projects/${project.id}/thumbnail.webm`,
                 alt: t(project.title),

@@ -11,20 +11,21 @@
     left: -100%;
     width: 300%;
     height: 300%;
-    scale: 1.41;
+    scale: calc(1.41 * var(--glint-scale, 1));
     background:
       conic-gradient(
         from 0deg,
         transparent 40deg,
-        rgba(255, 255, 255, 0.6) 80deg,
-        rgba(255, 255, 255, 0.7) 90deg,
-        rgba(255, 255, 255, 0.6) 100deg,
+        rgba(255, 255, 255, var(--glint-opacity, 0.6)) 80deg,
+        rgba(255, 255, 255, var(--glint-opacity-peak, 0.7)) 90deg,
+        rgba(255, 255, 255, var(--glint-opacity, 0.6)) 100deg,
         transparent 150deg
       ),
       radial-gradient(circle, #565656 0%, #565656 100%);
     border-radius: 50%;
     animation: border-spin var(--animation-duration) linear infinite;
     z-index: 1;
+    transition: scale 0.1s ease-out;
   }
 
   .glint-button-content {
