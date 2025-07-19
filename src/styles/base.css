@@ -1,0 +1,49 @@
+/* ===== BASE STYLES ===== */
+@layer base {
+  @media screen and (min-width: 1200px) {
+    :root {
+      font-size: 14px;
+    }
+  }
+
+  /* Full HD (1920x1080) - Realistic viewport: ~1800px */
+  @media screen and (min-width: 1800px) {
+    :root {
+      font-size: 16px;
+    }
+  }
+
+  /* 2K/QHD (2560x1440) - Realistic viewport: ~2400px */
+  @media screen and (min-width: 2400px) {
+    :root {
+      font-size: 18px;
+    }
+  }
+
+  /* 4K/UHD (3840x2160) - Realistic viewport: ~3600px */
+  @media screen and (min-width: 2800px) {
+    :root {
+      font-size: 20px;
+    }
+  }
+
+  /* Ultra-wide 4K+ - Realistic viewport: ~3800px+ */
+  @media screen and (min-width: 3800px) {
+    :root {
+      font-size: 22px;
+    }
+  }
+
+  body {
+    @apply bg-background text-foreground font-neue;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-nord font-bold;
+  }
+}

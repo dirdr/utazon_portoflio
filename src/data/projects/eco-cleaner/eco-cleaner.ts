@@ -3,7 +3,6 @@ import { Project } from "../../../types/project";
 export const EcoCleaner: Project = {
   id: "eco-cleaner",
   title: "projects.eco-cleaner.title",
-  cover: "/images/eco-cleaner/cover.webp",
   date: "projects.eco-cleaner.date",
   priority: 14,
   header: "projects.eco-cleaner.header",
@@ -12,4 +11,3 @@ export const EcoCleaner: Project = {
   role: "projects.eco-cleaner.role",
   images: [],
 };
-

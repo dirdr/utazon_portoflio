@@ -1,0 +1,17 @@
+/* ===== COMPONENT STYLES ===== */
+@layer utilities {
+  .card-item:hover ~ .card-item,
+  .card-container:has(.card-item:hover) .card-item:not(:hover) {
+    opacity: 0.6;
+    transition:
+      opacity 0.3s ease,
+      filter 0.3s ease;
+  }
+
+  .card-item {
+    transition:
+      opacity 0.3s ease,
+      filter 0.3s ease;
+  }
+}
+

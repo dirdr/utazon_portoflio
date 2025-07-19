@@ -1,0 +1,87 @@
+@layer utilities {
+  .glint-button-wrapper {
+    @apply relative overflow-hidden rounded-full;
+    padding: 1px;
+  }
+
+  .glint-button-wrapper::before {
+    content: "";
+    position: absolute;
+    top: -100%;
+    left: -100%;
+    width: 300%;
+    height: 300%;
+    scale: 1.41;
+    background:
+      conic-gradient(
+        from 0deg,
+        transparent 40deg,
+        rgba(255, 255, 255, 0.6) 80deg,
+        rgba(255, 255, 255, 0.7) 90deg,
+        rgba(255, 255, 255, 0.6) 100deg,
+        transparent 150deg
+      ),
+      radial-gradient(circle, #565656 0%, #565656 100%);
+    border-radius: 50%;
+    animation: border-spin var(--animation-duration) linear infinite;
+    z-index: 1;
+  }
+
+  .glint-button-content {
+    @apply relative h-full w-full rounded-full bg-button-bg z-10;
+  }
+
+  .glint-card-wrapper {
+    @apply relative overflow-hidden rounded-3xl;
+    padding: 2px;
+    --glint-card-speed: 4s;
+  }
+
+  .glint-card-wrapper::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(
+      from 0deg,
+      transparent 50deg,
+      rgba(255, 255, 255, 0.4) 70deg,
+      rgba(255, 255, 255, 0.8) 90deg,
+      rgba(255, 255, 255, 0.4) 110deg,
+      transparent 130deg,
+      transparent 230deg,
+      rgba(255, 255, 255, 0.4) 250deg,
+      rgba(255, 255, 255, 0.8) 270deg,
+      rgba(255, 255, 255, 0.4) 290deg,
+      transparent 310deg
+    );
+    border-radius: 24px;
+    animation: border-spin var(--glint-card-speed) linear infinite;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+  }
+
+  .glint-card-wrapper:hover::before {
+    opacity: 1;
+  }
+
+  .glint-card-wrapper-disabled::before {
+    display: none;
+  }
+
+  .glint-card-wrapper-static {
+    @apply relative overflow-hidden rounded-3xl;
+    padding: 2px;
+  }
+
+  .glint-card-wrapper-static::before {
+    display: none;
+  }
+
+  .glint-card-content {
+    @apply relative w-full h-full rounded-3xl bg-background z-10;
+  }
+}

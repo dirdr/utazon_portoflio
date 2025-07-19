@@ -1,0 +1,17 @@
+/* ===== THEME CONFIGURATION ===== */
+@theme {
+  --color-background: oklch(0% 0 0); /* Black */
+  --color-foreground: oklch(100% 0 0); /* White */
+  --color-muted: oklch(65.2% 0 0); /* #9B9B9B */
+  --color-gray: oklch(85.5% 0 0);
+  --color-muted-foreground: oklch(15.5% 0 0); /* Dark Grey */
+
+  --color-button-border: #565656;
+  --color-button-bg: oklch(20% 0 0);
+  /* --color-button-bg: rgba(255, 255, 255, 0.04); */
+  --color-button-hover: oklch(25% 0 0);
+
+  --font-neue: "NeueMontreal", sans-serif;
+  --font-nord: "Nord", "Crimson Text", "Times New Roman", serif;
+}
+

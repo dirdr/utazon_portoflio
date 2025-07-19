@@ -1,7 +1,6 @@
 export interface Project {
   id: string;
   title: string;
-  cover: string;
   date: string;
   priority: number;
   header: string;

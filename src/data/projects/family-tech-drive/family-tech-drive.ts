@@ -3,7 +3,6 @@ import { Project } from "../../../types/project";
 export const FamilyTechDrive: Project = {
   id: "family-tech-drive",
   title: "projects.family-tech-drive.title",
-  cover: "/images/family-tech-drive/cover.webp",
   date: "projects.family-tech-drive.date",
   priority: 11,
   header: "projects.family-tech-drive.header",
@@ -12,4 +11,3 @@ export const FamilyTechDrive: Project = {
   role: "projects.family-tech-drive.role",
   images: [],
 };
-

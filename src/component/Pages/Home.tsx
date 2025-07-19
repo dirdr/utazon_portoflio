@@ -42,39 +42,49 @@ export const Home = () => {
         aria-labelledby="location-heading"
       >
         <address className="not-italic">
-          <p id="location-heading" className="text-muted mb-6">
+          <p id="location-heading" className="text-lg text-muted mb-6">
             Paris, France
           </p>
         </address>
         <LineSweepText
-          className="font-nord text-5xl italic text-muted tracking-tight leading-14"
+          className="font-nord text-6xl italic text-muted tracking-tight leading-14"
           duration={6}
         >
-          {t("home.title").includes('\n') ? (
-            t("home.title").split('\n').map((line, index) => (
-              <span key={index} className="block">
-                {line}
-              </span>
-            ))
-          ) : (
-            t("home.title")
-          )}
+          {t("home.title").includes("\n")
+            ? t("home.title")
+                .split("\n")
+                .map((line, index) => (
+                  <span key={index} className="block">
+                    {line}
+                  </span>
+                ))
+            : t("home.title")}
         </LineSweepText>
       </section>
 
       <section
-        className="absolute bottom-0 right-0 w-125 pb-16 pr-12"
+        className="absolute bottom-0 right-0 w-140 pb-16 pr-12"
         aria-labelledby="intro-heading"
       >
         <div className="space-y-4">
-          <p id="intro-heading" className="text text-gray mb-10">
+          <p id="intro-heading" className="text-xl text-gray mb-10">
             {t("home.description")}
           </p>
-          <nav className="flex gap-4 text-xs" aria-label="Actions principales">
-            <Button as="link" glintOnHover={true} href={ROUTES.PROJECTS}>
+          <nav className="flex gap-8" aria-label="Actions principales">
+            <Button
+              as="link"
+              glintOnHover={true}
+              href={ROUTES.PROJECTS}
+              className="text-lg"
+            >
               {t("home.projects")}
             </Button>
-            <Button as="link" glintOnHover={true} href={ROUTES.SHOWREEL}>
+            <Button
+              as="link"
+              glintOnHover={true}
+              href={ROUTES.SHOWREEL}
+              className="text-lg"
+            >
               {t("nav.showreel")}
             </Button>
           </nav>

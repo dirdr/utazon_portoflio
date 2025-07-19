@@ -1,17 +1,72 @@
 import { cn } from "../../utils/cn";
-import { CardProps } from "../../types/card";
 import { useTranslation } from "react-i18next";
 import { Button } from "./Button";
-import cardBackground from "../../assets/images/card_background.webp";
+import { useMemo, useRef } from "react";
+
+const getCardBackgrounds = () => {
+  const backgrounds = [];
+  for (let i = 1; i <= 3; i++) {
+    backgrounds.push(
+      new URL(`../../assets/images/card_backgrounds/${i}.png`, import.meta.url)
+        .href,
+    );
+  }
+  return backgrounds;
+};
+
+const cardBackgrounds = getCardBackgrounds();
+
+export interface CardProps {
+  image: {
+    src: string;
+    alt: string;
+  };
+  thumbnail: {
+    src: string;
+    alt: string;
+  };
+  project: {
+    name: string;
+    header: string;
+    date: string;
+  };
+  className?: string;
+  onClick?: () => void;
+  glintSpeed?: string;
+}
 
 export const Card = ({
   image,
+  thumbnail,
   project,
   className,
   onClick,
-  glintSpeed = "4s",
+  glintSpeed = "6s",
 }: CardProps) => {
   const { t } = useTranslation();
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const randomBackground = useMemo(() => {
+    const hash = project.name.split("").reduce((acc, char) => {
+      return char.charCodeAt(0) + ((acc << 5) - acc);
+    }, 0);
+    const index = Math.abs(hash) % cardBackgrounds.length;
+    return cardBackgrounds[index];
+  }, [project.name]);
+
+  const handleMouseEnter = () => {
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.play().catch(() => {});
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+    }
+  };
 
   return (
     <div
@@ -21,11 +76,13 @@ export const Card = ({
       )}
       style={{ "--glint-card-speed": glintSpeed } as React.CSSProperties}
       onClick={onClick}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <div
         className="glint-card-content p-6"
         style={{
-          background: `url(${cardBackground}) center/cover`,
+          background: `url(${randomBackground}) center/cover`,
         }}
       >
         <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden group">
@@ -55,9 +112,20 @@ export const Card = ({
           <img
             src={image.src}
             alt={image.alt}
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover transition-opacity duration-300 group-hover:opacity-0"
             style={{ clipPath: "url(#rounded-diagonal-cut)" }}
           />
+
+          <video
+            ref={videoRef}
+            className="absolute inset-0 h-full w-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            style={{ clipPath: "url(#rounded-diagonal-cut)" }}
+            muted
+            loop
+            playsInline
+          >
+            <source src={thumbnail.src} type="video/webm" />
+          </video>
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent" />
 

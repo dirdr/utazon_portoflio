@@ -20,7 +20,7 @@ export const Projects = () => {
             <Card
               key={project.id}
               image={{
-                src: project.cover,
+                src: `/images/projects/${project.id}/cover.webp`,
                 alt: t(project.title),
               }}
               project={{
@@ -29,6 +29,10 @@ export const Projects = () => {
                 date: t(project.date),
               }}
               onClick={() => handleProjectClick(project.id)}
+              thumbnail={{
+                src: `/videos/projects/${project.id}/thumbnail.webm`,
+                alt: t(project.title),
+              }}
             />
           ))}
         </div>

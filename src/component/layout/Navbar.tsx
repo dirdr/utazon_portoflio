@@ -25,10 +25,10 @@ export const Navbar = () => {
       <WrapperComponent {...wrapperProps}>
         <div className="flex items-center justify-between h-16">
           <div className="flex flex-col items-start">
-            <a href="/" className="text-sm font-nord">
+            <a href="/" className="text font-nord">
               UTAZON
             </a>
-            <a href="/" className="font-nord text-muted text-xs">
+            <a href="/" className="font-nord text-muted text-sm">
               ANTOINE VERNEZ
             </a>
           </div>
@@ -42,7 +42,7 @@ export const Navbar = () => {
           )}
 
           <nav
-            className="hidden lg:flex items-center space-x-8"
+            className="hidden lg:flex items-center space-x-12"
             role="navigation"
             aria-label="Principle Nav"
           >
@@ -50,7 +50,7 @@ export const Navbar = () => {
               <a
                 key={href}
                 href={href}
-                className="hover:text-muted font-nord text-xs transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-sm"
+                className="hover:text-muted font-nord text transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-sm"
               >
                 {href === ROUTES.PROJECTS
                   ? t("nav.projects")
@@ -59,7 +59,7 @@ export const Navbar = () => {
                     : label}
               </a>
             ))}
-            <Button glint={true} className="text-xs" href={ROUTES.CONTACT}>
+            <Button glint={true} href={ROUTES.CONTACT} className="text-base">
               {t("nav.contact")}
             </Button>
             <LanguageSwitcher />
@@ -117,7 +117,7 @@ export const Navbar = () => {
                 <a
                   key={href}
                   href={href}
-                  className="hover:text-muted font-nord text-sm text-center py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-sm"
+                  className="hover:text-muted font-nord text text-center py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-sm"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {href === ROUTES.PROJECTS
@@ -129,6 +129,7 @@ export const Navbar = () => {
               ))}
               <div className="flex justify-center pt-2">
                 <Button
+                  className="text-base"
                   href={ROUTES.CONTACT}
                   onClick={() => setIsMenuOpen(false)}
                 >

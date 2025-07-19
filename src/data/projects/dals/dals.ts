@@ -3,7 +3,6 @@ import { Project } from "../../../types/project";
 export const Dals: Project = {
   id: "dals",
   title: "projects.dals.title",
-  cover: "/images/dals/cover.webp",
   date: "projects.dals.date",
   priority: 2,
   header: "projects.dals.header",
@@ -12,4 +11,3 @@ export const Dals: Project = {
   role: "projects.dals.role",
   images: [],
 };
-
