@@ -22,12 +22,6 @@ export const ProjectDetail = () => {
     <div className="min-h-screen pt-32 pb-16">
       <Container>
         <div className="max-w-4xl mx-auto">
-          <img
-            src={project.cover}
-            alt={t(project.title)}
-            className="w-full aspect-video object-cover rounded-2xl mb-8"
-          />
-
           <h1 className="font-nord text-4xl md:text-6xl font-bold mb-6">
             {t(project.title)}
           </h1>
@@ -62,4 +56,3 @@ export const ProjectDetail = () => {
     </div>
   );
 };
-

@@ -149,8 +149,8 @@ export const Card = ({
             </div>
           </div>
 
-          <div className="absolute bottom-4 right-4 transform translate-x-full opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 ease-out">
-            <Button glint className="text-xs" as="button">
+          <div className="absolute bottom-8 right-8 transform translate-x-full opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 ease-out">
+            <Button glint className="text-base" as="button">
               {t("common.seeProject")}
             </Button>
           </div>
