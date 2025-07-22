@@ -1,11 +1,13 @@
-export const Showreel = () => {
-  return (
-    <div className="min-h-screen bg-background flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-5xl font-bold mb-6">Showreel</h1>
-        <p className="text-muted">Video showreel coming soon...</p>
-      </div>
-    </div>
-  );
-};
+import { Container } from "../layout/Container";
+import { VideoCard } from "../Showreel/VideoCard";
 
+export const Showreel = () => (
+  <div className="flex items-center justify-center p-4">
+    <Container className="flex items-center justify-center">
+      <VideoCard 
+        src="/videos/showreel.webm" 
+        className="w-full max-w-screen-xl" 
+      />
+    </Container>
+  </div>
+);

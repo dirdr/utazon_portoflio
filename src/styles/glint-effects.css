@@ -82,6 +82,10 @@
     display: none;
   }
 
+  .glint-card-wrapper-always::before {
+    opacity: 1;
+  }
+
   .glint-card-content {
     @apply relative w-full h-full rounded-3xl bg-background z-10;
   }

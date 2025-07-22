@@ -1,10 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-interface CursorPosition {
-  x: number;
-  y: number;
-}
-
 interface UseCursorDistanceOptions {
   maxDistance?: number;
   throttleMs?: number;

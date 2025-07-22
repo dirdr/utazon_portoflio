@@ -1,13 +1,11 @@
 import { useRoute } from "wouter";
 import { getProjectById } from "../../data/projects";
-import { useTranslation } from "react-i18next";
 import { Container } from "../layout/Container";
-import { ProjectHero } from "../ProjectDetail/ProjectHero";
+import { ProjectHeroSection } from "../ProjectDetail/ProjectHeroSection";
 
 export const ProjectDetail = () => {
   const [, params] = useRoute("/projects/:id");
   const project = params?.id ? getProjectById(params.id) : null;
-  const { t } = useTranslation();
 
   if (!project) {
     return (
@@ -21,7 +19,20 @@ export const ProjectDetail = () => {
 
   return (
     <div>
-      <ProjectHero project={project} />
+      <ProjectHeroSection project={project} />
+      <section className="min-h-screen bg-black text-white">
+        <Container>
+          <div className="py-24">
+            <h2 className="font-nord text-3xl font-bold mb-8">
+              Project Details
+            </h2>
+            <p className="font-neue text-lg">
+              Additional project content goes here. This section scrolls
+              normally and the background image stays in place above.
+            </p>
+          </div>
+        </Container>
+      </section>
     </div>
   );
 };

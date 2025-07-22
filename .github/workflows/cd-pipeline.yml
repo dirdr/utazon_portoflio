@@ -35,18 +35,14 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            echo "🚀 Starting deployment process..."
+            echo "🚀 Deploying"
             echo "SSH connection successful!"
-            echo "Host: $(hostname)"
-            echo "Date: $(date)"
-            echo "=================================="
 
             VERSION="${{ github.event.inputs.version }}"
             ENVIRONMENT="${{ github.event.inputs.environment }}"
             DOCKER_USERNAME="${{ secrets.DOCKER_USERNAME }}"
             APP_NAME="${{ vars.APP_NAME }}"
             BASE_DIR="${{ vars.BASE_DIR }}"
-
             PROJECT_DIR="$BASE_DIR/$ENVIRONMENT"
 
             echo "📋 Deployment Configuration:"
@@ -54,10 +50,8 @@ jobs:
             echo "   Environment: $ENVIRONMENT"
             echo "   App Name: $APP_NAME"
             echo "   Project Directory: $PROJECT_DIR"
-            echo "=================================="
 
             cd "$PROJECT_DIR" || { echo "💥 Project directory not found: $PROJECT_DIR"; exit 1; }
-
 
             if [ ! -f "docker-compose.yaml" ]; then
               echo "💥 docker-compose.yaml not found in $PROJECT_DIR"
@@ -69,10 +63,6 @@ jobs:
               exit 1
             fi
 
-            echo "📁 Using directory: $PROJECT_DIR"
-            echo "📁 Files found: docker-compose.yaml, .env"
-
-            # Function to check if Docker image exists
             check_image_exists() {
               local image="$1"
               echo "🔍 Checking if image exists: $image"
@@ -85,7 +75,6 @@ jobs:
               fi
             }
 
-            # Determine target image
             TARGET_IMAGE="$DOCKER_USERNAME/$APP_NAME:$VERSION"
 
             if check_image_exists "$TARGET_IMAGE"; then
@@ -97,10 +86,6 @@ jobs:
               exit 1
             fi
 
-            # Update the image version in .env file
-            echo "📝 Updating image version in .env file..."
-
-            # Create backup of env file
             cp ".env" ".env.backup"
 
             # Update or add IMAGE_VERSION in env file
@@ -114,51 +99,27 @@ jobs:
             echo "📄 Current .env content:"
             cat .env | grep -E "(IMAGE_VERSION|APP_NAME)" || echo "IMAGE_VERSION=$DEPLOY_VERSION"
 
-            # Show current running containers
-            echo "📊 Current running containers:"
             docker-compose ps || true
 
-            # Pull the new image
-            echo "⬇️  Pulling latest image..."
             docker-compose pull
 
-            # Deploy with zero-downtime using rolling update
-            echo "🚀 Deploying with Docker Compose..."
-
-            # Start new containers
             docker-compose up -d
 
-            # Wait a moment for containers to stabilize
-            echo "⏳ Waiting for containers to stabilize..."
-            sleep 10
+            sleep 5
 
-            # Verify deployment
-            echo "🔍 Verifying deployment..."
             if docker-compose ps | grep -q "Up"; then
               echo "✅ Deployment successful!"
               
-              # Show final status
-              echo "📈 Final container status:"
-              docker-compose ps
-              
-              # Show logs (last 20 lines)
-              echo "📜 Recent logs:"
-              docker-compose logs --tail=20
-              
-              # Clean up old images
               echo "🧹 Cleaning up old images..."
               docker image prune -f
               
-              # Remove backup env file
               rm -f ".env.backup"
               
             else
               echo "💥 Deployment failed! Rolling back..."
               
-              # Restore backup env file
               mv ".env.backup" ".env"
               
-              # Try to restart with previous version
               docker-compose up -d
               
               echo "📜 Error logs:"

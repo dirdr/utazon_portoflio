@@ -2,14 +2,12 @@ import { VideoBackground } from "./VideoBackground";
 import { VideoProvider, useVideo } from "../../contexts/video";
 import { Navbar } from "./Navbar";
 import { FadeInContainer } from "../common/FadeInContainer";
-import { usePageTracker } from "../../hooks/usePageTracker";
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 const LayoutContent = ({ children }: LayoutProps) => {
-  usePageTracker();
   const { shouldShowLayout } = useVideo();
 
   return (

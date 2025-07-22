@@ -1,8 +1,7 @@
-/* ===== COMPONENT STYLES ===== */
 @layer utilities {
   .card-item:hover ~ .card-item,
   .card-container:has(.card-item:hover) .card-item:not(:hover) {
-    opacity: 0.6;
+    opacity: 0.8;
     transition:
       opacity 0.3s ease,
       filter 0.3s ease;
@@ -13,5 +12,60 @@
       opacity 0.3s ease,
       filter 0.3s ease;
   }
-}
 
+  /* Video Player Slider Styles */
+  .slider {
+    -webkit-appearance: none;
+    background: rgba(255, 255, 255, 0.2);
+    outline: none;
+    border-radius: 5px;
+  }
+
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+
+  .slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+  }
+
+  .slider::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+    border: none;
+    transition: transform 0.2s ease;
+  }
+
+  .slider::-moz-range-thumb:hover {
+    transform: scale(1.2);
+  }
+
+  /* ReactPlayer Custom Styling */
+  .react-player {
+    border-radius: 1rem !important;
+    overflow: hidden !important;
+  }
+
+  .react-player video {
+    border-radius: 1rem !important;
+  }
+
+  /* Custom controls styling for ReactPlayer */
+  .react-player__controls {
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 40%, transparent 100%) !important;
+  }
+
+  .react-player__play-icon {
+    border-left-color: white !important;
+  }
+}

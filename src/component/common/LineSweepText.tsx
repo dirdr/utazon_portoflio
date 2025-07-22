@@ -10,7 +10,7 @@ interface LineSweepTextProps {
 export const LineSweepText: React.FC<LineSweepTextProps> = ({
   children,
   className = "",
-  duration = 2,
+  duration = 6,
   animate = true,
 }) => {
   if (!animate) {
@@ -24,8 +24,8 @@ export const LineSweepText: React.FC<LineSweepTextProps> = ({
       <span
         className="absolute inset-0 text-white"
         style={{
-          background: `linear-gradient(90deg, transparent 30%, white 50%, transparent 70%)`,
-          backgroundSize: "200% 100%",
+          background: `linear-gradient(90deg, transparent 0%, white 20%, transparent 40%)`,
+          backgroundSize: "300% 100%",
           backgroundClip: "text",
           WebkitBackgroundClip: "text",
           color: "transparent",
