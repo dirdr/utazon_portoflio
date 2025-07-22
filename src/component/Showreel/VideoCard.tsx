@@ -14,9 +14,10 @@ export const VideoCard = ({
   glintSpeed = "6s",
 }: VideoCardProps) => {
   const [showControls, setShowControls] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
 
   const backgroundImage = new URL(
-    `../../assets/images/card_backgrounds/1.png`,
+    `../../assets/images/card_backgrounds/1.webp`,
     import.meta.url,
   ).href;
 
@@ -45,11 +46,13 @@ export const VideoCard = ({
             width="100%"
             height="100%"
             controls={showControls}
-            playing
-            muted
+            playing={isPlaying}
+            muted={false}
             loop
             volume={0.8}
             style={{ borderRadius: "0.75rem" }}
+            onPlay={() => setIsPlaying(true)}
+            onPause={() => setIsPlaying(false)}
           />
         </div>
       </div>

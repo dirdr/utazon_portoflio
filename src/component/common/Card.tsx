@@ -7,7 +7,7 @@ const getCardBackgrounds = () => {
   const backgrounds = [];
   for (let i = 1; i <= 3; i++) {
     backgrounds.push(
-      new URL(`../../assets/images/card_backgrounds/${i}.png`, import.meta.url)
+      new URL(`../../assets/images/card_backgrounds/${i}.webp`, import.meta.url)
         .href,
     );
   }

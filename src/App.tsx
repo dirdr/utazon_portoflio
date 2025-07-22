@@ -1,10 +1,10 @@
 import { Layout } from "./component/layout/Layout";
-import { About } from "./component/Pages/About";
-import { Home } from "./component/Pages/Home";
-import { Projects } from "./component/Pages/Projects";
-import { ProjectDetail } from "./component/Pages/ProjectDetail";
-import { Contact } from "./component/Pages/Contact";
-import { Showreel } from "./component/Pages/Showreel";
+import { About } from "./component/pages/About";
+import { Home } from "./component/pages/Home";
+import { Projects } from "./component/pages/Projects";
+import { ProjectDetail } from "./component/pages/ProjectDetail";
+import { Contact } from "./component/pages/Contact";
+import { Showreel } from "./component/pages/Showreel";
 import { ROUTES } from "./constants/routes";
 import "./index.css";
 import { Route, Switch } from "wouter";
