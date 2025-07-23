@@ -13,6 +13,7 @@ import { MrHelp } from "./mr-help/mr-help";
 import { Dals } from "./dals/dals";
 import { Yassencore } from "./yassencore/yassencore";
 import { PixelBreak } from "./pixel-break/pixel-break";
+import { Trybz } from "./trybz/trybz";
 
 const allProjects: Project[] = [
   AurumNova,
@@ -29,6 +30,7 @@ const allProjects: Project[] = [
   Dals,
   Yassencore,
   PixelBreak,
+  Trybz,
 ];
 
 export const allProjectsSortedByPriority: Project[] = allProjects

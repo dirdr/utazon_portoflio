@@ -4,17 +4,20 @@ import { useState } from "react";
 import { NAVIGATION_ITEMS, ROUTES } from "../../constants/routes";
 import { LanguageSwitcher } from "../common/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
-import { useVideo } from "../../contexts/video";
-import { Container } from "./Container";
+import { useVideo } from "../../contexts/VideoContext";
 import { NavLink } from "./NavLink";
 import { useAutoCloseMobileMenu } from "../../hooks/useAutoCloseMobileMenu";
+import { getPageConfig } from "../../config/pageConfig";
+import { cn } from "../../utils/cn";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { t } = useTranslation();
   const { currentPage } = useVideo();
 
+  const pageConfig = getPageConfig(currentPage);
   const isHomePage = currentPage === ROUTES.HOME;
+
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
 
@@ -35,7 +38,7 @@ export const Navbar = () => {
           </a>
         </div>
 
-        {!isHomePage && (
+        {pageConfig.showNavbarLogo && (
           <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2">
             <a href="/">
               <img src={logo} alt="Utazon Logo" className="h-10 w-auto" />
@@ -135,18 +138,19 @@ export const Navbar = () => {
 
   return (
     <nav
-      className={`w-full z-50 ${isHomePage ? "absolute top-0 left-0" : ""}`}
+      className="w-full z-50 bg-transparent"
       ref={menuRef}
     >
-      {isHomePage ? (
-        <div className="w-full px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 py-4 sm:py-8 md:py-12">
-          <WrapperContent />
-        </div>
-      ) : (
-        <Container className="py-4 sm:py-12">
-          <WrapperContent />
-        </Container>
-      )}
+      <div
+        className={cn(
+          "w-full py-4 md:py-8",
+          isHomePage
+            ? "px-4 sm:px-8 md:px-12 lg:px-16 xl:px-12"
+            : "container mx-auto px-4",
+        )}
+      >
+        <WrapperContent />
+      </div>
     </nav>
   );
 };

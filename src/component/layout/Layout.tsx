@@ -1,11 +1,11 @@
 import { VideoBackground } from "./VideoBackground";
 import { ImageBackgroundDisplay } from "./ImageBackgroundDisplay";
-import { VideoProvider, useVideo } from "../../contexts/video";
+import { VideoProvider, useVideo } from "../../contexts/VideoContext";
 import { Navbar } from "./Navbar";
+import { Footer } from "./Footer";
 import { FadeInContainer } from "../common/FadeInContainer";
 import { usePageTracker } from "../../hooks/usePageTracker";
-import { ROUTES } from "../../constants/routes";
-import { cn } from "../../utils/cn";
+import { getPageConfig } from "../../config/pageConfig";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -15,17 +15,28 @@ const LayoutContent = ({ children }: LayoutProps) => {
   usePageTracker();
   const { shouldShowLayout, currentPage } = useVideo();
 
-  const isHomePage = currentPage === ROUTES.HOME;
+  const pageConfig = getPageConfig(currentPage);
+  const isHomePage = currentPage === "/";
 
   return (
     <>
       <VideoBackground />
       <ImageBackgroundDisplay />
       <FadeInContainer isVisible={shouldShowLayout}>
-        <div className={cn("min-h-screen grid grid-rows-[auto_1fr]")}>
-          <Navbar />
-          <main className={isHomePage ? "" : "overflow-auto"}>{children}</main>
-        </div>
+        {isHomePage ? (
+          <div className="h-screen flex flex-col">
+            <Navbar />
+            <main className="flex-1 overflow-hidden">
+              {children}
+            </main>
+          </div>
+        ) : (
+          <div className="min-h-screen">
+            <Navbar />
+            <main>{children}</main>
+            {pageConfig.showFooter && <Footer />}
+          </div>
+        )}
       </FadeInContainer>
     </>
   );

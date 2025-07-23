@@ -13,7 +13,6 @@
       filter 0.3s ease;
   }
 
-  /* Video Player Slider Styles */
   .slider {
     -webkit-appearance: none;
     background: rgba(255, 255, 255, 0.2);
@@ -60,9 +59,13 @@
     border-radius: 1rem !important;
   }
 
-  /* Custom controls styling for ReactPlayer */
   .react-player__controls {
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 40%, transparent 100%) !important;
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.8) 0%,
+      rgba(0, 0, 0, 0.4) 40%,
+      transparent 100%
+    ) !important;
   }
 
   .react-player__play-icon {

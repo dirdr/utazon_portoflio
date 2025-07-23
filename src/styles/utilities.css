@@ -1,21 +1,13 @@
 /* ===== UTILITY CLASSES ===== */
 @layer utilities {
-  /* Rounded corner cut utility */
-  .rounded-corner-cut {
-    clip-path: polygon(
-      0 0,
-      calc(100% - 6rem) 0,
-      calc(100% - 3rem) 1.2rem,
-      calc(100% - 0.3rem) 4.5rem,
-      100% 6rem,
-      100% 100%,
-      0 100%
-    );
-    border-radius: 0.75rem;
+  /* Hide scrollbars for home page */
+  .hide-scrollbars {
+    overflow-x: hidden;
+    scrollbar-width: none; /* Firefox */
   }
-
-  /* Radial gradient utility for background vignette */
-  .bg-radial-gradient {
-    background: radial-gradient(circle at center, transparent 20%, rgba(0, 0, 0, 0.3) 70%, rgba(0, 0, 0, 0.6) 100%);
+  
+  .hide-scrollbars::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge */
   }
 }
+

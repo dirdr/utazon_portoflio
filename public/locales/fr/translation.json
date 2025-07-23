@@ -18,7 +18,7 @@
   "projects": {
     "aurum-nova": {
       "title": "AURUM NOVA",
-      "header": "Bijoux de luxe éco-responsables",
+      "header": "3D Motion",
       "description": "Un projet de pub 3D complet imaginé pour une marque fictive de joaillerie durable. Identité visuelle, direction artistique et ambiance sonore conçues pour refléter le prestige et l'engagement écologique.",
       "role": "Concept, DA, 3D, son – tout de A à Z",
       "client": "Projet d'études",
@@ -26,7 +26,7 @@
     },
     "dune": {
       "title": "DUNE – The Fremen Ambush",
-      "header": "Hommage 3D à l'univers de Dune",
+      "header": "Cinématique 3D",
       "description": "Court-métrage personnel entièrement réalisé en 3D, recréant l'esthétique unique de Dune. Micro-scénario et mise en scène immersive autour d'une embuscade.",
       "role": "Création complète",
       "client": "Projet personnel",
@@ -34,7 +34,7 @@
     },
     "eco-cleaner": {
       "title": "ECOCLEANER",
-      "header": "Innovation & écologie à bord",
+      "header": "3D Motion",
       "description": "Vidéo publicitaire 3D pour un aspirateur robot haut de gamme. Univers sobre et transitions élégantes pour valoriser l'innovation et la responsabilité environnementale.",
       "role": "Création complète",
       "client": "Projet d'études",
@@ -42,7 +42,7 @@
     },
     "family-tech-drive": {
       "title": "FAMILY TECH DRIVE",
-      "header": "Sécurité et confort en mouvement",
+      "header": "3D Motion",
       "description": "Projet réalisé en binôme. Publicité 3D présentant une gamme d'innovations embarquées pour la sécurité des familles dans les véhicules.",
       "role": "Co-réalisation avec mon binôme",
       "client": "Projet d'études",
@@ -50,7 +50,7 @@
     },
     "paris-music-2024": {
       "title": "PARIS – Fête de la Musique 2024",
-      "header": "Événement vibrant sous Unreal Engine 5",
+      "header": "Cinématique 3D",
       "description": "Court-métrage réalisé en deux semaines. Le récit suit un personnage explorant la Fête de la Musique dans les rues parisiennes à travers des scènes immersives et une narration rythmée.",
       "role": "Création complète",
       "client": "Projet d'études",
@@ -58,7 +58,7 @@
     },
     "fooh": {
       "title": "FOOH – Fake Out Of Home",
-      "header": "Illusions urbaines et campagnes immersives",
+      "header": "3D Motion",
       "description": "Projets de simulation 3D intégrée en environnement réel pour démontrer l'impact des campagnes publicitaires dans l'espace public. De la création complète d'univers conceptuels aux éléments clés pour des marques comme Gérard Darel : modélisation, texturing, particules et compositing.",
       "role": "Création complète & éléments clés 3D",
       "client": "Projets personnels & Blackmotion / Gérard Darel",
@@ -66,7 +66,7 @@
     },
     "karmin-corp-lec-reveal": {
       "title": "KARMINE CORP – LEC Reveal",
-      "header": "Célébration d'un géant de l'esport",
+      "header": "Cinématique 3D",
       "description": "Vidéo hommage en 3D pour l'entrée de la Karmine Corp en LEC. Univers épique et mise en scène monumentale autour du trophée.",
       "role": "Création complète",
       "client": "Projet personnel",
@@ -74,7 +74,7 @@
     },
     "limova-movali": {
       "title": "LIMOVA & MOVALI – Kaitonom.IA",
-      "header": "IA au service des pros et asso",
+      "header": "2D | 3D Motion",
       "description": "Motion design 2D et 3D pour valoriser les fonctionnalités de deux intelligences artificielles destinées à organiser et assister. Projet réalisé en agence.",
       "role": "Motion Design 2D & 3D",
       "client": "Blackmotion / Client : Kaitonom.IA",
@@ -82,7 +82,7 @@
     },
     "spiderman-timefreeze": {
       "title": "SPIDERMAN – Time Freeze",
-      "header": "Quand l'action se fige dans le chaos",
+      "header": "Cinématique 3D",
       "description": "Court-métrage 3D inspiré du générique de Deadpool, explorant la suspension du temps. Le décor et les personnages sont figés en pleine action, mêlant calme visuel et tension narrative.",
       "role": "Création complète",
       "client": "Projet personnel",
@@ -90,7 +90,7 @@
     },
     "lyner": {
       "title": "LYNER",
-      "header": "L'esthétique dentaire sublimée en 3D",
+      "header": "3D Motion",
       "description": "Vidéo 3D réalisée au sein de l'agence Blackmotion pour Lyner, un service spécialisé dans les gouttières dentaires sur mesure. L'objectif : mettre en avant l'accompagnement complet du service, la simplicité du parcours client et la modernité de la solution.",
       "role": "Réalisation de l'ensemble des plans 3D",
       "client": "Blackmotion / Client : Lyner",
@@ -98,15 +98,15 @@
     },
     "mr-help": {
       "title": "MR. HELP",
-      "header": "Installation simplifiée, service amplifié",
+      "header": "3D Motion",
       "description": "Série de vidéos 3D réalisées pour Mr. Help, une entreprise spécialisée dans l'installation de mobilier et de climatiseurs. Chaque vidéo met en avant, de façon claire et stylisée, la facilité du parcours client, la fiabilité du service, et les garanties incluses dans leur Pack Sérénité.",
       "role": "Réalisation des séquences 3D au sein de l'agence",
       "client": "Blackmotion / Client : Mr. Help",
       "date": "2025"
     },
     "dals": {
-      "title": "DANSE AVEC LES STARS – Tableaux en 3D Mapping",
-      "header": "Sublimer la scène par le mouvement digital",
+      "title": "DANSE AVEC LES STARS",
+      "header": "Visuels de plateau en 3D",
       "description": "Création de tableaux en 3D mapping projetés en live pour l'émission Danse avec les Stars (TF1), au sein de l'agence Blackmotion. Chaque univers a été conçu pour amplifier l'émotion des chorégraphies de Lénie, Jungeli, Claude Dartois, Florent Manaudou ou Adil Rami.",
       "role": "Création des tableaux en 3D mapping pour plusieurs chorégraphies",
       "client": "Blackmotion / Client : TF1 – Danse avec les Stars",
@@ -114,7 +114,7 @@
     },
     "yassencore": {
       "title": "YASSENCORE – Twitch Waiting Screen",
-      "header": "Un écran d'attente à son image",
+      "header": "Cinématique 3D",
       "description": "Création d'un écran d'attente Twitch sur mesure pour le streamer YassEncore, imaginé comme un hommage visuel à ses univers préférés : Breaking Bad, Dragon Ball, le football... Un décor animé unique et immersif pour ouvrir chaque live avec impact.",
       "role": "Conception et réalisation complète du waiting screen",
       "client": "Commande créateur / Client : YassEncore",
@@ -122,11 +122,60 @@
     },
     "pixel-break": {
       "title": "PIXEL BREAK",
-      "header": "Une brèche vers le monde des Invaders",
+      "header": "Cinématique 3D",
       "description": "Court-métrage 3D réalisé en duo avec Mario Sougoumarin dans le cadre d'un projet d'école. Une mosaïque Space Invaders s'illumine, s'ouvre, et la caméra plonge dans un monde rétro-futuriste où les aliens se préparent à l'invasion. Fusion entre réalisme urbain et esthétique 8-bit.",
       "role": "Co-direction artistique, animation, modélisation 3D",
       "client": "Projet d'école (binôme avec Mario Sougoumarin)",
       "date": "2025"
+    },
+    "trybz": {
+      "title": "TRYBZ",
+      "header": "Visualisation 3D",
+      "description": "Création d’un stand pour une marque de boisson, TRYBZ, présenté lors de l’anniversaire d’Adil Rami  Stand design for a beverage brand, TRYBZ, showcased at Adil Rami’s birthday event",
+      "role": "3D Modeling",
+      "client": "Blackmotion",
+      "date": "2024"
+    }
+  },
+  "legal": {
+    "title": "Mentions Légales",
+    "lastUpdated": "Dernière mise à jour",
+    "editor": {
+      "title": "1. Éditeur du Site",
+      "name": "Antoine Vernez",
+      "status": "Entrepreneur Individuel (EI)",
+      "address": "Paris, France",
+      "phone": "Disponible sur demande",
+      "email": "contact@utazon.com",
+      "siret": "SIRET : [Numéro fourni lors de l'immatriculation]",
+      "activity": "Activités spécialisées de design",
+      "nafCode": "Code NAF : 7410Z"
+    },
+    "hosting": {
+      "title": "2. Hébergement",
+      "provider": "Hébergeur : [À préciser]",
+      "address": "Adresse : [Adresse de l'hébergeur]",
+      "phone": "Téléphone : [Téléphone de l'hébergeur]"
+    },
+    "intellectual": {
+      "title": "3. Propriété Intellectuelle",
+      "content": "Ce site web et l'ensemble de son contenu (textes, images, vidéos, créations, logos, etc.) sont la propriété exclusive d'Antoine Vernez, sauf mention contraire. Toute reproduction, distribution, modification, adaptation, retransmission ou publication de ces éléments est strictement interdite sans l'accord écrit préalable d'Antoine Vernez. Tous les droits de propriété intellectuelle sont réservés. Les marques, logos et signes distinctifs reproduits sur ce site sont la propriété d'Antoine Vernez et ne peuvent être reproduits ou utilisés sans autorisation préalable."
+    },
+    "liability": {
+      "title": "4. Limitation de Responsabilité",
+      "content": "Les informations contenues sur ce site sont fournies à titre informatif uniquement. Antoine Vernez s'efforce de fournir des informations exactes et à jour mais ne peut garantir l'exactitude, l'exhaustivité ou l'actualité des informations publiées sur ce site. En conséquence, l'utilisateur reconnaît utiliser ces informations sous sa responsabilité exclusive. Antoine Vernez ne saurait être tenu responsable de tout dommage direct ou indirect résultant de l'utilisation de ce site."
+    },
+    "data": {
+      "title": "5. Données Personnelles",
+      "content": "Conformément à la loi Informatique et Libertés et au Règlement Général sur la Protection des Données (RGPD), vous disposez d'un droit d'accès, de rectification et de suppression des données vous concernant. Ce site peut collecter des informations personnelles (nom, adresse e-mail) via les formulaires de contact. Ces informations sont utilisées uniquement pour répondre à vos demandes et ne sont pas transmises à des tiers sans votre consentement. Pour exercer vos droits ou pour toute question relative au traitement de vos données personnelles, contactez-nous à : contact@utazon.com"
+    },
+    "cookies": {
+      "title": "6. Cookies",
+      "content": "Ce site peut utiliser des cookies pour améliorer l'expérience utilisateur. Les cookies sont de petits fichiers texte stockés sur votre appareil lors de la visite de notre site. Vous pouvez désactiver les cookies via les paramètres de votre navigateur, bien que cela puisse affecter certaines fonctionnalités du site."
+    },
+    "law": {
+      "title": "7. Droit Applicable",
+      "content": "Ces mentions légales sont régies par le droit français. En cas de litige, les tribunaux français seront seuls compétents."
     }
   }
 }

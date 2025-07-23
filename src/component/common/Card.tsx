@@ -1,7 +1,7 @@
 import { cn } from "../../utils/cn";
 import { useTranslation } from "react-i18next";
 import { Button } from "./Button";
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 
 const getCardBackgrounds = () => {
   const backgrounds = [];
@@ -44,6 +44,7 @@ export const Card = ({
 }: CardProps) => {
   const { t } = useTranslation();
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [hasVideoLoaded, setHasVideoLoaded] = useState(false);
 
   const randomBackground = useMemo(() => {
     const hash = project.name.split("").reduce((acc, char) => {
@@ -54,14 +55,14 @@ export const Card = ({
   }, [project.name]);
 
   const handleMouseEnter = () => {
-    if (videoRef.current) {
+    if (hasVideoLoaded && videoRef.current) {
       videoRef.current.currentTime = 0;
       videoRef.current.play().catch(() => {});
     }
   };
 
   const handleMouseLeave = () => {
-    if (videoRef.current) {
+    if (hasVideoLoaded && videoRef.current) {
       videoRef.current.pause();
       videoRef.current.currentTime = 0;
     }
@@ -110,17 +111,25 @@ export const Card = ({
           <img
             src={image.src}
             alt={image.alt}
-            className="h-full w-full object-cover transition-opacity duration-300 group-hover:opacity-0"
+            className={cn(
+              "h-full w-full object-cover transition-opacity duration-300",
+              hasVideoLoaded && "group-hover:opacity-0",
+            )}
             style={{ clipPath: "url(#rounded-diagonal-cut)" }}
           />
 
           <video
             ref={videoRef}
-            className="absolute inset-0 h-full w-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            className={cn(
+              "absolute inset-0 h-full w-full object-cover transition-opacity duration-300",
+              hasVideoLoaded ? "opacity-0 group-hover:opacity-100" : "hidden",
+            )}
             style={{ clipPath: "url(#rounded-diagonal-cut)" }}
             muted
             loop
             playsInline
+            onLoadedData={() => setHasVideoLoaded(true)}
+            onError={() => setHasVideoLoaded(false)}
           >
             <source src={thumbnail.src} type="video/webm" />
           </video>

@@ -2,7 +2,8 @@
   "nav": {
     "projects": "PROJECTS",
     "about": "ABOUT",
-    "contact": "CONTACT ME"
+    "contact": "CONTACT ME",
+    "showreel": "SHOWREEL"
   },
   "common": {
     "utazon": "UTAZON",
@@ -17,7 +18,7 @@
   "projects": {
     "aurum-nova": {
       "title": "AURUM NOVA",
-      "header": "Eco-luxury jewelry in motion",
+      "header": "3D Motion",
       "description": "A full 3D commercial imagined for a fictional sustainable jewelry brand. Visual identity, art direction, and sound design were all crafted to reflect both prestige and ecological commitment.",
       "role": "Concept, art direction, 3D, sound – full solo production",
       "client": "Student project",
@@ -25,7 +26,7 @@
     },
     "dune": {
       "title": "DUNE – The Fremen Ambush",
-      "header": "A cinematic tribute to Dune's universe",
+      "header": "3D Cinematic",
       "description": "A personal 3D short film recreating the unique aesthetic of Dune. A micro-story with immersive storytelling centered around a tactical ambush.",
       "role": "Full solo creation",
       "client": "Personal project",
@@ -33,7 +34,7 @@
     },
     "eco-cleaner": {
       "title": "ECOCLEANER",
-      "header": "Clean design for a clean world",
+      "header": "3D Motion",
       "description": "3D commercial for a high-end robotic vacuum. A sleek, minimalistic universe and fluid transitions to emphasize innovation and eco-consciousness.",
       "role": "Full solo creation",
       "client": "Student project",
@@ -41,7 +42,7 @@
     },
     "family-tech-drive": {
       "title": "FAMILY TECH DRIVE",
-      "header": "Safety & comfort on the move",
+      "header": "3D Motion",
       "description": "3D ad made in a duo, highlighting onboard technology and family safety in vehicles. A mix of storytelling and product showcasing.",
       "role": "Co-direction and production",
       "client": "Student project",
@@ -49,7 +50,7 @@
     },
     "paris-music-2024": {
       "title": "PARIS – Fête de la Musique 2024",
-      "header": "Immersive city vibes in UE5",
+      "header": "3D Cinematic",
       "description": "A 2-week short film built in Unreal Engine 5. The story follows a character exploring Paris during the Fête de la Musique, told through dynamic sequences and atmospheric cinematography.",
       "role": "Full solo creation",
       "client": "Student project",
@@ -57,7 +58,7 @@
     },
     "fooh": {
       "title": "FOOH – Fake Out Of Home",
-      "header": "Urban illusions and immersive campaigns",
+      "header": "3D Motion",
       "description": "3D simulation projects seamlessly integrated into real-world environments, showcasing the visual power of fictional ad campaigns in public spaces. From full conceptual universe creation to core 3D assets for brands like Gérard Darel: modeling, texturing, particles and compositing for hyper-realistic staging.",
       "role": "Full solo creation & core 3D assets",
       "client": "Personal projects & Blackmotion / Gérard Darel",
@@ -65,7 +66,7 @@
     },
     "karmin-corp-lec-reveal": {
       "title": "KARMINE CORP – LEC Reveal",
-      "header": "A tribute to an esport titan",
+      "header": "3D Cinematic",
       "description": "Epic 3D video celebrating Karmine Corp's entry into the LEC. A monumental, trophy-focused staging meant to capture the hype and emotion of the moment.",
       "role": "Full solo creation",
       "client": "Personal project",
@@ -73,7 +74,7 @@
     },
     "limova-movali": {
       "title": "LIMOVA & MOVALI – Kaitonom.IA",
-      "header": "AI-powered motion design",
+      "header": "2D | 3D Motion",
       "description": "2D and 3D motion design work for Kaitonom.IA, a smart assistant solution aimed at professionals and associations. Designed to explain key features with clarity and visual appeal.",
       "role": "Motion design 2D & 3D",
       "client": "Blackmotion / Client: Kaitonom.IA",
@@ -81,7 +82,7 @@
     },
     "spiderman-timefreeze": {
       "title": "SPIDERMAN – Time Freeze",
-      "header": "Suspending chaos in slow motion",
+      "header": "3D Cinematic",
       "description": "3D short film inspired by the Deadpool opening sequence. Time is frozen mid-action in a tense, highly detailed urban scene, where every element contributes to a sense of cinematic suspension.",
       "role": "Full solo creation",
       "client": "Personal project",
@@ -89,7 +90,7 @@
     },
     "lyner": {
       "title": "LYNER",
-      "header": "Shining a light on dental innovation",
+      "header": "3D Motion",
       "description": "3D commercial made at Blackmotion for Lyner, a dental service offering custom aligners and full support. A clean and bright visual treatment to convey trust, simplicity and modernity.",
       "role": "All 3D scenes",
       "client": "Blackmotion / Client: Lyner",
@@ -97,15 +98,15 @@
     },
     "mr-help": {
       "title": "MR. HELP",
-      "header": "Simplified installation, amplified service",
+      "header": "3D Motion",
       "description": "A series of 3D videos for Mr. Help, a company specializing in furniture and A/C installations. Each piece highlights the ease of use, service guarantees and the value of the 'Serenity Pack'.",
       "role": "3D production at the agency",
       "client": "Blackmotion / Client: Mr. Help",
       "date": "2024"
     },
     "dals": {
-      "title": "DANCING WITH THE STARS – 3D Mapping",
-      "header": "Digital scenography for live emotion",
+      "title": "DANCING WITH THE STARS",
+      "header": "3D Stage Visuals",
       "description": "Creation of 3D-mapped stage visuals for the French TV show Danse avec les Stars (TF1), working with talents like Lénie, Jungeli, Claude Dartois, Florent Manaudou and Adil Rami. Each tableau was designed to enhance the choreography with bespoke visuals and real-time projection mapping.",
       "role": "Design and creation of 3D stage visuals",
       "client": "Blackmotion / Client: TF1 – Danse avec les Stars",
@@ -113,7 +114,7 @@
     },
     "yassencore": {
       "title": "YASSENCORE – Twitch Waiting Screen",
-      "header": "A custom stream intro with style",
+      "header": "3D Cinematic",
       "description": "A tailor-made waiting screen for Twitch streamer YassEncore, reflecting his favorite universes: Breaking Bad, Dragon Ball, football... Designed to kick off streams with personality and atmosphere.",
       "role": "Full concept and production",
       "client": "Creator commission / Client: YassEncore",
@@ -121,11 +122,60 @@
     },
     "pixel-break": {
       "title": "PIXEL BREAK",
-      "header": "A breach into the world of Invaders",
+      "header": "3D Cinematic",
       "description": "3D short film made in collaboration with Mario Sougoumarin. Starting from a Space Invader mosaic on a wall, the viewer is pulled into a hidden digital world where the pixel aliens prepare their uprising. A mix of photoreal urban textures and retro pixel aesthetics.",
       "role": "Co-direction, 3D animation, visual dev",
       "client": "Student project (duo with Mario Sougoumarin)",
       "date": "2025"
+    },
+    "trybz": {
+      "title": "TRYBZ",
+      "header": "3D Vizualization",
+      "description": "Stand design for a beverage brand, TRYBZ, showcased at Adil Rami's birthday event",
+      "role": "3D Modeling",
+      "client": "Blackmotion",
+      "date": "2024"
+    }
+  },
+  "legal": {
+    "title": "Legal Notice",
+    "lastUpdated": "Last updated",
+    "editor": {
+      "title": "1. Site Editor",
+      "name": "Antoine Vernez",
+      "status": "Individual Entrepreneur (EI)",
+      "address": "Paris, France",
+      "phone": "Available upon request",
+      "email": "contact@utazon.com",
+      "siret": "SIRET: [Number will be provided upon business registration]",
+      "activity": "Specialized design activities",
+      "nafCode": "NAF Code: 7410Z"
+    },
+    "hosting": {
+      "title": "2. Hosting",
+      "provider": "Hosting Provider: [To be specified]",
+      "address": "Address: [Provider address]",
+      "phone": "Phone: [Provider phone]"
+    },
+    "intellectual": {
+      "title": "3. Intellectual Property",
+      "content": "This website and all its content (texts, images, videos, designs, logos, etc.) are the exclusive property of Antoine Vernez, unless otherwise specified. Any reproduction, distribution, modification, adaptation, retransmission or publication of these elements is strictly prohibited without the express written consent of Antoine Vernez. All intellectual property rights are reserved. The trademarks, logos, and distinctive signs reproduced on this site are the property of Antoine Vernez and may not be reproduced or used without prior authorization."
+    },
+    "liability": {
+      "title": "4. Limitation of Liability",
+      "content": "The information contained on this site is provided for informational purposes only. Antoine Vernez strives to provide accurate and up-to-date information but cannot guarantee the accuracy, completeness, or timeliness of the information published on this site. Consequently, the user acknowledges using this information under their sole responsibility. Antoine Vernez cannot be held liable for any direct or indirect damage resulting from the use of this site."
+    },
+    "data": {
+      "title": "5. Personal Data",
+      "content": "In accordance with the French Data Protection Act and the General Data Protection Regulation (GDPR), you have the right to access, rectify, and delete data concerning you. This site may collect personal information (name, email address) through contact forms. This information is used solely to respond to your requests and is not transmitted to third parties without your consent. To exercise your rights or for any questions regarding the processing of your personal data, please contact us at: contact@utazon.com"
+    },
+    "cookies": {
+      "title": "6. Cookies",
+      "content": "This site may use cookies to improve user experience. Cookies are small text files stored on your device when you visit our site. You can disable cookies through your browser settings, although this may affect certain site functionalities."
+    },
+    "law": {
+      "title": "7. Applicable Law",
+      "content": "These legal notices are governed by French law. In case of dispute, the French courts will have exclusive jurisdiction."
     }
   }
 }

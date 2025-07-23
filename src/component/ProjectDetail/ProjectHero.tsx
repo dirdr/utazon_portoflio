@@ -21,39 +21,39 @@ export const ProjectHero = ({ project }: ProjectHeroProps) => {
       </div>
 
       <Container className="relative z-10">
-        <div className="max-w-2xl">
-          <h1 className="font-nord text-4xl md:text-6xl lg:text-7xl font-bold mb-4 text-white">
+        <div className="max-w-xl">
+          <h1 className="text-3xl font-bold mb-4 text-white">
             {t(project.title)}
           </h1>
-          
-          <h2 className="font-nord text-xl md:text-2xl font-light mb-8 text-white/90">
+
+          <h2 className="text-lg font-light mb-8 text-white/90">
             {t(project.header)}
           </h2>
-          
-          <p className="font-neue text-lg md:text-xl leading-relaxed mb-12 text-white/80">
+
+          <p className="text-lg eading-relaxed mb-12 text-white/80">
             {t(project.description)}
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-white">
             <div>
-              <h3 className="font-nord text-sm font-bold mb-2 text-white/60 uppercase tracking-wider">
+              <h3 className="text-lg font-bold mb-2 text-white/60 uppercase tracking-wider">
                 Date
               </h3>
-              <p className="font-neue text-lg">{t(project.date)}</p>
+              <p className="text-lg">{t(project.date)}</p>
             </div>
-            
+
             <div>
-              <h3 className="font-nord text-sm font-bold mb-2 text-white/60 uppercase tracking-wider">
+              <h3 className="text-lg font-bold mb-2 text-white/60 uppercase tracking-wider">
                 Client
               </h3>
-              <p className="font-neue text-lg">{t(project.client)}</p>
+              <p className="text-lg">{t(project.client)}</p>
             </div>
-            
+
             <div>
-              <h3 className="font-nord text-sm font-bold mb-2 text-white/60 uppercase tracking-wider">
+              <h3 className="text-lg font-bold mb-2 text-white/60 uppercase tracking-wider">
                 Role
               </h3>
-              <p className="font-neue text-lg">{t(project.role)}</p>
+              <p>{t(project.role)}</p>
             </div>
           </div>
         </div>

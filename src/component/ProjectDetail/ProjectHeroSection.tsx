@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Project } from "../../types/project";
+import { Container } from "../layout/Container";
 
 interface ProjectHeroSectionProps {
   project: Project;
@@ -26,7 +27,7 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
             className="absolute inset-0"
             style={{
               background:
-                "linear-gradient(to right, transparent 40%, rgba(0,0,0,0.3) 60%, rgba(0,0,0,0.8) 80%, black 100%)",
+                "linear-gradient(to right, transparent 50%, rgba(0,0,0,0.1) 54%, rgba(0,0,0,0.3) 57%, rgba(0,0,0,0.6) 59%, rgba(0,0,0,0.9) 61%, black 63%)",
             }}
           />
           <div
@@ -37,17 +38,13 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
             className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent"
             style={{ height: "25vh" }}
           />
-          <div
-            className="absolute inset-y-0 left-0 bg-gradient-to-r from-black to-transparent"
-            style={{ width: "20vw" }}
-          />
         </div>
       </div>
       <div className="relative z-10 h-full flex items-center">
-        <div className="w-full">
-          <div className="ml-auto max-w-2xl pr-8 md:pr-16 lg:pr-24">
-            <div className="pl-8 md:pl-16">
-              <h1 className="font-nord text-3xl md:text-5xl lg:text-6xl font-bold mb-6 text-white">
+        <Container>
+          <div className="flex justify-end">
+            <div className="w-[36rem]">
+              <h1 className="font-nord text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white">
                 {t(project.title)}
               </h1>
 
@@ -84,9 +81,8 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
               </div>
             </div>
           </div>
-        </div>
+        </Container>
       </div>
     </section>
   );
 };
-

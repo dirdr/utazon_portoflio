@@ -4,6 +4,7 @@ export const ROUTES = {
   PROJECTS: "/projects",
   CONTACT: "/contact",
   SHOWREEL: "/showreel",
+  LEGAL: "/legal",
 } as const;
 
 export const NAVIGATION_ITEMS = [

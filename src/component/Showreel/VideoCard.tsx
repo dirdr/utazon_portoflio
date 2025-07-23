@@ -1,6 +1,9 @@
 import { cn } from "../../utils/cn";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import ReactPlayer from "react-player";
+import showreelThumbnail from "../../assets/images/showreel_background.webp";
+import cardBackground from "../../assets/images/card_backgrounds/1.webp";
+import { useVideo } from "../../contexts/VideoContext";
 
 interface VideoCardProps {
   src: string;
@@ -13,16 +16,36 @@ export const VideoCard = ({
   className,
   glintSpeed = "6s",
 }: VideoCardProps) => {
-  const [showControls, setShowControls] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [userActive, setUserActive] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const playerRef = useRef<any>(null);
+  const timeoutRef = useRef<number>();
+  const { volume, isMuted } = useVideo();
 
-  const backgroundImage = new URL(
-    `../../assets/images/card_backgrounds/1.webp`,
-    import.meta.url,
-  ).href;
+  // Industry standard: Auto-hide controls after 3 seconds of inactivity
+  const resetInactivityTimer = () => {
+    setUserActive(true);
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => {
+      setUserActive(false);
+    }, 3000);
+  };
 
-  const handleMouseEnter = () => setShowControls(true);
-  const handleMouseLeave = () => setShowControls(false);
+  // Show controls on any user interaction
+  const handleUserActivity = () => {
+    resetInactivityTimer();
+  };
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div
@@ -31,28 +54,37 @@ export const VideoCard = ({
         className,
       )}
       style={{ "--glint-card-speed": glintSpeed } as React.CSSProperties}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseMove={handleUserActivity}
+      onMouseEnter={handleUserActivity}
+      onClick={handleUserActivity}
     >
-      <div
+      <div 
         className="glint-card-content p-6"
         style={{
-          background: `url(${backgroundImage}) center/cover`,
+          background: `url(${cardBackground}) center/cover`,
         }}
       >
         <div className="relative aspect-video w-full rounded-xl overflow-hidden shadow-2xl">
           <ReactPlayer
+            ref={playerRef}
             src={src}
             width="100%"
             height="100%"
-            controls={showControls}
+            controls={userActive}
             playing={isPlaying}
-            muted={false}
+            muted={isMuted}
             loop
-            volume={0.8}
+            volume={volume}
             style={{ borderRadius: "0.75rem" }}
-            onPlay={() => setIsPlaying(true)}
-            onPause={() => setIsPlaying(false)}
+            light={showreelThumbnail}
+            onPlay={() => {
+              setIsPlaying(true);
+              resetInactivityTimer();
+            }}
+            onPause={() => {
+              setIsPlaying(false);
+              resetInactivityTimer();
+            }}
           />
         </div>
       </div>
