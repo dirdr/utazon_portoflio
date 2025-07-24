@@ -1,11 +1,11 @@
 import { Layout } from "./component/layout/Layout";
-import { About } from "./component/pages/About";
-import { Home } from "./component/pages/Home";
-import { Projects } from "./component/pages/Projects";
-import { ProjectDetail } from "./component/pages/ProjectDetail";
-import { Contact } from "./component/pages/Contact";
-import { Showreel } from "./component/pages/Showreel";
-import { Legal } from "./component/pages/Legal";
+import { About } from "./component/pages/About.tsx";
+import { Home } from "./component/pages/Home.tsx";
+import { Projects } from "./component/pages/Projects.tsx";
+import { ProjectDetail } from "./component/pages/ProjectDetail.tsx";
+import { Contact } from "./component/pages/Contact.tsx";
+import { Showreel } from "./component/pages/Showreel.tsx";
+import { Legal } from "./component/pages/Legal.tsx";
 import { ROUTES } from "./constants/routes";
 import "./index.css";
 import { Route, Switch } from "wouter";
