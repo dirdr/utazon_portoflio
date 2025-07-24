@@ -46,7 +46,7 @@ export const Card = ({
 }: CardProps) => {
   const { t } = useTranslation();
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [hasVideoLoaded, setHasVideoLoaded] = useState(false);
+  const [videoReady, setVideoReady] = useState<boolean | null>(null);
 
   const randomBackground = useMemo(() => {
     const hash = project.name.split("").reduce((acc, char) => {
@@ -56,15 +56,25 @@ export const Card = ({
     return cardBackgrounds[index];
   }, [project.name]);
 
-  const handleMouseEnter = () => {
-    if (hasVideoLoaded && videoRef.current) {
+  const handleMouseEnter = async () => {
+    if (videoReady === null) {
+      const video = videoRef.current;
+      if (video) {
+        try {
+          video.src = thumbnail.src;
+          video.load();
+        } catch {
+          setVideoReady(false);
+        }
+      }
+    } else if (videoReady === true && videoRef.current) {
       videoRef.current.currentTime = 0;
       videoRef.current.play().catch(() => {});
     }
   };
 
   const handleMouseLeave = () => {
-    if (hasVideoLoaded && videoRef.current) {
+    if (videoReady === true && videoRef.current) {
       videoRef.current.pause();
       videoRef.current.currentTime = 0;
     }
@@ -88,7 +98,6 @@ export const Card = ({
         }}
       >
         <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden group">
-          {/* SVG clipPath definition */}
           <svg className="absolute w-0 h-0">
             <defs>
               <clipPath
@@ -106,7 +115,7 @@ export const Card = ({
           L0,1
           Z
         "
-                />{" "}
+/>
               </clipPath>
             </defs>
           </svg>
@@ -116,7 +125,7 @@ export const Card = ({
             alt={image.alt}
             className={cn(
               "h-full w-full object-cover transition-opacity duration-300",
-              hasVideoLoaded && "group-hover:opacity-0",
+              videoReady === true && "group-hover:opacity-0",
             )}
             style={{ clipPath: "url(#rounded-diagonal-cut)" }}
             loading={priority ? "eager" : "lazy"}
@@ -126,17 +135,15 @@ export const Card = ({
             ref={videoRef}
             className={cn(
               "absolute inset-0 h-full w-full object-cover transition-opacity duration-300",
-              hasVideoLoaded ? "opacity-0 group-hover:opacity-100" : "hidden",
+              videoReady === true ? "opacity-0 group-hover:opacity-100" : "hidden",
             )}
             style={{ clipPath: "url(#rounded-diagonal-cut)" }}
             muted
             loop
             playsInline
-            onLoadedData={() => setHasVideoLoaded(true)}
-            onError={() => setHasVideoLoaded(false)}
-          >
-            <source src={thumbnail.src} type="video/webm" />
-          </video>
+            onLoadedData={() => setVideoReady(true)}
+            onError={() => setVideoReady(false)}
+          />
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent" />
 

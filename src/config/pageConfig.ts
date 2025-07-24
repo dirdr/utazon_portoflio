@@ -5,7 +5,6 @@ export interface PageConfig {
   showNavbarLogo: boolean;
 }
 
-// Configuration for each page type
 export const PAGE_CONFIGS: Record<string, PageConfig> = {
   [ROUTES.HOME]: {
     showFooter: false,

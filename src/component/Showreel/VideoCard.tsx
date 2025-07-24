@@ -22,7 +22,6 @@ export const VideoCard = ({
   const timeoutRef = useRef<number>();
   const { volume, isMuted } = useVideo();
 
-  // Industry standard: Auto-hide controls after 3 seconds of inactivity
   const resetInactivityTimer = () => {
     setUserActive(true);
     if (timeoutRef.current) {
@@ -33,12 +32,10 @@ export const VideoCard = ({
     }, 3000);
   };
 
-  // Show controls on any user interaction
   const handleUserActivity = () => {
     resetInactivityTimer();
   };
 
-  // Cleanup timeout on unmount
   useEffect(() => {
     return () => {
       if (timeoutRef.current) {

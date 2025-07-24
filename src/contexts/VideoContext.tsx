@@ -1,11 +1,5 @@
-import {
-  createContext,
-  useRef,
-  useState,
-  ReactNode,
-} from "react";
+import { createContext, useState, ReactNode, useEffect } from "react";
 import { VideoContextProps } from "../types/videoContext";
-import { useVideoPlayer } from "../hooks/useVideoPlayer";
 import { useRouteBasedVideo } from "../hooks/useRouteBasedVideo";
 
 const VideoContext = createContext<VideoContextProps | undefined>(undefined);
@@ -15,25 +9,24 @@ interface VideoProviderProps {
 }
 
 export const VideoProvider = ({ children }: VideoProviderProps) => {
-  const videoRef = useRef<HTMLVideoElement>(null);
   const [shouldShowLayout, setShouldShowLayout] = useState(false);
-
-  const introSrc = "/videos/intro.webm";
-  const { shouldPlayVideo } = useRouteBasedVideo();
+  const [volume, setVolume] = useState(0.8);
+  const [isMuted, setIsMuted] = useState(false);
   
-  const videoPlayer = useVideoPlayer({
-    videoRef,
-    shouldPlayVideo,
-    introSrc,
-    onLayoutShow: () => setShouldShowLayout(true),
-  });
+  const { shouldPlayVideo, currentPath } = useRouteBasedVideo();
+
+  useEffect(() => {
+    setShouldShowLayout(false);
+  }, [currentPath]);
 
   const value: VideoContextProps = {
-    videoRef,
-    introSrc,
-    shouldPlayVideo,
     shouldShowLayout,
-    ...videoPlayer,
+    setShouldShowLayout,
+    volume,
+    isMuted,
+    setVolume,
+    toggleMute: () => setIsMuted(prev => !prev),
+    setMuted: setIsMuted,
   };
 
   return (
@@ -43,4 +36,3 @@ export const VideoProvider = ({ children }: VideoProviderProps) => {
 
 export { VideoContext };
 export default VideoProvider;
-

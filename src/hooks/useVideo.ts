@@ -1,10 +1,5 @@
 import { useContext } from "react";
-import { createContext } from "react";
-import { VideoContextProps } from "../types/videoContext";
-
-export const VideoContext = createContext<VideoContextProps | undefined>(
-  undefined,
-);
+import { VideoContext } from "../contexts/VideoContext";
 
 export const useVideo = () => {
   const context = useContext(VideoContext);

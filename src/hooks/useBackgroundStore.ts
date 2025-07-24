@@ -15,7 +15,6 @@ export const useBackgroundStore = create<BackgroundStore>((set, get) => ({
     
     if (image === currentImage) return;
     
-    // Set the image immediately and handle transition in CSS
     set({ 
       backgroundImage: image, 
       isTransitioning: false 

@@ -38,7 +38,6 @@ export const OptimizedVideoThumbnail = forwardRef<OptimizedVideoThumbnailRef, Op
   const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   
-  // Use react-intersection-observer for better performance
   const { ref: inViewRef, inView } = useInView({
     triggerOnce: true,
     threshold: 0.1,
@@ -83,14 +82,12 @@ export const OptimizedVideoThumbnail = forwardRef<OptimizedVideoThumbnailRef, Op
     }
   }, []);
 
-  // Expose methods to parent
   useImperativeHandle(ref, () => ({
     play,
     pause,
     reset,
   }), [play, pause, reset]);
 
-  // Combine refs for intersection observer
   const setRefs = (element: HTMLDivElement | null) => {
     inViewRef(element);
   };
@@ -104,18 +101,15 @@ export const OptimizedVideoThumbnail = forwardRef<OptimizedVideoThumbnailRef, Op
         ...(width && height && { aspectRatio: `${width}/${height}` }),
       }}
     >
-      {/* Preload poster image for priority cards */}
       {priority && (
         <link 
           rel="preload" 
           href={poster} 
           as="image" 
-          // @ts-expect-error - fetchpriority is a valid HTML attribute
           fetchpriority="high" 
         />
       )}
 
-      {/* Poster Image - Always visible as thumbnail */}
       <img
         src={poster}
         alt={alt}
@@ -129,7 +123,6 @@ export const OptimizedVideoThumbnail = forwardRef<OptimizedVideoThumbnailRef, Op
         {...(width && height && { width, height })}
       />
 
-      {/* Video - Only load when in view */}
       {inView && !hasError && (
         <video
           ref={videoRef}
@@ -152,14 +145,12 @@ export const OptimizedVideoThumbnail = forwardRef<OptimizedVideoThumbnailRef, Op
         </video>
       )}
 
-      {/* Loading state for video */}
       {inView && !isVideoLoaded && !hasError && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/10">
           <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin" />
         </div>
       )}
 
-      {/* Error state */}
       {hasError && (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-100 text-gray-500 text-sm">
           Video unavailable

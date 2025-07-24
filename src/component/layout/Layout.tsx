@@ -13,8 +13,8 @@ interface LayoutProps {
 }
 
 const LayoutContent = ({ children }: LayoutProps) => {
-  const { shouldShowLayout } = useVideo();
-  const { currentPath } = useRouteBasedVideo();
+  const { shouldShowLayout: videoLayoutReady } = useVideo();
+  const { currentPath, shouldShowLayout } = useRouteBasedVideo();
 
   const pageConfig = getPageConfig(currentPath);
   const isHomePage = currentPath === "/";
@@ -23,7 +23,7 @@ const LayoutContent = ({ children }: LayoutProps) => {
     <>
       <VideoBackground />
       <ImageBackgroundDisplay />
-      <FadeInContainer isVisible={shouldShowLayout}>
+      <FadeInContainer isVisible={isHomePage ? videoLayoutReady : shouldShowLayout}>
         {isHomePage ? (
           <div className="h-screen flex flex-col">
             <Navbar />

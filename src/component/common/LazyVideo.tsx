@@ -33,7 +33,6 @@ export const LazyVideo = forwardRef<LazyVideoRef, LazyVideoProps>(({
     onError?.();
   };
 
-  // Expose play/pause methods to parent
   useImperativeHandle(ref, () => ({
     play: () => {
       if (isLoaded && videoRef.current) {

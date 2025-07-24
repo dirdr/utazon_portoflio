@@ -49,7 +49,6 @@
     transform: scale(1.2);
   }
 
-  /* ReactPlayer Custom Styling */
   .react-player {
     border-radius: 1rem !important;
     overflow: hidden !important;

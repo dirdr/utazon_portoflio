@@ -1,13 +1,11 @@
-/* ===== UTILITY CLASSES ===== */
 @layer utilities {
-  /* Hide scrollbars for home page */
   .hide-scrollbars {
     overflow-x: hidden;
-    scrollbar-width: none; /* Firefox */
+    scrollbar-width: none;
   }
   
   .hide-scrollbars::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Edge */
+    display: none;
   }
 }
 
