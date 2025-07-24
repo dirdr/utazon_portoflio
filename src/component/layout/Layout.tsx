@@ -33,10 +33,14 @@ const LayoutContent = ({ children }: LayoutProps) => {
             <main className="flex-1 overflow-hidden">{children}</main>
           </div>
         ) : (
-          <div className="min-h-screen">
+          <div className="h-screen flex flex-col">
             <Navbar />
-            <main>{children}</main>
-            {pageConfig.showFooter && <Footer />}
+            <main className="flex-1">{children}</main>
+            {pageConfig.showFooter ? (
+              <Footer />
+            ) : (
+              <div className="py-4 md:py-8" />
+            )}
           </div>
         )}
       </FadeInContainer>

@@ -74,6 +74,7 @@ export const VideoCard = ({
             volume={volume}
             style={{ borderRadius: "0.75rem" }}
             light={showreelThumbnail}
+            onClickPreview={() => setIsPlaying(true)}
             onPlay={() => {
               setIsPlaying(true);
               resetInactivityTimer();

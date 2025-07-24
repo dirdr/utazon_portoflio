@@ -140,9 +140,9 @@ export const Navbar = () => {
       <div
         className={cn(
           "w-full py-4 md:py-8",
-          currentPath === "/" 
-            ? "p-12 pt-4 md:pt-8" // Match home padding
-            : "px-8 sm:px-10 lg:px-12 xl:px-24 2xl:px-24", // Standard responsive
+          currentPath === "/"
+            ? "p-12 pt-4 md:pt-8"
+            : "px-8 sm:px-10 lg:px-12 xl:px-24 2xl:px-24",
         )}
       >
         <WrapperContent />

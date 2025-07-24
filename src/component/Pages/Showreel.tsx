@@ -1,4 +1,3 @@
-import { Container } from "../layout/Container";
 import { VideoCard } from "../Showreel/VideoCard";
 import { useBackgroundStore } from "../../hooks/useBackgroundStore";
 import { useEffect } from "react";
@@ -16,13 +15,11 @@ export const Showreel = () => {
   }, [setBackgroundImage]);
 
   return (
-    <div className="h-full flex items-center justify-center px-4">
-      <Container className="flex items-center justify-center">
-        <VideoCard
-          src="/videos/showreel.webm"
-          className="w-full max-w-screen-2xl"
-        />
-      </Container>
+    <div className="h-full flex items-center justify-center px-6">
+      <VideoCard
+        src="/videos/showreel.webm"
+        className="w-full max-w-screen-2xl"
+      />
     </div>
   );
 };
