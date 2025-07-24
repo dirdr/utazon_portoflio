@@ -16,7 +16,6 @@ export const Navbar = () => {
   const { currentPage } = useVideo();
 
   const pageConfig = getPageConfig(currentPage);
-  const isHomePage = currentPage === ROUTES.HOME;
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);

@@ -18,7 +18,7 @@ export const VideoCard = ({
 }: VideoCardProps) => {
   const [userActive, setUserActive] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
-  const playerRef = useRef<any>(null);
+  const playerRef = useRef<HTMLVideoElement>(null);
   const timeoutRef = useRef<number>();
   const { volume, isMuted } = useVideo();
 

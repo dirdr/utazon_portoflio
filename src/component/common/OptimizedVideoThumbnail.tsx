@@ -1,4 +1,4 @@
-import { useRef, useState, forwardRef, useImperativeHandle } from 'react';
+import { useRef, useState, forwardRef, useImperativeHandle, useCallback } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { cn } from '../../utils/cn';
 
@@ -56,7 +56,7 @@ export const OptimizedVideoThumbnail = forwardRef<OptimizedVideoThumbnailRef, Op
     onError?.();
   };
 
-  const play = async () => {
+  const play = useCallback(async () => {
     if (isVideoLoaded && videoRef.current && !isPlaying) {
       try {
         videoRef.current.currentTime = 0;
@@ -66,22 +66,22 @@ export const OptimizedVideoThumbnail = forwardRef<OptimizedVideoThumbnailRef, Op
         console.warn('Video play failed:', error);
       }
     }
-  };
+  }, [isVideoLoaded, isPlaying]);
 
-  const pause = () => {
+  const pause = useCallback(() => {
     if (videoRef.current && isPlaying) {
       videoRef.current.pause();
       videoRef.current.currentTime = 0;
       setIsPlaying(false);
     }
-  };
+  }, [isPlaying]);
 
-  const reset = () => {
+  const reset = useCallback(() => {
     if (videoRef.current) {
       videoRef.current.currentTime = 0;
       setIsPlaying(false);
     }
-  };
+  }, []);
 
   // Expose methods to parent
   useImperativeHandle(ref, () => ({
@@ -110,7 +110,7 @@ export const OptimizedVideoThumbnail = forwardRef<OptimizedVideoThumbnailRef, Op
           rel="preload" 
           href={poster} 
           as="image" 
-          // @ts-ignore - fetchpriority is a valid HTML attribute
+          // @ts-expect-error - fetchpriority is a valid HTML attribute
           fetchpriority="high" 
         />
       )}
