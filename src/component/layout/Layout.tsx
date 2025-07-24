@@ -7,6 +7,7 @@ import { FadeInContainer } from "../common/FadeInContainer";
 import { getPageConfig } from "../../config/pageConfig";
 import { useVideo } from "../../hooks/useVideo";
 import { useRouteBasedVideo } from "../../hooks/useRouteBasedVideo";
+import { Container } from "./Container";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -23,7 +24,9 @@ const LayoutContent = ({ children }: LayoutProps) => {
     <>
       <VideoBackground />
       <ImageBackgroundDisplay />
-      <FadeInContainer isVisible={isHomePage ? videoLayoutReady : shouldShowLayout}>
+      <FadeInContainer
+        isVisible={isHomePage ? videoLayoutReady : shouldShowLayout}
+      >
         {isHomePage ? (
           <div className="h-screen flex flex-col">
             <Navbar />
