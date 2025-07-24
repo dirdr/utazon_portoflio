@@ -46,7 +46,7 @@ export const Card = ({
 }: CardProps) => {
   const { t } = useTranslation();
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [videoReady, setVideoReady] = useState<boolean | null>(null);
+  const [videoReady, setVideoReady] = useState(false);
 
   const randomBackground = useMemo(() => {
     const hash = project.name.split("").reduce((acc, char) => {
@@ -56,25 +56,15 @@ export const Card = ({
     return cardBackgrounds[index];
   }, [project.name]);
 
-  const handleMouseEnter = async () => {
-    if (videoReady === null) {
-      const video = videoRef.current;
-      if (video) {
-        try {
-          video.src = thumbnail.src;
-          video.load();
-        } catch {
-          setVideoReady(false);
-        }
-      }
-    } else if (videoReady === true && videoRef.current) {
+  const handleMouseEnter = () => {
+    if (videoReady && videoRef.current) {
       videoRef.current.currentTime = 0;
       videoRef.current.play().catch(() => {});
     }
   };
 
   const handleMouseLeave = () => {
-    if (videoReady === true && videoRef.current) {
+    if (videoReady && videoRef.current) {
       videoRef.current.pause();
       videoRef.current.currentTime = 0;
     }
@@ -125,7 +115,7 @@ export const Card = ({
             alt={image.alt}
             className={cn(
               "h-full w-full object-cover transition-opacity duration-300",
-              videoReady === true && "group-hover:opacity-0",
+              videoReady && "group-hover:opacity-0",
             )}
             style={{ clipPath: "url(#rounded-diagonal-cut)" }}
             loading={priority ? "eager" : "lazy"}
@@ -135,12 +125,14 @@ export const Card = ({
             ref={videoRef}
             className={cn(
               "absolute inset-0 h-full w-full object-cover transition-opacity duration-300",
-              videoReady === true ? "opacity-0 group-hover:opacity-100" : "hidden",
+              videoReady ? "opacity-0 group-hover:opacity-100" : "hidden",
             )}
             style={{ clipPath: "url(#rounded-diagonal-cut)" }}
+            src={thumbnail.src}
             muted
             loop
             playsInline
+            preload="metadata"
             onLoadedData={() => setVideoReady(true)}
             onError={() => setVideoReady(false)}
           />
