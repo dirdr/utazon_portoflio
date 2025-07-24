@@ -7,7 +7,6 @@ import { FadeInContainer } from "../common/FadeInContainer";
 import { getPageConfig } from "../../config/pageConfig";
 import { useVideo } from "../../hooks/useVideo";
 import { useRouteBasedVideo } from "../../hooks/useRouteBasedVideo";
-import { Container } from "./Container";
 
 interface LayoutProps {
   children: React.ReactNode;
