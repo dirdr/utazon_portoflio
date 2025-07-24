@@ -1,4 +1,4 @@
-import { useVideo } from "../../contexts/VideoContext";
+import { useVideo } from "../../hooks/useVideo";
 import { RadialGradient } from "../common/RadialGradient";
 
 export const VideoBackground = () => {

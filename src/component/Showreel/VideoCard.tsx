@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import ReactPlayer from "react-player";
 import showreelThumbnail from "../../assets/images/showreel_background.webp";
 import cardBackground from "../../assets/images/card_backgrounds/1.webp";
-import { useVideo } from "../../contexts/VideoContext";
+import { useVideo } from "../../hooks/useVideo";
 
 interface VideoCardProps {
   src: string;

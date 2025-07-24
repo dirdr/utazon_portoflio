@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import { useVideo } from "../../contexts/VideoContext";
 import { Button } from "../common/Button";
 import { LineSweepText } from "../common/LineSweepText";
 import { ROUTES } from "../../constants/routes";
 import { useTranslation } from "react-i18next";
+import { useVideo } from "../../hooks/useVideo";
 
 export const Home = () => {
   const { isLoading } = useVideo();

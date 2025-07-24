@@ -4,18 +4,18 @@ import { useState } from "react";
 import { NAVIGATION_ITEMS, ROUTES } from "../../constants/routes";
 import { LanguageSwitcher } from "../common/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
-import { useVideo } from "../../contexts/VideoContext";
 import { NavLink } from "./NavLink";
 import { useAutoCloseMobileMenu } from "../../hooks/useAutoCloseMobileMenu";
 import { getPageConfig } from "../../config/pageConfig";
 import { cn } from "../../utils/cn";
+import { useRouteBasedVideo } from "../../hooks/useRouteBasedVideo";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { t } = useTranslation();
-  const { currentPage } = useVideo();
+  const { currentPath } = useRouteBasedVideo();
 
-  const pageConfig = getPageConfig(currentPage);
+  const pageConfig = getPageConfig(currentPath);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
@@ -136,10 +136,7 @@ export const Navbar = () => {
   );
 
   return (
-    <nav
-      className="w-full z-50 bg-transparent"
-      ref={menuRef}
-    >
+    <nav className="w-full z-50 bg-transparent" ref={menuRef}>
       <div
         className={cn(
           "w-full py-4 md:py-8",
