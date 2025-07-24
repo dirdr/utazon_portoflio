@@ -3,10 +3,8 @@ import { Button } from "../common/Button";
 import { LineSweepText } from "../common/LineSweepText";
 import { ROUTES } from "../../constants/routes";
 import { useTranslation } from "react-i18next";
-import { useVideo } from "../../hooks/useVideo";
 
 export const Home = () => {
-  const { isLoading } = useVideo();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -15,14 +13,6 @@ export const Home = () => {
       document.documentElement.classList.remove("hide-scrollbars");
     };
   }, []);
-
-  if (isLoading) {
-    return (
-      <div className="fixed inset-0 bg-black flex items-center justify-center z-50">
-        <p className="text-white">Loading...</p>
-      </div>
-    );
-  }
 
   return (
     <div className="h-full w-full flex flex-col justify-end p-12 pb-16">

@@ -12,8 +12,8 @@ export const VideoProvider = ({ children }: VideoProviderProps) => {
   const [shouldShowLayout, setShouldShowLayout] = useState(false);
   const [volume, setVolume] = useState(0.8);
   const [isMuted, setIsMuted] = useState(false);
-  
-  const { shouldPlayVideo, currentPath } = useRouteBasedVideo();
+
+  const { currentPath } = useRouteBasedVideo();
 
   useEffect(() => {
     setShouldShowLayout(false);
@@ -25,7 +25,7 @@ export const VideoProvider = ({ children }: VideoProviderProps) => {
     volume,
     isMuted,
     setVolume,
-    toggleMute: () => setIsMuted(prev => !prev),
+    toggleMute: () => setIsMuted((prev) => !prev),
     setMuted: setIsMuted,
   };
 

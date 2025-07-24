@@ -106,7 +106,7 @@ export const OptimizedVideoThumbnail = forwardRef<OptimizedVideoThumbnailRef, Op
           rel="preload" 
           href={poster} 
           as="image" 
-          fetchpriority="high" 
+          fetchPriority="high" 
         />
       )}
 
