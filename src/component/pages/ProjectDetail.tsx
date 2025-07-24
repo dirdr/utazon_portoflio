@@ -1,7 +1,7 @@
 import { useRoute } from "wouter";
 import { getProjectById } from "../../data/projects";
 import { Container } from "../layout/Container";
-import { ProjectHeroSection } from "../ProjectDetail/ProjectHeroSection";
+import { ProjectHeroSection } from "../projectdetail/ProjectHeroSection";
 
 export const ProjectDetail = () => {
   const [, params] = useRoute("/projects/:id");

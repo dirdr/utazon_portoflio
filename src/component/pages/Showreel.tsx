@@ -1,4 +1,4 @@
-import { VideoCard } from "../Showreel/VideoCard";
+import { VideoCard } from "../showreel/VideoCard";
 import { useBackgroundStore } from "../../hooks/useBackgroundStore";
 import { useEffect } from "react";
 
