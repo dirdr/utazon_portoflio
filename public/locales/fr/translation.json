@@ -137,6 +137,10 @@
       "date": "2024"
     }
   },
+  "footer": {
+    "legalNotice": "Mentions Légales",
+    "allRightsReserved": "Tous droits réservés."
+  },
   "legal": {
     "title": "Mentions Légales",
     "lastUpdated": "Dernière mise à jour",

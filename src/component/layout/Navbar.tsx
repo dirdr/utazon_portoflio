@@ -144,9 +144,7 @@ export const Navbar = () => {
       <div
         className={cn(
           "w-full py-4 md:py-8",
-          isHomePage
-            ? "px-4 sm:px-8 md:px-12 lg:px-16 xl:px-12"
-            : "container mx-auto px-4",
+          "px-8 sm:px-10 lg:px-12 xl:px-24 2xl:px-24",
         )}
       >
         <WrapperContent />

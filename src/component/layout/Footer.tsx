@@ -164,7 +164,7 @@ export const Footer = () => {
           <div className="pt-8 border-t border-white/10">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               <p className="text-white/60 text-xs">
-                © {currentYear} Antoine Vernez. All rights reserved.
+                © {currentYear} Antoine Vernez. {t("footer.allRightsReserved")}
               </p>
 
               <div className="flex items-center gap-6">
@@ -172,7 +172,7 @@ export const Footer = () => {
                   href="/legal"
                   className="text-white/60 hover:text-white/80 transition-colors duration-200 text-xs"
                 >
-                  Legal Notice
+                  {t("footer.legalNotice")}
                 </a>
               </div>
             </div>

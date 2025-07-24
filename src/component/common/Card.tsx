@@ -33,6 +33,7 @@ export interface CardProps {
   };
   className?: string;
   glintSpeed?: string;
+  priority?: boolean;
 }
 
 export const Card = ({
@@ -41,6 +42,7 @@ export const Card = ({
   project,
   className,
   glintSpeed = "6s",
+  priority = false,
 }: CardProps) => {
   const { t } = useTranslation();
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -67,6 +69,7 @@ export const Card = ({
       videoRef.current.currentTime = 0;
     }
   };
+
 
   return (
     <div
@@ -116,6 +119,7 @@ export const Card = ({
               hasVideoLoaded && "group-hover:opacity-0",
             )}
             style={{ clipPath: "url(#rounded-diagonal-cut)" }}
+            loading={priority ? "eager" : "lazy"}
           />
 
           <video
