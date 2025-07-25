@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { Link } from "wouter";
 import { ROUTES } from "../../constants/routes";
 
 interface NavLinkProps {
@@ -23,12 +24,12 @@ export const NavLink = ({ href, label, onClick, className = "" }: NavLinkProps) 
   const { t } = useTranslation();
   
   return (
-    <a
+    <Link
       href={href}
       onClick={onClick}
       className={`hover:text-muted font-nord transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-sm ${className}`}
     >
       {getNavLabel(href, t) || label}
-    </a>
+    </Link>
   );
 };

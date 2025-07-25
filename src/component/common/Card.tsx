@@ -47,6 +47,7 @@ export const Card = ({
   const { t } = useTranslation();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoReady, setVideoReady] = useState(false);
+  const [videoError, setVideoError] = useState(false);
 
   const randomBackground = useMemo(() => {
     const hash = project.name.split("").reduce((acc, char) => {
@@ -55,6 +56,7 @@ export const Card = ({
     const index = Math.abs(hash) % cardBackgrounds.length;
     return cardBackgrounds[index];
   }, [project.name]);
+
 
   const handleMouseEnter = () => {
     if (videoReady && videoRef.current) {
@@ -69,7 +71,6 @@ export const Card = ({
       videoRef.current.currentTime = 0;
     }
   };
-
 
   return (
     <div
@@ -105,7 +106,7 @@ export const Card = ({
           L0,1
           Z
         "
-/>
+                />
               </clipPath>
             </defs>
           </svg>
@@ -121,21 +122,28 @@ export const Card = ({
             loading={priority ? "eager" : "lazy"}
           />
 
-          <video
-            ref={videoRef}
-            className={cn(
-              "absolute inset-0 h-full w-full object-cover transition-opacity duration-300",
-              videoReady ? "opacity-0 group-hover:opacity-100" : "hidden",
-            )}
-            style={{ clipPath: "url(#rounded-diagonal-cut)" }}
-            src={thumbnail.src}
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            onLoadedData={() => setVideoReady(true)}
-            onError={() => setVideoReady(false)}
-          />
+          {!videoError && (
+            <video
+              ref={videoRef}
+              className={cn(
+                "absolute inset-0 h-full w-full object-cover transition-opacity duration-300",
+                videoReady ? "opacity-0 group-hover:opacity-100" : "hidden",
+              )}
+              style={{ clipPath: "url(#rounded-diagonal-cut)" }}
+              src={thumbnail.src}
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              onLoadedData={() => {
+                setVideoReady(true);
+              }}
+              onError={() => {
+                setVideoReady(false);
+                setVideoError(true);
+              }}
+            />
+          )}
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent" />
 

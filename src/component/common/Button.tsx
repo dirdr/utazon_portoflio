@@ -1,4 +1,5 @@
 import React, { useState, useRef, useMemo } from "react";
+import { Link } from "wouter";
 import { cn } from "../../utils/cn";
 import { BUTTON_STYLES } from "../../constants/buttonStyles";
 import { useCursorDistance } from "../../hooks/useCursorDistance";
@@ -124,15 +125,13 @@ export const Button = (props: ButtonProps) => {
     }
 
     return (
-      <a
+      <Link
+        href={props.href}
         className={buttonClasses}
         onClick={onClick as React.MouseEventHandler<HTMLAnchorElement>}
-        href={props.href}
-        target={props.target}
-        rel={props.rel}
       >
         {children}
-      </a>
+      </Link>
     );
   };
 

@@ -1,6 +1,7 @@
 import { Button } from "../common/Button";
 import logo from "../../assets/images/logo.svg";
 import { useState } from "react";
+import { Link } from "wouter";
 import { NAVIGATION_ITEMS, ROUTES } from "../../constants/routes";
 import { LanguageSwitcher } from "../common/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
@@ -29,19 +30,19 @@ export const Navbar = () => {
     <>
       <div className="flex items-center justify-between h-16">
         <div className="flex flex-col items-start">
-          <a href="/" className="text font-nord">
+          <Link href="/" className="text font-nord">
             UTAZON
-          </a>
-          <a href="/" className="font-nord text-muted text-sm">
+          </Link>
+          <Link href="/" className="font-nord text-muted text-sm">
             ANTOINE VERNEZ
-          </a>
+          </Link>
         </div>
 
         {pageConfig.showNavbarLogo && (
           <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2">
-            <a href="/">
+            <Link href="/">
               <img src={logo} alt="Utazon Logo" className="h-10 w-auto" />
-            </a>
+            </Link>
           </div>
         )}
 

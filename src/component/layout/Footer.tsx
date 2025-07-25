@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { Container } from "./Container";
 import { ROUTES } from "../../constants/routes";
 import logo from "../../assets/images/logo.svg";
+import { Link } from "wouter";
 
 export const Footer = () => {
   const { t } = useTranslation();
@@ -168,12 +169,12 @@ export const Footer = () => {
               </p>
 
               <div className="flex items-center gap-6">
-                <a
+                <Link
                   href="/legal"
                   className="text-white/60 hover:text-white/80 transition-colors duration-200 text-xs"
                 >
                   {t("footer.legalNotice")}
-                </a>
+                </Link>
               </div>
             </div>
           </div>
