@@ -1,5 +1,5 @@
-import { motion, AnimatePresence, useReducedMotion, Variants } from 'framer-motion';
-import { ReactNode } from 'react';
+import { motion, AnimatePresence, Variants } from "framer-motion";
+import { ReactNode } from "react";
 
 export interface SimpleFadeTransitionProps {
   children: ReactNode;
@@ -9,73 +9,45 @@ export interface SimpleFadeTransitionProps {
   style?: React.CSSProperties;
 }
 
-// Subtle motion variants
 const pageVariants: Variants = {
-  initial: { 
+  initial: {
     opacity: 0,
-    y: 16 // Reduced y-movement for more subtle effect
+    y: 16,
   },
-  in: { 
+  in: {
     opacity: 1,
-    y: 0
+    y: 0,
   },
-  out: { 
+  out: {
     opacity: 0,
-    y: -16
-  }
+    y: -16,
+  },
 };
 
-/**
- * Industry-standard page transition following best practices:
- * - Single AnimatePresence (no conflicts)
- * - GPU-accelerated animations  
- * - Accessibility support (reduced motion)
- * - Layout isolation via absolute positioning
- */
 export const SimpleFadeTransition = ({
   children,
   pageKey,
-  duration = 0.4,
-  className = '',
+  className = "",
   style = {},
 }: SimpleFadeTransitionProps) => {
-  const shouldReduceMotion = false; // useReducedMotion();
-  
-  // Disable animation when going TO home page
-  const isGoingToHome = pageKey === '/';
-  
-  // Completely disable transition to home, normal transition elsewhere
-  const transition = shouldReduceMotion || isGoingToHome
-    ? { duration: 0 } // Instant transition to home
-    : { 
-        type: "tween" as const,
-        ease: [0.4, 0, 0.2, 1], // Industry-standard easing
-        duration 
-      };
-    
-  const variants = shouldReduceMotion || isGoingToHome
-    ? { initial: { opacity: 1 }, in: { opacity: 1 }, out: { opacity: 1 } } // No fade-out OR fade-in when going to home
-    : pageVariants;
+  const isHomePage = pageKey === "/";
 
-  // Different layout handling for home vs other pages
-  const isHomePage = pageKey === '/';
-  
+  const shouldDisableTransition = isHomePage;
+
   return (
-    <div className={`w-full ${isHomePage ? 'h-full' : ''}`}>
+    <div className={`w-full ${isHomePage ? "h-full" : ""}`}>
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={pageKey}
-          className={`${isHomePage ? 'h-full' : ''} w-full ${className}`}
+          className={`${isHomePage ? "h-full" : ""} w-full ${className}`}
           initial="initial"
           animate="in"
           exit="out"
-          variants={variants}
-          transition={transition}
+          variants={pageVariants}
           style={{
-            // GPU optimizations to prevent layout shifts
-            willChange: 'opacity, transform',
-            backfaceVisibility: 'hidden',
-            WebkitBackfaceVisibility: 'hidden',
+            willChange: "opacity, transform",
+            backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden",
             ...style,
           }}
         >

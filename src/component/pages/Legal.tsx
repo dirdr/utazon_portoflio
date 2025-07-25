@@ -2,8 +2,7 @@ import { useTranslation } from "react-i18next";
 import { Container } from "../layout/Container";
 import { useBackgroundStore } from "../../hooks/useBackgroundStore";
 import { useEffect } from "react";
-
-const LEGAL_BG = "/src/assets/images/background.webp";
+import backgroundImage from "../../assets/images/background.webp";
 
 export const Legal = () => {
   const { t } = useTranslation();
@@ -12,8 +11,8 @@ export const Legal = () => {
   );
 
   useEffect(() => {
-    setBackgroundImage(LEGAL_BG);
-    return () => setBackgroundImage(null);
+    setBackgroundImage(backgroundImage, 'Legal');
+    return () => setBackgroundImage(null, 'Legal');
   }, [setBackgroundImage]);
 
   const currentYear = new Date().getFullYear();

@@ -1,7 +1,9 @@
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect } from 'react';
+import { useLocation } from 'wouter';
 import { GlobalLoader } from '../loader/GlobalLoader';
 import { useAppInitialization } from '../../hooks/useAppInitialization';
+import { ROUTES } from '../../constants/routes';
 
 export interface AppWrapperProps {
   children: React.ReactNode;
@@ -17,6 +19,9 @@ export interface AppWrapperProps {
  * - Modern React patterns with custom hooks
  */
 export const AppWrapper = ({ children }: AppWrapperProps) => {
+  const [location] = useLocation();
+  const isHomePage = location === ROUTES.HOME;
+  
   const { 
     showLoader, 
     isInitialized, 
@@ -39,22 +44,34 @@ export const AppWrapper = ({ children }: AppWrapperProps) => {
     };
   }, [showLoader]);
 
-  // Show loader or app content (no AnimatePresence to avoid conflicts)
-  if (showLoader) {
-    return (
-      <GlobalLoader
-        showProgress={true}
-        progress={progress}
-        loadedAssets={loadedAssets}
-        totalAssets={totalAssets}
-        failedAssets={failedAssets}
-      />
-    );
-  }
-
   return (
-    <div className="w-full min-h-screen">
-      {children}
+    <div className="relative w-full min-h-screen">
+      <AnimatePresence mode="wait">
+        {showLoader ? (
+          <GlobalLoader
+            key="global-loader"
+            showProgress={true}
+            progress={progress}
+            loadedAssets={loadedAssets}
+            totalAssets={totalAssets}
+            failedAssets={failedAssets}
+          />
+        ) : (
+          <motion.div
+            key="app-content"
+            className="w-full min-h-screen"
+            initial={{ opacity: isHomePage ? 1 : 0 }}
+            animate={{ opacity: 1 }}
+            transition={isHomePage ? { duration: 0 } : { 
+              duration: 0.6, 
+              ease: [0.4, 0, 0.2, 1],
+              delay: 0.1 // Small delay for polish
+            }}
+          >
+            {children}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

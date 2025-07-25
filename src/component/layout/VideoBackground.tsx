@@ -11,14 +11,16 @@ export const VideoBackground = () => {
     return null;
   }
 
-  const handleVideoLoaded = () => {
+  const handleVideoReady = () => {
+    console.log('🎬 Video ready, starting sequence');
     setTimeout(() => {
+      console.log('🎬 Video sequence complete, showing layout');
       setShouldShowLayout(true);
     }, ANIMATION_CONFIG.FADE_IN_DELAY);
   };
 
   return (
-    <div className="fixed inset-0 -z-10">
+    <div className="fixed inset-0" style={{ zIndex: -20 }}>
       <video
         className="w-full h-full object-cover"
         muted
@@ -26,8 +28,9 @@ export const VideoBackground = () => {
         loop
         playsInline
         disablePictureInPicture
+        preload="auto"
         src="/videos/intro.webm"
-        onLoadedData={handleVideoLoaded}
+        onCanPlayThrough={handleVideoReady}
       />
       {shouldShowLayout && (
         <RadialGradient

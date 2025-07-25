@@ -1,52 +1,48 @@
 import { VideoBackground } from "./VideoBackground";
 import { ImageBackgroundDisplay } from "./ImageBackgroundDisplay";
-import { VideoProvider } from "../../contexts/VideoContext";
 import { Navbar } from "./Navbar";
-import { Footer } from "./Footer";
-import { FadeInContainer } from "../common/FadeInContainer";
-import { getPageConfig } from "../../config/pageConfig";
-import { useVideo } from "../../hooks/useVideo";
 import { useRouteBasedVideo } from "../../hooks/useRouteBasedVideo";
+import { FadeInContainer } from "../common/FadeInContainer";
+import { useVideo } from "../../hooks/useVideo";
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 const LayoutContent = ({ children }: LayoutProps) => {
-  const { shouldShowLayout: videoLayoutReady } = useVideo();
-  const { currentPath, shouldShowLayout } = useRouteBasedVideo();
-
-  const pageConfig = getPageConfig(currentPath);
+  const { currentPath } = useRouteBasedVideo();
+  const { shouldShowLayout } = useVideo();
   const isHomePage = currentPath === "/";
+  
+  console.log('🏠 Layout.tsx Render:', { 
+    currentPath, 
+    isHomePage, 
+    shouldShowLayout,
+    renderingHomeBranch: isHomePage
+  });
 
   return (
-    <>
+    <div className="relative min-h-screen">
       <VideoBackground />
       <ImageBackgroundDisplay />
-      <FadeInContainer
-        isVisible={isHomePage ? videoLayoutReady : shouldShowLayout}
-      >
-        {isHomePage ? (
-          <div className="h-screen flex flex-col">
-            <Navbar />
-            <main className="flex-1 overflow-hidden">{children}</main>
-          </div>
-        ) : (
-          <div className="min-h-screen flex flex-col">
-            <Navbar />
-            <main className="flex-1">{children}</main>
-            {pageConfig.showFooter && <Footer />}
-          </div>
-        )}
-      </FadeInContainer>
-    </>
+      {isHomePage ? (
+        // Home page: simple fade transition for navbar and content together
+        <FadeInContainer isVisible={shouldShowLayout} className="h-screen relative">
+          <Navbar />
+          <main className="absolute inset-0 top-auto overflow-hidden">{children}</main>
+        </FadeInContainer>
+      ) : (
+        // Other pages: stable grid layout prevents navbar shifting
+        <div className="min-h-screen grid grid-rows-[auto_1fr_auto]">
+          <Navbar />
+          <main>{children}</main>
+          <div /> {/* Footer placeholder - prevents layout shift */}
+        </div>
+      )}
+    </div>
   );
 };
 
 export const Layout = ({ children }: LayoutProps) => {
-  return (
-    <VideoProvider>
-      <LayoutContent>{children}</LayoutContent>
-    </VideoProvider>
-  );
+  return <LayoutContent>{children}</LayoutContent>;
 };

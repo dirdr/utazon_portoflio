@@ -4,8 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Container } from "../layout/Container";
 import { useBackgroundStore } from "../../hooks/useBackgroundStore";
 import { useEffect } from "react";
-
-const PROJECT_BG = "/src/assets/images/background.webp";
+import backgroundImage from "../../assets/images/background.webp";
 
 export const Projects = () => {
   const { t } = useTranslation();
@@ -14,8 +13,8 @@ export const Projects = () => {
   );
 
   useEffect(() => {
-    setBackgroundImage(PROJECT_BG);
-    return () => setBackgroundImage(null);
+    setBackgroundImage(backgroundImage, 'Projects');
+    return () => setBackgroundImage(null, 'Projects');
   }, [setBackgroundImage]);
 
   return (

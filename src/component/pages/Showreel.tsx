@@ -1,8 +1,7 @@
 import { VideoCard } from "../showreel/VideoCard";
 import { useBackgroundStore } from "../../hooks/useBackgroundStore";
 import { useEffect } from "react";
-
-const SHOWREEL_BG = "/src/assets/images/background.webp";
+import showreelBackground from "../../assets/images/showreel_background.webp";
 
 export const Showreel = () => {
   const setBackgroundImage = useBackgroundStore(
@@ -10,8 +9,8 @@ export const Showreel = () => {
   );
 
   useEffect(() => {
-    setBackgroundImage(SHOWREEL_BG);
-    return () => setBackgroundImage(null);
+    setBackgroundImage(showreelBackground, 'Showreel');
+    return () => setBackgroundImage(null, 'Showreel');
   }, [setBackgroundImage]);
 
   return (

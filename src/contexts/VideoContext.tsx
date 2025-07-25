@@ -9,19 +9,35 @@ interface VideoProviderProps {
 }
 
 export const VideoProvider = ({ children }: VideoProviderProps) => {
-  const [shouldShowLayout, setShouldShowLayout] = useState(false);
+  const { currentPath } = useRouteBasedVideo();
+  const isHomePage = currentPath === "/";
+  
+  // Calculate shouldShowLayout directly from route - no useState delay
+  const shouldShowLayoutFromRoute = !isHomePage;
+  const [shouldShowLayoutOverride, setShouldShowLayoutOverride] = useState<boolean | null>(null);
+  
+  // Use override if set, otherwise use route-based value
+  const shouldShowLayout = shouldShowLayoutOverride !== null ? shouldShowLayoutOverride : shouldShowLayoutFromRoute;
+  
   const [volume, setVolume] = useState(0.8);
   const [isMuted, setIsMuted] = useState(false);
 
-  const { currentPath } = useRouteBasedVideo();
+  console.log('🎬 VideoContext render:', { 
+    currentPath, 
+    isHomePage, 
+    shouldShowLayoutFromRoute,
+    shouldShowLayoutOverride,
+    finalShouldShowLayout: shouldShowLayout
+  });
 
+  // Reset override when route changes
   useEffect(() => {
-    setShouldShowLayout(false);
+    setShouldShowLayoutOverride(null);
   }, [currentPath]);
 
   const value: VideoContextProps = {
     shouldShowLayout,
-    setShouldShowLayout,
+    setShouldShowLayout: setShouldShowLayoutOverride,
     volume,
     isMuted,
     setVolume,

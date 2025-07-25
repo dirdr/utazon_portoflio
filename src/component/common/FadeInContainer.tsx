@@ -21,6 +21,8 @@ export const FadeInContainer = ({
 
   const delayStyle = delay > 0 ? { transitionDelay: `${delay}ms` } : {};
 
+  console.log('🎭 FadeInContainer:', { isVisible, className: visibilityClasses });
+
   return (
     <div
       className={`${baseClasses} ${visibilityClasses} ${className}`}
