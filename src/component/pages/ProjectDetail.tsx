@@ -2,12 +2,22 @@ import { useRoute } from "wouter";
 import { getProjectById } from "../../data/projects";
 import { Container } from "../layout/Container";
 import { ProjectHeroSection } from "../projectdetail/ProjectHeroSection";
+import { useRef, useEffect } from "react";
 
 export const ProjectDetail = () => {
   const [, params] = useRoute("/projects/:id");
   const project = params?.id ? getProjectById(params.id) : null;
+  const previousProjectRef = useRef(project);
 
-  if (!project) {
+  useEffect(() => {
+    if (project) {
+      previousProjectRef.current = project;
+    }
+  }, [project]);
+
+  const displayProject = project || previousProjectRef.current;
+
+  if (!displayProject) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Container>
@@ -19,7 +29,7 @@ export const ProjectDetail = () => {
 
   return (
     <div>
-      <ProjectHeroSection project={project} />
+      <ProjectHeroSection project={displayProject} />
       <section className="min-h-screen bg-black text-white">
         <Container>
           <div className="py-24">

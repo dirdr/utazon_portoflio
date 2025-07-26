@@ -38,6 +38,14 @@ export const DEFAULT_PAGE_CONFIG: PageConfig = {
 };
 
 export const getPageConfig = (route: string): PageConfig => {
+  // Handle dynamic project detail routes
+  if (route.startsWith('/projects/') && route !== '/projects') {
+    return {
+      showFooter: false,
+      showNavbarLogo: true,
+    };
+  }
+  
   return PAGE_CONFIGS[route] || DEFAULT_PAGE_CONFIG;
 };
 

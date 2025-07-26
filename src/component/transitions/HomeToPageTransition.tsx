@@ -54,7 +54,9 @@ export const HomeToPageTransition = ({
       <AnimatePresence 
         mode="wait"
         initial={isFromHome}
-        onExitComplete={() => {}}
+        onExitComplete={() => {
+          window.scrollTo(0, 0);
+        }}
       >
         <motion.div
           key={pageKey}
