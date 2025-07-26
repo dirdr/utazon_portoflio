@@ -15,7 +15,7 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
         <div
           className="absolute inset-0 bg-cover bg-left bg-no-repeat"
           style={{
-            backgroundImage: `url(/images/projects/${project.id}/cover.webp)`,
+            backgroundImage: `url(/images/projects/${project.id}/background.webp)`,
             aspectRatio: "16 / 9",
             width: "min(100vw, calc(80vh * 16 / 9))",
             height: "80vh",

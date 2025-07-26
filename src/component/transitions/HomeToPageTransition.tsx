@@ -9,33 +9,33 @@ interface HomeToPageTransitionProps {
 }
 
 const fromHomeVariants = {
-  initial: { opacity: 0, scale: 0.98, y: 20 },
-  in: { opacity: 1, scale: 1, y: 0 },
-  out: { opacity: 0, scale: 1.02, y: -20, position: "absolute" as const, top: 0, left: 0, right: 0 },
+  initial: { opacity: 0, y: 6 },
+  in: { opacity: 1, y: 0 },
+  out: { opacity: 0, y: -6, position: "absolute" as const, top: 0, left: 0, right: 0 },
 };
 
 const homePageVariants = {
-  initial: { opacity: 0, scale: 1.02, y: -20 },
-  in: { opacity: 1, scale: 1, y: 0 },
-  out: { opacity: 0, scale: 1.02, y: -20, position: "absolute" as const, top: 0, left: 0, right: 0 },
+  initial: { opacity: 0, y: -6 },
+  in: { opacity: 1, y: 0 },
+  out: { opacity: 0, y: -6, position: "absolute" as const, top: 0, left: 0, right: 0 },
 };
 
 const defaultVariants = {
-  initial: { opacity: 0, y: 8 },
+  initial: { opacity: 0, y: 4 },
   in: { opacity: 1, y: 0 },
-  out: { opacity: 0, y: -8, position: "absolute" as const, top: 0, left: 0, right: 0 },
+  out: { opacity: 0, y: -4, position: "absolute" as const, top: 0, left: 0, right: 0 },
 };
 
 const fromHomeTransition = {
   type: 'tween' as const,
-  ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
-  duration: 0.6,
+  ease: [0.2, 0, 0.2, 1] as [number, number, number, number],
+  duration: 0.35,
 };
 
 const defaultTransition = {
   type: 'tween' as const,
-  ease: [0.4, 0, 0.2, 1] as [number, number, number, number],
-  duration: 0.4,
+  ease: [0.2, 0, 0.2, 1] as [number, number, number, number],
+  duration: 0.25,
 };
 
 export const HomeToPageTransition = ({ 

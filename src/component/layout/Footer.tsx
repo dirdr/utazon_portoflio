@@ -28,30 +28,30 @@ export const Footer = () => {
             </div>
             <nav className="flex flex-col items-start md:items-start">
               <h4 className="text-muted text-base mb-3">Menu</h4>
-              <a
+              <Link
                 href={ROUTES.PROJECTS}
                 className="text-white hover:text-white transition-colors duration-200 mb-2"
               >
                 {t("nav.projects")}
-              </a>
-              <a
+              </Link>
+              <Link
                 href={ROUTES.ABOUT}
                 className="text-white hover:text-white transition-colors duration-200 mb-2"
               >
                 {t("nav.about")}
-              </a>
-              <a
+              </Link>
+              <Link
                 href={ROUTES.SHOWREEL}
                 className="text-white hover:text-white transition-colors duration-200 mb-2"
               >
                 {t("nav.showreel")}
-              </a>
-              <a
+              </Link>
+              <Link
                 href={ROUTES.CONTACT}
                 className="text-white hover:text-white transition-colors duration-200"
               >
                 {t("nav.contact")}
-              </a>
+              </Link>
             </nav>
 
             <div className="flex flex-col items-start gap-3">

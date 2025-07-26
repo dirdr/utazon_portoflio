@@ -19,7 +19,7 @@ export const VideoShowcase = ({ data }: VideoShowcaseProps) => {
             muted={video.muted ?? true}
             playsInline
             poster={video.poster}
-            className="w-full h-screen object-cover rounded-lg"
+            className="w-full h-screen object-cover rounded-xl border-2 border-muted"
             aria-label={video.title || "Project video"}
           />
           {video.title && (

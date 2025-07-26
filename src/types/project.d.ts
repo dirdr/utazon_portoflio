@@ -1,3 +1,5 @@
+import { ShowcaseData } from "./showcase";
+
 export interface Project {
   id: string;
   title: string;
@@ -15,4 +17,5 @@ export interface Project {
   links?: {
     live?: string;
   };
+  showcases?: ShowcaseData[];
 }

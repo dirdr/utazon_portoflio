@@ -17,7 +17,7 @@ export const ImageShowcase = ({ data }: ImageShowcaseProps) => {
             <OptimizedImage
               src={mainImage.src}
               alt={mainImage.alt}
-              className="w-full h-screen object-cover rounded-lg"
+              className="w-full h-screen object-cover rounded-xl border-2 border-muted"
             />
             {mainImage.caption && (
               <p className="text-sm text-gray-600 mt-2 text-center">
@@ -25,7 +25,7 @@ export const ImageShowcase = ({ data }: ImageShowcaseProps) => {
               </p>
             )}
           </div>
-          
+
           {bottomImages.length > 0 && (
             <div className="grid grid-cols-2 gap-4">
               {bottomImages.map((image, index) => (
@@ -33,7 +33,7 @@ export const ImageShowcase = ({ data }: ImageShowcaseProps) => {
                   <OptimizedImage
                     src={image.src}
                     alt={image.alt}
-                    className="w-full h-auto object-cover rounded-lg"
+                    className="w-full h-auto object-cover rounded-xl border-2 border-muted"
                   />
                   {image.caption && (
                     <p className="text-sm text-gray-600 mt-2 text-center">
@@ -49,3 +49,4 @@ export const ImageShowcase = ({ data }: ImageShowcaseProps) => {
     </section>
   );
 };
+
