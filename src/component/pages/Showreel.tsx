@@ -9,8 +9,8 @@ export const Showreel = () => {
   );
 
   useEffect(() => {
-    setBackgroundImage(showreelBackground, 'Showreel');
-    return () => setBackgroundImage(null, 'Showreel');
+    setBackgroundImage(showreelBackground, "Showreel");
+    return () => setBackgroundImage(null, "Showreel");
   }, [setBackgroundImage]);
 
   return (

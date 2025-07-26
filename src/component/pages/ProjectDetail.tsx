@@ -3,6 +3,8 @@ import { getProjectById } from "../../data/projects";
 import { Container } from "../layout/Container";
 import { ProjectHeroSection } from "../projectdetail/ProjectHeroSection";
 import { useRef, useEffect } from "react";
+import { ShowcaseList } from "../showcase/ShowcaseList";
+import { getShowcaseConfigForProject } from "../../data/showcaseConfigs";
 
 export const ProjectDetail = () => {
   const [, params] = useRoute("/projects/:id");
@@ -27,9 +29,21 @@ export const ProjectDetail = () => {
     );
   }
 
+  const showcaseConfig = getShowcaseConfigForProject(displayProject.id);
+
   return (
     <div>
+      {/* Hero section - always present and consistent across all projects */}
       <ProjectHeroSection project={displayProject} />
+      
+      {/* Configurable showcase sections - different layouts per project */}
+      {showcaseConfig && (
+        <ShowcaseList 
+          showcases={showcaseConfig.showcases} 
+          project={displayProject}
+        />
+      )}
+      
       <section className="min-h-screen bg-black text-white">
         <Container>
           <div className="py-24">

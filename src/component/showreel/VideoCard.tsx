@@ -2,6 +2,7 @@ import { cn } from "../../utils/cn";
 import { useState, useRef, useEffect } from "react";
 import ReactPlayer from "react-player";
 import showreelThumbnail from "../../assets/images/showreel_background.webp";
+import showreelLight from "../../assets/images/showreel_light.webp";
 import cardBackground from "../../assets/images/card_backgrounds/1.webp";
 import { useVideo } from "../../hooks/useVideo";
 
@@ -18,7 +19,8 @@ export const VideoCard = ({
 }: VideoCardProps) => {
   const [userActive, setUserActive] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
-  const playerRef = useRef<HTMLVideoElement>(null);
+  const [isReady, setIsReady] = useState(false);
+  const playerRef = useRef<any>(null);
   const timeoutRef = useRef<number>();
   const { volume, isMuted } = useVideo();
 
@@ -55,26 +57,33 @@ export const VideoCard = ({
       onMouseEnter={handleUserActivity}
       onClick={handleUserActivity}
     >
-      <div 
+      <div
         className="glint-card-content p-6"
         style={{
           background: `url(${cardBackground}) center/cover`,
         }}
       >
-        <div className="relative aspect-video w-full rounded-xl overflow-hidden shadow-2xl">
+        <div className="relative aspect-video w-full rounded-xl overflow-hidden shadow-2xl z-10">
           <ReactPlayer
             ref={playerRef}
             src={src}
             width="100%"
             height="100%"
-            controls={userActive}
+            controls={userActive && isPlaying}
             playing={isPlaying}
             muted={isMuted}
             loop
             volume={volume}
             style={{ borderRadius: "0.75rem" }}
-            light={showreelThumbnail}
-            onClickPreview={() => setIsPlaying(true)}
+            light={showreelLight}
+            onReady={() => {
+              setIsReady(true);
+              console.log("Video ready");
+            }}
+            onClickPreview={() => {
+              setIsPlaying(true);
+              resetInactivityTimer();
+            }}
             onPlay={() => {
               setIsPlaying(true);
               resetInactivityTimer();
@@ -82,6 +91,9 @@ export const VideoCard = ({
             onPause={() => {
               setIsPlaying(false);
               resetInactivityTimer();
+            }}
+            onError={(error) => {
+              console.error("Video error:", error);
             }}
           />
         </div>
