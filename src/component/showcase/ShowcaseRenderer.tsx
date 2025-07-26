@@ -4,10 +4,10 @@ import { VideoShowcase } from "./VideoShowcase";
 
 interface ShowcaseRendererProps {
   showcase: ShowcaseData;
-  project?: any;
+  project?: unknown;
 }
 
-export const ShowcaseRenderer = ({ showcase, project }: ShowcaseRendererProps) => {
+export const ShowcaseRenderer = ({ showcase }: ShowcaseRendererProps) => {
   switch (showcase.type) {
     case 'image':
       return <ImageShowcase data={showcase} />;
@@ -26,7 +26,7 @@ export const ShowcaseRenderer = ({ showcase, project }: ShowcaseRendererProps) =
       return null;
     
     default:
-      console.warn(`Unknown showcase type: ${(showcase as any).type}`);
+      console.warn(`Unknown showcase type: ${(showcase as { type: string }).type}`);
       return null;
   }
 };

@@ -7,8 +7,8 @@ interface BackgroundStore {
   setBackgroundImage: (image: string | null, componentId?: string) => void;
 }
 
-let activeBackgroundUsers = new Set<string>();
-let clearTimeouts = new Map<string, NodeJS.Timeout>();
+const activeBackgroundUsers = new Set<string>();
+const clearTimeouts = new Map<string, number>();
 
 export const useBackgroundStore = create<BackgroundStore>((set, get) => ({
   currentBackground: null,
@@ -73,7 +73,6 @@ export const useBackgroundStore = create<BackgroundStore>((set, get) => ({
       if (activeBackgroundUsers.size === 0) {
         console.log('🗑️ Clearing background (delayed) - no active users');
         const timeoutId = setTimeout(() => {
-          const currentState = get();
           // Double-check no new users were added
           if (activeBackgroundUsers.size === 0) {
             console.log('🗑️ Actually clearing background');

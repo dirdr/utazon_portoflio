@@ -13,7 +13,6 @@ import { HomeToPageTransition } from "./component/transitions/HomeToPageTransiti
 import { Footer } from "./component/layout/Footer";
 import { getPageConfig } from "./config/pageConfig";
 import { VideoProvider } from "./contexts/VideoContext";
-import { useVideo } from "./hooks/useVideo";
 import "./index.css";
 import { Route, Switch, useLocation } from "wouter";
 

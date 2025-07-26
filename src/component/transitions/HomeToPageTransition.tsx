@@ -1,4 +1,4 @@
-import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ReactNode } from 'react';
 
 interface HomeToPageTransitionProps {
@@ -27,14 +27,14 @@ const defaultVariants = {
 };
 
 const fromHomeTransition = {
-  type: 'tween',
-  ease: [0.25, 0.1, 0.25, 1],
+  type: 'tween' as const,
+  ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
   duration: 0.6,
 };
 
 const defaultTransition = {
-  type: 'tween',
-  ease: [0.4, 0, 0.2, 1],
+  type: 'tween' as const,
+  ease: [0.4, 0, 0.2, 1] as [number, number, number, number],
   duration: 0.4,
 };
 

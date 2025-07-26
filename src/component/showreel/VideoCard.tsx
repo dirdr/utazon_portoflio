@@ -1,10 +1,10 @@
 import { cn } from "../../utils/cn";
 import { useState, useRef, useEffect } from "react";
 import ReactPlayer from "react-player";
-import showreelThumbnail from "../../assets/images/showreel_background.webp";
 import showreelLight from "../../assets/images/showreel_light.webp";
 import cardBackground from "../../assets/images/card_backgrounds/1.webp";
 import { useVideo } from "../../hooks/useVideo";
+
 
 interface VideoCardProps {
   src: string;
@@ -19,8 +19,7 @@ export const VideoCard = ({
 }: VideoCardProps) => {
   const [userActive, setUserActive] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isReady, setIsReady] = useState(false);
-  const playerRef = useRef<any>(null);
+  const playerRef = useRef(null);
   const timeoutRef = useRef<number>();
   const { volume, isMuted } = useVideo();
 
@@ -77,7 +76,6 @@ export const VideoCard = ({
             style={{ borderRadius: "0.75rem" }}
             light={showreelLight}
             onReady={() => {
-              setIsReady(true);
               console.log("Video ready");
             }}
             onClickPreview={() => {

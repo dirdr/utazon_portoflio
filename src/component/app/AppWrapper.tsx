@@ -23,12 +23,7 @@ export const AppWrapper = ({ children }: AppWrapperProps) => {
   const isHomePage = location === ROUTES.HOME;
   
   const { 
-    showLoader, 
-    isInitialized, 
-    progress, 
-    loadedAssets, 
-    totalAssets, 
-    failedAssets 
+    showLoader
   } = useAppInitialization();
 
   // Prevent body scroll while loader is active
@@ -48,14 +43,7 @@ export const AppWrapper = ({ children }: AppWrapperProps) => {
     <div className="relative w-full min-h-screen">
       <AnimatePresence mode="wait">
         {showLoader ? (
-          <GlobalLoader
-            key="global-loader"
-            showProgress={true}
-            progress={progress}
-            loadedAssets={loadedAssets}
-            totalAssets={totalAssets}
-            failedAssets={failedAssets}
-          />
+          <GlobalLoader key="global-loader" />
         ) : (
           <motion.div
             key="app-content"

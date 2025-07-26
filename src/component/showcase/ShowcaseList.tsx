@@ -3,7 +3,7 @@ import { ShowcaseRenderer } from "./ShowcaseRenderer";
 
 interface ShowcaseListProps {
   showcases: ShowcaseData[];
-  project?: any;
+  project?: unknown;
 }
 
 export const ShowcaseList = ({ showcases, project }: ShowcaseListProps) => {

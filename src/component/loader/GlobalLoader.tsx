@@ -11,7 +11,7 @@ export interface GlobalLoaderProps {
   failedAssets: number;
 }
 
-export const GlobalLoader = ({}: GlobalLoaderProps) => {
+export const GlobalLoader = () => {
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
