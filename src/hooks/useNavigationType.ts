@@ -34,7 +34,7 @@ export const useNavigationType = () => {
     });
 
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, []);
+  }, [isClientSideNavigation, location]);
 
   return {
     isInternalNavigation: isClientSideNavigation,

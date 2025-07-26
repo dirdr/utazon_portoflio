@@ -54,11 +54,12 @@ export const VideoBackground = () => {
 
   // Expose startVideo function globally for the DiveInButton
   useEffect(() => {
+    const windowWithVideo = window as Window & { startHomeVideo?: () => void };
     if (shouldPlayVideo) {
-      (window as any).startHomeVideo = startVideo;
+      windowWithVideo.startHomeVideo = startVideo;
     }
     return () => {
-      delete (window as any).startHomeVideo;
+      delete windowWithVideo.startHomeVideo;
     };
   }, [shouldPlayVideo]);
 

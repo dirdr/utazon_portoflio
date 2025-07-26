@@ -31,8 +31,9 @@ export const AppWithDiveIn = () => {
     
     // Small delay to ensure state update, then trigger video
     setTimeout(() => {
-      if ((window as any).startHomeVideo) {
-        (window as any).startHomeVideo();
+      const windowWithVideo = window as Window & { startHomeVideo?: () => void };
+      if (windowWithVideo.startHomeVideo) {
+        windowWithVideo.startHomeVideo();
       }
     }, 100);
   };
