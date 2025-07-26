@@ -43,6 +43,14 @@ export const usePreloadAssets = () => {
       type: 'video',
     });
 
+    // Background image (critical for layout)
+    assets.push({
+      url: `/images/background.webp`,
+      loaded: false,
+      error: false,
+      type: 'image',
+    });
+
     allProjectsSortedByPriority.forEach(project => {
       // Cover images
       assets.push({

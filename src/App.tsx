@@ -9,7 +9,7 @@ import { Showreel } from "./component/pages/Showreel";
 import { Legal } from "./component/pages/Legal";
 import { ROUTES } from "./constants/routes";
 import { AppWrapper } from "./component/app/AppWrapper";
-import { PageTransition } from "./component/transitions/PageTransition";
+import { HomeToPageTransition } from "./component/transitions/HomeToPageTransition";
 import { Footer } from "./component/layout/Footer";
 import { getPageConfig } from "./config/pageConfig";
 import { VideoProvider } from "./contexts/VideoContext";
@@ -22,39 +22,23 @@ function App() {
   const pageConfig = getPageConfig(location);
   const isHomePage = location === "/";
   
-  // Track previous location using ref to avoid re-render issues
   const previousLocationRef = React.useRef(location);
-  const shouldSkipTransition = isHomePage; // Only skip when going TO home
+  const isFromHome = previousLocationRef.current === "/";
   
-  // Update previous location ref after render
   React.useEffect(() => {
     previousLocationRef.current = location;
   });
   
-  console.log('🔄 App.tsx Navigation Debug:', {
-    location,
-    previousLocation: previousLocationRef.current,
-    isHomePage,
-    shouldSkipTransition,
-    renderingBranch: isHomePage ? 'HOME' : shouldSkipTransition ? 'SKIP_TRANSITION' : 'NORMAL_TRANSITION'
-  });
 
   return (
     <AppWrapper>
       <VideoProvider>
         <Layout>
-          {isHomePage ? (
-            // Home page: Simple direct rendering 
-            <div className="h-full">
-              <Switch location={location}>
-                <Route path={ROUTES.HOME} component={Home} />
-              </Switch>
-            </div>
-          ) : shouldSkipTransition ? (
-            // Skip transitions when navigating to/from home page - instant render
-            <div className="min-h-full flex flex-col">
+          <HomeToPageTransition pageKey={location} isFromHome={isFromHome}>
+            <div className={`${isHomePage ? "h-full" : "min-h-full"} flex flex-col`}>
               <div className="flex-1">
                 <Switch location={location}>
+                  <Route path={ROUTES.HOME} component={Home} />
                   <Route path={ROUTES.ABOUT} component={About} />
                   <Route path={ROUTES.PROJECTS} component={Projects} />
                   <Route path="/projects/:id" component={ProjectDetail} />
@@ -73,32 +57,7 @@ function App() {
               </div>
               {pageConfig.showFooter && <Footer />}
             </div>
-          ) : (
-            // Other pages: Normal page transitions
-            <PageTransition pageKey={location}>
-              <div className="min-h-full flex flex-col">
-                <div className="flex-1">
-                  <Switch location={location}>
-                    <Route path={ROUTES.ABOUT} component={About} />
-                    <Route path={ROUTES.PROJECTS} component={Projects} />
-                    <Route path="/projects/:id" component={ProjectDetail} />
-                    <Route path={ROUTES.CONTACT} component={Contact} />
-                    <Route path={ROUTES.SHOWREEL} component={Showreel} />
-                    <Route path={ROUTES.LEGAL} component={Legal} />
-                    <Route>
-                      <div className="min-h-screen bg-background flex items-center justify-center">
-                        <div className="text-center">
-                          <h1 className="text-5xl font-bold">404</h1>
-                          <p className="py-6">Page not found</p>
-                        </div>
-                      </div>
-                    </Route>
-                  </Switch>
-                </div>
-                {pageConfig.showFooter && <Footer />}
-              </div>
-            </PageTransition>
-          )}
+          </HomeToPageTransition>
         </Layout>
       </VideoProvider>
     </AppWrapper>
