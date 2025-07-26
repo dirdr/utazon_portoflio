@@ -2,6 +2,7 @@ import { cn } from "../../utils/cn";
 import { useTranslation } from "react-i18next";
 import { Button } from "./Button";
 import { useMemo, useRef, useState } from "react";
+import { LineSweepText } from "./LineSweepText";
 
 const getCardBackgrounds = () => {
   const backgrounds = [];
@@ -48,6 +49,7 @@ export const Card = ({
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoReady, setVideoReady] = useState(false);
   const [videoError, setVideoError] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const randomBackground = useMemo(() => {
     const hash = project.name.split("").reduce((acc, char) => {
@@ -59,6 +61,7 @@ export const Card = ({
 
 
   const handleMouseEnter = () => {
+    setIsHovered(true);
     if (videoReady && videoRef.current) {
       videoRef.current.currentTime = 0;
       videoRef.current.play().catch(() => {});
@@ -66,6 +69,7 @@ export const Card = ({
   };
 
   const handleMouseLeave = () => {
+    setIsHovered(false);
     if (videoReady && videoRef.current) {
       videoRef.current.pause();
       videoRef.current.currentTime = 0;
@@ -151,8 +155,13 @@ export const Card = ({
             <div className="flex items-start gap-4">
               <div className="w-px bg-white self-stretch min-h-[40px]" />
               <div className="flex-1">
-                <h3 className="font-nord text-xl font-bold italic text-white mb-1">
-                  {project.name}
+                <h3 className={cn(
+                  "font-nord text-xl font-bold italic mb-1 transition-colors duration-300",
+                  isHovered ? "text-muted" : "text-white"
+                )}>
+                  <LineSweepText animate={isHovered}>
+                    {project.name}
+                  </LineSweepText>
                 </h3>
                 <p className="font-nord text-white font-light">
                   {project.header}
