@@ -51,10 +51,19 @@ export const PageTransition = ({
   pageKey, 
   className = '' 
 }: PageTransitionProps) => {
+  console.log('📄 PageTransition render:', { 
+    pageKey, 
+    timestamp: Date.now() 
+  });
+
   return (
     <LayoutGroup>
       <div className="relative w-full min-h-full">
-        <AnimatePresence mode="popLayout" initial={false}>
+        <AnimatePresence 
+          mode="popLayout" 
+          initial={false}
+          onExitComplete={() => console.log('🚪 PageTransition exit complete:', pageKey)}
+        >
           <motion.div
             key={pageKey}
             className={`w-full ${className}`}
@@ -73,6 +82,8 @@ export const PageTransition = ({
               transition: exitTransition,
             }}
             layout
+            onAnimationStart={(definition) => console.log('🎬 PageTransition animation start:', { pageKey, definition })}
+            onAnimationComplete={(definition) => console.log('✅ PageTransition animation complete:', { pageKey, definition })}
           >
             {children}
           </motion.div>

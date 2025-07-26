@@ -22,18 +22,18 @@ function App() {
   const pageConfig = getPageConfig(location);
   const isHomePage = location === "/";
   
-  // Track previous location to determine if we should skip transitions
-  const [previousLocation, setPreviousLocation] = React.useState(location);
-  React.useEffect(() => {
-    setPreviousLocation(location);
-  }, [location]);
+  // Track previous location using ref to avoid re-render issues
+  const previousLocationRef = React.useRef(location);
+  const shouldSkipTransition = isHomePage; // Only skip when going TO home
   
-  // Skip transitions when navigating FROM home page (but not TO home)
-  const shouldSkipTransition = !isHomePage && previousLocation === "/";
+  // Update previous location ref after render
+  React.useEffect(() => {
+    previousLocationRef.current = location;
+  });
   
   console.log('🔄 App.tsx Navigation Debug:', {
     location,
-    previousLocation,
+    previousLocation: previousLocationRef.current,
     isHomePage,
     shouldSkipTransition,
     renderingBranch: isHomePage ? 'HOME' : shouldSkipTransition ? 'SKIP_TRANSITION' : 'NORMAL_TRANSITION'
