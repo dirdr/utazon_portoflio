@@ -30,7 +30,7 @@ export const VideoProvider = ({ children }: VideoProviderProps) => {
     finalShouldShowLayout: shouldShowLayout
   });
 
-  // Reset override when route changes
+  // Reset layout override when route changes
   useEffect(() => {
     setShouldShowLayoutOverride(null);
   }, [currentPath]);

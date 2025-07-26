@@ -1,36 +1,85 @@
 import { useRouteBasedVideo } from "../../hooks/useRouteBasedVideo";
 import { useVideo } from "../../hooks/useVideo";
+import { useDiveInInitialization } from "../../hooks/useDiveInInitialization";
 import { RadialGradient } from "../common/RadialGradient";
 import { ANIMATION_CONFIG } from "../../constants/animations";
+import { useRef, useEffect } from "react";
+import { useLocation } from "wouter";
 
 export const VideoBackground = () => {
   const { shouldPlayVideo } = useRouteBasedVideo();
   const { shouldShowLayout, setShouldShowLayout } = useVideo();
+  const { isFreshLoad } = useDiveInInitialization();
+  const [location] = useLocation();
+  const videoRef = useRef<HTMLVideoElement>(null);
+  
+  const isHomePage = location === "/";
+  const shouldAutoPlayVideo = isHomePage && !isFreshLoad; // Auto-play on internal navigation
 
-  if (!shouldPlayVideo) {
-    return null;
-  }
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !shouldPlayVideo) return;
+
+    if (shouldAutoPlayVideo) {
+      console.log('🎬 Auto-playing video (internal navigation)');
+      video.currentTime = 0; // Reset to beginning
+      video.play().catch(console.error);
+    } else {
+      console.log('🎬 Video ready but waiting for user interaction (fresh load)');
+      video.pause();
+      video.currentTime = 0; // Keep at beginning
+    }
+  }, [shouldAutoPlayVideo, shouldPlayVideo]);
 
   const handleVideoReady = () => {
-    console.log('🎬 Video ready, starting sequence');
+    console.log('🎬 Video loaded and ready');
+    // Don't start layout sequence yet - wait for video to actually play
+  };
+
+  const handleVideoPlay = () => {
+    console.log('🎬 Video started playing, beginning layout sequence');
     setTimeout(() => {
       console.log('🎬 Video sequence complete, showing layout');
       setShouldShowLayout(true);
     }, ANIMATION_CONFIG.FADE_IN_DELAY);
   };
 
+  const startVideo = () => {
+    const video = videoRef.current;
+    if (video) {
+      video.currentTime = 0;
+      video.play().catch(console.error);
+    }
+  };
+
+  // Expose startVideo function globally for the DiveInButton
+  useEffect(() => {
+    if (shouldPlayVideo) {
+      (window as any).startHomeVideo = startVideo;
+    }
+    return () => {
+      delete (window as any).startHomeVideo;
+    };
+  }, [shouldPlayVideo]);
+
+  if (!shouldPlayVideo) {
+    return null;
+  }
+
   return (
     <div className="fixed inset-0" style={{ zIndex: -20 }}>
       <video
+        ref={videoRef}
         className="w-full h-full object-cover"
         muted
-        autoPlay
+        autoPlay={false}
         loop
         playsInline
         disablePictureInPicture
         preload="auto"
         src="/videos/intro.webm"
         onCanPlayThrough={handleVideoReady}
+        onPlay={handleVideoPlay}
       />
       {shouldShowLayout && (
         <RadialGradient

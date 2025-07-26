@@ -34,7 +34,7 @@ export const Projects = () => {
               date: t(project.date),
             }}
             thumbnail={{
-              src: `/videos/projects/${project.id}/thumbnail.webm`,
+              src: `/videos/projects/${project.id}/details.webm`,
               alt: t(project.title),
             }}
             priority={index < 4}

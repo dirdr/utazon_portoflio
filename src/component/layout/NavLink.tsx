@@ -20,9 +20,14 @@ const getNavLabel = (href: string, t: (key: string) => string): string => {
   }
 };
 
-export const NavLink = ({ href, label, onClick, className = "" }: NavLinkProps) => {
+export const NavLink = ({
+  href,
+  label,
+  onClick,
+  className = "",
+}: NavLinkProps) => {
   const { t } = useTranslation();
-  
+
   return (
     <Link
       href={href}
@@ -33,3 +38,4 @@ export const NavLink = ({ href, label, onClick, className = "" }: NavLinkProps) 
     </Link>
   );
 };
+

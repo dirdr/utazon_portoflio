@@ -60,9 +60,9 @@ export const usePreloadAssets = () => {
         type: 'image',
       });
 
-      // Thumbnail videos (only if they exist)
+      // Details videos (only if they exist)
       assets.push({
-        url: `/videos/projects/${project.id}/thumbnail.webm`,
+        url: `/videos/projects/${project.id}/details.webm`,
         loaded: false,
         error: false,
         type: 'video',

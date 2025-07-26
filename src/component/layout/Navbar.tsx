@@ -40,9 +40,7 @@ export const Navbar = () => {
 
         {pageConfig.showNavbarLogo && (
           <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2">
-            <Link href="/">
-              <img src={logo} alt="Utazon Logo" className="h-10 w-auto" />
-            </Link>
+            <img src={logo} alt="Utazon Logo" className="h-10 w-auto" />
           </div>
         )}
 
