@@ -1,10 +1,7 @@
 import { cn } from "../../utils/cn";
-import { useState, useRef, useEffect } from "react";
-import ReactPlayer from "react-player";
 import showreelLight from "../../assets/images/showreel_light.webp";
 import cardBackground from "../../assets/images/card_backgrounds/1.webp";
-import { useVideo } from "../../hooks/useVideo";
-
+import { ReactPlayerWrapper } from "../common/ReactPlayerWrapper";
 
 interface VideoCardProps {
   src: string;
@@ -17,34 +14,6 @@ export const VideoCard = ({
   className,
   glintSpeed = "6s",
 }: VideoCardProps) => {
-  const [userActive, setUserActive] = useState(true);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const playerRef = useRef(null);
-  const timeoutRef = useRef<number>();
-  const { volume, isMuted } = useVideo();
-
-  const resetInactivityTimer = () => {
-    setUserActive(true);
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    timeoutRef.current = setTimeout(() => {
-      setUserActive(false);
-    }, 3000);
-  };
-
-  const handleUserActivity = () => {
-    resetInactivityTimer();
-  };
-
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, []);
-
   return (
     <div
       className={cn(
@@ -52,9 +21,6 @@ export const VideoCard = ({
         className,
       )}
       style={{ "--glint-card-speed": glintSpeed } as React.CSSProperties}
-      onMouseMove={handleUserActivity}
-      onMouseEnter={handleUserActivity}
-      onClick={handleUserActivity}
     >
       <div
         className="glint-card-content p-6"
@@ -63,36 +29,10 @@ export const VideoCard = ({
         }}
       >
         <div className="relative aspect-video w-full rounded-xl overflow-hidden shadow-2xl z-10">
-          <ReactPlayer
-            ref={playerRef}
+          <ReactPlayerWrapper
             src={src}
-            width="100%"
-            height="100%"
-            controls={userActive && isPlaying}
-            playing={isPlaying}
-            muted={isMuted}
-            loop
-            volume={volume}
-            style={{ borderRadius: "0.75rem" }}
             light={showreelLight}
-            onReady={() => {
-              console.log("Video ready");
-            }}
-            onClickPreview={() => {
-              setIsPlaying(true);
-              resetInactivityTimer();
-            }}
-            onPlay={() => {
-              setIsPlaying(true);
-              resetInactivityTimer();
-            }}
-            onPause={() => {
-              setIsPlaying(false);
-              resetInactivityTimer();
-            }}
-            onError={(error) => {
-              console.error("Video error:", error);
-            }}
+            className="w-full h-full rounded-xl"
           />
         </div>
       </div>

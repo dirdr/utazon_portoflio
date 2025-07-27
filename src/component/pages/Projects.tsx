@@ -13,8 +13,8 @@ export const Projects = () => {
   );
 
   useEffect(() => {
-    setBackgroundImage(backgroundImage, 'Projects');
-    return () => setBackgroundImage(null, 'Projects');
+    setBackgroundImage(backgroundImage, "Projects");
+    return () => setBackgroundImage(null, "Projects");
   }, [setBackgroundImage]);
 
   return (
@@ -34,7 +34,7 @@ export const Projects = () => {
               date: t(project.date),
             }}
             thumbnail={{
-              src: `/videos/projects/${project.id}/details.webm`,
+              src: `/videos/projects/${project.id}/thumbnail.webm`,
               alt: t(project.title),
             }}
             priority={index < 4}

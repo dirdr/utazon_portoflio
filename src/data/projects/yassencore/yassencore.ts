@@ -16,29 +16,40 @@ export const Yassencore: Project = {
       id: "video-1",
       order: 1,
       video: {
-        src: `/videos/projects/yassencore/details.webm`,
-        title: "Project demonstration",
-        autoPlay: true,
-        loop: true,
-        muted: true,
+        src: `/videos/projects/yassencore/details-1.webm`,
+        light: "/images/projects/yassencore/3.webp",
       },
     },
     {
-      type: "image",
-      id: "image-1",
+      type: "video",
+      id: "video-2",
       order: 2,
-      mainImage: {
-        src: "/images/projects/yassencore/1.webp",
-        alt: "Main project showcase",
+      video: {
+        src: `/videos/projects/yassencore/details-2.webm`,
+        light: "/images/projects/yassencore/cover.webp",
       },
-      bottomImages: [
+    },
+    {
+      type: "image-single",
+      id: "image-1",
+      order: 3,
+      image: {
+        src: "/images/projects/yassencore/1.webp",
+        alt: "Yassencore 1",
+      },
+    },
+    {
+      type: "image-grid",
+      id: "image-grid-1",
+      order: 4,
+      images: [
         {
           src: `/images/projects/yassencore/2.webp`,
-          alt: "Project detail 1",
+          alt: "Yassencore 2",
         },
         {
           src: `/images/projects/yassencore/3.webp`,
-          alt: "Project detail 2",
+          alt: "Yassencore 3",
         },
       ],
     },

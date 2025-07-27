@@ -17,28 +17,30 @@ export const KarminCorpLecReveal: Project = {
       order: 1,
       video: {
         src: `/videos/projects/karmin-corp-lec-reveal/details.webm`,
-        title: "Project demonstration",
-        autoPlay: true,
-        loop: true,
-        muted: true,
+        light: "/images/projects/karmin-corp-lec-reveal/cover.webp",
       },
     },
     {
-      type: "image",
+      type: "image-single",
       id: "image-1",
       order: 2,
-      mainImage: {
+      image: {
         src: "/images/projects/karmin-corp-lec-reveal/1.webp",
-        alt: "Main project showcase",
+        alt: "Karmin Corp Lec Reveal 1",
       },
-      bottomImages: [
+    },
+    {
+      type: "image-grid",
+      id: "image-grid-1",
+      order: 3,
+      images: [
         {
           src: `/images/projects/karmin-corp-lec-reveal/2.webp`,
-          alt: "Project detail 1",
+          alt: "Karmin Corp Lec Reveal 2",
         },
         {
           src: `/images/projects/karmin-corp-lec-reveal/3.webp`,
-          alt: "Project detail 2",
+          alt: "Karmin Corp Lec Reveal 3",
         },
       ],
     },

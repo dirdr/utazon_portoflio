@@ -17,28 +17,30 @@ export const AurumNova: Project = {
       order: 1,
       video: {
         src: `/videos/projects/aurum-nova/details.webm`,
-        title: "Project demonstration",
-        autoPlay: true,
-        loop: true,
-        muted: true,
+        light: "/images/projects/aurum-nova/cover.webp",
       },
     },
     {
-      type: "image",
+      type: "image-single",
       id: "image-1",
       order: 2,
-      mainImage: {
+      image: {
         src: "/images/projects/aurum-nova/1.webp",
-        alt: "Main project showcase",
+        alt: "Aurum Nova 1",
       },
-      bottomImages: [
+    },
+    {
+      type: "image-grid",
+      id: "image-grid-1",
+      order: 3,
+      images: [
         {
           src: `/images/projects/aurum-nova/2.webp`,
-          alt: "Project detail 1",
+          alt: "Aurum Nova 2",
         },
         {
           src: `/images/projects/aurum-nova/3.webp`,
-          alt: "Project detail 2",
+          alt: "Aurum Nova 3",
         },
       ],
     },

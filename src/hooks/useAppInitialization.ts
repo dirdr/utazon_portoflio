@@ -10,7 +10,6 @@ const MIN_LOADING_TIME = 1000;
  * Uses session flag pattern to distinguish between page loads and route changes
  */
 export const useAppInitialization = () => {
-  // Check if we're in an active SPA session (client-side navigation)
   const isClientSideNavigation =
     typeof window !== "undefined"
       ? sessionStorage.getItem(SESSION_KEY) === "true"
@@ -20,16 +19,12 @@ export const useAppInitialization = () => {
   const [isInitialized, setIsInitialized] = useState(isClientSideNavigation);
   const [startTime] = useState(() => Date.now());
 
-  // Get preload state only if we should show loader
   const preloadState = usePreloadAssets();
   const shouldPreload = showLoader;
 
-  // Mark SPA navigation as active and handle cleanup
   useEffect(() => {
-    // Mark SPA navigation as active
     sessionStorage.setItem(SESSION_KEY, "true");
 
-    // Clear flag on page unload (refresh/close)
     const handleBeforeUnload = () => {
       sessionStorage.removeItem(SESSION_KEY);
     };
@@ -38,17 +33,14 @@ export const useAppInitialization = () => {
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);
   }, []);
 
-  // Handle initialization completion with minimum loading time
   useEffect(() => {
     if (shouldPreload && preloadState.isComplete) {
       const elapsedTime = Date.now() - startTime;
       const remainingTime = Math.max(0, MIN_LOADING_TIME - elapsedTime);
 
       setTimeout(() => {
-        // Mark app as initialized
         setIsInitialized(true);
 
-        // Hide loader with small delay for smooth transition
         setTimeout(() => {
           setShowLoader(false);
         }, 500);
@@ -65,4 +57,3 @@ export const useAppInitialization = () => {
     failedAssets: shouldPreload ? preloadState.failedAssets : 0,
   };
 };
-

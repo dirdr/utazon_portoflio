@@ -17,28 +17,30 @@ export const ParisMusic2024: Project = {
       order: 1,
       video: {
         src: `/videos/projects/paris-music-2024/details.webm`,
-        title: "Project demonstration",
-        autoPlay: true,
-        loop: true,
-        muted: true,
+        light: "/images/projects/paris-music-2024/cover.webp",
       },
     },
     {
-      type: "image",
+      type: "image-single",
       id: "image-1",
       order: 2,
-      mainImage: {
+      image: {
         src: "/images/projects/paris-music-2024/1.webp",
-        alt: "Main project showcase",
+        alt: "Paris Music 2024 1",
       },
-      bottomImages: [
+    },
+    {
+      type: "image-grid",
+      id: "image-grid-1",
+      order: 3,
+      images: [
         {
           src: `/images/projects/paris-music-2024/2.webp`,
-          alt: "Project detail 1",
+          alt: "Paris Music 2024 2",
         },
         {
           src: `/images/projects/paris-music-2024/3.webp`,
-          alt: "Project detail 2",
+          alt: "Paris Music 2024 3",
         },
       ],
     },

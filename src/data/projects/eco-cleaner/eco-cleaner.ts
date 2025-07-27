@@ -17,28 +17,30 @@ export const EcoCleaner: Project = {
       order: 1,
       video: {
         src: `/videos/projects/eco-cleaner/details.webm`,
-        title: "Project demonstration",
-        autoPlay: true,
-        loop: true,
-        muted: true,
+        light: "/images/projects/eco-cleaner/cover.webp",
       },
     },
     {
-      type: "image",
+      type: "image-single",
       id: "image-1",
       order: 2,
-      mainImage: {
+      image: {
         src: "/images/projects/eco-cleaner/1.webp",
-        alt: "Main project showcase",
+        alt: "Eco Cleaner 1",
       },
-      bottomImages: [
+    },
+    {
+      type: "image-grid",
+      id: "image-grid-1",
+      order: 3,
+      images: [
         {
           src: `/images/projects/eco-cleaner/2.webp`,
-          alt: "Project detail 1",
+          alt: "Eco Cleaner 2",
         },
         {
           src: `/images/projects/eco-cleaner/3.webp`,
-          alt: "Project detail 2",
+          alt: "Eco Cleaner 3",
         },
       ],
     },

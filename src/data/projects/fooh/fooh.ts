@@ -17,10 +17,7 @@ export const Fooh: Project = {
       order: 1,
       video: {
         src: `/videos/projects/fooh/details.webm`,
-        title: "Project demonstration",
-        autoPlay: true,
-        loop: true,
-        muted: true,
+        light: "/images/projects/fooh/cover.webp",
       },
     },
     {

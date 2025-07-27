@@ -17,10 +17,7 @@ export const MrHelp: Project = {
       order: 1,
       video: {
         src: `/videos/projects/mr-help/details.webm`,
-        title: "Project demonstration",
-        autoPlay: true,
-        loop: true,
-        muted: true,
+        light: "/images/projects/mr-help/cover.webp",
       },
     },
     {

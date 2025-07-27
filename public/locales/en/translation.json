@@ -26,7 +26,7 @@
     },
     "dune": {
       "title": "DUNE – The Fremen Ambush",
-      "header": "3D Cinematic",
+      "header": "3D Cinematic Animation",
       "description": "A personal 3D short film recreating the unique aesthetic of Dune. A micro-story with immersive storytelling centered around a tactical ambush.",
       "role": "Full solo creation",
       "client": "Personal project",
@@ -50,7 +50,7 @@
     },
     "paris-music-2024": {
       "title": "PARIS – Fête de la Musique 2024",
-      "header": "3D Cinematic",
+      "header": "3D Cinematic Animation",
       "description": "A 2-week short film built in Unreal Engine 5. The story follows a character exploring Paris during the Fête de la Musique, told through dynamic sequences and atmospheric cinematography.",
       "role": "Full solo creation",
       "client": "Student project",
@@ -66,7 +66,7 @@
     },
     "karmin-corp-lec-reveal": {
       "title": "KARMINE CORP – LEC Reveal",
-      "header": "3D Cinematic",
+      "header": "3D Cinematic Animation",
       "description": "Epic 3D video celebrating Karmine Corp's entry into the LEC. A monumental, trophy-focused staging meant to capture the hype and emotion of the moment.",
       "role": "Full solo creation",
       "client": "Personal project",
@@ -82,7 +82,7 @@
     },
     "spiderman-timefreeze": {
       "title": "SPIDERMAN – Time Freeze",
-      "header": "3D Cinematic",
+      "header": "3D Cinematic Animation",
       "description": "3D short film inspired by the Deadpool opening sequence. Time is frozen mid-action in a tense, highly detailed urban scene, where every element contributes to a sense of cinematic suspension.",
       "role": "Full solo creation",
       "client": "Personal project",
@@ -114,7 +114,7 @@
     },
     "yassencore": {
       "title": "YASSENCORE – Twitch Waiting Screen",
-      "header": "3D Cinematic",
+      "header": "3D Cinematic Animation",
       "description": "A tailor-made waiting screen for Twitch streamer YassEncore, reflecting his favorite universes: Breaking Bad, Dragon Ball, football... Designed to kick off streams with personality and atmosphere.",
       "role": "Full concept and production",
       "client": "Creator commission / Client: YassEncore",
@@ -122,7 +122,7 @@
     },
     "pixel-break": {
       "title": "PIXEL BREAK",
-      "header": "3D Cinematic",
+      "header": "3D Cinematic Animation",
       "description": "3D short film made in collaboration with Mario Sougoumarin. Starting from a Space Invader mosaic on a wall, the viewer is pulled into a hidden digital world where the pixel aliens prepare their uprising. A mix of photoreal urban textures and retro pixel aesthetics.",
       "role": "Co-direction, 3D animation, visual dev",
       "client": "Student project (duo with Mario Sougoumarin)",

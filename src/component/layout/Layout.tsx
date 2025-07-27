@@ -13,12 +13,12 @@ const LayoutContent = ({ children }: LayoutProps) => {
   const { currentPath } = useRouteBasedVideo();
   const { shouldShowLayout } = useVideo();
   const isHomePage = currentPath === "/";
-  
-  console.log('🏠 Layout.tsx Render:', { 
-    currentPath, 
-    isHomePage, 
+
+  console.log("🏠 Layout.tsx Render:", {
+    currentPath,
+    isHomePage,
     shouldShowLayout,
-    renderingHomeBranch: isHomePage
+    renderingHomeBranch: isHomePage,
   });
 
   return (
@@ -26,17 +26,20 @@ const LayoutContent = ({ children }: LayoutProps) => {
       <VideoBackground />
       <ImageBackgroundDisplay />
       {isHomePage ? (
-        // Home page: simple fade transition for navbar and content together
-        <FadeInContainer isVisible={shouldShowLayout} className="h-screen relative">
+        <FadeInContainer
+          isVisible={shouldShowLayout}
+          className="h-screen relative"
+        >
           <Navbar />
-          <main className="absolute inset-0 top-auto overflow-hidden">{children}</main>
+          <main className="absolute inset-0 top-auto overflow-hidden">
+            {children}
+          </main>
         </FadeInContainer>
       ) : (
-        // Other pages: stable grid layout prevents navbar shifting
         <div className="min-h-screen grid grid-rows-[auto_1fr_auto]">
           <Navbar />
           <main>{children}</main>
-          <div /> {/* Footer placeholder - prevents layout shift */}
+          <div />
         </div>
       )}
     </div>

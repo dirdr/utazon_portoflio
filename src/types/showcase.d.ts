@@ -4,14 +4,18 @@ export interface ShowcaseItem {
   order: number;
 }
 
-export interface ImageShowcaseData extends ShowcaseItem {
-  type: "image";
-  mainImage: {
+export interface SingleImageShowcaseData extends ShowcaseItem {
+  type: "image-single";
+  image: {
     src: string;
     alt: string;
     caption?: string;
   };
-  bottomImages: {
+}
+
+export interface GridImagesShowcaseData extends ShowcaseItem {
+  type: "image-grid";
+  images: {
     src: string;
     alt: string;
     caption?: string;
@@ -23,10 +27,7 @@ export interface VideoShowcaseData extends ShowcaseItem {
   video: {
     src: string;
     title?: string;
-    autoPlay?: boolean;
-    loop?: boolean;
-    muted?: boolean;
-    poster?: string;
+    light: string;
   };
 }
 
@@ -66,4 +67,3 @@ export interface ProjectShowcaseConfig {
   projectId: string;
   showcases: ShowcaseData[];
 }
-

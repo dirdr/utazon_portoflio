@@ -12,18 +12,6 @@ export const Trybz: Project = {
   images: [],
   showcases: [
     {
-      type: "video",
-      id: "video-1",
-      order: 1,
-      video: {
-        src: `/videos/projects/trybz/details.webm`,
-        title: "Project demonstration",
-        autoPlay: true,
-        loop: true,
-        muted: true,
-      },
-    },
-    {
       type: "image",
       id: "image-1",
       order: 2,

@@ -17,28 +17,30 @@ export const Lyner: Project = {
       order: 1,
       video: {
         src: `/videos/projects/lyner/details.webm`,
-        title: "Project demonstration",
-        autoPlay: true,
-        loop: true,
-        muted: true,
+        light: "/images/projects/lyner/cover.webp",
       },
     },
     {
-      type: "image",
+      type: "image-single",
       id: "image-1",
       order: 2,
-      mainImage: {
+      image: {
         src: "/images/projects/lyner/1.webp",
-        alt: "Main project showcase",
+        alt: "Lyner 1",
       },
-      bottomImages: [
+    },
+    {
+      type: "image-grid",
+      id: "image-grid-1",
+      order: 3,
+      images: [
         {
           src: `/images/projects/lyner/2.webp`,
-          alt: "Project detail 1",
+          alt: "Lyner 2",
         },
         {
           src: `/images/projects/lyner/3.webp`,
-          alt: "Project detail 2",
+          alt: "Lyner 3",
         },
       ],
     },

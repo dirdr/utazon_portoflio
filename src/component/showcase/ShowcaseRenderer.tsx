@@ -1,5 +1,6 @@
 import { ShowcaseData } from "../../types/showcase";
-import { ImageShowcase } from "./ImageShowcase";
+import { GridImagesShowcase } from "./GridImagesShowcase";
+import { SingleImageShowcase } from "./SingleImageShowcase";
 import { VideoShowcase } from "./VideoShowcase";
 
 interface ShowcaseRendererProps {
@@ -9,8 +10,11 @@ interface ShowcaseRendererProps {
 
 export const ShowcaseRenderer = ({ showcase }: ShowcaseRendererProps) => {
   switch (showcase.type) {
-    case "image":
-      return <ImageShowcase data={showcase} />;
+    case "image-single":
+      return <SingleImageShowcase data={showcase} />;
+
+    case "image-grid":
+      return <GridImagesShowcase data={showcase} />;
 
     case "video":
       return <VideoShowcase data={showcase} />;
@@ -30,4 +34,3 @@ export const ShowcaseRenderer = ({ showcase }: ShowcaseRendererProps) => {
       return null;
   }
 };
-

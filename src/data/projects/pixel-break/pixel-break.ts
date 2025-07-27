@@ -17,28 +17,30 @@ export const PixelBreak: Project = {
       order: 1,
       video: {
         src: `/videos/projects/pixel-break/details.webm`,
-        title: "Project demonstration",
-        autoPlay: true,
-        loop: true,
-        muted: true,
+        light: "/images/projects/pixel-break/cover.webp",
       },
     },
     {
-      type: "image",
+      type: "image-single",
       id: "image-1",
       order: 2,
-      mainImage: {
+      image: {
         src: "/images/projects/pixel-break/1.webp",
-        alt: "Main project showcase",
+        alt: "Pixel Break 1",
       },
-      bottomImages: [
+    },
+    {
+      type: "image-grid",
+      id: "image-grid-1",
+      order: 3,
+      images: [
         {
           src: `/images/projects/pixel-break/2.webp`,
-          alt: "Project detail 1",
+          alt: "Pixel Break 2",
         },
         {
           src: `/images/projects/pixel-break/3.webp`,
-          alt: "Project detail 2",
+          alt: "Pixel Break 3",
         },
       ],
     },

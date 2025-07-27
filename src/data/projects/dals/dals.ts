@@ -17,10 +17,7 @@ export const Dals: Project = {
       order: 1,
       video: {
         src: `/videos/projects/dals/details.webm`,
-        title: "Project demonstration",
-        autoPlay: true,
-        loop: true,
-        muted: true,
+        light: "/images/projects/dals/cover.webp",
       },
     },
     {

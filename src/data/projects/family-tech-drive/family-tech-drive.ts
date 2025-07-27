@@ -17,28 +17,30 @@ export const FamilyTechDrive: Project = {
       order: 1,
       video: {
         src: `/videos/projects/family-tech-drive/details.webm`,
-        title: "Project demonstration",
-        autoPlay: true,
-        loop: true,
-        muted: true,
+        light: "/images/projects/family-tech-drive/cover.webp",
       },
     },
     {
-      type: "image",
+      type: "image-single",
       id: "image-1",
       order: 2,
-      mainImage: {
+      image: {
         src: "/images/projects/family-tech-drive/1.webp",
-        alt: "Main project showcase",
+        alt: "Family Tech Drive 1",
       },
-      bottomImages: [
+    },
+    {
+      type: "image-grid",
+      id: "image-grid-1",
+      order: 3,
+      images: [
         {
           src: `/images/projects/family-tech-drive/2.webp`,
-          alt: "Project detail 1",
+          alt: "Family Tech Drive 2",
         },
         {
           src: `/images/projects/family-tech-drive/3.webp`,
-          alt: "Project detail 2",
+          alt: "Family Tech Drive 3",
         },
       ],
     },

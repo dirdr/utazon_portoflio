@@ -16,29 +16,42 @@ export const LimovaMovali: Project = {
       id: "video-1",
       order: 1,
       video: {
-        src: `/videos/projects/limova-movali/details.webm`,
-        title: "Project demonstration",
+        src: `/videos/projects/limova-movali/details-1.webm`,
+        light: "/images/projects/limova-movali/cover.webp",
+      },
+    },
+    {
+      type: "video",
+      id: "video-2",
+      order: 2,
+      video: {
+        src: `/videos/projects/limova-movali/details-2.webm`,
         autoPlay: true,
         loop: true,
         muted: true,
       },
     },
     {
-      type: "image",
+      type: "image-single",
       id: "image-1",
-      order: 2,
-      mainImage: {
+      order: 3,
+      image: {
         src: "/images/projects/limova-movali/1.webp",
-        alt: "Main project showcase",
+        alt: "Limova Movali 1",
       },
-      bottomImages: [
+    },
+    {
+      type: "image-grid",
+      id: "image-grid-1",
+      order: 4,
+      images: [
         {
           src: `/images/projects/limova-movali/2.webp`,
-          alt: "Project detail 1",
+          alt: "Limova Movali 2",
         },
         {
           src: `/images/projects/limova-movali/3.webp`,
-          alt: "Project detail 2",
+          alt: "Limova Movali 3",
         },
       ],
     },
