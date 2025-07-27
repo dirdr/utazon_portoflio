@@ -44,38 +44,28 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
         <Container>
           <div className="flex justify-end">
             <div className="w-[36rem]">
-              <h1 className="font-nord text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white">
+              <h1 className="font-nord text-4xl md:text-5xl lg:text-6xl font-bold mb-2 text-white">
                 {t(project.title)}
               </h1>
-
+              <h2 className="font-nord text-xl md:text-2xl mb-8 font-thin text-white">
+                {t(project.header)}
+              </h2>
+              <p className="font-neue text-lg md:text-xl leading-relaxed text-gray mb-20">
+                {t(project.description)}
+              </p>
               <div className="space-y-8">
-                <div>
-                  <h2 className="font-nord text-xl md:text-2xl font-bold mb-4 text-white/90">
-                    {t(project.header)}
-                  </h2>
-                  <p className="font-neue text-lg md:text-xl leading-relaxed text-white/80 mb-8">
-                    {t(project.description)}
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 gap-6 text-sm md:text-base">
+                <div className="grid grid-cols-1 gap-6 text-xl">
                   <div>
-                    <h3 className="font-nord font-bold mb-2 text-white/60 uppercase tracking-wider">
-                      Date
-                    </h3>
-                    <p className="font-neue text-white">{t(project.date)}</p>
+                    <h1 className="font-nord text-white uppercase">Date</h1>
+                    <p className="font-neue text-gray">{t(project.date)}</p>
                   </div>
                   <div>
-                    <h3 className="font-nord font-bold mb-2 text-white/60 uppercase tracking-wider">
-                      Client
-                    </h3>
-                    <p className="font-neue text-white">{t(project.client)}</p>
+                    <h3 className="font-nord text-white uppercase">Client</h3>
+                    <p className="font-neue text-gray">{t(project.client)}</p>
                   </div>
                   <div>
-                    <h3 className="font-nord font-bold mb-2 text-white/60 uppercase tracking-wider">
-                      Role
-                    </h3>
-                    <p className="font-neue text-white">{t(project.role)}</p>
+                    <h3 className="font-nord  text-white uppercase">Role</h3>
+                    <p className="font-neue text-gray">{t(project.role)}</p>
                   </div>
                 </div>
               </div>
