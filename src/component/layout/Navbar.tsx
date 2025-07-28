@@ -39,13 +39,13 @@ export const Navbar = () => {
         </div>
 
         {pageConfig.showNavbarLogo && (
-          <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2">
+          <div className="hidden lg:flex absolute left-1/2 transform -translate-x-1/2">
             <img src={logo} alt="Utazon Logo" className="h-10 w-auto" />
           </div>
         )}
 
         <nav
-          className="hidden md:flex lg:flex items-center space-x-6 lg:space-x-12"
+          className="hidden lg:flex items-center space-x-12"
           role="navigation"
           aria-label="Main navigation"
         >
@@ -60,7 +60,7 @@ export const Navbar = () => {
 
         <button
           onClick={toggleMenu}
-          className="md:hidden text-foreground hover:text-muted focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary transition-colors"
+          className="lg:hidden text-foreground hover:text-muted focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary transition-colors"
           aria-expanded={isMenuOpen}
           aria-controls="mobile-menu"
           aria-label="Toggle navigation menu"
@@ -95,7 +95,7 @@ export const Navbar = () => {
 
       <div
         id="mobile-menu"
-        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+        className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out ${
           isMenuOpen
             ? "transform translate-y-0 opacity-100 mt-4 pb-4 border-t border-muted/20"
             : "transform -translate-y-4 opacity-0 max-h-0"
@@ -136,7 +136,7 @@ export const Navbar = () => {
 
   return (
     <nav className="w-full z-50 bg-transparent" ref={menuRef}>
-      <div className={cn("w-full py-4 md:py-8", "p-12 pt-4 md:pt-8")}>
+      <div className={cn("w-full py-4 lg:py-8", "p-12 pt-4 lg:pt-8")}>
         <WrapperContent />
       </div>
     </nav>

@@ -14,7 +14,6 @@ const LayoutContent = ({ children }: LayoutProps) => {
   const { shouldShowLayout } = useVideo();
   const isHomePage = currentPath === "/";
 
-
   return (
     <div className="relative min-h-screen">
       <VideoBackground />

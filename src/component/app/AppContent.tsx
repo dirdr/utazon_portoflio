@@ -8,7 +8,7 @@ import { Contact } from "../pages/Contact";
 import { Showreel } from "../pages/Showreel";
 import { Legal } from "../pages/Legal";
 import { ROUTES } from "../../constants/routes";
-import { HomeToPageTransition } from "../transitions/HomeToPageTransition";
+import { PageTransition } from "../transitions/PageTransition";
 import { Footer } from "../layout/Footer";
 import { getPageConfig } from "../../config/pageConfig";
 import { Route, Switch, useLocation } from "wouter";
@@ -18,16 +18,10 @@ export const AppContent = () => {
   const pageConfig = getPageConfig(location);
   const isHomePage = location === "/";
   
-  const previousLocationRef = React.useRef(location);
-  const isFromHome = previousLocationRef.current === "/";
-  
-  React.useEffect(() => {
-    previousLocationRef.current = location;
-  });
 
   return (
     <Layout>
-      <HomeToPageTransition pageKey={location} isFromHome={isFromHome}>
+      <PageTransition pageKey={location}>
         <div className={`${isHomePage ? "h-full" : "min-h-full"} flex flex-col`}>
           <div className="flex-1">
             <Switch location={location}>
@@ -50,7 +44,7 @@ export const AppContent = () => {
           </div>
           {pageConfig.showFooter && <Footer />}
         </div>
-      </HomeToPageTransition>
+      </PageTransition>
     </Layout>
   );
 };
