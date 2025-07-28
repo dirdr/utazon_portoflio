@@ -1,5 +1,5 @@
 export interface ShowcaseItem {
-  type: "image" | "video" | "behind-the-scenes" | "carousel";
+  type: "image-single" | "image-grid" | "video";
   id: string;
   order: number;
 }
@@ -31,39 +31,7 @@ export interface VideoShowcaseData extends ShowcaseItem {
   };
 }
 
-export interface BehindTheScenesShowcaseData extends ShowcaseItem {
-  type: "behind-the-scenes";
-  title?: string;
-  description?: string;
-  images: {
-    src: string;
-    alt: string;
-    caption?: string;
-  }[];
-  layout?: "grid" | "masonry" | "stacked";
-}
-
-export interface CarouselShowcaseData extends ShowcaseItem {
-  type: "carousel";
-  title?: string;
-  items: {
-    type: "image" | "video";
-    src: string;
-    alt?: string;
-    caption?: string;
-    poster?: string;
-  }[];
-  autoPlay?: boolean;
-  showThumbnails?: boolean;
-}
-
 export type ShowcaseData =
-  | ImageShowcaseData
-  | VideoShowcaseData
-  | BehindTheScenesShowcaseData
-  | CarouselShowcaseData;
-
-export interface ProjectShowcaseConfig {
-  projectId: string;
-  showcases: ShowcaseData[];
-}
+  | SingleImageShowcaseData
+  | GridImagesShowcaseData
+  | VideoShowcaseData;

@@ -25,13 +25,6 @@ export const VideoProvider = ({ children }: VideoProviderProps) => {
   const [volume, setVolume] = useState(0.8);
   const [isMuted, setIsMuted] = useState(false);
 
-  console.log("🎬 VideoContext render:", {
-    currentPath,
-    isHomePage,
-    shouldShowLayoutFromRoute,
-    shouldShowLayoutOverride,
-    finalShouldShowLayout: shouldShowLayout,
-  });
 
   useEffect(() => {
     setShouldShowLayoutOverride(null);
@@ -53,4 +46,3 @@ export const VideoProvider = ({ children }: VideoProviderProps) => {
 };
 
 export { VideoContext };
-export default VideoProvider;

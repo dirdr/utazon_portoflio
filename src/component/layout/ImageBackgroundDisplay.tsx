@@ -5,14 +5,6 @@ export const ImageBackgroundDisplay: React.FC = () => {
   const { currentBackground, nextBackground, isTransitioning } = useBackgroundStore();
   const [preloadedImages, setPreloadedImages] = useState<Set<string>>(new Set());
 
-  // Debug logging
-  useEffect(() => {
-    console.log('🖼️ ImageBackgroundDisplay:', { 
-      currentBackground, 
-      nextBackground, 
-      isTransitioning 
-    });
-  }, [currentBackground, nextBackground, isTransitioning]);
 
   // Preload images to prevent flicker
   useEffect(() => {
@@ -23,7 +15,6 @@ export const ImageBackgroundDisplay: React.FC = () => {
         const img = new Image();
         img.onload = () => {
           setPreloadedImages(prev => new Set([...prev, imageUrl]));
-          console.log('✅ Preloaded image:', imageUrl);
         };
         img.onerror = () => {
           console.error('❌ Failed to preload image:', imageUrl);
@@ -35,7 +26,6 @@ export const ImageBackgroundDisplay: React.FC = () => {
 
   // Don't render anything if no background is set
   if (!currentBackground && !nextBackground) {
-    console.log('📭 No backgrounds to show');
     return null;
   }
 

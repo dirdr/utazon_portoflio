@@ -9,24 +9,23 @@ export const Trybz: Project = {
   description: "projects.trybz.description",
   client: "projects.trybz.client",
   role: "projects.trybz.role",
-  images: [],
   showcases: [
     {
-      type: "image",
+      type: "image-grid",
       id: "image-1",
-      order: 2,
-      mainImage: {
-        src: "/images/projects/trybz/1.webp",
-        alt: "Main project showcase",
-      },
-      bottomImages: [
+      order: 1,
+      images: [
         {
-          src: `/images/projects/trybz/2.webp`,
-          alt: "Project detail 1",
+          src: "/images/projects/trybz/2.webp",
+          alt: "Trybz 1",
         },
         {
-          src: `/images/projects/trybz/3.webp`,
-          alt: "Project detail 2",
+          src: "/images/projects/trybz/3.webp",
+          alt: "Trybz 2",
+        },
+        {
+          src: "/images/projects/trybz/4.webp",
+          alt: "Trybz 3",
         },
       ],
     },

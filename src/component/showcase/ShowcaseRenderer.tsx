@@ -19,13 +19,6 @@ export const ShowcaseRenderer = ({ showcase }: ShowcaseRendererProps) => {
     case "video":
       return <VideoShowcase data={showcase} />;
 
-    case "behind-the-scenes":
-      console.warn("Behind-the-scenes showcase not yet implemented");
-      return null;
-
-    case "carousel":
-      console.warn("Carousel showcase not yet implemented");
-      return null;
 
     default:
       console.warn(

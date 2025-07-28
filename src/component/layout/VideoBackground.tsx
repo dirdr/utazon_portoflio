@@ -14,28 +14,26 @@ export const VideoBackground = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const isHomePage = location === "/";
-  const shouldAutoPlayVideo = isHomePage && !isFreshLoad; // Auto-play on internal navigation
-
+  const shouldAutoPlayVideo = isHomePage && !isFreshLoad;
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !shouldPlayVideo) return;
 
     if (shouldAutoPlayVideo) {
       console.log("🎬 Auto-playing video (internal navigation)");
-      video.currentTime = 0; // Reset to beginning
+      video.currentTime = 0;
       video.play().catch(console.error);
     } else {
       console.log(
         "🎬 Video ready but waiting for user interaction (fresh load)",
       );
       video.pause();
-      video.currentTime = 0; // Keep at beginning
+      video.currentTime = 0;
     }
   }, [shouldAutoPlayVideo, shouldPlayVideo]);
 
   const handleVideoReady = () => {
     console.log("🎬 Video loaded and ready");
-    // Don't start layout sequence yet - wait for video to actually play
   };
 
   const handleVideoPlay = () => {
@@ -76,7 +74,6 @@ export const VideoBackground = () => {
         className="w-full h-full object-cover"
         muted
         autoPlay={false}
-        loop
         playsInline
         disablePictureInPicture
         preload="auto"

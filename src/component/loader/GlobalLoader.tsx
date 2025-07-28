@@ -3,13 +3,6 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import logo from "../../assets/images/logo.svg";
 
-export interface GlobalLoaderProps {
-  showProgress?: boolean;
-  progress: number;
-  loadedAssets: number;
-  totalAssets: number;
-  failedAssets: number;
-}
 
 export const GlobalLoader = () => {
   useEffect(() => {

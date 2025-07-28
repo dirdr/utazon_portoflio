@@ -14,12 +14,6 @@ const LayoutContent = ({ children }: LayoutProps) => {
   const { shouldShowLayout } = useVideo();
   const isHomePage = currentPath === "/";
 
-  console.log("🏠 Layout.tsx Render:", {
-    currentPath,
-    isHomePage,
-    shouldShowLayout,
-    renderingHomeBranch: isHomePage,
-  });
 
   return (
     <div className="relative min-h-screen">

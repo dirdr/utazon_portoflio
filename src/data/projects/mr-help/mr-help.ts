@@ -9,43 +9,42 @@ export const MrHelp: Project = {
   description: "projects.mr-help.description",
   client: "projects.mr-help.client",
   role: "projects.mr-help.role",
-  images: [],
   showcases: [
     {
       type: "video",
-      id: "video-2",
+      id: "video-1",
       order: 1,
       video: {
-        src: "https://utazon-backend.adrienpelfresne.com/api/video/mr-help/details1.mp4",
+        src: "https://utazon-backend.adrienpelfresne.com/api/videos/mr-help/details1.mp4",
         light: "/images/projects/mr-help/cover.webp",
       },
     },
     {
       type: "video",
       id: "video-2",
-      order: 1,
+      order: 2,
       video: {
-        src: "https://utazon-backend.adrienpelfresne.com/api/video/mr-help/details2.mp4",
+        src: "https://utazon-backend.adrienpelfresne.com/api/videos/mr-help/details2.mp4",
         light: "/images/projects/mr-help/cover.webp",
       },
     },
 
     {
-      type: "image",
+      type: "image-grid",
       id: "image-1",
-      order: 2,
-      mainImage: {
-        src: "/images/projects/mr-help/1.webp",
-        alt: "Main project showcase",
-      },
-      bottomImages: [
+      order: 3,
+      images: [
         {
-          src: `/images/projects/mr-help/2.webp`,
-          alt: "Project detail 1",
+          src: "/images/projects/mr-help/1.webp",
+          alt: "Mr Help 1",
         },
         {
-          src: `/images/projects/mr-help/3.webp`,
-          alt: "Project detail 2",
+          src: "/images/projects/mr-help/2.webp",
+          alt: "Mr Help 2",
+        },
+        {
+          src: "/images/projects/mr-help/3.webp",
+          alt: "Mr Help 3",
         },
       ],
     },

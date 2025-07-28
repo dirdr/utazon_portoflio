@@ -9,7 +9,7 @@ export interface Project {
   description: string;
   client: string;
   role: string;
-  images: {
+  images?: {
     src: string;
     alt: string;
     caption?: string;

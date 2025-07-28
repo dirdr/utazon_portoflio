@@ -18,15 +18,8 @@ export const AppWithDiveIn = () => {
     hideDiveInButton
   } = useDiveInInitialization();
   
-  console.log('🏃 AppWithDiveIn render:', { 
-    location, 
-    isHomePage, 
-    showDiveInButton,
-    willShowDiveIn: isHomePage && showDiveInButton
-  });
 
   const handleDiveIn = () => {
-    console.log('🚀 User clicked Dive In - starting experience');
     hideDiveInButton();
     
     // Small delay to ensure state update, then trigger video

@@ -9,7 +9,6 @@ export const Dals: Project = {
   description: "projects.dals.description",
   client: "projects.dals.client",
   role: "projects.dals.role",
-  images: [],
   showcases: [
     {
       type: "video",
@@ -21,21 +20,21 @@ export const Dals: Project = {
       },
     },
     {
-      type: "image",
+      type: "image-grid",
       id: "image-1",
       order: 2,
-      mainImage: {
-        src: "/images/projects/dals/1.webp",
-        alt: "Main project showcase",
-      },
-      bottomImages: [
+      images: [
         {
-          src: `/images/projects/dals/2.webp`,
-          alt: "Project detail 1",
+          src: "/images/projects/dals/1.webp",
+          alt: "Dals 1",
         },
         {
-          src: `/images/projects/dals/3.webp`,
-          alt: "Project detail 2",
+          src: "/images/projects/dals/2.webp",
+          alt: "Dals 2",
+        },
+        {
+          src: "/images/projects/dals/3.webp",
+          alt: "Dals 3",
         },
       ],
     },

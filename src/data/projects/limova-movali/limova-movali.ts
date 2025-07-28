@@ -9,14 +9,13 @@ export const LimovaMovali: Project = {
   description: "projects.limova-movali.description",
   client: "projects.limova-movali.client",
   role: "projects.limova-movali.role",
-  images: [],
   showcases: [
     {
       type: "video",
       id: "video-1",
       order: 1,
       video: {
-        src: `/videos/projects/limova-movali/details-1.webm`,
+        src: "https://utazon-backend.adrienpelfresne.com/api/videos/limova-movali/details1.mp4",
         light: "/images/projects/limova-movali/cover.webp",
       },
     },
@@ -25,10 +24,8 @@ export const LimovaMovali: Project = {
       id: "video-2",
       order: 2,
       video: {
-        src: `/videos/projects/limova-movali/details-2.webm`,
-        autoPlay: true,
-        loop: true,
-        muted: true,
+        src: "https://utazon-backend.adrienpelfresne.com/api/videos/limova-movali/details2.mp4",
+        light: "/images/projects/limova-movali/cover.webp",
       },
     },
     {
