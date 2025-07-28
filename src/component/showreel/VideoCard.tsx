@@ -23,16 +23,16 @@ export const VideoCard = ({
       style={{ "--glint-card-speed": glintSpeed } as React.CSSProperties}
     >
       <div
-        className="glint-card-content p-6"
+        className="glint-card-content p-3 sm:p-4 md:p-6"
         style={{
           background: `url(${cardBackground}) center/cover`,
         }}
       >
-        <div className="relative aspect-video w-full rounded-xl overflow-hidden shadow-2xl z-10">
+        <div className="relative aspect-video w-full rounded-lg sm:rounded-xl overflow-hidden shadow-xl sm:shadow-2xl z-10">
           <ReactPlayerWrapper
             src={src}
             light={showreelLight}
-            className="w-full h-full rounded-xl"
+            className="w-full h-full rounded-lg sm:rounded-xl"
           />
         </div>
       </div>

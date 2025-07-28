@@ -1,5 +1,5 @@
 import { VideoBackground } from "./VideoBackground";
-import { ImageBackgroundDisplay } from "./ImageBackgroundDisplay";
+import { RouteBackground } from "./RouteBackground";
 import { Navbar } from "./Navbar";
 import { useRouteBasedVideo } from "../../hooks/useRouteBasedVideo";
 import { FadeInContainer } from "../common/FadeInContainer";
@@ -24,7 +24,7 @@ const LayoutContent = ({ children }: LayoutProps) => {
   return (
     <div className="relative min-h-screen">
       <VideoBackground />
-      <ImageBackgroundDisplay />
+      <RouteBackground />
       {isHomePage ? (
         <FadeInContainer
           isVisible={shouldShowLayout}
