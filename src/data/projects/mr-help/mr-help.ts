@@ -13,13 +13,23 @@ export const MrHelp: Project = {
   showcases: [
     {
       type: "video",
-      id: "video-1",
+      id: "video-2",
       order: 1,
       video: {
-        src: `/videos/projects/mr-help/details.webm`,
+        src: "https://utazon-backend.adrienpelfresne.com/api/video/mr-help/details1.mp4",
         light: "/images/projects/mr-help/cover.webp",
       },
     },
+    {
+      type: "video",
+      id: "video-2",
+      order: 1,
+      video: {
+        src: "https://utazon-backend.adrienpelfresne.com/api/video/mr-help/details2.mp4",
+        light: "/images/projects/mr-help/cover.webp",
+      },
+    },
+
     {
       type: "image",
       id: "image-1",

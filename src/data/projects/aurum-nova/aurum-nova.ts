@@ -16,7 +16,7 @@ export const AurumNova: Project = {
       id: "video-1",
       order: 1,
       video: {
-        src: `/videos/projects/aurum-nova/details.webm`,
+        src: "https://utazon-backend.adrienpelfresne.com/api/videos/aurum-nova/details.mp4",
         light: "/images/projects/aurum-nova/cover.webp",
       },
     },

@@ -16,7 +16,7 @@ export const Yassencore: Project = {
       id: "video-1",
       order: 1,
       video: {
-        src: `/videos/projects/yassencore/details-1.webm`,
+        src: "https://utazon-backend.adrienpelfresne.com/api/video/yassencore/details1.mp4",
         light: "/images/projects/yassencore/3.webp",
       },
     },
@@ -25,7 +25,7 @@ export const Yassencore: Project = {
       id: "video-2",
       order: 2,
       video: {
-        src: `/videos/projects/yassencore/details-2.webm`,
+        src: "https://utazon-backend.adrienpelfresne.com/api/video/yassencore/details2.mp4",
         light: "/images/projects/yassencore/cover.webp",
       },
     },

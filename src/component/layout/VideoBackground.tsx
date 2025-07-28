@@ -12,7 +12,7 @@ export const VideoBackground = () => {
   const { isFreshLoad } = useDiveInInitialization();
   const [location] = useLocation();
   const videoRef = useRef<HTMLVideoElement>(null);
-  
+
   const isHomePage = location === "/";
   const shouldAutoPlayVideo = isHomePage && !isFreshLoad; // Auto-play on internal navigation
 
@@ -21,25 +21,27 @@ export const VideoBackground = () => {
     if (!video || !shouldPlayVideo) return;
 
     if (shouldAutoPlayVideo) {
-      console.log('🎬 Auto-playing video (internal navigation)');
+      console.log("🎬 Auto-playing video (internal navigation)");
       video.currentTime = 0; // Reset to beginning
       video.play().catch(console.error);
     } else {
-      console.log('🎬 Video ready but waiting for user interaction (fresh load)');
+      console.log(
+        "🎬 Video ready but waiting for user interaction (fresh load)",
+      );
       video.pause();
       video.currentTime = 0; // Keep at beginning
     }
   }, [shouldAutoPlayVideo, shouldPlayVideo]);
 
   const handleVideoReady = () => {
-    console.log('🎬 Video loaded and ready');
+    console.log("🎬 Video loaded and ready");
     // Don't start layout sequence yet - wait for video to actually play
   };
 
   const handleVideoPlay = () => {
-    console.log('🎬 Video started playing, beginning layout sequence');
+    console.log("🎬 Video started playing, beginning layout sequence");
     setTimeout(() => {
-      console.log('🎬 Video sequence complete, showing layout');
+      console.log("🎬 Video sequence complete, showing layout");
       setShouldShowLayout(true);
     }, ANIMATION_CONFIG.FADE_IN_DELAY);
   };
@@ -78,7 +80,7 @@ export const VideoBackground = () => {
         playsInline
         disablePictureInPicture
         preload="auto"
-        src="/videos/intro.webm"
+        src="/videos/intro.mp4"
         onCanPlayThrough={handleVideoReady}
         onPlay={handleVideoPlay}
       />

@@ -16,7 +16,7 @@ export const Dals: Project = {
       id: "video-1",
       order: 1,
       video: {
-        src: `/videos/projects/dals/details.webm`,
+        src: "https://utazon-backend.adrienpelfresne.com/api/videos/dals/details.mp4",
         light: "/images/projects/dals/cover.webp",
       },
     },

@@ -16,7 +16,7 @@ export const PixelBreak: Project = {
       id: "video-1",
       order: 1,
       video: {
-        src: `/videos/projects/pixel-break/details.webm`,
+        src: "https://utazon-backend.adrienpelfresne.com/api/video/pixel-break/details.mp4",
         light: "/images/projects/pixel-break/cover.webp",
       },
     },

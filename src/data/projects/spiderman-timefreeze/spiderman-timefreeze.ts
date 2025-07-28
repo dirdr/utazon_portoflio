@@ -16,7 +16,7 @@ export const SpidermanTimefreeze: Project = {
       id: "video-1",
       order: 1,
       video: {
-        src: `/videos/projects/spiderman-timefreeze/details.webm`,
+        src: "https://utazon-backend.adrienpelfresne.com/api/video/spiderman-timefreeze/details.mp4",
         light: "/images/projects/spiderman-timefreeze/cover.webp",
       },
     },

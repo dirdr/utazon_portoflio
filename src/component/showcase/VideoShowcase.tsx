@@ -14,8 +14,11 @@ export const VideoShowcase = ({ data }: VideoShowcaseProps) => {
       <div className="w-full h-screen rounded-2xl border-2 border-muted my-4 overflow-hidden">
         <ReactPlayerWrapper
           src={video.src}
+          width="100%"
+          height="100%"
+          controls
           light={video.light}
-          className="w-full h-full"
+          style={{ aspectRatio: "16/9" }}
         />
       </div>
     </Container>

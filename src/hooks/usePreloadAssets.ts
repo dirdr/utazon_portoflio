@@ -34,7 +34,7 @@ export const usePreloadAssets = () => {
     const assets: AssetLoadState[] = [];
 
     assets.push({
-      url: `/videos/intro.webm`,
+      url: `/videos/intro.mp4`,
       loaded: false,
       error: false,
       type: "video",
@@ -156,4 +156,3 @@ export const usePreloadAssets = () => {
     startPreloading,
   };
 };
-

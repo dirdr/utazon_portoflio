@@ -1,82 +1,45 @@
-import { useState, useRef, useEffect } from "react";
 import ReactPlayer from "react-player";
+import { useState } from "react";
 
 interface ReactPlayerWrapperProps {
   src: string;
+  width?: string | number;
+  height?: string | number;
   light?: string | boolean;
+  controls?: boolean;
   className?: string;
+  style?: React.CSSProperties;
+  pip?: boolean;
 }
 
 export const ReactPlayerWrapper = ({
   src,
-  light,
+  width = "100%",
+  height = "100%",
+  light = false,
+  controls = true,
   className,
+  style,
+  pip = false,
 }: ReactPlayerWrapperProps) => {
-  const [userActive, setUserActive] = useState(true);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const playerRef = useRef(null);
-  const timeoutRef = useRef<number>();
-
-  const resetInactivityTimer = () => {
-    setUserActive(true);
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    timeoutRef.current = setTimeout(() => {
-      setUserActive(false);
-    }, 3000);
-  };
-
-  const handleUserActivity = () => {
-    resetInactivityTimer();
-  };
-
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, []);
+  const [playing, setPlaying] = useState(false);
 
   const handleClickPreview = () => {
-    setIsPlaying(true);
-    resetInactivityTimer();
-  };
-
-  const handlePlay = () => {
-    setIsPlaying(true);
-    resetInactivityTimer();
-  };
-
-  const handlePause = () => {
-    setIsPlaying(false);
-    resetInactivityTimer();
+    setPlaying(true);
   };
 
   return (
-    <div
+    <ReactPlayer
+      src={src}
+      width={width}
+      height={height}
+      light={!playing ? light : false}
+      controls={controls}
       className={className}
-      onMouseMove={handleUserActivity}
-      onMouseEnter={handleUserActivity}
-      onClick={handleUserActivity}
-    >
-      <ReactPlayer
-        ref={playerRef}
-        src={src}
-        width="100%"
-        height="100%"
-        controls={userActive && isPlaying}
-        playing={isPlaying}
-        autoPlay={false}
-        muted={false}
-        loop={true}
-        light={light}
-        onClickPreview={handleClickPreview}
-        onPlay={handlePlay}
-        onPause={handlePause}
-        onError={(error) => console.error("Video error:", error)}
-      />
-    </div>
+      style={style}
+      pip={pip}
+      playing={playing}
+      onClickPreview={handleClickPreview}
+    />
   );
 };

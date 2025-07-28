@@ -16,7 +16,7 @@ export const Lyner: Project = {
       id: "video-1",
       order: 1,
       video: {
-        src: `/videos/projects/lyner/details.webm`,
+        src: "https://utazon-backend.adrienpelfresne.com/api/video/lyner/details.mp4",
         light: "/images/projects/lyner/cover.webp",
       },
     },

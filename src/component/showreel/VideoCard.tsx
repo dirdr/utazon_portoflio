@@ -1,7 +1,7 @@
 import { cn } from "../../utils/cn";
-import showreelLight from "../../assets/images/showreel_light.webp";
 import cardBackground from "../../assets/images/card_backgrounds/1.webp";
 import { ReactPlayerWrapper } from "../common/ReactPlayerWrapper";
+import light from "../../assets/images/showreel_background.webp";
 
 interface VideoCardProps {
   src: string;
@@ -17,22 +17,26 @@ export const VideoCard = ({
   return (
     <div
       className={cn(
-        "group glint-card-wrapper glint-card-wrapper-always cursor-default w-full card-item",
+        "group glint-card-wrapper glint-card-wrapper-always cursor-default w-full h-full card-item",
         className,
       )}
       style={{ "--glint-card-speed": glintSpeed } as React.CSSProperties}
     >
       <div
-        className="glint-card-content p-3 sm:p-4 md:p-6"
+        className="glint-card-content p-3 sm:p-4 md:p-6 flex items-center justify-center"
         style={{
           background: `url(${cardBackground}) center/cover`,
         }}
       >
-        <div className="relative aspect-video w-full rounded-lg sm:rounded-xl overflow-hidden shadow-xl sm:shadow-2xl z-10">
+        <div className="w-full aspect-video max-w-none">
           <ReactPlayerWrapper
             src={src}
-            light={showreelLight}
-            className="w-full h-full rounded-lg sm:rounded-xl"
+            light={light}
+            width="100%"
+            height="100%"
+            controls
+            className="rounded-lg overflow-hidden"
+            pip={false}
           />
         </div>
       </div>

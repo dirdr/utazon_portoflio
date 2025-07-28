@@ -16,7 +16,7 @@ export const EcoCleaner: Project = {
       id: "video-1",
       order: 1,
       video: {
-        src: `/videos/projects/eco-cleaner/details.webm`,
+        src: "https://utazon-backend.adrienpelfresne.com/api/videos/eco-cleaner/details.mp4",
         light: "/images/projects/eco-cleaner/cover.webp",
       },
     },
