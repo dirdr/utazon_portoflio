@@ -6,12 +6,19 @@ interface VideoShowcaseProps {
   data: VideoShowcaseData;
 }
 
-export const VideoShowcase = ({ data }: VideoShowcaseProps) => {
+interface VideoShowcaseProps {
+  data: VideoShowcaseData;
+  className?: string;
+}
+
+export const VideoShowcase = ({ data, className = "" }: VideoShowcaseProps) => {
   const { video } = data;
 
   return (
     <Container>
-      <div className="w-full h-screen rounded-2xl border-2 border-muted my-4 overflow-hidden">
+      <div
+        className={`w-full aspect-video rounded-2xl border-2 border-muted my-4 overflow-hidden px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 ${className}`}
+      >
         <ReactPlayerWrapper
           src={video.src}
           width="100%"

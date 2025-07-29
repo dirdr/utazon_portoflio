@@ -14,21 +14,11 @@ interface ProjectHeroSectionProps {
   gradients?: GradientConfig;
 }
 
-const defaultGradients: GradientConfig = {
-  top: { size: "35vh", enabled: true },
-  bottom: { size: "25vh", enabled: true },
-  right: { start: "48%", enabled: true },
-};
-
-export const ProjectHeroSection = ({
-  project,
-  gradients = defaultGradients,
-}: ProjectHeroSectionProps) => {
+export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
   const { t } = useTranslation();
-  const config = { ...defaultGradients, ...gradients };
 
   return (
-    <section className="relative w-full bg-black">
+    <section className="relative w-full bg-black -mt-20 pt-20">
       <div className="lg:hidden">
         <div className="relative h-[60vh] overflow-hidden">
           <img
@@ -36,17 +26,8 @@ export const ProjectHeroSection = ({
             alt={t(project.title)}
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 pointer-events-none">
-            {config.top?.enabled && (
-              <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-black to-transparent" />
-            )}
-            {config.bottom?.enabled && (
-              <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black to-transparent" />
-            )}
-          </div>
         </div>
 
-        {/* Mobile content */}
         <div className="px-4 py-12">
           <Container>
             <h1 className="font-nord text-3xl md:text-4xl font-bold mb-2 text-white">
@@ -76,42 +57,22 @@ export const ProjectHeroSection = ({
         </div>
       </div>
 
-      <div className="hidden lg:block h-[80vh]">
-        <div className="absolute top-0 left-0 w-[65%] h-full overflow-hidden">
+      <div className="hidden lg:block h-[100vh] relative">
+        <div className="absolute top-0 left-0 w-[80%] h-full overflow-hidden">
           <img
             src={`/images/projects/${project.id}/background.webp`}
             alt={t(project.title)}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover opacity-60"
           />
+          {/* Right gradient overlay */}
+          <div className="absolute inset-y-0 right-0 w-300 bg-gradient-to-l from-black to-transparent pointer-events-none" />
+          {/* Top gradient overlay */}
+          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black to-transparent pointer-events-none" />
+          {/* Bottom gradient overlay */}
+          <div className="absolute inset-x-0 bottom-0 h-80 bg-gradient-to-t from-black to-transparent pointer-events-none" />
         </div>
 
-        <div className="absolute inset-0 pointer-events-none">
-          {config.top?.enabled && (
-            <div
-              className="absolute top-0 left-0 right-0 bg-gradient-to-b from-black to-transparent"
-              style={{ height: config.top.size }}
-            />
-          )}
-
-          {config.bottom?.enabled && (
-            <div
-              className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent"
-              style={{ height: config.bottom.size }}
-            />
-          )}
-
-          {config.right?.enabled && (
-            <div
-              className="absolute top-0 h-full bg-gradient-to-r from-transparent via-black/90 to-black"
-              style={{
-                left: config.right.start ?? "48%",
-                width: `calc(65% - ${config.right.start ?? "48%"})`,
-              }}
-            />
-          )}
-        </div>
-
-        <div className="absolute top-0 right-0 w-[35%] h-full flex items-center">
+        <div className="absolute top-0 right-0 w-[45%] h-full flex items-center">
           <Container>
             <div className="pl-8">
               <h1 className="font-nord text-4xl xl:text-5xl 2xl:text-6xl font-bold mb-2 text-white">

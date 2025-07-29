@@ -30,7 +30,9 @@ export const ProjectDetail = () => {
 
   return (
     <div>
-      <ProjectHeroSection project={displayProject} />
+      <div className="mb-16">
+        <ProjectHeroSection project={displayProject} />
+      </div>
       {displayProject.showcases && displayProject.showcases.length > 0 && (
         <ShowcaseList
           showcases={displayProject.showcases}
