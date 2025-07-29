@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { GlobalLoader } from '../loader/GlobalLoader';
-import { useAppInitialization } from '../../hooks/useAppInitialization';
+import { useAppState } from '../../hooks/useAppState';
 import { ROUTES } from '../../constants/routes';
 
 export interface AppWrapperProps {
@@ -22,9 +22,7 @@ export const AppWrapper = ({ children }: AppWrapperProps) => {
   const [location] = useLocation();
   const isHomePage = location === ROUTES.HOME;
   
-  const { 
-    showLoader
-  } = useAppInitialization();
+  const { showLoader } = useAppState();
 
   // Prevent body scroll while loader is active
   useEffect(() => {

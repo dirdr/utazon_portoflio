@@ -1,39 +1,55 @@
 import { useRouteBasedVideo } from "../../hooks/useRouteBasedVideo";
 import { useVideo } from "../../hooks/useVideo";
-import { useDiveInInitialization } from "../../hooks/useDiveInInitialization";
+import { useAppState } from "../../hooks/useAppState";
 import { RadialGradient } from "../common/RadialGradient";
 import { ANIMATION_CONFIG } from "../../constants/animations";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useLocation } from "wouter";
+
+// Video timing configuration
+const VIDEO_TIMINGS = {
+  FRESH_LOAD_START: 0, // Start from beginning on fresh load
+  INTERNAL_NAV_START: 8, // Start from 8s on internal navigation
+  LAYOUT_SHOW_DELAY: 3000, // Show layout after 3s of video play
+} as const;
 
 export const VideoBackground = () => {
   const { shouldPlayVideo } = useRouteBasedVideo();
   const { shouldShowLayout, setShouldShowLayout } = useVideo();
-  const { isFreshLoad } = useDiveInInitialization();
+  const { shouldPlayFromStart, shouldJumpTo8s, preloadComplete } = useAppState();
   const [location] = useLocation();
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [hasStartedPlaying, setHasStartedPlaying] = useState(false);
 
   const isHomePage = location === "/";
-  const shouldAutoPlayVideo = isHomePage && !isFreshLoad;
+  
+  // Handle video behavior for SPA navigation - jump to 8s and play
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || !shouldPlayVideo) return;
+    if (!video || !shouldPlayVideo || !isHomePage) return;
 
-    if (shouldAutoPlayVideo) {
-      console.log("🎬 Auto-playing video (internal navigation)");
-      video.currentTime = 0;
+    if (shouldJumpTo8s && preloadComplete) {
+      console.log("🎬 SPA navigation - jumping to 8s and playing");
+      video.currentTime = VIDEO_TIMINGS.INTERNAL_NAV_START;
       video.play().catch(console.error);
-    } else {
-      console.log(
-        "🎬 Video ready but waiting for user interaction (fresh load)",
-      );
-      video.pause();
-      video.currentTime = 0;
     }
-  }, [shouldAutoPlayVideo, shouldPlayVideo]);
+  }, [shouldJumpTo8s, shouldPlayVideo, isHomePage, preloadComplete]);
+
+  // Handle video behavior for fresh load - set to start and pause
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !shouldPlayVideo || !isHomePage || hasStartedPlaying) return;
+
+    if (shouldPlayFromStart) {
+      console.log("🎬 Fresh load - setting video to start and pausing");
+      video.currentTime = VIDEO_TIMINGS.FRESH_LOAD_START;
+      video.pause();
+    }
+  }, [shouldPlayFromStart, shouldPlayVideo, isHomePage, hasStartedPlaying]);
 
   const handleVideoReady = () => {
     console.log("🎬 Video loaded and ready");
+    // Remove conflicting pause logic - let other effects handle video control
   };
 
   const handleVideoPlay = () => {
@@ -46,8 +62,10 @@ export const VideoBackground = () => {
 
   const startVideo = () => {
     const video = videoRef.current;
-    if (video) {
-      video.currentTime = 0;
+    if (video && shouldPlayFromStart) {
+      console.log("🎬 Starting video from dive-in button at:", VIDEO_TIMINGS.FRESH_LOAD_START);
+      setHasStartedPlaying(true); // Mark that user has started the video
+      video.currentTime = VIDEO_TIMINGS.FRESH_LOAD_START;
       video.play().catch(console.error);
     }
   };
