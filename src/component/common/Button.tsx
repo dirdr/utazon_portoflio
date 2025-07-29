@@ -27,6 +27,7 @@ interface ActionButtonProps extends BaseButtonProps {
   as: "button";
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   type?: "button" | "submit" | "reset";
+  disabled?: boolean;
 }
 
 type ButtonProps = LinkButtonProps | ActionButtonProps;
@@ -118,6 +119,7 @@ export const Button = (props: ButtonProps) => {
           className={buttonClasses}
           onClick={onClick as React.MouseEventHandler<HTMLButtonElement>}
           type={props.type || "button"}
+          disabled={props.disabled}
         >
           {children}
         </button>

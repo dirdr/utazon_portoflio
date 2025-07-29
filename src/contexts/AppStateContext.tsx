@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { usePreloadAssets } from '../hooks/usePreloadAssets';
 
@@ -26,7 +26,17 @@ interface AppState {
   hideDiveInButton: () => void;
 }
 
-const AppStateContext = createContext<AppState | null>(null);
+// eslint-disable-next-line react-refresh/only-export-components
+export const AppStateContext = createContext<AppState | null>(null);
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const useAppState = (): AppState => {
+  const context = useContext(AppStateContext);
+  if (!context) {
+    throw new Error('useAppState must be used within AppStateProvider');
+  }
+  return context;
+};
 
 const MIN_LOADING_TIME = 1500;
 
@@ -186,10 +196,3 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   );
 };
 
-export const useAppState = (): AppState => {
-  const context = useContext(AppStateContext);
-  if (!context) {
-    throw new Error('useAppState must be used within AppStateProvider');
-  }
-  return context;
-};

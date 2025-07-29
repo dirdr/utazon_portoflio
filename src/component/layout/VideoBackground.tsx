@@ -3,7 +3,7 @@ import { useVideo } from "../../hooks/useVideo";
 import { useAppState } from "../../hooks/useAppState";
 import { RadialGradient } from "../common/RadialGradient";
 import { ANIMATION_CONFIG } from "../../constants/animations";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import { useLocation } from "wouter";
 
 // Video timing configuration
@@ -60,7 +60,7 @@ export const VideoBackground = () => {
     }, ANIMATION_CONFIG.FADE_IN_DELAY);
   };
 
-  const startVideo = () => {
+  const startVideo = useCallback(() => {
     const video = videoRef.current;
     if (video && shouldPlayFromStart) {
       console.log("🎬 Starting video from dive-in button at:", VIDEO_TIMINGS.FRESH_LOAD_START);
@@ -68,7 +68,7 @@ export const VideoBackground = () => {
       video.currentTime = VIDEO_TIMINGS.FRESH_LOAD_START;
       video.play().catch(console.error);
     }
-  };
+  }, [shouldPlayFromStart]);
 
   // Expose startVideo function globally for the DiveInButton
   useEffect(() => {
@@ -79,7 +79,7 @@ export const VideoBackground = () => {
     return () => {
       delete windowWithVideo.startHomeVideo;
     };
-  }, [shouldPlayVideo]);
+  }, [shouldPlayVideo, startVideo]);
 
   if (!shouldPlayVideo) {
     return null;

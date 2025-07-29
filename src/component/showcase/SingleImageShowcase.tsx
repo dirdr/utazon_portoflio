@@ -7,17 +7,15 @@ interface SingleImageShowcaseProps {
   className?: string;
 }
 
-export const SingleImageShowcase = ({ data, className = "" }: SingleImageShowcaseProps) => {
+export const SingleImageShowcase = ({ data }: SingleImageShowcaseProps) => {
   const { image } = data;
   return (
-    <Container>
-      <div className={`px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 ${className}`}>
-        <ShowcaseImage
-          src={image.src}
-          alt={image.alt}
-          className="w-full h-auto object-contain rounded-2xl border-2 border-muted my-4"
-        />
-      </div>
+    <Container className="px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32">
+      <ShowcaseImage
+        src={image.src}
+        alt={image.alt}
+        className="w-full h-auto object-contain rounded-2xl border-2 border-muted my-4"
+      />
     </Container>
   );
 };
