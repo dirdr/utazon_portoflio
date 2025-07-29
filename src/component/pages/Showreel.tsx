@@ -1,7 +1,8 @@
 import { VideoCard } from "../showreel/VideoCard";
 import { useBackgroundStore } from "../../hooks/useBackgroundStore";
 import { useEffect } from "react";
-import showreelBackground from "../../assets/images/showreel_background.webp";
+import showreelBackground from "../../assets/images/background.webp";
+import showreelLight from "../../assets/images/showreel_light.webp";
 
 export const Showreel = () => {
   const setBackgroundImage = useBackgroundStore(
@@ -18,6 +19,7 @@ export const Showreel = () => {
       <VideoCard
         src="https://utazon-backend.adrienpelfresne.com/api/videos/showreel.mp4"
         className="w-full h-full max-w-7xl max-h-[80vh]"
+        light={showreelLight}
       />
     </div>
   );

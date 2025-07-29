@@ -1,18 +1,19 @@
 import { cn } from "../../utils/cn";
 import cardBackground from "../../assets/images/card_backgrounds/1.webp";
 import { ReactPlayerWrapper } from "../common/ReactPlayerWrapper";
-import light from "../../assets/images/showreel_background.webp";
 
 interface VideoCardProps {
   src: string;
   className?: string;
   glintSpeed?: string;
+  light: string;
 }
 
 export const VideoCard = ({
   src,
   className,
   glintSpeed = "6s",
+  light,
 }: VideoCardProps) => {
   return (
     <div
