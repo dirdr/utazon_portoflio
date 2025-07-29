@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import logo from "../../assets/images/logo.svg";
 
-
 export const GlobalLoader = () => {
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -35,7 +34,7 @@ export const GlobalLoader = () => {
           >
             <img src={logo} alt="Utazon Logo" className="h-12 w-auto" />
           </motion.a>
-          
+
           <div className="flex flex-col items-start">
             <div className="overflow-hidden">
               <motion.a
@@ -43,7 +42,11 @@ export const GlobalLoader = () => {
                 className="text-2xl text-white block"
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
-                transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1], delay: 0.2 }}
+                transition={{
+                  duration: 0.8,
+                  ease: [0.25, 1, 0.5, 1],
+                  delay: 0.2,
+                }}
               >
                 {t("common.utazon")}
               </motion.a>
@@ -53,7 +56,11 @@ export const GlobalLoader = () => {
                 className="text-muted text-base block"
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
-                transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1], delay: 0.4 }}
+                transition={{
+                  duration: 0.8,
+                  ease: [0.25, 1, 0.5, 1],
+                  delay: 0.4,
+                }}
               >
                 {t("common.antoine_vernez")}
               </motion.span>
@@ -71,7 +78,12 @@ export const GlobalLoader = () => {
             className="absolute top-0 left-0 h-0.5 w-full bg-gradient-to-r from-transparent via-white to-transparent"
             initial={{ x: "-100%" }}
             animate={{ x: "100%" }}
-            transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut", delay: 1 }}
+            transition={{
+              repeat: Infinity,
+              duration: 1.5,
+              ease: "easeInOut",
+              delay: 1,
+            }}
           />
         </motion.div>
       </div>

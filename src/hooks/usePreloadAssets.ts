@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { allProjectsSortedByPriority } from "../data/projects";
 import backgroundImage from "../assets/images/background.webp";
+import p1 from "../assets/images/card_backgrounds/1.webp";
+import p2 from "../assets/images/card_backgrounds/2.webp";
+import p3 from "../assets/images/card_backgrounds/3.webp";
 
 export interface AssetLoadState {
   url: string;
@@ -43,6 +46,27 @@ export const usePreloadAssets = () => {
 
     assets.push({
       url: backgroundImage,
+      loaded: false,
+      error: false,
+      type: "image",
+    });
+
+    assets.push({
+      url: p1,
+      loaded: false,
+      error: false,
+      type: "image",
+    });
+
+    assets.push({
+      url: p2,
+      loaded: false,
+      error: false,
+      type: "image",
+    });
+
+    assets.push({
+      url: p3,
       loaded: false,
       error: false,
       type: "image",
