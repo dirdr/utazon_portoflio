@@ -46,14 +46,14 @@ impl AppConfig {
             .map(|s| s.trim().to_string())
             .collect();
 
-        let jwt_secret = env::var("JWT_SECRET")
-            .map_err(|_| anyhow::anyhow!("JWT_SECRET must be set"))?;
+        let jwt_secret =
+            env::var("JWT_SECRET").map_err(|_| anyhow::anyhow!("JWT_SECRET must be set"))?;
 
-        let auth_username = env::var("AUTH_USERNAME")
-            .map_err(|_| anyhow::anyhow!("AUTH_USERNAME must be set"))?;
+        let auth_username =
+            env::var("AUTH_USERNAME").map_err(|_| anyhow::anyhow!("AUTH_USERNAME must be set"))?;
 
-        let auth_password = env::var("AUTH_PASSWORD")
-            .map_err(|_| anyhow::anyhow!("AUTH_PASSWORD must be set"))?;
+        let auth_password =
+            env::var("AUTH_PASSWORD").map_err(|_| anyhow::anyhow!("AUTH_PASSWORD must be set"))?;
 
         Ok(Self {
             port,

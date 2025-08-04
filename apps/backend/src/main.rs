@@ -66,6 +66,7 @@ async fn main() -> anyhow::Result<()> {
             header::AUTHORIZATION,
             header::ACCEPT,
             header::ORIGIN,
+            header::RANGE,
         ])
         .allow_credentials(true);
 
