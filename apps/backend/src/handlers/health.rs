@@ -1,12 +1,12 @@
 use axum::{extract::State, http::StatusCode, Json};
 use serde_json::{json, Value};
 
-use crate::services::minio::MinioService;
+use crate::state::AppState;
 
-pub async fn health_handler(State(minio_service): State<MinioService>) -> (StatusCode, Json<Value>) {
+pub async fn health_handler(State(app_state): State<AppState>) -> (StatusCode, Json<Value>) {
     tracing::info!("Health check endpoint called");
     
-    let health = minio_service.health_check().await;
+    let health = app_state.minio_service.health_check().await;
     
     let status_code = if health.status == "healthy" {
         tracing::info!("Health check passed - bucket '{}' is accessible", health.bucket_name);

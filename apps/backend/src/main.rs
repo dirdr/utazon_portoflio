@@ -70,11 +70,12 @@ async fn main() -> anyhow::Result<()> {
         .allow_credentials(true);
 
     // Build the application router
-    let app = Router::new()
+    let app_state = AppState::new(minio_service, config);
+    let app = Router::<AppState>::new()
         .route("/", get(root_handler))
         .route("/api/health", get(health_handler))
         .route("/api/auth/login", axum::routing::post(login_handler))
-        .nest("/api/videos", video_routes())
+        .nest("/api/videos", video_routes(app_state.clone()))
         .layer(
             ServiceBuilder::new()
                 .layer(TraceLayer::new_for_http())
@@ -82,7 +83,7 @@ async fn main() -> anyhow::Result<()> {
                 .layer(DefaultBodyLimit::max(10 * 1024 * 1024)) // 10MB limit
                 .into_inner(),
         )
-        .with_state(AppState::new(minio_service, config));
+        .with_state(app_state);
 
     let addr = SocketAddr::from(([0, 0, 0, 0], port));
     tracing::info!("Starting Utazon Backend Server...");

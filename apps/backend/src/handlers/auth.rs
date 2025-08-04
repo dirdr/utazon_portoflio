@@ -1,5 +1,4 @@
 use axum::{extract::State, http::StatusCode, Json};
-use bcrypt::verify;
 use chrono::{Duration, Utc};
 use jsonwebtoken::{encode, EncodingKey, Header};
 use serde::{Deserialize, Serialize};

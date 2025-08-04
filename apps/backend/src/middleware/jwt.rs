@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::state::AppState;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Claims {
     pub sub: String,
     pub exp: usize,

@@ -60,11 +60,11 @@ impl StreamError {
     }
 }
 
-pub fn video_routes() -> Router<AppState> {
+pub fn video_routes(app_state: AppState) -> Router<AppState> {
     Router::new()
         .route("/", get(list_videos_handler))
         .route("/{*video_path}", get(stream_video_handler))
-        .route_layer(axum::middleware::from_fn(jwt_middleware))
+        .layer(axum::middleware::from_fn_with_state(app_state.clone(), jwt_middleware))
 }
 
 pub async fn list_videos_handler(
