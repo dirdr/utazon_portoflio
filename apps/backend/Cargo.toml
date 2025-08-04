@@ -32,3 +32,6 @@ anyhow = "1.0"
 chrono = { version = "0.4", features = ["serde"] }
 
 mime_guess = "2.0"
+
+jsonwebtoken = "9.0"
+bcrypt = "0.15"

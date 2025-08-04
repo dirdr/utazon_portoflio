@@ -12,12 +12,17 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 mod config;
 mod handlers;
+mod middleware;
 mod routes;
 mod services;
+mod state;
 
 use crate::{
-    config::AppConfig, handlers::health::health_handler, routes::videos::video_routes,
+    config::AppConfig, 
+    handlers::{auth::login_handler, health::health_handler}, 
+    routes::videos::video_routes,
     services::minio::MinioService,
+    state::AppState,
 };
 
 #[tokio::main]
@@ -68,6 +73,7 @@ async fn main() -> anyhow::Result<()> {
     let app = Router::new()
         .route("/", get(root_handler))
         .route("/api/health", get(health_handler))
+        .route("/api/auth/login", axum::routing::post(login_handler))
         .nest("/api/videos", video_routes())
         .layer(
             ServiceBuilder::new()
@@ -76,7 +82,7 @@ async fn main() -> anyhow::Result<()> {
                 .layer(DefaultBodyLimit::max(10 * 1024 * 1024)) // 10MB limit
                 .into_inner(),
         )
-        .with_state(minio_service);
+        .with_state(AppState::new(minio_service, config));
 
     let addr = SocketAddr::from(([0, 0, 0, 0], port));
     tracing::info!("Starting Utazon Backend Server...");

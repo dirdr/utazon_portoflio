@@ -10,7 +10,7 @@ use mime_guess::from_path;
 use serde_json::json;
 use tokio_util::io::ReaderStream;
 
-use crate::services::minio::MinioService;
+use crate::{middleware::jwt::jwt_middleware, state::AppState};
 
 #[derive(Debug)]
 struct StreamError {
@@ -60,16 +60,17 @@ impl StreamError {
     }
 }
 
-pub fn video_routes() -> Router<MinioService> {
+pub fn video_routes() -> Router<AppState> {
     Router::new()
         .route("/", get(list_videos_handler))
         .route("/{*video_path}", get(stream_video_handler))
+        .route_layer(axum::middleware::from_fn(jwt_middleware))
 }
 
 pub async fn list_videos_handler(
-    State(minio_service): State<MinioService>,
+    State(app_state): State<AppState>,
 ) -> Result<Json<serde_json::Value>, (StatusCode, Json<serde_json::Value>)> {
-    match minio_service.list_videos().await {
+    match app_state.minio_service.list_videos().await {
         Ok(videos) => Ok(Json(json!({
             "videos": videos,
             "count": videos.len()
@@ -89,7 +90,7 @@ pub async fn list_videos_handler(
 }
 
 pub async fn stream_video_handler(
-    State(minio_service): State<MinioService>,
+    State(app_state): State<AppState>,
     Path(video_path): Path<String>,
     headers: HeaderMap,
 ) -> Result<Response, (StatusCode, Json<serde_json::Value>)> {
@@ -99,7 +100,7 @@ pub async fn stream_video_handler(
 
     let object_name = format!("videos/{video_path}");
 
-    let (file_size, _content_type) = match minio_service.get_object_metadata(&object_name).await {
+    let (file_size, _content_type) = match app_state.minio_service.get_object_metadata(&object_name).await {
         Ok(metadata) => metadata,
         Err(e) => {
             tracing::error!("Failed to get object metadata: {}", e);
@@ -124,7 +125,7 @@ pub async fn stream_video_handler(
 
     let content_length = end - start + 1;
 
-    let byte_stream = match minio_service
+    let byte_stream = match app_state.minio_service
         .get_object_stream_with_range(&object_name, start, end)
         .await
     {
