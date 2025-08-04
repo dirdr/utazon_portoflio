@@ -9,8 +9,16 @@ RUN apt-get update && apt-get install -y \
 
 COPY Cargo.toml Cargo.lock ./
 
+# Create a dummy src/lib.rs to build dependencies
+RUN mkdir src && echo "fn main() {}" > src/main.rs
+
+# Build dependencies - this will be cached until Cargo.toml changes
+RUN cargo build --release && rm src/main.rs
+
+# Now copy actual source code
 COPY src ./src
 
+# Build only your code (dependencies are already compiled)
 RUN cargo build --release
 
 FROM debian:bookworm-slim
