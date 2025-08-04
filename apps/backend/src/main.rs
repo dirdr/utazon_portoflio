@@ -36,10 +36,12 @@ async fn main() -> anyhow::Result<()> {
     })?;
     let port = config.port;
 
+    tracing::info!("Initializing MinIO service...");
     let minio_service = MinioService::new(&config).await.map_err(|e| {
         tracing::error!("Failed to initialize MinIO service: {}", e);
         e
     })?;
+    tracing::info!("✅ MinIO service initialized successfully");
 
     let cors = CorsLayer::new()
         .allow_origin(
@@ -77,12 +79,17 @@ async fn main() -> anyhow::Result<()> {
         .with_state(minio_service);
 
     let addr = SocketAddr::from(([0, 0, 0, 0], port));
-    tracing::info!("Utazon Backend Server running on port {}", port);
+    tracing::info!("Starting Utazon Backend Server...");
+    tracing::info!("Binding to address: {}", addr);
 
     let listener = tokio::net::TcpListener::bind(addr).await.map_err(|e| {
         tracing::error!("Failed to bind to address {}: {}", addr, e);
         e
     })?;
+    
+    tracing::info!("✅ Utazon Backend Server successfully started and listening on port {}", port);
+    tracing::info!("Health check endpoint: http://{}:{}/api/health", "localhost", port);
+    tracing::info!("Ready to accept connections!");
     
     axum::serve(listener, app).await.map_err(|e| {
         tracing::error!("Server failed to start: {}", e);

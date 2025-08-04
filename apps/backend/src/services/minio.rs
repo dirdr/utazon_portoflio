@@ -63,6 +63,8 @@ impl MinioService {
     }
 
     pub async fn health_check(&self) -> HealthStatus {
+        tracing::debug!("Performing MinIO health check for bucket: {}", self.bucket_name);
+        
         match self
             .client
             .head_bucket()
@@ -70,17 +72,23 @@ impl MinioService {
             .send()
             .await
         {
-            Ok(_) => HealthStatus {
-                status: "healthy".to_string(),
-                bucket_exists: true,
-                bucket_name: self.bucket_name.clone(),
-                error: None,
+            Ok(_) => {
+                tracing::debug!("MinIO health check successful - bucket '{}' exists and is accessible", self.bucket_name);
+                HealthStatus {
+                    status: "healthy".to_string(),
+                    bucket_exists: true,
+                    bucket_name: self.bucket_name.clone(),
+                    error: None,
+                }
             },
-            Err(e) => HealthStatus {
-                status: "unhealthy".to_string(),
-                bucket_exists: false,
-                bucket_name: self.bucket_name.clone(),
-                error: Some(e.to_string()),
+            Err(e) => {
+                tracing::warn!("MinIO health check failed for bucket '{}': {}", self.bucket_name, e);
+                HealthStatus {
+                    status: "unhealthy".to_string(),
+                    bucket_exists: false,
+                    bucket_name: self.bucket_name.clone(),
+                    error: Some(e.to_string()),
+                }
             },
         }
     }
