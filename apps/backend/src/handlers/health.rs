@@ -9,6 +9,7 @@ pub async fn health_handler(State(minio_service): State<MinioService>) -> (Statu
     let status_code = if health.status == "healthy" {
         StatusCode::OK
     } else {
+        tracing::error!("Health check failed for bucket '{}': {:?}", health.bucket_name, health.error);
         StatusCode::SERVICE_UNAVAILABLE
     };
 

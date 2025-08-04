@@ -113,7 +113,10 @@ pub async fn stream_video_handler(
     let (start, end, partial_content) = if let Some(range) = range_header {
         match parse_range_header(range, file_size as u64) {
             Ok((start, end)) => (start, end, true),
-            Err(_) => (0, file_size as u64 - 1, false),
+            Err(_) => {
+                tracing::warn!("Invalid range header for {}: {:?}", video_path, range);
+                (0, file_size as u64 - 1, false)
+            },
         }
     } else {
         (0, file_size as u64 - 1, false)

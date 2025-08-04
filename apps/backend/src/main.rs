@@ -30,10 +30,16 @@ async fn main() -> anyhow::Result<()> {
         .with(tracing_subscriber::fmt::layer())
         .init();
 
-    let config = AppConfig::from_env()?;
+    let config = AppConfig::from_env().map_err(|e| {
+        tracing::error!("Failed to load configuration: {}", e);
+        e
+    })?;
     let port = config.port;
 
-    let minio_service = MinioService::new(&config).await?;
+    let minio_service = MinioService::new(&config).await.map_err(|e| {
+        tracing::error!("Failed to initialize MinIO service: {}", e);
+        e
+    })?;
 
     let cors = CorsLayer::new()
         .allow_origin(
@@ -41,7 +47,11 @@ async fn main() -> anyhow::Result<()> {
                 .allowed_origins
                 .iter()
                 .map(|origin| origin.parse::<HeaderValue>())
-                .collect::<Result<Vec<_>, _>>()?,
+                .collect::<Result<Vec<_>, _>>()
+                .map_err(|e| {
+                    tracing::error!("Failed to parse CORS allowed origins: {}", e);
+                    e
+                })?,
         )
         .allow_methods([Method::GET, Method::POST, Method::OPTIONS])
         .allow_headers([
@@ -69,8 +79,15 @@ async fn main() -> anyhow::Result<()> {
     let addr = SocketAddr::from(([0, 0, 0, 0], port));
     tracing::info!("Utazon Backend Server running on port {}", port);
 
-    let listener = tokio::net::TcpListener::bind(addr).await?;
-    axum::serve(listener, app).await?;
+    let listener = tokio::net::TcpListener::bind(addr).await.map_err(|e| {
+        tracing::error!("Failed to bind to address {}: {}", addr, e);
+        e
+    })?;
+    
+    axum::serve(listener, app).await.map_err(|e| {
+        tracing::error!("Server failed to start: {}", e);
+        e
+    })?;
 
     Ok(())
 }
