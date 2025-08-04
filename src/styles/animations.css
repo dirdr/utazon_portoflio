@@ -35,4 +35,23 @@
   .animate-slide {
     animation: slide 2s ease-in-out infinite;
   }
+
+  /* GPU acceleration and performance optimizations for page transitions */
+  .page-transition {
+    transform: translate3d(0, 0, 0);
+    contain: layout style paint;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+  }
+
+  .gpu-accelerated {
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+
+  .smooth-animation {
+    contain: layout style paint;
+    transform-style: preserve-3d;
+  }
 }

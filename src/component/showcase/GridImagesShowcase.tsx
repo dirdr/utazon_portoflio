@@ -7,11 +7,16 @@ interface GridImagesShowcaseProps {
   className?: string;
 }
 
-export const GridImagesShowcase = ({ data, className = "" }: GridImagesShowcaseProps) => {
+export const GridImagesShowcase = ({
+  data,
+  className = "",
+}: GridImagesShowcaseProps) => {
   const { images } = data;
   return (
     <Container>
-      <div className={`w-full my-4 px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 ${className}`}>
+      <div
+        className={`w-full my-4 px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 ${className}`}
+      >
         <div className="grid grid-cols-2 gap-8">
           {images.map((image, index) => (
             <div key={index} className="w-full">

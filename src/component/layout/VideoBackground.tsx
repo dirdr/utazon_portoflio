@@ -28,6 +28,11 @@ export const VideoBackground = () => {
     const video = videoRef.current;
     if (!video || !shouldPlayVideo || !isHomePage) return;
 
+    // Apply hardware acceleration optimizations
+    video.style.transform = 'translate3d(0, 0, 0)';
+    video.style.willChange = 'transform';
+    video.style.backfaceVisibility = 'hidden';
+
     if (shouldJumpTo8s && preloadComplete) {
       console.log("🎬 SPA navigation - jumping to 8s and playing");
       // Safari-specific: Ensure proper state reset before seeking
@@ -104,7 +109,7 @@ export const VideoBackground = () => {
     <div className="fixed inset-0" style={{ zIndex: -20 }}>
       <video
         ref={videoRef}
-        className="w-full h-full object-cover"
+        className="w-full h-full object-cover gpu-accelerated"
         muted
         autoPlay={false}
         playsInline

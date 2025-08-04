@@ -7,6 +7,9 @@ interface OptimizedImageProps {
   className?: string;
   style?: React.CSSProperties;
   priority?: boolean;
+  width?: number;
+  height?: number;
+  sizes?: string;
 }
 
 export const ShowcaseImage = ({
@@ -15,6 +18,9 @@ export const ShowcaseImage = ({
   className,
   style,
   priority = false,
+  width,
+  height,
+  sizes = "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw",
 }: OptimizedImageProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -34,7 +40,7 @@ export const ShowcaseImage = ({
         src={src}
         alt={alt}
         className={cn(
-          "transition-opacity duration-300",
+          "transition-opacity duration-300 gpu-accelerated",
           isLoaded ? "opacity-100" : "opacity-0",
           className,
         )}
@@ -43,6 +49,9 @@ export const ShowcaseImage = ({
         onLoad={handleLoad}
         onError={handleError}
         decoding="async"
+        width={width}
+        height={height}
+        sizes={sizes}
       />
 
       {hasError && (

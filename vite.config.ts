@@ -13,6 +13,11 @@ export default defineConfig({
             return 'fonts/[name][extname]';
           }
           return 'assets/[name]-[hash][extname]';
+        },
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          framer: ['framer-motion'],
+          ui: ['wouter', 'zustand']
         }
       }
     }
