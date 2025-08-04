@@ -48,25 +48,33 @@ async fn main() -> anyhow::Result<()> {
     })?;
     tracing::info!("✅ MinIO service initialized successfully");
 
+    tracing::info!("Configuring CORS with allowed origins: {:?}", config.allowed_origins);
+    
     let cors = CorsLayer::new()
         .allow_origin(
             config
                 .allowed_origins
                 .iter()
-                .map(|origin| origin.parse::<HeaderValue>())
+                .map(|origin| {
+                    tracing::debug!("Parsing CORS origin: {}", origin);
+                    origin.parse::<HeaderValue>()
+                })
                 .collect::<Result<Vec<_>, _>>()
                 .map_err(|e| {
                     tracing::error!("Failed to parse CORS allowed origins: {}", e);
                     e
                 })?,
         )
-        .allow_methods([Method::GET, Method::POST, Method::OPTIONS])
+        .allow_methods([Method::GET, Method::POST, Method::OPTIONS, Method::PUT, Method::DELETE])
         .allow_headers([
             header::CONTENT_TYPE,
             header::AUTHORIZATION,
             header::ACCEPT,
             header::ORIGIN,
             header::RANGE,
+            header::ACCESS_CONTROL_ALLOW_ORIGIN,
+            header::ACCESS_CONTROL_ALLOW_HEADERS,
+            header::ACCESS_CONTROL_ALLOW_METHODS,
         ])
         .allow_credentials(true);
 
