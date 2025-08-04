@@ -11,6 +11,9 @@ services:
       - MINIO_BUCKET_NAME=${MINIO_BUCKET_NAME}
       - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
       - RUST_LOG=${RUST_LOG}
+      - JWT_SECRET=${JWT_SECRET}
+      - AUTH_USERNAME=${AUTH_USERNAME}
+      - AUTH_PASSWORD=${AUTH_PASSWORD}
     restart: unless-stopped
     networks:
       - traefik_public

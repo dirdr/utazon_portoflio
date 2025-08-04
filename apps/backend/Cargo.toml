@@ -6,7 +6,7 @@ authors = ["Adrien Pelfresne"]
 description = "Rust backend API for Utazon Portfolio - MinIO video streaming service"
 
 [[bin]]
-name = "app"
+name = "utazon_backend"
 path = "src/main.rs"
 
 [dependencies]
