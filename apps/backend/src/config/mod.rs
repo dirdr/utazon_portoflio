@@ -25,7 +25,7 @@ impl AppConfig {
             .map_err(|_| anyhow::anyhow!("MINIO_INTERNAL_ENDPOINT must be set"))?;
 
         let minio_port = env::var("MINIO_INTERNAL_PORT")
-            .unwrap_or_else(|_| "443".to_string())
+            .unwrap_or_else(|_| "9000".to_string())
             .parse()?;
 
         let minio_access_key = env::var("MINIO_ROOT_USER")

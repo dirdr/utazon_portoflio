@@ -40,11 +40,16 @@ impl MinioService {
             "minio",
         );
 
-        let protocol = "https";
+        let protocol = "http";
 
         let endpoint_url = format!(
             "{protocol}://{}:{}",
             config.minio_endpoint, config.minio_port
+        );
+        
+        tracing::info!(
+            "Configuring MinIO client - endpoint: {}, bucket: {}, user: {}",
+            endpoint_url, config.minio_bucket_name, config.minio_access_key
         );
 
         let s3_config = Config::builder()
@@ -88,10 +93,11 @@ impl MinioService {
                 }
             }
             Err(e) => {
-                tracing::warn!(
-                    "MinIO health check failed for bucket '{}': {}",
+                tracing::error!(
+                    "MinIO health check failed for bucket '{}': {} (Error details: {:?})",
                     self.bucket_name,
-                    e
+                    e,
+                    e.source()
                 );
                 HealthStatus {
                     status: "unhealthy".to_string(),

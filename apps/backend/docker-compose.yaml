@@ -5,10 +5,12 @@ services:
     environment:
       - PORT=3001
       - MINIO_INTERNAL_ENDPOINT=${MINIO_INTERNAL_ENDPOINT}
+      - MINIO_INTERNAL_PORT=${MINIO_INTERNAL_PORT}
       - MINIO_ROOT_USER=${MINIO_ROOT_USER}
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
       - MINIO_BUCKET_NAME=${MINIO_BUCKET_NAME}
       - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
+      - RUST_LOG=${RUST_LOG}
     restart: unless-stopped
     networks:
       - traefik_public
