@@ -25,6 +25,9 @@ export const useAppInitialization = () => {
 
   const preloadState = usePreloadAssets();
   const shouldPreload = showLoader;
+  
+  // Only check preload state
+  const isFullyLoaded = preloadState.isComplete;
 
   // Video behavior logic
   const shouldPlayFromStart = isFreshLoad && isHomePage;
@@ -38,17 +41,18 @@ export const useAppInitialization = () => {
     showLoader,
     showDiveInButton,
     preloadComplete: preloadState.isComplete,
+    isFullyLoaded,
     shouldPlayFromStart,
     shouldJumpTo8s
   });
 
   // Handle showDiveInButton in useEffect, not useState - this ensures proper timing
   useEffect(() => {
-    if (isFreshLoad && isHomePage && preloadState.isComplete) {
-      console.log("🚀 Setting showDiveInButton to true - preload complete");
+    if (isFreshLoad && isHomePage && isFullyLoaded) {
+      console.log("🚀 Setting showDiveInButton to true - fully loaded");
       setShowDiveInButton(true);
     }
-  }, [isFreshLoad, isHomePage, preloadState.isComplete]);
+  }, [isFreshLoad, isHomePage, isFullyLoaded]);
 
   // Handle SPA navigation - immediate show for non-fresh loads
   useEffect(() => {
@@ -60,13 +64,13 @@ export const useAppInitialization = () => {
     }
   }, [isFreshLoad]);
 
-  // Handle preload completion - deterministic timing
+  // Handle preload completion - deterministic timing (including auth)
   useEffect(() => {
-    if (shouldPreload && preloadState.isComplete) {
+    if (shouldPreload && isFullyLoaded) {
       const elapsedTime = Date.now() - startTime;
       const remainingTime = Math.max(0, MIN_LOADING_TIME - elapsedTime);
 
-      console.log("🚀 Preload complete - setting timers:", {
+      console.log("🚀 Fully loaded - setting timers:", {
         elapsedTime,
         remainingTime,
         minLoadingTime: MIN_LOADING_TIME
@@ -84,7 +88,7 @@ export const useAppInitialization = () => {
         }, 500);
       }, remainingTime);
     }
-  }, [shouldPreload, preloadState.isComplete, startTime]);
+  }, [shouldPreload, isFullyLoaded, startTime]);
 
   const hideDiveInButton = () => {
     console.log("🚀 hideDiveInButton called");

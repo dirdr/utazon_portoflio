@@ -15,7 +15,7 @@ export const MrHelp: Project = {
       id: "video-1",
       order: 1,
       video: {
-        src: "https://utazon-backend.adrienpelfresne.com/api/videos/mr-help/details1.mp4",
+        src: "mr-help/details1.mp4",
         light: "/images/projects/mr-help/cover.webp",
       },
     },
@@ -24,7 +24,7 @@ export const MrHelp: Project = {
       id: "video-2",
       order: 2,
       video: {
-        src: "https://utazon-backend.adrienpelfresne.com/api/videos/mr-help/details2.mp4",
+        src: "mr-help/details2.mp4",
         light: "/images/projects/mr-help/cover.webp",
       },
     },

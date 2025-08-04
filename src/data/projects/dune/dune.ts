@@ -16,7 +16,7 @@ export const Dune: Project = {
       id: "video-1",
       order: 1,
       video: {
-        src: "https://utazon-backend.adrienpelfresne.com/api/videos/dune/details.mp4",
+        src: "dune/details.mp4",
         light: "/images/projects/dune/cover.webp",
       },
     },

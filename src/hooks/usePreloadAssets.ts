@@ -110,10 +110,52 @@ export const usePreloadAssets = () => {
   const preloadVideo = useCallback((url: string): Promise<void> => {
     return new Promise((resolve, reject) => {
       const video = document.createElement("video");
-      video.oncanplaythrough = () => resolve();
-      video.onerror = () => reject(new Error(`Failed to load video: ${url}`));
+      let resolved = false;
+      
+      const handleSuccess = () => {
+        if (!resolved) {
+          resolved = true;
+          resolve();
+        }
+      };
+      
+      const handleError = () => {
+        if (!resolved) {
+          resolved = true;
+          reject(new Error(`Failed to load video: ${url}`));
+        }
+      };
+
+      // Safari-friendly event listeners
+      video.addEventListener('loadedmetadata', handleSuccess);
+      video.addEventListener('canplay', handleSuccess);
+      video.addEventListener('error', handleError);
+      
+      // Fallback timeout for Safari (3 seconds)
+      const timeout = setTimeout(() => {
+        if (!resolved) {
+          console.warn(`Video preload timeout for: ${url}`);
+          resolved = true;
+          resolve(); // Resolve instead of reject to not block the app
+        }
+      }, 3000);
+      
       video.preload = "metadata";
+      video.muted = true; // Safari requires muted for autoplay
       video.src = url;
+      
+      // Cleanup
+      const cleanup = () => {
+        clearTimeout(timeout);
+        video.removeEventListener('loadedmetadata', handleSuccess);
+        video.removeEventListener('canplay', handleSuccess);
+        video.removeEventListener('error', handleError);
+      };
+      
+      // Store cleanup for potential future use
+      video.addEventListener('loadedmetadata', cleanup, { once: true });
+      video.addEventListener('canplay', cleanup, { once: true });
+      video.addEventListener('error', cleanup, { once: true });
     });
   }, []);
 

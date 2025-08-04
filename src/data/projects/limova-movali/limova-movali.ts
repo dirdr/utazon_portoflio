@@ -15,7 +15,7 @@ export const LimovaMovali: Project = {
       id: "video-1",
       order: 1,
       video: {
-        src: "https://utazon-backend.adrienpelfresne.com/api/videos/limova-movali/details1.mp4",
+        src: "limova-movali/details1.mp4",
         light: "/images/projects/limova-movali/cover.webp",
       },
     },
@@ -24,7 +24,7 @@ export const LimovaMovali: Project = {
       id: "video-2",
       order: 2,
       video: {
-        src: "https://utazon-backend.adrienpelfresne.com/api/videos/limova-movali/details2.mp4",
+        src: "limova-movali/details2.mp4",
         light: "/images/projects/limova-movali/cover.webp",
       },
     },

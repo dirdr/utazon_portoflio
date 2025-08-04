@@ -52,10 +52,14 @@
   .react-player {
     border-radius: 1rem !important;
     overflow: hidden !important;
+    position: relative !important;
   }
 
   .react-player video {
     border-radius: 1rem !important;
+    object-fit: cover !important;
+    width: 100% !important;
+    height: 100% !important;
   }
 
   .react-player__controls {

@@ -16,7 +16,7 @@ export const KarminCorpLecReveal: Project = {
       id: "video-1",
       order: 1,
       video: {
-        src: "https://utazon-backend.adrienpelfresne.com/api/videos/karmin-corp-lec-reveal/details.mp4",
+        src: "karmin-corp-lec-reveal/details.mp4",
         light: "/images/projects/karmin-corp-lec-reveal/cover.webp",
       },
     },

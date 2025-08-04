@@ -15,7 +15,7 @@ export const Fooh: Project = {
       id: "video-1",
       order: 1,
       video: {
-        src: "https://utazon-backend.adrienpelfresne.com/api/videos/fooh/details1.mp4",
+        src: "fooh/details1.mp4",
         light: "/images/projects/fooh/cover.webp",
       },
     },
@@ -24,7 +24,7 @@ export const Fooh: Project = {
       id: "video-2",
       order: 2,
       video: {
-        src: "https://utazon-backend.adrienpelfresne.com/api/videos/fooh/details2.mp4",
+        src: "fooh/details2.mp4",
         light: "/images/projects/fooh/cover.webp",
       },
     },

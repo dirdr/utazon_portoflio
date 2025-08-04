@@ -96,7 +96,7 @@ export const Card = ({
           <svg className="absolute w-0 h-0">
             <defs>
               <clipPath
-                id="rounded-diagonal-cut"
+                id={`rounded-diagonal-cut-${project.id}`}
                 clipPathUnits="objectBoundingBox"
               >
                 <path
@@ -119,10 +119,10 @@ export const Card = ({
             src={image.src}
             alt={image.alt}
             className={cn(
-              "h-full w-full object-cover transition-opacity duration-300",
+              "h-full w-full object-cover transition-all duration-300",
               videoReady && "group-hover:opacity-0",
             )}
-            style={{ clipPath: "url(#rounded-diagonal-cut)" }}
+            style={{ clipPath: `url(#rounded-diagonal-cut-${project.id})` }}
             loading={priority ? "eager" : "lazy"}
           />
 
@@ -130,10 +130,10 @@ export const Card = ({
             <video
               ref={videoRef}
               className={cn(
-                "absolute inset-0 h-full w-full object-cover transition-opacity duration-300",
+                "absolute inset-0 h-full w-full object-cover transition-all duration-300",
                 videoReady ? "opacity-0 group-hover:opacity-100" : "hidden",
               )}
-              style={{ clipPath: "url(#rounded-diagonal-cut)" }}
+              style={{ clipPath: `url(#rounded-diagonal-cut-${project.id})` }}
               src={thumbnail.src}
               muted
               loop

@@ -1,10 +1,7 @@
 import { VideoShowcaseData } from "../../types/showcase";
 import { Container } from "../layout/Container";
 import { ReactPlayerWrapper } from "../common/ReactPlayerWrapper";
-
-interface VideoShowcaseProps {
-  data: VideoShowcaseData;
-}
+import { apiClient } from "../../services/api";
 
 interface VideoShowcaseProps {
   data: VideoShowcaseData;
@@ -13,20 +10,20 @@ interface VideoShowcaseProps {
 
 export const VideoShowcase = ({ data, className = "" }: VideoShowcaseProps) => {
   const { video } = data;
+  const videoUrl = apiClient.getVideoUrl(video.src);
 
   return (
     <Container>
-      <div
-        className={`w-full aspect-video rounded-2xl border-2 border-muted my-4 overflow-hidden px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 ${className}`}
-      >
-        <ReactPlayerWrapper
-          src={video.src}
-          width="100%"
-          height="100%"
-          controls
-          light={video.light}
-          style={{ aspectRatio: "16/9" }}
-        />
+      <div className={`w-full my-4 px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 ${className}`}>
+        <div className="w-full aspect-video rounded-2xl border-1 lg:border-2 border-muted overflow-hidden">
+          <ReactPlayerWrapper
+            src={videoUrl}
+            width="100%"
+            height="100%"
+            controls
+            light={video.light}
+          />
+        </div>
       </div>
     </Container>
   );

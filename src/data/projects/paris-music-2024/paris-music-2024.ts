@@ -16,7 +16,7 @@ export const ParisMusic2024: Project = {
       id: "video-1",
       order: 1,
       video: {
-        src: "https://utazon-backend.adrienpelfresne.com/api/videos/paris-music-2024/details.mp4",
+        src: "paris-music-2024/details.mp4",
         light: "/images/projects/paris-music-2024/cover.webp",
       },
     },

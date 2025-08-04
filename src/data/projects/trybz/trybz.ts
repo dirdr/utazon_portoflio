@@ -16,16 +16,20 @@ export const Trybz: Project = {
       order: 1,
       images: [
         {
-          src: "/images/projects/trybz/2.webp",
+          src: "/images/projects/trybz/1.webp",
           alt: "Trybz 1",
         },
         {
-          src: "/images/projects/trybz/3.webp",
+          src: "/images/projects/trybz/2.webp",
           alt: "Trybz 2",
         },
         {
-          src: "/images/projects/trybz/4.webp",
+          src: "/images/projects/trybz/3.webp",
           alt: "Trybz 3",
+        },
+        {
+          src: "/images/projects/trybz/4.webp",
+          alt: "Trybz 4",
         },
       ],
     },

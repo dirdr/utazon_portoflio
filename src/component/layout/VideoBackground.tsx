@@ -30,8 +30,13 @@ export const VideoBackground = () => {
 
     if (shouldJumpTo8s && preloadComplete) {
       console.log("🎬 SPA navigation - jumping to 8s and playing");
+      // Safari-specific: Ensure proper state reset before seeking
+      video.pause();
       video.currentTime = VIDEO_TIMINGS.INTERNAL_NAV_START;
-      video.play().catch(console.error);
+      
+      requestAnimationFrame(() => {
+        video.play().catch(console.error);
+      });
     }
   }, [shouldJumpTo8s, shouldPlayVideo, isHomePage, preloadComplete]);
 
@@ -42,8 +47,11 @@ export const VideoBackground = () => {
 
     if (shouldPlayFromStart) {
       console.log("🎬 Fresh load - setting video to start and pausing");
-      video.currentTime = VIDEO_TIMINGS.FRESH_LOAD_START;
+      // Safari-specific: Force pause first, then set currentTime
       video.pause();
+      requestAnimationFrame(() => {
+        video.currentTime = VIDEO_TIMINGS.FRESH_LOAD_START;
+      });
     }
   }, [shouldPlayFromStart, shouldPlayVideo, isHomePage, hasStartedPlaying]);
 
@@ -65,8 +73,15 @@ export const VideoBackground = () => {
     if (video && shouldPlayFromStart) {
       console.log("🎬 Starting video from dive-in button at:", VIDEO_TIMINGS.FRESH_LOAD_START);
       setHasStartedPlaying(true); // Mark that user has started the video
+      
+      // Safari-specific: Force video to reset state before setting currentTime
+      video.pause();
       video.currentTime = VIDEO_TIMINGS.FRESH_LOAD_START;
-      video.play().catch(console.error);
+      
+      // Use requestAnimationFrame to ensure currentTime is set before playing
+      requestAnimationFrame(() => {
+        video.play().catch(console.error);
+      });
     }
   }, [shouldPlayFromStart]);
 
