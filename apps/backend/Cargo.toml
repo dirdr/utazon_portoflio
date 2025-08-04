@@ -13,13 +13,9 @@ tower = "0.5"
 tower-http = { version = "0.6", features = ["cors", "trace"] }
 
 # AWS S3 SDK for MinIO
-aws-config = "1.0"
 aws-sdk-s3 = { version = "1.0", features = ["behavior-version-latest"] }
 
 # HTTP and streaming
-reqwest = { version = "0.12", features = ["stream"] }
-bytes = "1.0"
-futures = "0.3"
 tokio-util = { version = "0.7", features = ["io"] }
 
 # Serialization
@@ -35,10 +31,9 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 
 # Error handling
 anyhow = "1.0"
-thiserror = "2.0"
 
 # Time
 chrono = { version = "0.4", features = ["serde"] }
 
-# Rate limiting
-governor = "0.10"
+# MIME type detection
+mime_guess = "2.0"

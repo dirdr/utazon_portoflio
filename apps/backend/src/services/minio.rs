@@ -48,8 +48,8 @@ impl MinioService {
             "http"
         };
         let endpoint_url = format!(
-            "{}://{}:{}",
-            protocol, config.minio_endpoint, config.minio_port
+            "{protocol}://{}:{}",
+            config.minio_endpoint, config.minio_port
         );
 
         let s3_config = Config::builder()
@@ -154,7 +154,7 @@ impl MinioService {
         start: u64,
         end: u64,
     ) -> Result<ByteStream> {
-        let range = format!("bytes={}-{}", start, end);
+        let range = format!("bytes={start}-{end}");
 
         let response = self
             .client

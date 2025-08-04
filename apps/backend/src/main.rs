@@ -33,10 +33,8 @@ async fn main() -> anyhow::Result<()> {
     let config = AppConfig::from_env()?;
     let port = config.port;
 
-    // Initialize MinIO service
     let minio_service = MinioService::new(&config).await?;
 
-    // Build CORS layer
     let cors = CorsLayer::new()
         .allow_origin(
             config
