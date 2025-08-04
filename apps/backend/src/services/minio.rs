@@ -46,10 +46,12 @@ impl MinioService {
             "{protocol}://{}:{}",
             config.minio_endpoint, config.minio_port
         );
-        
+
         tracing::info!(
             "Configuring MinIO client - endpoint: {}, bucket: {}, user: {}",
-            endpoint_url, config.minio_bucket_name, config.minio_access_key
+            endpoint_url,
+            config.minio_bucket_name,
+            config.minio_access_key
         );
 
         let s3_config = Config::builder()
@@ -93,17 +95,17 @@ impl MinioService {
                 }
             }
             Err(e) => {
+                let error_string = e.to_string();
                 tracing::error!(
-                    "MinIO health check failed for bucket '{}': {} (Error details: {:?})",
+                    "MinIO health check failed for bucket '{}': (Error details: {:?})",
                     self.bucket_name,
-                    e,
-                    e.source()
+                    e.into_source()
                 );
                 HealthStatus {
                     status: "unhealthy".to_string(),
                     bucket_exists: false,
                     bucket_name: self.bucket_name.clone(),
-                    error: Some(e.to_string()),
+                    error: Some(error_string),
                 }
             }
         }
