@@ -11,9 +11,6 @@ pub struct AppConfig {
     pub minio_secret_key: String,
     pub minio_bucket_name: String,
     pub allowed_origins: Vec<String>,
-    pub jwt_secret: String,
-    pub auth_username: String,
-    pub auth_password: String,
 }
 
 impl AppConfig {
@@ -46,17 +43,6 @@ impl AppConfig {
             .map(|s| s.trim().to_string())
             .collect();
 
-        let jwt_secret =
-            env::var("JWT_SECRET").map_err(|_| anyhow::anyhow!("JWT_SECRET must be set"))?;
-
-        let auth_username =
-            env::var("AUTH_USERNAME").map_err(|_| anyhow::anyhow!("AUTH_USERNAME must be set"))?;
-
-        let auth_password =
-            env::var("AUTH_PASSWORD").map_err(|_| anyhow::anyhow!("AUTH_PASSWORD must be set"))?;
-
-        tracing::debug!("Loaded auth credentials - username: '{}', password: '{}'", auth_username, auth_password);
-
         Ok(Self {
             port,
             minio_endpoint,
@@ -65,9 +51,6 @@ impl AppConfig {
             minio_secret_key,
             minio_bucket_name,
             allowed_origins,
-            jwt_secret,
-            auth_username,
-            auth_password,
         })
     }
 }

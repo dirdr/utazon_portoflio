@@ -10,7 +10,7 @@ use mime_guess::from_path;
 use serde_json::json;
 use tokio_util::io::ReaderStream;
 
-use crate::{middleware::jwt::jwt_middleware, state::AppState};
+use crate::state::AppState;
 
 #[derive(Debug)]
 struct StreamError {
@@ -60,11 +60,10 @@ impl StreamError {
     }
 }
 
-pub fn video_routes(app_state: AppState) -> Router<AppState> {
+pub fn video_routes(_app_state: AppState) -> Router<AppState> {
     Router::new()
         .route("/", get(list_videos_handler))
         .route("/{*video_path}", get(stream_video_handler))
-        .layer(axum::middleware::from_fn_with_state(app_state.clone(), jwt_middleware))
 }
 
 pub async fn list_videos_handler(

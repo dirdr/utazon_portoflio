@@ -12,14 +12,13 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 mod config;
 mod handlers;
-mod middleware;
 mod routes;
 mod services;
 mod state;
 
 use crate::{
     config::AppConfig, 
-    handlers::{auth::login_handler, health::health_handler}, 
+    handlers::health::health_handler, 
     routes::videos::video_routes,
     services::minio::MinioService,
     state::AppState,
@@ -83,7 +82,6 @@ async fn main() -> anyhow::Result<()> {
     let app = Router::<AppState>::new()
         .route("/", get(root_handler))
         .route("/api/health", get(health_handler))
-        .route("/api/auth/login", axum::routing::post(login_handler))
         .nest("/api/videos", video_routes(app_state.clone()))
         .layer(
             ServiceBuilder::new()
