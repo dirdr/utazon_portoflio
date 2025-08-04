@@ -32,7 +32,6 @@ pub struct HealthStatus {
 
 impl MinioService {
     pub async fn new(config: &AppConfig) -> Result<Self> {
-        // Create custom credentials
         let credentials = Credentials::new(
             &config.minio_access_key,
             &config.minio_secret_key,
@@ -41,12 +40,8 @@ impl MinioService {
             "minio",
         );
 
-        // Build endpoint URL
-        let protocol = if config.minio_use_ssl {
-            "https"
-        } else {
-            "http"
-        };
+        let protocol = "http";
+
         let endpoint_url = format!(
             "{protocol}://{}:{}",
             config.minio_endpoint, config.minio_port
@@ -168,4 +163,3 @@ impl MinioService {
         Ok(response.body)
     }
 }
-

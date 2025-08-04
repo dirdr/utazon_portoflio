@@ -10,7 +10,6 @@ pub struct AppConfig {
     pub minio_access_key: String,
     pub minio_secret_key: String,
     pub minio_bucket_name: String,
-    pub minio_use_ssl: bool,
     pub allowed_origins: Vec<String>,
 }
 
@@ -22,15 +21,11 @@ impl AppConfig {
             .unwrap_or_else(|_| "3001".to_string())
             .parse()?;
 
-        let minio_endpoint = env::var("MINIO_ENDPOINT")
-            .or_else(|_| env::var("MINIO_INTERNAL_ENDPOINT"))
-            .map_err(|_| {
-                anyhow::anyhow!("MINIO_ENDPOINT or MINIO_INTERNAL_ENDPOINT must be set")
-            })?;
+        let minio_endpoint = env::var("MINIO_INTERNAL_ENDPOINT")
+            .map_err(|_| anyhow::anyhow!("MINIO_INTERNAL_ENDPOINT must be set"))?;
 
-        let minio_port = env::var("MINIO_PORT")
-            .or_else(|_| env::var("MINIO_INTERNAL_PORT"))
-            .unwrap_or_else(|_| "9000".to_string())
+        let minio_port = env::var("MINIO_INTERNAL_PORT")
+            .unwrap_or_else(|_| "443".to_string())
             .parse()?;
 
         let minio_access_key = env::var("MINIO_ROOT_USER")
@@ -41,9 +36,6 @@ impl AppConfig {
 
         let minio_bucket_name = env::var("MINIO_BUCKET_NAME")
             .map_err(|_| anyhow::anyhow!("MINIO_BUCKET_NAME must be set"))?;
-
-        // Use SSL for external endpoints, not for internal ones
-        let minio_use_ssl = env::var("MINIO_INTERNAL_ENDPOINT").is_err();
 
         let allowed_origins = env::var("ALLOWED_ORIGINS")
             .unwrap_or_else(|_| "http://localhost:5173,http://localhost:3000".to_string())
@@ -58,9 +50,7 @@ impl AppConfig {
             minio_access_key,
             minio_secret_key,
             minio_bucket_name,
-            minio_use_ssl,
             allowed_origins,
         })
     }
 }
-
