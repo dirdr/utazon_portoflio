@@ -7,18 +7,13 @@ RUN apt-get update && apt-get install -y \
   libssl-dev \
   && rm -rf /var/lib/apt/lists/*
 
-COPY Cargo.toml Cargo.lock ./
+COPY dummy.rs .
+COPY Cargo.toml .
+RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
+RUN cargo build --release
+RUN sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
+COPY . .
 
-# Create a dummy src/lib.rs to build dependencies
-RUN mkdir src && echo "fn main() {}" > src/main.rs
-
-# Build dependencies - this will be cached until Cargo.toml changes
-RUN cargo build --release && rm src/main.rs
-
-# Now copy actual source code
-COPY src ./src
-
-# Build only your code (dependencies are already compiled)
 RUN cargo build --release
 
 FROM debian:bookworm-slim
