@@ -55,6 +55,8 @@ impl AppConfig {
         let auth_password =
             env::var("AUTH_PASSWORD").map_err(|_| anyhow::anyhow!("AUTH_PASSWORD must be set"))?;
 
+        tracing::debug!("Loaded auth credentials - username: '{}', password: '{}'", auth_username, auth_password);
+
         Ok(Self {
             port,
             minio_endpoint,

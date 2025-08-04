@@ -27,7 +27,25 @@ pub async fn login_handler(
     State(app_state): State<AppState>,
     Json(payload): Json<LoginRequest>,
 ) -> Result<Json<LoginResponse>, impl IntoResponse> {
-    if payload.username != app_state.config.auth_username || payload.password != app_state.config.auth_password {
+    let username = payload.username.trim();
+    let password = payload.password.trim();
+    let expected_username = app_state.config.auth_username.trim();
+    let expected_password = app_state.config.auth_password.trim();
+    
+    tracing::debug!(
+        "Login attempt - received username: '{}', received password: '{}', expected username: '{}', expected password: '{}'",
+        username,
+        password,
+        expected_username,
+        expected_password
+    );
+    
+    if username != expected_username || password != expected_password {
+        tracing::warn!(
+            "Authentication failed - username match: {}, password match: {}",
+            username == expected_username,
+            password == expected_password
+        );
         return Err((
             StatusCode::UNAUTHORIZED,
             Json(ErrorResponse {
@@ -43,7 +61,7 @@ pub async fn login_handler(
         .timestamp() as usize;
 
     let claims = Claims {
-        sub: payload.username,
+        sub: username.to_string(),
         exp,
     };
 
