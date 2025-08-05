@@ -1,7 +1,8 @@
-import { useRef, useEffect, useCallback, forwardRef, useImperativeHandle } from "react";
+import { useRef, useEffect, useCallback, forwardRef, useImperativeHandle, useMemo } from "react";
 import { useLocation } from "wouter";
 import { useAppLoading } from "../../contexts/AppLoadingContext";
 import { RadialGradient } from "../common/RadialGradient";
+import { useIsMobileSimple } from "../../hooks/useIsMobile";
 
 const VIDEO_TIMINGS = {
   FRESH_LOAD_START: 0,
@@ -20,12 +21,18 @@ interface VideoBackgroundProps {
 export const VideoBackground = forwardRef<VideoBackgroundRef, VideoBackgroundProps>(({ showContent = false }, ref) => {
   const [location] = useLocation();
   const isHomePage = location === "/";
+  const isMobile = useIsMobileSimple();
   
   const { 
     videoBehavior
   } = useAppLoading();
   
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Select appropriate video source based on device type
+  const videoSource = useMemo(() => {
+    return isMobile ? "/videos/intro_mobile.mp4" : "/videos/intro.mp4";
+  }, [isMobile]);
 
   // Setup video for hardware acceleration and immediate readiness
   useEffect(() => {
@@ -107,7 +114,7 @@ export const VideoBackground = forwardRef<VideoBackgroundRef, VideoBackgroundPro
         playsInline
         disablePictureInPicture
         preload="metadata"
-        src="/videos/intro.mp4"
+        src={videoSource}
         onPlay={handleVideoPlay}
         onLoadedData={() => console.log("🎬 Video data loaded and ready")}
       />
