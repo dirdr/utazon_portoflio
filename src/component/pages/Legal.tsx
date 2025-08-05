@@ -11,8 +11,8 @@ export const Legal = () => {
   );
 
   useEffect(() => {
-    setBackgroundImage(backgroundImage, 'Legal');
-    return () => setBackgroundImage(null, 'Legal');
+    setBackgroundImage(backgroundImage, "Legal");
+    return () => setBackgroundImage(null, "Legal");
   }, [setBackgroundImage]);
 
   const currentYear = new Date().getFullYear();
@@ -20,7 +20,7 @@ export const Legal = () => {
   return (
     <div className="min-h-screen">
       <Container className="py-16 md:py-24">
-        <div className="mb-16">
+        <div className="mb-16 text-center">
           <h1 className="font-nord text-4xl md:text-6xl font-bold text-white mb-6">
             {t("legal.title")}
           </h1>
@@ -39,17 +39,16 @@ export const Legal = () => {
                 <strong className="text-white">{t("legal.editor.name")}</strong>
               </p>
               <p>{t("legal.editor.status")}</p>
-              <p>{t("legal.editor.address")}</p>
               <p>
                 <strong className="text-white">Email :</strong>{" "}
                 <a
-                  href="mailto:contact@utazon.com"
+                  href="mailto:utazoncontact@gmail.com"
                   className="text-white hover:text-white/80 transition-colors"
                 >
                   {t("legal.editor.email")}
                 </a>
               </p>
-              <p>{t("legal.editor.phone")}</p>
+              <p>Téléphone : {t("legal.editor.phone")}</p>
               <p className="text-white/60 text-sm italic">
                 {t("legal.editor.siret")}
               </p>
@@ -69,7 +68,9 @@ export const Legal = () => {
               <p className="text-white/60 italic">
                 {t("legal.hosting.address")}
               </p>
-              <p className="text-white/60 italic">{t("legal.hosting.phone")}</p>
+              <p className="text-white/60 italic">
+                {t("legal.hosting.contact")}
+              </p>
             </div>
           </section>
 

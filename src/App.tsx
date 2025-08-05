@@ -1,19 +1,8 @@
-import { AppWrapper } from "./component/app/AppWrapper";
-import { AppWithDiveIn } from "./component/app/AppWithDiveIn";
-import { VideoProvider } from "./contexts/VideoContext";
-import { AppStateProvider } from "./contexts/AppStateContext";
+import { AppContent } from "./component/app/AppContent";
 import "./index.css";
 
 function App() {
-  return (
-    <AppStateProvider>
-      <AppWrapper>
-        <VideoProvider>
-          <AppWithDiveIn />
-        </VideoProvider>
-      </AppWrapper>
-    </AppStateProvider>
-  );
+  return <AppContent />;
 }
 
 export default App;

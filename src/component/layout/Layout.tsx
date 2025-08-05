@@ -1,39 +1,28 @@
-import { VideoBackground } from "./VideoBackground";
 import { RouteBackground } from "./RouteBackground";
 import { Navbar } from "./Navbar";
-import { useRouteBasedVideo } from "../../hooks/useRouteBasedVideo";
-import { FadeInContainer } from "../common/FadeInContainer";
-import { useVideo } from "../../hooks/useVideo";
+import { useLocation } from "wouter";
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 const LayoutContent = ({ children }: LayoutProps) => {
-  const { currentPath } = useRouteBasedVideo();
-  const { shouldShowLayout } = useVideo();
-  const isHomePage = currentPath === "/";
+  const [location] = useLocation();
+  const isHomePage = location === "/";
 
+  // For home page, let HomeContainer handle everything (video, navbar, content)
+  if (isHomePage) {
+    return <>{children}</>;
+  }
+
+  // For non-home pages, show normal layout
   return (
     <div className="relative min-h-screen">
-      <VideoBackground />
       <RouteBackground />
-      {isHomePage ? (
-        <FadeInContainer
-          isVisible={shouldShowLayout}
-          className="h-screen relative"
-        >
-          <Navbar />
-          <main className="absolute inset-0 top-auto overflow-hidden">
-            {children}
-          </main>
-        </FadeInContainer>
-      ) : (
-        <div className="min-h-screen">
-          <Navbar />
-          <main>{children}</main>
-        </div>
-      )}
+      <div className="min-h-screen">
+        <Navbar />
+        <main>{children}</main>
+      </div>
     </div>
   );
 };

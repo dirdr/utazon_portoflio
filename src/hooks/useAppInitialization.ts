@@ -4,6 +4,8 @@ import { usePreloadAssets } from "./usePreloadAssets";
 
 // Global singleton to ensure only one instance tracks first load
 let globalIsFirstLoad = true;
+// Track dive-in activation separately from fresh load state
+let isDiveInActive = false;
 
 const MIN_LOADING_TIME = 1500; // Updated to 1.5s as recommended
 
@@ -29,21 +31,24 @@ export const useAppInitialization = () => {
   // Only check preload state
   const isFullyLoaded = preloadState.isComplete;
 
-  // Video behavior logic
-  const shouldPlayFromStart = isFreshLoad && isHomePage;
-  const shouldJumpTo8s = !isFreshLoad && isHomePage;
+  // Video behavior logic - updated to handle dive-in state properly
+  const shouldPlayFromStart = isFreshLoad && isHomePage && !isDiveInActive;
+  const shouldJumpTo8s = (!isFreshLoad || isDiveInActive) && isHomePage;
+  const isDiveInFlow = isFreshLoad && isDiveInActive && isHomePage;
 
   console.log("🚀 useAppInitialization:", {
     location,
     isHomePage,
     globalIsFirstLoad,
     isFreshLoad,
+    isDiveInActive,
     showLoader,
     showDiveInButton,
     preloadComplete: preloadState.isComplete,
     isFullyLoaded,
     shouldPlayFromStart,
-    shouldJumpTo8s
+    shouldJumpTo8s,
+    isDiveInFlow
   });
 
   // Handle showDiveInButton in useEffect, not useState - this ensures proper timing
@@ -64,6 +69,30 @@ export const useAppInitialization = () => {
     }
   }, [isFreshLoad]);
 
+  // Handle dive-in workflow - reset global state only after video workflow completes
+  useEffect(() => {
+    if (isDiveInFlow) {
+      console.log("🚀 Dive-in workflow active - maintaining fresh load state");
+      // Set a timer to reset the global state after the dive-in workflow completes
+      const timer = setTimeout(() => {
+        console.log("🚀 Dive-in workflow complete - resetting global state");
+        globalIsFirstLoad = false;
+        isDiveInActive = false;
+      }, 5000); // Give enough time for the video workflow to complete
+
+      return () => clearTimeout(timer);
+    }
+  }, [isDiveInFlow]);
+
+  // Reset global state when user navigates away from home page
+  useEffect(() => {
+    if (!isHomePage && (globalIsFirstLoad || isDiveInActive)) {
+      console.log("🚀 User navigated away from home - resetting global state");
+      globalIsFirstLoad = false;
+      isDiveInActive = false;
+    }
+  }, [isHomePage]);
+
   // Handle preload completion - deterministic timing (including auth)
   useEffect(() => {
     if (shouldPreload && isFullyLoaded) {
@@ -83,16 +112,19 @@ export const useAppInitialization = () => {
         setTimeout(() => {
           console.log("🚀 Setting showLoader to false");
           setShowLoader(false);
-          // Only now mark first load as done - deterministic timing
-          globalIsFirstLoad = false;
+          // Don't reset globalIsFirstLoad yet - only reset when user interacts or navigates
+          // This preserves fresh load state for dive-in functionality
         }, 500);
       }, remainingTime);
     }
   }, [shouldPreload, isFullyLoaded, startTime]);
 
   const hideDiveInButton = () => {
-    console.log("🚀 hideDiveInButton called");
+    console.log("🚀 hideDiveInButton called - activating dive-in workflow");
     setShowDiveInButton(false);
+    // Mark dive-in as active but maintain fresh load state for proper video workflow
+    isDiveInActive = true;
+    // Don't reset globalIsFirstLoad here - let the workflow complete naturally
   };
 
   return {
@@ -112,7 +144,8 @@ export const useAppInitialization = () => {
     // Video behavior properties
     videoBehavior: {
       shouldPlayFromStart,
-      shouldJumpTo8s
+      shouldJumpTo8s,
+      isDiveInFlow
     }
   };
 };

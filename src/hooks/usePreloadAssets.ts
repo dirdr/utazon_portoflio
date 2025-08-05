@@ -101,61 +101,105 @@ export const usePreloadAssets = () => {
   const preloadImage = useCallback((url: string): Promise<void> => {
     return new Promise((resolve, reject) => {
       const img = new Image();
-      img.onload = () => resolve();
-      img.onerror = () => reject(new Error(`Failed to load image: ${url}`));
+      
+      // Modern image loading with better performance
+      img.decoding = 'async';
+      img.loading = 'eager';
+      
+      // Set up event listeners before setting src
+      const handleLoad = () => {
+        cleanup();
+        resolve();
+      };
+      
+      const handleError = () => {
+        cleanup();
+        reject(new Error(`Failed to load image: ${url}`));
+      };
+      
+      const cleanup = () => {
+        img.removeEventListener('load', handleLoad);
+        img.removeEventListener('error', handleError);
+      };
+      
+      img.addEventListener('load', handleLoad);
+      img.addEventListener('error', handleError);
+      
+      // Set src last to trigger loading
       img.src = url;
+      
+      // Add timeout for stuck images
+      setTimeout(() => {
+        if (!img.complete) {
+          console.warn(`Image preload timeout for: ${url}`);
+          cleanup();
+          resolve(); // Resolve to not block the app
+        }
+      }, 10000); // 10 second timeout
     });
   }, []);
 
   const preloadVideo = useCallback((url: string): Promise<void> => {
-    return new Promise((resolve, reject) => {
-      const video = document.createElement("video");
-      let resolved = false;
-      
-      const handleSuccess = () => {
-        if (!resolved) {
-          resolved = true;
-          resolve();
-        }
-      };
-      
-      const handleError = () => {
-        if (!resolved) {
-          resolved = true;
-          reject(new Error(`Failed to load video: ${url}`));
-        }
-      };
+    return new Promise((resolve) => {
+      // First check if video exists with a HEAD request to avoid content-type issues
+      fetch(url, { method: 'HEAD' })
+        .then(response => {
+          if (!response.ok) {
+            console.warn(`Video not found: ${url} (${response.status})`);
+            resolve(); // Don't block the app for missing videos
+            return;
+          }
+          
+          const video = document.createElement("video");
+          let resolved = false;
+          
+          // Fallback timeout for Safari (5 seconds)
+          const timeoutId = setTimeout(() => {
+            if (!resolved) {
+              console.warn(`Video preload timeout for: ${url}`);
+              resolved = true;
+              cleanup();
+              resolve(); // Resolve instead of reject to not block the app
+            }
+          }, 5000);
+          
+          const handleSuccess = () => {
+            if (!resolved) {
+              resolved = true;
+              cleanup();
+              resolve();
+            }
+          };
+          
+          const handleError = (error: Event) => {
+            if (!resolved) {
+              resolved = true;
+              cleanup();
+              console.warn(`Video preload failed: ${url}`, error);
+              resolve(); // Don't block the app
+            }
+          };
 
-      // Safari-friendly event listeners
-      video.addEventListener('loadedmetadata', handleSuccess);
-      video.addEventListener('canplay', handleSuccess);
-      video.addEventListener('error', handleError);
-      
-      // Fallback timeout for Safari (3 seconds)
-      const timeout = setTimeout(() => {
-        if (!resolved) {
-          console.warn(`Video preload timeout for: ${url}`);
-          resolved = true;
-          resolve(); // Resolve instead of reject to not block the app
-        }
-      }, 3000);
-      
-      video.preload = "metadata";
-      video.muted = true; // Safari requires muted for autoplay
-      video.src = url;
-      
-      // Cleanup
-      const cleanup = () => {
-        clearTimeout(timeout);
-        video.removeEventListener('loadedmetadata', handleSuccess);
-        video.removeEventListener('canplay', handleSuccess);
-        video.removeEventListener('error', handleError);
-      };
-      
-      // Store cleanup for potential future use
-      video.addEventListener('loadedmetadata', cleanup, { once: true });
-      video.addEventListener('canplay', cleanup, { once: true });
-      video.addEventListener('error', cleanup, { once: true });
+          const cleanup = () => {
+            video.removeEventListener('loadedmetadata', handleSuccess);
+            video.removeEventListener('canplay', handleSuccess);
+            video.removeEventListener('error', handleError);
+            clearTimeout(timeoutId);
+          };
+
+          // Safari-friendly event listeners
+          video.addEventListener('loadedmetadata', handleSuccess);
+          video.addEventListener('canplay', handleSuccess);
+          video.addEventListener('error', handleError);
+          
+          video.preload = "metadata";
+          video.muted = true; // Safari requires muted for autoplay
+          video.src = url;
+        })
+        .catch(error => {
+          console.warn(`Failed to check video existence: ${url}`, error);
+          resolve(); // Don't block the app for network errors
+        });
     });
   }, []);
 
@@ -204,8 +248,37 @@ export const usePreloadAssets = () => {
     [preloadImage, preloadVideo, updateAssetState],
   );
 
+  // Add resource hints to document head for critical assets
+  const addResourceHints = useCallback(() => {
+    const criticalAssets = [
+      { url: `/videos/intro.mp4`, as: 'video', type: 'video/mp4' },
+      { url: backgroundImage, as: 'image', type: 'image/webp' },
+    ];
+
+    criticalAssets.forEach(({ url, as, type }) => {
+      // Check if hint already exists
+      if (document.querySelector(`link[href="${url}"]`)) return;
+
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.href = url;
+      link.as = as;
+      link.type = type;
+      
+      // Add crossorigin for video files to prevent CORS issues
+      if (as === 'video') {
+        link.crossOrigin = 'anonymous';
+      }
+      
+      document.head.appendChild(link);
+    });
+  }, []);
+
   const startPreloading = useCallback(async () => {
     const assetsList = generateAssetsList();
+
+    // Add resource hints for critical assets
+    addResourceHints();
 
     setState({
       assets: assetsList,
@@ -216,10 +289,26 @@ export const usePreloadAssets = () => {
       progress: 0,
     });
 
-    const preloadPromises = assetsList.map((asset) => preloadAsset(asset));
+    // Prioritize critical assets by loading them first
+    const criticalAssets = assetsList.filter(asset => 
+      asset.url.includes('intro.mp4') || asset.url === backgroundImage
+    );
+    const nonCriticalAssets = assetsList.filter(asset => 
+      !criticalAssets.includes(asset)
+    );
 
-    await Promise.allSettled(preloadPromises);
-  }, [generateAssetsList, preloadAsset]);
+    // Load critical assets first, then non-critical ones in parallel
+    const criticalPromises = criticalAssets.map((asset) => preloadAsset(asset));
+    await Promise.allSettled(criticalPromises);
+
+    // Load remaining assets in batches to avoid overwhelming the browser
+    const batchSize = 6; // Reasonable concurrent requests
+    for (let i = 0; i < nonCriticalAssets.length; i += batchSize) {
+      const batch = nonCriticalAssets.slice(i, i + batchSize);
+      const batchPromises = batch.map((asset) => preloadAsset(asset));
+      await Promise.allSettled(batchPromises);
+    }
+  }, [generateAssetsList, preloadAsset, addResourceHints]);
 
   useEffect(() => {
     startPreloading();

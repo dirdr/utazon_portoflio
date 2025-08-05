@@ -147,19 +147,18 @@
     "editor": {
       "title": "1. Site Editor",
       "name": "Antoine Vernez",
-      "status": "Individual Entrepreneur (EI)",
-      "address": "Paris, France",
-      "phone": "Available upon request",
-      "email": "contact@utazon.com",
-      "siret": "SIRET: [Number will be provided upon business registration]",
-      "activity": "Specialized design activities",
-      "nafCode": "NAF Code: 7410Z"
+      "status": "Sole Proprietorship (EI)",
+      "phone": "+33 7 66 00 77 89",
+      "email": "utazoncontact@gmail.com",
+      "siret": "92924632000014",
+      "activity": "Post-production of films, videos, and television programs",
+      "nafCode": "5912Z"
     },
     "hosting": {
       "title": "2. Hosting",
-      "provider": "Hosting Provider: [To be specified]",
-      "address": "Address: [Provider address]",
-      "phone": "Phone: [Provider phone]"
+      "provider": "OVH",
+      "address": "2 rue Kellermann - 59100 Roubaix - France",
+      "contact": "www.ovhcloud.com"
     },
     "intellectual": {
       "title": "3. Intellectual Property",

@@ -1,6 +1,6 @@
 import { Layout } from "../layout/Layout";
 import { About } from "../pages/About";
-import { Home } from "../pages/Home";
+import { HomeContainer } from "../pages/HomeContainer";
 import { Projects } from "../pages/Projects";
 import { ProjectDetail } from "../pages/ProjectDetail";
 import { Contact } from "../pages/Contact";
@@ -24,7 +24,7 @@ export const AppContent = () => {
         <div className={`${isHomePage ? "h-full" : "min-h-full"} flex flex-col`}>
           <div className="flex-1">
             <Switch location={location}>
-              <Route path={ROUTES.HOME} component={Home} />
+              <Route path={ROUTES.HOME} component={HomeContainer} />
               <Route path={ROUTES.ABOUT} component={About} />
               <Route path={ROUTES.PROJECTS} component={Projects} />
               <Route path="/projects/:id" component={ProjectDetail} />

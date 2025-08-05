@@ -9,12 +9,12 @@ import { NavLink } from "./NavLink";
 import { useAutoCloseMobileMenu } from "../../hooks/useAutoCloseMobileMenu";
 import { getPageConfig } from "../../config/pageConfig";
 import { cn } from "../../utils/cn";
-import { useRouteBasedVideo } from "../../hooks/useRouteBasedVideo";
+import { useLocation } from "wouter";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { t } = useTranslation();
-  const { currentPath } = useRouteBasedVideo();
+  const [currentPath] = useLocation();
 
   const pageConfig = getPageConfig(currentPath);
 
