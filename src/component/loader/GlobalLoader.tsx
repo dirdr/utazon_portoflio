@@ -23,8 +23,8 @@ export const GlobalLoader = () => {
       aria-labelledby="loader-title"
       aria-live="polite"
     >
-      <div className="flex items-center justify-center gap-12 font-nord">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12 font-nord h-full px-4">
+        <div className="flex items-center gap-4 flex-shrink-0">
           <motion.a
             href="/"
             className="flex-shrink-0"
