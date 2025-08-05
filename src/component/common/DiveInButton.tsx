@@ -33,11 +33,12 @@ export const DiveInButton = ({
       className={`fixed inset-0 z-50 flex items-center justify-center ${className}`}
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.9 }}
+      exit={{ opacity: 0, scale: 0.8 }}
       transition={{ 
         duration: 0.6, 
         ease: [0.25, 1, 0.5, 1],
-        scale: { type: "spring", stiffness: 260, damping: 20 }
+        scale: { type: "spring", stiffness: 260, damping: 20 },
+        exit: { duration: 0.8, ease: [0.4, 0, 0.2, 1] }
       }}
       role="dialog"
       aria-label="Welcome screen"
