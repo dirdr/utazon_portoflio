@@ -55,15 +55,13 @@ export const HomeContainer = () => {
   }, [videoBehavior.isDiveInFlow]);
 
   const handleDiveIn = useCallback(() => {
-    console.log("🎬 Dive in button clicked - hiding button and starting video");
+    console.log("🎬 Dive in button clicked - starting video immediately");
     
-    // Hide the dive-in button immediately
+    // Start video IMMEDIATELY on button click for instant response
+    videoRef.current?.startVideo();
+    
+    // Hide the dive-in button after video starts (no delay needed)
     hideDiveInButton();
-    
-    // Start video after a brief delay to ensure state update
-    setTimeout(() => {
-      videoRef.current?.startVideo();
-    }, 50);
   }, [hideDiveInButton]);
 
   console.log('🏠 HomeContainer render:', {

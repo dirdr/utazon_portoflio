@@ -27,11 +27,12 @@ export const VideoBackground = forwardRef<VideoBackgroundRef, VideoBackgroundPro
   
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Setup video for hardware acceleration
+  // Setup video for hardware acceleration and immediate readiness
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !isHomePage) return;
 
+    // Hardware acceleration
     video.style.transform = "translate3d(0, 0, 0)";
     video.style.willChange = "transform";
     video.style.backfaceVisibility = "hidden";
@@ -71,15 +72,14 @@ export const VideoBackground = forwardRef<VideoBackgroundRef, VideoBackgroundPro
     const video = videoRef.current;
     if (!video) return;
 
-    console.log("🎬 Starting video from dive-in button click");
+    console.log("🎬 Starting video immediately from dive-in button click");
     
     // Always start from 0 for user-initiated playback
     video.currentTime = VIDEO_TIMINGS.FRESH_LOAD_START;
     
-    requestAnimationFrame(() => {
-      video.play().catch(error => {
-        console.error("Video play failed:", error);
-      });
+    // Start playing immediately without requestAnimationFrame delay
+    video.play().catch(error => {
+      console.error("Video play failed:", error);
     });
   }, []);
 
@@ -106,9 +106,10 @@ export const VideoBackground = forwardRef<VideoBackgroundRef, VideoBackgroundPro
         autoPlay={false}
         playsInline
         disablePictureInPicture
-        preload="auto"
+        preload="metadata"
         src="/videos/intro.mp4"
         onPlay={handleVideoPlay}
+        onLoadedData={() => console.log("🎬 Video data loaded and ready")}
       />
       {showContent && (
         <RadialGradient
