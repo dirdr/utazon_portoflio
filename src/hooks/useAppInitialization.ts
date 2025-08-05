@@ -46,9 +46,12 @@ export const useAppInitialization = () => {
     showDiveInButton,
     preloadComplete: preloadState.isComplete,
     isFullyLoaded,
+    shouldPreload,
     shouldPlayFromStart,
     shouldJumpTo8s,
-    isDiveInFlow
+    isDiveInFlow,
+    startTime,
+    elapsedSinceStart: Date.now() - startTime
   });
 
   // Handle showDiveInButton in useEffect, not useState - this ensures proper timing
@@ -85,13 +88,14 @@ export const useAppInitialization = () => {
   }, [isDiveInFlow]);
 
   // Reset global state when user navigates away from home page
+  // But only for SPA navigation, not fresh loads to non-home pages
   useEffect(() => {
-    if (!isHomePage && (globalIsFirstLoad || isDiveInActive)) {
-      console.log("🚀 User navigated away from home - resetting global state");
+    if (!isHomePage && !isFreshLoad && (globalIsFirstLoad || isDiveInActive)) {
+      console.log("🚀 User navigated away from home via SPA - resetting global state");
       globalIsFirstLoad = false;
       isDiveInActive = false;
     }
-  }, [isHomePage]);
+  }, [isHomePage, isFreshLoad]);
 
   // Handle preload completion - deterministic timing (including auth)
   useEffect(() => {
@@ -112,12 +116,18 @@ export const useAppInitialization = () => {
         setTimeout(() => {
           console.log("🚀 Setting showLoader to false");
           setShowLoader(false);
-          // Don't reset globalIsFirstLoad yet - only reset when user interacts or navigates
-          // This preserves fresh load state for dive-in functionality
+          
+          // Reset global state for non-home pages after loading completes
+          // For home page, preserve fresh load state for dive-in functionality
+          if (!isHomePage && isFreshLoad) {
+            console.log("🚀 Resetting global state after non-home fresh load completion");
+            globalIsFirstLoad = false;
+            isDiveInActive = false;
+          }
         }, 500);
       }, remainingTime);
     }
-  }, [shouldPreload, isFullyLoaded, startTime]);
+  }, [shouldPreload, isFullyLoaded, startTime, isHomePage, isFreshLoad]);
 
   const hideDiveInButton = () => {
     console.log("🚀 hideDiveInButton called - activating dive-in workflow");
