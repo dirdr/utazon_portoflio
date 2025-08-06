@@ -11,6 +11,8 @@ import { PageTransition } from "../transitions/PageTransition";
 import { Footer } from "../layout/Footer";
 import { getPageConfig } from "../../config/pageConfig";
 import { Route, Switch, useLocation } from "wouter";
+import { ModalProvider } from "../../contexts/ModalContext";
+import { ModalRoot } from "../common/ModalRoot";
 
 export const AppContent = () => {
   const [location] = useLocation();
@@ -19,31 +21,34 @@ export const AppContent = () => {
   
 
   return (
-    <Layout>
-      <PageTransition pageKey={location}>
-        <div className={`${isHomePage ? "h-full" : "min-h-full"} flex flex-col`}>
-          <div className="flex-1">
-            <Switch location={location}>
-              <Route path={ROUTES.HOME} component={HomeContainer} />
-              <Route path={ROUTES.ABOUT} component={About} />
-              <Route path={ROUTES.PROJECTS} component={Projects} />
-              <Route path="/projects/:id" component={ProjectDetail} />
-              <Route path={ROUTES.CONTACT} component={Contact} />
-              <Route path={ROUTES.SHOWREEL} component={Showreel} />
-              <Route path={ROUTES.LEGAL} component={Legal} />
-              <Route>
-                <div className="min-h-screen bg-background flex items-center justify-center">
-                  <div className="text-center">
-                    <h1 className="text-5xl font-bold">404</h1>
-                    <p className="py-6">Page not found</p>
+    <ModalProvider>
+      <Layout>
+        <PageTransition pageKey={location}>
+          <div className={`${isHomePage ? "h-full" : "min-h-full"} flex flex-col`}>
+            <div className="flex-1">
+              <Switch location={location}>
+                <Route path={ROUTES.HOME} component={HomeContainer} />
+                <Route path={ROUTES.ABOUT} component={About} />
+                <Route path={ROUTES.PROJECTS} component={Projects} />
+                <Route path="/projects/:id" component={ProjectDetail} />
+                <Route path={ROUTES.CONTACT} component={Contact} />
+                <Route path={ROUTES.SHOWREEL} component={Showreel} />
+                <Route path={ROUTES.LEGAL} component={Legal} />
+                <Route>
+                  <div className="min-h-screen bg-background flex items-center justify-center">
+                    <div className="text-center">
+                      <h1 className="text-5xl font-bold">404</h1>
+                      <p className="py-6">Page not found</p>
+                    </div>
                   </div>
-                </div>
-              </Route>
-            </Switch>
+                </Route>
+              </Switch>
+            </div>
+            {pageConfig.showFooter && <Footer />}
           </div>
-          {pageConfig.showFooter && <Footer />}
-        </div>
-      </PageTransition>
-    </Layout>
+        </PageTransition>
+      </Layout>
+      <ModalRoot />
+    </ModalProvider>
   );
 };

@@ -2,7 +2,7 @@ import { Button } from "../common/Button";
 import logo from "../../assets/images/logo.svg";
 import { useState } from "react";
 import { Link } from "wouter";
-import { NAVIGATION_ITEMS, ROUTES } from "../../constants/routes";
+import { NAVIGATION_ITEMS } from "../../constants/routes";
 import { LanguageSwitcher } from "../common/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
 import { NavLink } from "./NavLink";
@@ -10,11 +10,13 @@ import { useAutoCloseMobileMenu } from "../../hooks/useAutoCloseMobileMenu";
 import { getPageConfig } from "../../config/pageConfig";
 import { cn } from "../../utils/cn";
 import { useLocation } from "wouter";
+import { useContactModal } from "../../hooks/useContactModal";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { t } = useTranslation();
   const [currentPath] = useLocation();
+  const { openContactModal } = useContactModal();
 
   const pageConfig = getPageConfig(currentPath);
 
@@ -52,7 +54,12 @@ export const Navbar = () => {
           {NAVIGATION_ITEMS.map(({ label, href }) => (
             <NavLink key={href} href={href} label={label} />
           ))}
-          <Button glint={true} href={ROUTES.CONTACT} className="text-base">
+          <Button 
+            glint={true} 
+            as="button" 
+            className="text-base" 
+            onClick={openContactModal}
+          >
             {t("nav.contact")}
           </Button>
           <LanguageSwitcher />
@@ -119,8 +126,11 @@ export const Navbar = () => {
           <div className="flex justify-center pt-4">
             <Button
               className="text-base"
-              href={ROUTES.CONTACT}
-              onClick={closeMenu}
+              as="button"
+              onClick={() => {
+                openContactModal();
+                closeMenu();
+              }}
             >
               {t("nav.contact")}
             </Button>
@@ -136,7 +146,7 @@ export const Navbar = () => {
 
   return (
     <nav className="w-full z-50 bg-transparent relative" ref={menuRef}>
-      <div className={cn("w-full py-2 lg:py-4 pt-4 lg:pt-8", "px-12")}>
+      <div className={cn("w-full py-2 lg:py-4 pt-8 lg:pt-8", "px-12")}>
         <WrapperContent />
       </div>
     </nav>
