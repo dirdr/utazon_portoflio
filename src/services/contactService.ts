@@ -1,23 +1,23 @@
-interface EmailData {
+interface ContactData {
   name: string;
   email: string;
   subject: string;
   message: string;
 }
 
-interface EmailResponse {
+interface ContactResponse {
   success: boolean;
   message: string;
   error?: string;
 }
 
-export const emailService = {
-  async sendContactEmail(data: EmailData): Promise<EmailResponse> {
+export const contactService = {
+  async sendContactEmail(data: ContactData): Promise<ContactResponse> {
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
+      const response = await fetch("/api/contact", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       });
@@ -29,12 +29,13 @@ export const emailService = {
       const result = await response.json();
       return result;
     } catch (error) {
-      console.error('Email service error:', error);
+      console.error("Contact service error:", error);
       return {
         success: false,
-        message: 'Failed to send email',
-        error: error instanceof Error ? error.message : 'Unknown error',
+        message: "Failed to send contact request",
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   },
 };
+
