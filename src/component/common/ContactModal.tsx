@@ -52,7 +52,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
 
     if (!formData.telephone.trim()) {
       newErrors.telephone = "Telephone is required";
-    } else if (!/^[\+]?[0-9\s\-\(\)]{8,}$/.test(formData.telephone)) {
+    } else if (!/^[+]?[0-9\s\-()]{8,}$/.test(formData.telephone)) {
       newErrors.telephone = "Please enter a valid telephone number";
     }
 

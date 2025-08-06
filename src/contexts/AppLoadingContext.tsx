@@ -29,6 +29,7 @@ interface AppLoadingState {
 
 const AppLoadingContext = createContext<AppLoadingState | null>(null);
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAppLoading = (): AppLoadingState => {
   const context = useContext(AppLoadingContext);
   if (!context) {

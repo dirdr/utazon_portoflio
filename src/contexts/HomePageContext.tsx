@@ -24,6 +24,7 @@ interface HomePageContextValue extends HomePageState {
 
 const HomePageContext = createContext<HomePageContextValue | null>(null);
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useHomePage = (): HomePageContextValue => {
   const context = useContext(HomePageContext);
   if (!context) {

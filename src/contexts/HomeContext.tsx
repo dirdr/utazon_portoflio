@@ -71,6 +71,7 @@ function homeReducer(state: HomeState, action: HomeAction): HomeState {
 
 const HomeContext = createContext<HomeContextValue | null>(null);
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useHome = (): HomeContextValue => {
   const context = useContext(HomeContext);
   if (!context) {
