@@ -12,7 +12,7 @@ pub struct AppConfig {
     pub minio_bucket_name: String,
     pub allowed_origins: Vec<String>,
     pub discord_bot_token: String,
-    pub discord_user_id: String,
+    pub discord_user_ids: Vec<String>,
 }
 
 impl AppConfig {
@@ -48,8 +48,12 @@ impl AppConfig {
         let discord_bot_token = env::var("DISCORD_BOT_TOKEN")
             .map_err(|_| anyhow::anyhow!("DISCORD_BOT_TOKEN must be set"))?;
 
-        let discord_user_id = env::var("DISCORD_USER_ID")
-            .map_err(|_| anyhow::anyhow!("DISCORD_USER_ID must be set"))?;
+        let discord_user_ids = env::var("DISCORD_USER_IDS")
+            .map_err(|_| anyhow::anyhow!("DISCORD_USER_IDS must be set"))?
+            .split(',')
+            .map(|s| s.trim().to_string())
+            .filter(|s| !s.is_empty())
+            .collect();
 
         Ok(Self {
             port,
@@ -60,7 +64,7 @@ impl AppConfig {
             minio_bucket_name,
             allowed_origins,
             discord_bot_token,
-            discord_user_id,
+            discord_user_ids,
         })
     }
 }

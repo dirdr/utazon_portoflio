@@ -13,28 +13,50 @@ pub trait Notification: Send + Sync {
 
 pub struct DiscordNotifier {
     bot_token: String,
-    user_id: String,
+    user_ids: Vec<String>,
 }
 
 impl DiscordNotifier {
-    pub fn new(bot_token: impl Into<String>, user_id: impl Into<String>) -> Self {
+    pub fn new(bot_token: impl Into<String>, user_ids: Vec<String>) -> Self {
         Self {
             bot_token: bot_token.into(),
-            user_id: user_id.into(),
+            user_ids,
         }
     }
 }
 
 impl Notification for DiscordNotifier {
     async fn notify(&self, message: String) -> anyhow::Result<()> {
-        let url = format!("https://discord.com/api/v10/users/@me/channels");
-        let payload = serde_json::json!({ "recipient_id": self.user_id });
-
         let client = reqwest::Client::new();
-        
+        let mut errors = Vec::new();
+
+        for user_id in &self.user_ids {
+            if let Err(e) = self.send_dm_to_user(&client, user_id, &message).await {
+                errors.push(format!("Failed to notify user {}: {}", user_id, e));
+            }
+        }
+
+        if errors.is_empty() {
+            Ok(())
+        } else {
+            Err(anyhow::anyhow!("Some notifications failed: {}", errors.join("; ")))
+        }
+    }
+}
+
+impl DiscordNotifier {
+    async fn send_dm_to_user(
+        &self,
+        client: &reqwest::Client,
+        user_id: &str,
+        message: &str,
+    ) -> anyhow::Result<()> {
+        let url = "https://discord.com/api/v10/users/@me/channels";
+        let payload = serde_json::json!({ "recipient_id": user_id });
+
         // Create DM channel with the user
         let dm_response = client
-            .post(&url)
+            .post(url)
             .header("Authorization", format!("Bot {}", self.bot_token))
             .header("Content-Type", "application/json")
             .json(&payload)
@@ -80,7 +102,7 @@ async fn contact_handler(
 
     let notifier = DiscordNotifier::new(
         state.config.discord_bot_token.clone(),
-        state.config.discord_user_id.clone()
+        state.config.discord_user_ids.clone()
     );
     let message = format_contact_message(&form);
     
