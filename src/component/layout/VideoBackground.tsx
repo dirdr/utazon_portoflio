@@ -2,7 +2,7 @@ import { useRef, useEffect, useCallback, forwardRef, useImperativeHandle, useMem
 import { useLocation } from "wouter";
 import { useAppLoading } from "../../contexts/AppLoadingContext";
 import { RadialGradient } from "../common/RadialGradient";
-import { useIsMobileSimple } from "../../hooks/useIsMobile";
+import { useIsMobileHome } from "../../hooks/useIsMobileHome";
 
 const VIDEO_TIMINGS = {
   FRESH_LOAD_START: 0,
@@ -21,7 +21,7 @@ interface VideoBackgroundProps {
 export const VideoBackground = forwardRef<VideoBackgroundRef, VideoBackgroundProps>(({ showContent = false }, ref) => {
   const [location] = useLocation();
   const isHomePage = location === "/";
-  const isMobile = useIsMobileSimple();
+  const isMobile = useIsMobileHome();
   
   const { 
     videoBehavior
@@ -45,10 +45,29 @@ export const VideoBackground = forwardRef<VideoBackgroundRef, VideoBackgroundPro
     video.style.backfaceVisibility = "hidden";
   }, [isHomePage]);
 
-  // Handle SPA navigation - auto-start video at 8s
+  // Mobile video: auto-start muted with no sequencing
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || !isHomePage || !videoBehavior.shouldJumpTo8s || videoBehavior.isDiveInFlow) return;
+    if (!video || !isHomePage || !isMobile) return;
+
+    console.log("📱 Mobile detected - starting video immediately, muted");
+    
+    // Mobile: Always start from beginning, muted, and play immediately
+    video.currentTime = VIDEO_TIMINGS.FRESH_LOAD_START;
+    video.muted = true;
+    
+    // Start playing immediately for mobile (no user interaction required when muted)
+    requestAnimationFrame(() => {
+      video.play().catch(error => {
+        console.error("Mobile video autoplay failed:", error);
+      });
+    });
+  }, [isHomePage, isMobile]);
+
+  // Handle SPA navigation - auto-start video at 8s (desktop only)
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !isHomePage || !videoBehavior.shouldJumpTo8s || videoBehavior.isDiveInFlow || isMobile) return;
 
     console.log("🎬 SPA navigation - jumping to 8s and playing");
     
@@ -61,19 +80,19 @@ export const VideoBackground = forwardRef<VideoBackgroundRef, VideoBackgroundPro
         console.error("Video autoplay failed (expected):", error);
       });
     });
-  }, [isHomePage, videoBehavior.shouldJumpTo8s, videoBehavior.isDiveInFlow]);
+  }, [isHomePage, videoBehavior.shouldJumpTo8s, videoBehavior.isDiveInFlow, isMobile]);
 
-  // Setup video for fresh loads (paused at start, ready for user interaction)
+  // Setup video for fresh loads (paused at start, ready for user interaction) - desktop only
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || !isHomePage || !videoBehavior.shouldPlayFromStart) return;
+    if (!video || !isHomePage || !videoBehavior.shouldPlayFromStart || isMobile) return;
 
     console.log("🎬 Fresh load - setting video to start position, paused");
     video.pause();
     requestAnimationFrame(() => {
       video.currentTime = VIDEO_TIMINGS.FRESH_LOAD_START;
     });
-  }, [isHomePage, videoBehavior.shouldPlayFromStart]);
+  }, [isHomePage, videoBehavior.shouldPlayFromStart, isMobile]);
 
   const startVideo = useCallback(() => {
     const video = videoRef.current;
@@ -109,7 +128,7 @@ export const VideoBackground = forwardRef<VideoBackgroundRef, VideoBackgroundPro
       <video
         ref={videoRef}
         className="w-full h-full object-cover gpu-accelerated"
-        muted={false}
+        muted={isMobile}
         autoPlay={false}
         playsInline
         disablePictureInPicture

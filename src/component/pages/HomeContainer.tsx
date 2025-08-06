@@ -7,10 +7,12 @@ import { DiveInButton } from "../common/DiveInButton";
 import { FadeInContainer } from "../common/FadeInContainer";
 import { Navbar } from "../layout/Navbar";
 import { Home } from "./Home";
+import { useIsMobileHome } from "../../hooks/useIsMobileHome";
 
 export const HomeContainer = () => {
   const [location] = useLocation();
   const isHomePage = location === "/";
+  const isMobile = useIsMobileHome();
   
   const { 
     showDiveInButton, 
@@ -29,30 +31,34 @@ export const HomeContainer = () => {
       return;
     }
 
-    if (!isFreshLoad) {
-      // SPA navigation: show content immediately
-      console.log('🏠 SPA navigation - showing content immediately');
+    if (isMobile) {
+      // Mobile: show content immediately with no sequencing
+      console.log('📱 Mobile detected - showing content immediately');
+      setShowContent(true);
+    } else if (!isFreshLoad) {
+      // Desktop SPA navigation: show content immediately
+      console.log('🏠 Desktop SPA navigation - showing content immediately');
       setShowContent(true);
     } else {
-      // Fresh load: wait for video workflow
-      console.log('🏠 Fresh load - waiting for dive-in workflow');
+      // Desktop fresh load: wait for video workflow
+      console.log('🏠 Desktop fresh load - waiting for dive-in workflow');
       setShowContent(false);
     }
-  }, [isHomePage, isFreshLoad]);
+  }, [isHomePage, isFreshLoad, isMobile]);
 
-  // Listen for dive-in workflow to show content after 3 seconds
+  // Listen for dive-in workflow to show content after 3 seconds (desktop only)
   useEffect(() => {
-    if (!videoBehavior.isDiveInFlow) return;
+    if (!videoBehavior.isDiveInFlow || isMobile) return;
 
-    console.log('🏠 Dive-in workflow active - setting up content timer');
+    console.log('🏠 Desktop dive-in workflow active - setting up content timer');
     // Set up content show timer for dive-in workflow
     const timer = setTimeout(() => {
-      console.log('🏠 Dive-in workflow - showing content after video delay');
+      console.log('🏠 Desktop dive-in workflow - showing content after video delay');
       setShowContent(true);
     }, 3000); // 3s delay for dive-in workflow
 
     return () => clearTimeout(timer);
-  }, [videoBehavior.isDiveInFlow]);
+  }, [videoBehavior.isDiveInFlow, isMobile]);
 
   const handleDiveIn = useCallback(() => {
     console.log("🎬 Dive in button clicked - starting video immediately");
@@ -66,6 +72,7 @@ export const HomeContainer = () => {
 
   console.log('🏠 HomeContainer render:', {
     isHomePage,
+    isMobile,
     isFreshLoad,
     showDiveInButton,
     showContent,
@@ -90,9 +97,9 @@ export const HomeContainer = () => {
       {/* Video Background */}
       <VideoBackground ref={videoRef} showContent={showContent} />
       
-      {/* Dive In Button Overlay */}
+      {/* Dive In Button Overlay - Desktop Only */}
       <AnimatePresence>
-        {showDiveInButton && (
+        {showDiveInButton && !isMobile && (
           <DiveInButton 
             onDiveIn={handleDiveIn}
             isReady={true}
@@ -101,16 +108,27 @@ export const HomeContainer = () => {
       </AnimatePresence>
       
       {/* Home Content */}
-      <FadeInContainer
-        isVisible={showContent}
-        className="h-screen relative z-10"
-        delay={isFreshLoad ? 300 : 0}
-      >
-        <Navbar />
-        <main className="absolute inset-0 top-auto overflow-hidden">
-          <Home />
-        </main>
-      </FadeInContainer>
+      {isMobile ? (
+        // Mobile: No fade animation, content always visible
+        <div className="h-screen relative z-10">
+          <Navbar />
+          <main className="absolute inset-0 top-auto overflow-hidden">
+            <Home />
+          </main>
+        </div>
+      ) : (
+        // Desktop: Fade animation based on sequencing
+        <FadeInContainer
+          isVisible={showContent}
+          className="h-screen relative z-10"
+          delay={isFreshLoad ? 300 : 0}
+        >
+          <Navbar />
+          <main className="absolute inset-0 top-auto overflow-hidden">
+            <Home />
+          </main>
+        </FadeInContainer>
+      )}
     </motion.div>
   );
 };

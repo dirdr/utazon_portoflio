@@ -1,5 +1,5 @@
 @layer base {
-  @media screen and (min-width: 1200px) {
+  @media screen and (min-width: 0px) {
     :root {
       font-size: 14px;
     }
