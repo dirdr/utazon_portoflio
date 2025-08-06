@@ -8,6 +8,9 @@ RUN npm install --frozen-lockfile
 
 COPY . .
 
+ARG UTAZON_API_URL
+ENV UTAZON_API_URL=$UTAZON_API_URL
+
 RUN npm run build
 
 FROM nginx:stable-alpine as production
