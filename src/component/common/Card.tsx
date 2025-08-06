@@ -3,6 +3,8 @@ import { useTranslation } from "react-i18next";
 import { Button } from "./Button";
 import { useMemo, useRef, useState } from "react";
 import { LineSweepText } from "./LineSweepText";
+import { useLocation } from "wouter";
+import { useIsMobile } from "../../hooks/useIsMobile";
 
 const getCardBackgrounds = () => {
   const backgrounds = [];
@@ -46,6 +48,8 @@ export const Card = ({
   priority = false,
 }: CardProps) => {
   const { t } = useTranslation();
+  const [, setLocation] = useLocation();
+  const { isMobile } = useIsMobile();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoReady, setVideoReady] = useState(false);
   const [videoError, setVideoError] = useState(false);
@@ -58,7 +62,6 @@ export const Card = ({
     const index = Math.abs(hash) % cardBackgrounds.length;
     return cardBackgrounds[index];
   }, [project.name]);
-
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -76,6 +79,12 @@ export const Card = ({
     }
   };
 
+  const handleMobileClick = () => {
+    if (isMobile) {
+      setLocation(`/projects/${project.id}`);
+    }
+  };
+
   return (
     <div
       className={cn(
@@ -85,9 +94,10 @@ export const Card = ({
       style={{ "--glint-card-speed": glintSpeed } as React.CSSProperties}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onClick={handleMobileClick}
     >
       <div
-        className="glint-card-content p-6"
+        className="glint-card-content p-2 sm:p-3 md:p-6"
         style={{
           background: `url(${randomBackground}) center/cover`,
         }}
@@ -155,11 +165,16 @@ export const Card = ({
             <div className="flex items-start gap-4">
               <div className="w-px bg-white self-stretch min-h-[40px]" />
               <div className="flex-1">
-                <h3 className={cn(
-                  "font-nord text-xl font-bold italic mb-1 transition-colors duration-300",
-                  isHovered ? "text-muted" : "text-white"
-                )}>
-                  <LineSweepText animate={isHovered}>
+                <h3
+                  className={cn(
+                    "font-nord text-xl font-bold italic mb-1 transition-colors duration-300",
+                    isHovered ? "text-muted" : "text-white",
+                  )}
+                >
+                  <LineSweepText
+                    animate={isHovered}
+                    className="text-base md:text-lg lg:text-xl"
+                  >
                     {project.name}
                   </LineSweepText>
                 </h3>
@@ -170,8 +185,8 @@ export const Card = ({
             </div>
           </div>
 
-          <div className="absolute top-8 right-8">
-            <div className="text-muted font-nord font-light">
+          <div className="absolute top-2 right-2 sm:top-4 sm:right-4 md:top-6 md:right-6 lg:top-8 lg:right-8">
+            <div className="text-muted font-nord font-light text-xs sm:text-sm md:text-base">
               {project.date}
             </div>
           </div>

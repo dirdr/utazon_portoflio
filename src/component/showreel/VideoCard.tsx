@@ -18,25 +18,25 @@ export const VideoCard = ({
   return (
     <div
       className={cn(
-        "group glint-card-wrapper glint-card-wrapper-always cursor-default w-full h-full card-item",
+        "group glint-card-wrapper glint-card-wrapper-always cursor-default w-full card-item",
         className,
       )}
       style={{ "--glint-card-speed": glintSpeed } as React.CSSProperties}
     >
       <div
-        className="glint-card-content p-3 sm:p-4 md:p-6 flex items-center justify-center"
+        className="glint-card-content p-2 sm:p-3 md:p-4 lg:p-6 flex items-center justify-center"
         style={{
           background: `url(${cardBackground}) center/cover`,
         }}
       >
-        <div className="w-full aspect-video max-w-none">
+        <div className="w-full aspect-video">
           <ReactPlayerWrapper
             src={src}
             light={light}
             width="100%"
             height="100%"
             controls
-            className="rounded-lg overflow-hidden"
+            className="rounded-md sm:rounded-lg overflow-hidden"
             pip={false}
           />
         </div>

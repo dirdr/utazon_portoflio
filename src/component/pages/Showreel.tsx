@@ -18,10 +18,16 @@ export const Showreel = () => {
   }, [setBackgroundImage]);
 
   return (
-    <div className="h-full flex items-center justify-center p-4 sm:p-6 lg:p-8">
+    <div className="h-[calc(100vh-8rem)] flex items-center justify-center p-2 sm:p-4 md:p-6 lg:p-8">
       <VideoCard
         src={videoUrl}
-        className="w-full h-full max-w-7xl max-h-[80vh]"
+        className="w-full 
+                   max-w-[95vw] max-h-[70vh]
+                   sm:max-w-[90vw] sm:max-h-[65vh] 
+                   md:max-w-4xl md:max-h-[60vh] 
+                   lg:max-w-5xl lg:max-h-[65vh] 
+                   xl:max-w-6xl xl:max-h-[70vh] 
+                   2xl:max-w-7xl 2xl:max-h-[75vh]"
         light={showreelLight}
       />
     </div>

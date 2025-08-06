@@ -1,4 +1,11 @@
-import { useRef, useEffect, useCallback, forwardRef, useImperativeHandle, useMemo } from "react";
+import {
+  useRef,
+  useEffect,
+  useCallback,
+  forwardRef,
+  useImperativeHandle,
+  useMemo,
+} from "react";
 import { useLocation } from "wouter";
 import { useAppLoading } from "../../contexts/AppLoadingContext";
 import { RadialGradient } from "../common/RadialGradient";
@@ -18,74 +25,79 @@ interface VideoBackgroundProps {
   showContent?: boolean;
 }
 
-export const VideoBackground = forwardRef<VideoBackgroundRef, VideoBackgroundProps>(({ showContent = false }, ref) => {
+export const VideoBackground = forwardRef<
+  VideoBackgroundRef,
+  VideoBackgroundProps
+>(({ showContent = false }, ref) => {
   const [location] = useLocation();
   const isHomePage = location === "/";
   const isMobile = useIsMobileHome();
-  
-  const { 
-    videoBehavior
-  } = useAppLoading();
-  
+
+  const { videoBehavior } = useAppLoading();
+
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Select appropriate video source based on device type
   const videoSource = useMemo(() => {
     return isMobile ? "/videos/intro_mobile.mp4" : "/videos/intro.mp4";
   }, [isMobile]);
 
-  // Setup video for hardware acceleration and immediate readiness
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !isHomePage) return;
 
-    // Hardware acceleration
     video.style.transform = "translate3d(0, 0, 0)";
     video.style.willChange = "transform";
     video.style.backfaceVisibility = "hidden";
   }, [isHomePage]);
 
-  // Mobile video: auto-start muted with no sequencing
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !isHomePage || !isMobile) return;
 
     console.log("📱 Mobile detected - starting video immediately, muted");
-    
-    // Mobile: Always start from beginning, muted, and play immediately
+
     video.currentTime = VIDEO_TIMINGS.FRESH_LOAD_START;
     video.muted = true;
-    
-    // Start playing immediately for mobile (no user interaction required when muted)
+
     requestAnimationFrame(() => {
-      video.play().catch(error => {
+      video.play().catch((error) => {
         console.error("Mobile video autoplay failed:", error);
       });
     });
   }, [isHomePage, isMobile]);
 
-  // Handle SPA navigation - auto-start video at 8s (desktop only)
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || !isHomePage || !videoBehavior.shouldJumpTo8s || videoBehavior.isDiveInFlow || isMobile) return;
+    if (
+      !video ||
+      !isHomePage ||
+      !videoBehavior.shouldJumpTo8s ||
+      videoBehavior.isDiveInFlow ||
+      isMobile
+    )
+      return;
 
     console.log("🎬 SPA navigation - jumping to 8s and playing");
-    
+
     video.pause();
     video.currentTime = VIDEO_TIMINGS.SPA_NAV_START;
-    
-    // Small delay to ensure DOM is ready
+
     requestAnimationFrame(() => {
-      video.play().catch(error => {
+      video.play().catch((error) => {
         console.error("Video autoplay failed (expected):", error);
       });
     });
-  }, [isHomePage, videoBehavior.shouldJumpTo8s, videoBehavior.isDiveInFlow, isMobile]);
+  }, [
+    isHomePage,
+    videoBehavior.shouldJumpTo8s,
+    videoBehavior.isDiveInFlow,
+    isMobile,
+  ]);
 
-  // Setup video for fresh loads (paused at start, ready for user interaction) - desktop only
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || !isHomePage || !videoBehavior.shouldPlayFromStart || isMobile) return;
+    if (!video || !isHomePage || !videoBehavior.shouldPlayFromStart || isMobile)
+      return;
 
     console.log("🎬 Fresh load - setting video to start position, paused");
     video.pause();
@@ -99,24 +111,24 @@ export const VideoBackground = forwardRef<VideoBackgroundRef, VideoBackgroundPro
     if (!video) return;
 
     console.log("🎬 Starting video immediately from dive-in button click");
-    
-    // Always start from 0 for user-initiated playback
+
     video.currentTime = VIDEO_TIMINGS.FRESH_LOAD_START;
-    
-    // Start playing immediately without requestAnimationFrame delay
-    video.play().catch(error => {
+
+    video.play().catch((error) => {
       console.error("Video play failed:", error);
     });
   }, []);
 
-  // Expose startVideo method through ref
-  useImperativeHandle(ref, () => ({
-    startVideo,
-  }), [startVideo]);
+  useImperativeHandle(
+    ref,
+    () => ({
+      startVideo,
+    }),
+    [startVideo],
+  );
 
   const handleVideoPlay = () => {
     console.log("🎬 Video started playing");
-    // Content visibility is now handled by HomeContainer
   };
 
   if (!isHomePage) {

@@ -21,7 +21,7 @@ export const Home = () => {
       <div className="h-full w-full flex flex-col justify-end p-8">
         <div className="flex flex-col ">
           <address className="not-italic">
-            <p className="text-lg text-muted pb-4">Paris, France</p>
+            <p className="text-lg text-muted pb-2">Paris, France</p>
           </address>
           <section aria-labelledby="title-heading">
             <LineSweepText
@@ -46,12 +46,12 @@ export const Home = () => {
             </p>
           </section>
 
-          <div className="flex gap-8 justify-between">
+          <div className="flex gap-4 justify-start">
             <Button
               as="link"
               glintOnHover={true}
               href={ROUTES.PROJECTS}
-              className="text-lg"
+              className="text-base"
             >
               {t("home.projects")}
             </Button>
@@ -59,7 +59,7 @@ export const Home = () => {
               as="link"
               glintOnHover={true}
               href={ROUTES.SHOWREEL}
-              className="text-lg"
+              className="text-base"
             >
               {t("nav.showreel")}
             </Button>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 /**
  * Mobile detection breakpoints (following Tailwind CSS conventions)
@@ -60,21 +60,7 @@ export const useIsMobile = (
     treatTabletsAsMobile = true,
   } = options;
 
-  const [detection, setDetection] = useState<MobileDetectionResult>(() => {
-    if (typeof window === "undefined") {
-      return {
-        isMobile: false,
-        isTouch: false,
-        isTablet: false,
-        viewportWidth: 1024,
-        isPortrait: false,
-      };
-    }
-
-    return getDetectionResult();
-  });
-
-  function getDetectionResult(): MobileDetectionResult {
+  const getDetectionResult = useCallback((): MobileDetectionResult => {
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
     const isPortrait = viewportHeight > viewportWidth;
@@ -83,7 +69,7 @@ export const useIsMobile = (
       includeTouchDetection &&
       ("ontouchstart" in window ||
         navigator.maxTouchPoints > 0 ||
-        // @ts-ignore - for older browsers
+        // @ts-expect-error - for older browsers
         navigator.msMaxTouchPoints > 0);
 
     // Screen size classifications
@@ -112,10 +98,24 @@ export const useIsMobile = (
       viewportWidth,
       isPortrait,
     };
-  }
+  }, [breakpoint, includeTouchDetection, treatTabletsAsMobile]);
+
+  const [detection, setDetection] = useState<MobileDetectionResult>(() => {
+    if (typeof window === "undefined") {
+      return {
+        isMobile: false,
+        isTouch: false,
+        isTablet: false,
+        viewportWidth: 1024,
+        isPortrait: false,
+      };
+    }
+
+    return getDetectionResult();
+  });
 
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
+    let timeoutId: number;
 
     const handleResize = () => {
       clearTimeout(timeoutId);
@@ -140,7 +140,7 @@ export const useIsMobile = (
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("orientationchange", handleOrientationChange);
     };
-  }, [breakpoint, includeTouchDetection, treatTabletsAsMobile]);
+  }, [breakpoint, includeTouchDetection, treatTabletsAsMobile, getDetectionResult]);
 
   return detection;
 };

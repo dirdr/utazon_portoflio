@@ -10,12 +10,10 @@ const LayoutContent = ({ children }: LayoutProps) => {
   const [location] = useLocation();
   const isHomePage = location === "/";
 
-  // For home page, let HomeContainer handle everything (video, navbar, content)
   if (isHomePage) {
     return <>{children}</>;
   }
 
-  // For non-home pages, show normal layout
   return (
     <div className="relative min-h-screen">
       <RouteBackground />
