@@ -3,7 +3,7 @@ name = "utazon_backend"
 version = "1.0.0"
 edition = "2024"
 authors = ["Adrien Pelfresne"]
-description = "Rust backend API for Utazon Portfolio - MinIO video streaming service"
+description = "Rust backend API for Utazon Portfolio"
 
 [[bin]]
 name = "utazon_backend"
@@ -33,3 +33,4 @@ chrono = { version = "0.4", features = ["serde"] }
 
 mime_guess = "2.0"
 
+reqwest = { version = "0.12.22", features = ["json"] }

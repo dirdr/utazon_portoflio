@@ -19,7 +19,7 @@ mod state;
 use crate::{
     config::AppConfig, 
     handlers::health::health_handler, 
-    routes::videos::video_routes,
+    routes::{videos::video_routes, contact::mail_routes},
     services::minio::MinioService,
     state::AppState,
 };
@@ -83,6 +83,7 @@ async fn main() -> anyhow::Result<()> {
         .route("/", get(root_handler))
         .route("/api/health", get(health_handler))
         .nest("/api/videos", video_routes(app_state.clone()))
+        .nest("/api", mail_routes(app_state.clone()))
         .layer(
             ServiceBuilder::new()
                 .layer(TraceLayer::new_for_http())
@@ -120,7 +121,8 @@ async fn root_handler() -> Json<Value> {
         "endpoints": {
             "health": "GET /api/health",
             "listVideos": "GET /api/videos",
-            "videoStream": "GET /api/videos/:videoId - supports paths like 'showreel.mp4' or 'aurum-nova/details.mp4'"
+            "videoStream": "GET /api/videos/:videoId - supports paths like 'showreel.mp4' or 'aurum-nova/details.mp4'",
+            "contact": "POST /api/contact - submit contact form"
         },
         "timestamp": chrono::Utc::now().to_rfc3339()
     }))

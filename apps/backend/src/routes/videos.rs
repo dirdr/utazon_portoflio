@@ -99,7 +99,11 @@ pub async fn stream_video_handler(
 
     let object_name = format!("videos/{video_path}");
 
-    let (file_size, _content_type) = match app_state.minio_service.get_object_metadata(&object_name).await {
+    let (file_size, _content_type) = match app_state
+        .minio_service
+        .get_object_metadata(&object_name)
+        .await
+    {
         Ok(metadata) => metadata,
         Err(e) => {
             tracing::error!("Failed to get object metadata: {}", e);
@@ -116,7 +120,7 @@ pub async fn stream_video_handler(
             Err(_) => {
                 tracing::warn!("Invalid range header for {}: {:?}", video_path, range);
                 (0, file_size as u64 - 1, false)
-            },
+            }
         }
     } else {
         (0, file_size as u64 - 1, false)
@@ -124,7 +128,8 @@ pub async fn stream_video_handler(
 
     let content_length = end - start + 1;
 
-    let byte_stream = match app_state.minio_service
+    let byte_stream = match app_state
+        .minio_service
         .get_object_stream_with_range(&object_name, start, end)
         .await
     {
