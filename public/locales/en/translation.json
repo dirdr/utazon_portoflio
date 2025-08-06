@@ -141,6 +141,19 @@
     "legalNotice": "Legal Notice",
     "allRightsReserved": "All rights reserved."
   },
+  "contact": {
+    "description": "Share your vision, I'll help you bring it to life",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "telephone": "Telephone",
+    "message": "Message",
+    "cancel": "Cancel",
+    "sending": "Sending...",
+    "sendMessage": "Send",
+    "successTitle": "Message sent successfully!",
+    "successDescription": "Thank you for reaching out."
+  },
   "legal": {
     "title": "Legal Notice",
     "lastUpdated": "Last updated",

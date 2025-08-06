@@ -141,6 +141,19 @@
     "legalNotice": "Mentions Légales",
     "allRightsReserved": "Tous droits réservés."
   },
+  "contact": {
+    "description": "Partagez votre vision, je vous aide à lui donner forme",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "email": "Email",
+    "telephone": "Téléphone",
+    "message": "Message",
+    "cancel": "Annuler",
+    "sending": "Envoi en cours...",
+    "sendMessage": "Envoyer",
+    "successTitle": "Message envoyé avec succès !",
+    "successDescription": "Merci de m'avoir contacté."
+  },
   "legal": {
     "title": "Mentions Légales",
     "lastUpdated": "Dernière mise à jour",

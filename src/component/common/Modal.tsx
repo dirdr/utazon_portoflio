@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
-import { createPortal } from 'react-dom';
-import { cn } from '../../utils/cn';
+import React, { useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
+import { cn } from "../../utils/cn";
 
 interface ModalProps {
   isOpen: boolean;
@@ -22,67 +22,60 @@ export const Modal: React.FC<ModalProps> = ({
   const modalRef = useRef<HTMLDivElement>(null);
   const previousActiveElement = useRef<HTMLElement | null>(null);
 
-  // Handle escape key press
   useEffect(() => {
     if (!closeOnEscape) return;
 
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
+      if (event.key === "Escape") {
         onClose();
       }
     };
 
     if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
-      return () => document.removeEventListener('keydown', handleEscape);
+      document.addEventListener("keydown", handleEscape);
+      return () => document.removeEventListener("keydown", handleEscape);
     }
   }, [isOpen, onClose, closeOnEscape]);
 
-  // Focus management
   useEffect(() => {
     if (isOpen) {
-      // Store the currently focused element
       previousActiveElement.current = document.activeElement as HTMLElement;
-      
-      // Focus the modal container
+
       if (modalRef.current) {
         modalRef.current.focus();
       }
     } else if (previousActiveElement.current) {
-      // Restore focus to the previously focused element
       previousActiveElement.current.focus();
       previousActiveElement.current = null;
     }
   }, [isOpen]);
 
-  // Handle backdrop click
   const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
     if (closeOnBackdropClick && event.target === event.currentTarget) {
       onClose();
     }
   };
 
-  // Trap focus within modal
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key !== 'Tab') return;
+    if (event.key !== "Tab") return;
 
     const focusableElements = modalRef.current?.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
     );
 
     if (!focusableElements || focusableElements.length === 0) return;
 
     const firstElement = focusableElements[0] as HTMLElement;
-    const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+    const lastElement = focusableElements[
+      focusableElements.length - 1
+    ] as HTMLElement;
 
     if (event.shiftKey) {
-      // Shift + Tab
       if (document.activeElement === firstElement) {
         event.preventDefault();
         lastElement.focus();
       }
     } else {
-      // Tab
       if (document.activeElement === lastElement) {
         event.preventDefault();
         firstElement.focus();
@@ -100,17 +93,15 @@ export const Modal: React.FC<ModalProps> = ({
       aria-modal="true"
       aria-labelledby="modal-title"
     >
-      {/* Backdrop with blur effect */}
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm animate-modal-fade-in" />
-      
-      {/* Modal content */}
+
       <div
         ref={modalRef}
         className={cn(
-          'relative z-10 w-full max-w-lg max-h-[90vh] overflow-y-auto',
-          'bg-background border border-border rounded-lg shadow-2xl',
-          'animate-modal-scale-in',
-          className
+          "relative z-10 w-full max-w-lg max-h-[90vh] overflow-y-auto",
+          "bg-background border border-border rounded-lg shadow-2xl",
+          "animate-modal-scale-in",
+          className,
         )}
         tabIndex={-1}
         onKeyDown={handleKeyDown}
@@ -122,3 +113,4 @@ export const Modal: React.FC<ModalProps> = ({
 
   return createPortal(modalContent, document.body);
 };
+
