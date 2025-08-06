@@ -68,7 +68,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/utazon-portfolio:${{ github.event.inputs.tag }}
           build-args: |
-            UTAZON_API_URL=${{ secrets.UTAZON_API_URL }}
+            VITE_UTAZON_API_URL=${{ secrets.VITE_UTAZON_API_URL }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
