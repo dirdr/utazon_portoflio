@@ -12,28 +12,54 @@ pub trait Notification: Send + Sync {
 }
 
 pub struct DiscordNotifier {
-    webhook: String,
+    bot_token: String,
+    user_id: String,
 }
 
 impl DiscordNotifier {
-    pub fn new(webhook: impl Into<String>) -> Self {
+    pub fn new(bot_token: impl Into<String>, user_id: impl Into<String>) -> Self {
         Self {
-            webhook: webhook.into(),
+            bot_token: bot_token.into(),
+            user_id: user_id.into(),
         }
     }
 }
 
 impl Notification for DiscordNotifier {
     async fn notify(&self, message: String) -> anyhow::Result<()> {
-        let payload = serde_json::json!({ "content": message });
+        let url = format!("https://discord.com/api/v10/users/@me/channels");
+        let payload = serde_json::json!({ "recipient_id": self.user_id });
 
         let client = reqwest::Client::new();
-        client
-            .post(&self.webhook)
+        
+        // Create DM channel with the user
+        let dm_response = client
+            .post(&url)
+            .header("Authorization", format!("Bot {}", self.bot_token))
+            .header("Content-Type", "application/json")
             .json(&payload)
             .send()
             .await?
             .error_for_status()?;
+
+        let dm_channel: serde_json::Value = dm_response.json().await?;
+        let channel_id = dm_channel["id"]
+            .as_str()
+            .ok_or_else(|| anyhow::anyhow!("Failed to get DM channel ID"))?;
+
+        // Send message to the DM channel
+        let message_url = format!("https://discord.com/api/v10/channels/{}/messages", channel_id);
+        let message_payload = serde_json::json!({ "content": message });
+
+        client
+            .post(&message_url)
+            .header("Authorization", format!("Bot {}", self.bot_token))
+            .header("Content-Type", "application/json")
+            .json(&message_payload)
+            .send()
+            .await?
+            .error_for_status()?;
+
         Ok(())
     }
 }
@@ -52,7 +78,10 @@ async fn contact_handler(
         ));
     }
 
-    let notifier = DiscordNotifier::new(state.config.discord_webhook.clone());
+    let notifier = DiscordNotifier::new(
+        state.config.discord_bot_token.clone(),
+        state.config.discord_user_id.clone()
+    );
     let message = format_contact_message(&form);
     
     match notifier.notify(message).await {

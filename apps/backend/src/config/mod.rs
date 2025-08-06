@@ -11,7 +11,8 @@ pub struct AppConfig {
     pub minio_secret_key: String,
     pub minio_bucket_name: String,
     pub allowed_origins: Vec<String>,
-    pub discord_webhook: String,
+    pub discord_bot_token: String,
+    pub discord_user_id: String,
 }
 
 impl AppConfig {
@@ -44,7 +45,11 @@ impl AppConfig {
             .map(|s| s.trim().to_string())
             .collect();
 
-        let discord_webhook = env::var("DISCORD_WEBHOOK").expect("Discord webhook must be set");
+        let discord_bot_token = env::var("DISCORD_BOT_TOKEN")
+            .map_err(|_| anyhow::anyhow!("DISCORD_BOT_TOKEN must be set"))?;
+
+        let discord_user_id = env::var("DISCORD_USER_ID")
+            .map_err(|_| anyhow::anyhow!("DISCORD_USER_ID must be set"))?;
 
         Ok(Self {
             port,
@@ -54,7 +59,8 @@ impl AppConfig {
             minio_secret_key,
             minio_bucket_name,
             allowed_origins,
-            discord_webhook,
+            discord_bot_token,
+            discord_user_id,
         })
     }
 }
