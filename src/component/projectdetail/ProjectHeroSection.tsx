@@ -28,7 +28,7 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
           />
         </div>
 
-        <div className="px-4 py-12">
+        <div className="py-12">
           <Container>
             <h1 className="font-nord text-3xl md:text-4xl font-bold mb-2 text-white">
               {t(project.title)}

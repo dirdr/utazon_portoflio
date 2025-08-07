@@ -15,7 +15,7 @@ export const GridImagesShowcase = ({
   return (
     <Container>
       <div
-        className={`w-full my-4 px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 ${className}`}
+        className={`w-full my-4 ${className}`}
       >
         <div className="grid grid-cols-2 gap-8">
           {images.map((image, index) => (

@@ -14,7 +14,7 @@ export const Container = ({
   return (
     <Component
       className={cn(
-        "w-full px-8 sm:px-10 lg:px-12 xl:px-24 2xl:px-24",
+        "w-full px-12",
         className,
       )}
     >
