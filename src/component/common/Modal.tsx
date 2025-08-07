@@ -98,11 +98,12 @@ export const Modal: React.FC<ModalProps> = ({
       <div
         ref={modalRef}
         className={cn(
-          "relative z-10 w-full max-w-lg max-h-[90vh] overflow-y-auto",
-          "bg-background border border-border rounded-lg shadow-2xl",
+          "relative z-10 w-full max-w-2xl max-h-[90vh] overflow-y-auto",
+          "bg-background rounded-2xl shadow-2xl",
           "animate-modal-scale-in",
           className,
         )}
+        style={{ border: '1px solid #565656' }}
         tabIndex={-1}
         onKeyDown={handleKeyDown}
       >
