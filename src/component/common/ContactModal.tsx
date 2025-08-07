@@ -58,8 +58,6 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
 
     if (!formData.message.trim()) {
       newErrors.message = "Message is required";
-    } else if (formData.message.trim().length < 10) {
-      newErrors.message = "Message must be at least 10 characters long";
     }
 
     setErrors(newErrors);
@@ -72,7 +70,6 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
@@ -89,20 +86,29 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
 
     try {
       const result = await apiClient.sendContact(formData);
-      
+
       if (result.success) {
         setIsSubmitted(true);
         setTimeout(() => {
-          setFormData({ firstName: "", lastName: "", email: "", telephone: "", message: "" });
+          setFormData({
+            firstName: "",
+            lastName: "",
+            email: "",
+            telephone: "",
+            message: "",
+          });
           setIsSubmitted(false);
           onClose();
         }, 2000);
       } else {
-        throw new Error(result.message || "Failed to send contact");
+        throw new Error(result.message || "Failed to send request");
       }
     } catch (error) {
       console.error("Error submitting form:", error);
-      setErrors({ general: error instanceof Error ? error.message : "Failed to send message" });
+      setErrors({
+        general:
+          error instanceof Error ? error.message : "Failed to send message",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -110,7 +116,13 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
 
   const handleClose = () => {
     if (!isSubmitting) {
-      setFormData({ firstName: "", lastName: "", email: "", telephone: "", message: "" });
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        telephone: "",
+        message: "",
+      });
       setErrors({});
       setIsSubmitted(false);
       onClose();
@@ -143,8 +155,11 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
       </div>
 
       <div className="mb-6">
-        <p className="text-lg text-foreground text-center">
-          {t("contact.description", "Share your vision, I'll help you bring it to life")}
+        <p className="text-lg text-foreground text-center font-nord">
+          {t(
+            "contact.description",
+            "Share your vision, I'll help you bring it to life",
+          )}
         </p>
       </div>
 
@@ -326,7 +341,9 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
               className="flex-1"
               glint={!isSubmitting}
             >
-              {isSubmitting ? t("contact.sending", "Sending...") : t("contact.sendMessage", "Send Message")}
+              {isSubmitting
+                ? t("contact.sending", "Sending...")
+                : t("contact.sendMessage", "Send Message")}
             </Button>
           </div>
         </form>
@@ -334,4 +351,3 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
     </div>
   );
 };
-

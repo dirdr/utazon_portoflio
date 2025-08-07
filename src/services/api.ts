@@ -55,7 +55,7 @@ class ApiClient {
       message: data.message,
     };
 
-    const response = await fetch("https://utazon-backend.adrienpelfresne.com/api/contact", {
+    const response = await fetch(`${API_URL}/api/contact`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -72,4 +72,3 @@ class ApiClient {
 }
 
 export const apiClient = new ApiClient(API_URL);
-
