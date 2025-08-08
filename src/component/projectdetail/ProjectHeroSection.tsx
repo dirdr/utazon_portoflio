@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Project } from "../../types/project";
 import { Container } from "../layout/Container";
+import { ImageWithLoading } from "../common/ImageWithLoading";
 
 interface GradientConfig {
   top?: { size: string; enabled: boolean };
@@ -21,10 +22,11 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
     <section className="relative w-full bg-black -mt-20 pt-20">
       <div className="lg:hidden">
         <div className="relative h-[60vh] overflow-hidden">
-          <img
+          <ImageWithLoading
             src={`/images/projects/${project.id}/background.webp`}
             alt={t(project.title)}
             className="w-full h-full object-cover"
+            placeholderClassName="w-full h-full"
           />
         </div>
 
@@ -59,10 +61,11 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
 
       <div className="hidden lg:block h-[100vh] relative">
         <div className="absolute top-0 left-0 w-[80%] h-full overflow-hidden">
-          <img
+          <ImageWithLoading
             src={`/images/projects/${project.id}/background.webp`}
             alt={t(project.title)}
             className="w-full h-full object-cover opacity-60"
+            placeholderClassName="w-full h-full"
           />
           <div className="absolute inset-y-0 right-0 w-300 bg-gradient-to-l from-black to-transparent pointer-events-none" />
           <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black to-transparent pointer-events-none" />

@@ -138,7 +138,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
 
   return (
     <div
-      className="px-16 py-8 min-h-full bg-cover bg-center bg-no-repeat relative rounded-2xl"
+      className="px-16 py-8 min-h-full bg-cover bg-center bg-no-repeat relative rounded-2xl border-2 border-gray-400/30"
       style={{
         backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/src/assets/images/card_backgrounds/3.webp')`,
       }}

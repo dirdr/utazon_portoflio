@@ -1,28 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useBackgroundStore } from "../../hooks/useBackgroundStore";
+import { useImageLoadState } from "../../hooks/useImageLoadState";
 
 export const ImageBackgroundDisplay: React.FC = () => {
   const { currentBackground, nextBackground, isTransitioning } = useBackgroundStore();
-  const [preloadedImages, setPreloadedImages] = useState<Set<string>>(new Set());
-
-
-  // Preload images to prevent flicker
-  useEffect(() => {
-    const imagesToPreload = [currentBackground, nextBackground].filter(Boolean);
-    
-    imagesToPreload.forEach((imageUrl) => {
-      if (imageUrl && !preloadedImages.has(imageUrl)) {
-        const img = new Image();
-        img.onload = () => {
-          setPreloadedImages(prev => new Set([...prev, imageUrl]));
-        };
-        img.onerror = () => {
-          console.error('❌ Failed to preload image:', imageUrl);
-        };
-        img.src = imageUrl;
-      }
-    });
-  }, [currentBackground, nextBackground, preloadedImages]);
+  
+  // Use the bridge hook to leverage existing preload system
+  const currentBgLoadState = useImageLoadState(currentBackground || "");
+  const nextBgLoadState = useImageLoadState(nextBackground || "");
+  
+  const isCurrentReady = !currentBackground || currentBgLoadState.isLoaded;
+  const isNextReady = !nextBackground || nextBgLoadState.isLoaded;
 
   // Don't render anything if no background is set
   if (!currentBackground && !nextBackground) {
@@ -37,7 +25,7 @@ export const ImageBackgroundDisplay: React.FC = () => {
           className={`
             absolute inset-0 
             transition-opacity duration-300 ease-in-out
-            ${isTransitioning ? "opacity-0" : "opacity-100"}
+            ${isTransitioning ? "opacity-0" : (isCurrentReady ? "opacity-100" : "opacity-0")}
           `}
           style={{
             backgroundImage: `url(${currentBackground})`,
@@ -54,7 +42,7 @@ export const ImageBackgroundDisplay: React.FC = () => {
           className={`
             absolute inset-0 
             transition-opacity duration-300 ease-in-out
-            ${isTransitioning ? "opacity-100" : "opacity-0"}
+            ${isTransitioning && isNextReady ? "opacity-100" : "opacity-0"}
           `}
           style={{
             backgroundImage: `url(${nextBackground})`,
