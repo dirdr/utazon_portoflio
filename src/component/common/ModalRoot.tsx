@@ -3,10 +3,10 @@ import { useModal } from '../../contexts/ModalContext';
 import { Modal } from './Modal';
 
 export const ModalRoot: React.FC = () => {
-  const { isOpen, modalContent, closeModal } = useModal();
+  const { isOpen, isClosing, modalContent, closeModal } = useModal();
 
   return (
-    <Modal isOpen={isOpen} onClose={closeModal}>
+    <Modal isOpen={isOpen} isClosing={isClosing} onClose={closeModal}>
       {modalContent}
     </Modal>
   );

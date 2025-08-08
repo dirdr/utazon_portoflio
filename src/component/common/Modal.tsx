@@ -4,6 +4,7 @@ import { cn } from "../../utils/cn";
 
 interface ModalProps {
   isOpen: boolean;
+  isClosing?: boolean;
   onClose: () => void;
   children: React.ReactNode;
   className?: string;
@@ -13,6 +14,7 @@ interface ModalProps {
 
 export const Modal: React.FC<ModalProps> = ({
   isOpen,
+  isClosing = false,
   onClose,
   children,
   className,
@@ -51,7 +53,7 @@ export const Modal: React.FC<ModalProps> = ({
   }, [isOpen]);
 
   const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (closeOnBackdropClick && event.target === event.currentTarget) {
+    if (closeOnBackdropClick && modalRef.current && !modalRef.current.contains(event.target as Node)) {
       onClose();
     }
   };
@@ -93,14 +95,17 @@ export const Modal: React.FC<ModalProps> = ({
       aria-modal="true"
       aria-labelledby="modal-title"
     >
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm animate-modal-fade-in" />
+      <div className={cn(
+        "absolute inset-0 bg-black/50 backdrop-blur-sm",
+        isClosing ? "animate-modal-fade-out" : "animate-modal-fade-in"
+      )} />
 
       <div
         ref={modalRef}
         className={cn(
-          "relative z-10 w-full max-w-2xl max-h-[90vh] overflow-y-auto",
+          "relative z-10 w-full max-w-3xl max-h-[90vh] overflow-y-auto",
           "bg-background rounded-2xl shadow-2xl",
-          "animate-modal-scale-in",
+          isClosing ? "animate-modal-scale-out" : "animate-modal-scale-in",
           className,
         )}
         style={{ border: '1px solid #565656' }}

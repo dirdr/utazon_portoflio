@@ -98,4 +98,32 @@
   .animate-modal-slide-in {
     animation: modal-slide-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
+
+  @keyframes modal-fade-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes modal-scale-out {
+    from {
+      transform: scale(1);
+      opacity: 1;
+    }
+    to {
+      transform: scale(0.95);
+      opacity: 0;
+    }
+  }
+
+  .animate-modal-fade-out {
+    animation: modal-fade-out 0.2s ease-in;
+  }
+
+  .animate-modal-scale-out {
+    animation: modal-scale-out 0.2s cubic-bezier(0.4, 0, 1, 1);
+  }
 }

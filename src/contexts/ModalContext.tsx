@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface ModalContextType {
   isOpen: boolean;
+  isClosing: boolean;
   modalContent: ReactNode | null;
   openModal: (content: ReactNode) => void;
   closeModal: () => void;
@@ -24,24 +25,31 @@ interface ModalProviderProps {
 
 export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const [modalContent, setModalContent] = useState<ReactNode | null>(null);
 
   const openModal = (content: ReactNode) => {
     setModalContent(content);
     setIsOpen(true);
+    setIsClosing(false);
     // Prevent body scroll when modal is open
     document.body.style.overflow = 'hidden';
   };
 
   const closeModal = () => {
-    setIsOpen(false);
-    setModalContent(null);
-    // Restore body scroll when modal is closed
-    document.body.style.overflow = 'unset';
+    setIsClosing(true);
+    // Wait for animation to complete before actually closing
+    setTimeout(() => {
+      setIsOpen(false);
+      setIsClosing(false);
+      setModalContent(null);
+      // Restore body scroll when modal is closed
+      document.body.style.overflow = 'unset';
+    }, 200); // Match animation duration
   };
 
   return (
-    <ModalContext.Provider value={{ isOpen, modalContent, openModal, closeModal }}>
+    <ModalContext.Provider value={{ isOpen, isClosing, modalContent, openModal, closeModal }}>
       {children}
     </ModalContext.Provider>
   );
