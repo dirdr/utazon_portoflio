@@ -14,7 +14,7 @@ export const VideoShowcase = ({ data, className = "" }: VideoShowcaseProps) => {
 
   return (
     <Container>
-      <div className={`w-full my-4 ${className}`}>
+      <div className={`w-full max-w-[90%] mx-auto my-4 ${className}`}>
         <div className="w-full aspect-video rounded-2xl border-1 lg:border-2 border-muted overflow-hidden">
           <ReactPlayerWrapper
             src={videoUrl}

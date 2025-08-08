@@ -11,7 +11,7 @@ export const SingleImageShowcase = ({ data, className = "" }: SingleImageShowcas
   const { image } = data;
   return (
     <Container>
-      <div className={`w-full my-4 ${className}`}>
+      <div className={`w-full max-w-[90%] mx-auto my-4 ${className}`}>
         <ShowcaseImage
           src={image.src}
           alt={image.alt}

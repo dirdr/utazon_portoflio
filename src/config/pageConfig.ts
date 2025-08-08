@@ -12,11 +12,6 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     showNavbarLogo: false,
     navbarMode: 'overlay',
   },
-  [ROUTES.SHOWREEL]: {
-    showFooter: false,
-    showNavbarLogo: false,
-    navbarMode: 'overlay',
-  },
   [ROUTES.ABOUT]: {
     showFooter: true,
     showNavbarLogo: true,

@@ -10,6 +10,8 @@ interface ReactPlayerWrapperProps {
   className?: string;
   style?: React.CSSProperties;
   pip?: boolean;
+  playing?: boolean;
+  volume?: number;
 }
 
 export const ReactPlayerWrapper = ({
@@ -21,11 +23,14 @@ export const ReactPlayerWrapper = ({
   className,
   style,
   pip = false,
+  playing: externalPlaying,
+  volume = 0.8,
 }: ReactPlayerWrapperProps) => {
-  const [playing, setPlaying] = useState(false);
+  const [internalPlaying, setInternalPlaying] = useState(false);
+  const playing = externalPlaying !== undefined ? externalPlaying : internalPlaying;
 
   const handleClickPreview = () => {
-    setPlaying(true);
+    setInternalPlaying(true);
   };
 
   return (
@@ -39,6 +44,7 @@ export const ReactPlayerWrapper = ({
       style={style}
       pip={pip}
       playing={playing}
+      volume={volume}
       onClickPreview={handleClickPreview}
     />
   );

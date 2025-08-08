@@ -1,13 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../common/Button";
 import { LineSweepText } from "../common/LineSweepText";
 import { ROUTES } from "../../constants/routes";
 import { useTranslation } from "react-i18next";
 import { useIsMobileHome } from "../../hooks/useIsMobileHome";
+import { FullscreenVideoModal } from "../common/FullscreenVideoModal";
 
 export const Home = () => {
   const { t } = useTranslation();
   const isMobile = useIsMobileHome();
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 
   useEffect(() => {
     document.documentElement.classList.add("hide-scrollbars");
@@ -56,15 +58,19 @@ export const Home = () => {
               {t("home.projects")}
             </Button>
             <Button
-              as="link"
+              as="button"
               glintOnHover={true}
-              href={ROUTES.SHOWREEL}
+              onClick={() => setIsVideoModalOpen(true)}
               className="text-base"
             >
               {t("nav.showreel")}
             </Button>
           </div>
         </div>
+        <FullscreenVideoModal
+          isOpen={isVideoModalOpen}
+          onClose={() => setIsVideoModalOpen(false)}
+        />
       </div>
     );
   }
@@ -109,9 +115,9 @@ export const Home = () => {
                 {t("home.projects")}
               </Button>
               <Button
-                as="link"
+                as="button"
                 glintOnHover={true}
-                href={ROUTES.SHOWREEL}
+                onClick={() => setIsVideoModalOpen(true)}
                 className="text-lg"
               >
                 {t("nav.showreel")}
@@ -120,6 +126,10 @@ export const Home = () => {
           </div>
         </section>
       </div>
+      <FullscreenVideoModal
+        isOpen={isVideoModalOpen}
+        onClose={() => setIsVideoModalOpen(false)}
+      />
     </div>
   );
 };

@@ -44,12 +44,6 @@ export const Footer = () => {
                 {t("nav.about")}
               </Link>
               <Link
-                href={ROUTES.SHOWREEL}
-                className="text-white hover:text-white transition-colors duration-200 mb-2"
-              >
-                {t("nav.showreel")}
-              </Link>
-              <Link
                 href={ROUTES.CONTACT}
                 className="text-white hover:text-white transition-colors duration-200"
               >
