@@ -11,4 +11,8 @@
 
   --font-neue: "NeueMontreal", sans-serif;
   --font-nord: "Nord", "Crimson Text", "Times New Roman", serif;
+
+  /* Define border colors explicitly for Tailwind CSS v4 */
+  --color-border: oklch(65.2% 0 0);
+  --color-border-muted: oklch(65.2% 0 0);
 }

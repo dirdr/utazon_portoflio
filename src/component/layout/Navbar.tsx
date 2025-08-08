@@ -104,7 +104,7 @@ export const Navbar = () => {
         id="mobile-menu"
         className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out ${
           isMenuOpen
-            ? "transform translate-y-0 opacity-100 mt-4 pb-4 border-t border-muted/20"
+            ? "transform translate-y-0 opacity-100 mt-4 pb-4 border-t border-gray-400/20"
             : "transform -translate-y-4 opacity-0 max-h-0"
         }`}
       >

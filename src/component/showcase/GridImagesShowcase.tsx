@@ -1,6 +1,8 @@
 import { Container } from "../layout/Container";
 import { ShowcaseImage } from "../common/ShowcaseImage";
 import { GridImagesShowcaseData } from "../../types/showcase";
+import { SHOWCASE_STYLES } from "../../constants/showcaseStyles";
+import { cn } from "../../utils/cn";
 
 interface GridImagesShowcaseProps {
   data: GridImagesShowcaseData;
@@ -9,21 +11,24 @@ interface GridImagesShowcaseProps {
 
 export const GridImagesShowcase = ({
   data,
-  className = "",
+  className,
 }: GridImagesShowcaseProps) => {
   const { images } = data;
+  
   return (
     <Container>
-      <div
-        className={`w-full max-w-[90%] mx-auto my-4 ${className}`}
-      >
+      <div className={cn(SHOWCASE_STYLES.container, className)}>
         <div className="grid grid-cols-2 gap-8">
           {images.map((image, index) => (
             <div key={index} className="w-full">
               <ShowcaseImage
                 src={image.src}
                 alt={image.alt}
-                className="w-full h-auto object-cover rounded-2xl border-1 lg:border-2 border-muted"
+                className={cn(
+                  "w-full h-auto object-cover",
+                  SHOWCASE_STYLES.borderRadius,
+                  SHOWCASE_STYLES.border
+                )}
               />
               {image.caption && (
                 <p className="text-sm text-gray-600 mt-2 text-center">
