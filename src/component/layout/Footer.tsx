@@ -90,14 +90,27 @@ export const Footer = () => {
 
           <div className="pt-8 border-t border-white/10">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <p className="text-white/60 text-xs">
-                © {currentYear} Antoine Vernez. {t("footer.allRightsReserved")}
-              </p>
+              <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
+                <p className="text-white text-xs">
+                  © {currentYear} Antoine Vernez. {t("footer.allRightsReserved")}
+                </p>
+                <p className="text-white text-xs">
+                  Made with ❤️ by{" "}
+                  <a
+                    href="https://github.com/dirdr"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white hover:text-white transition-colors duration-200"
+                  >
+                    Adrien Pelfresne
+                  </a>
+                </p>
+              </div>
 
               <div className="flex items-center gap-6">
                 <Link
                   href="/legal"
-                  className="text-white/60 hover:text-white/80 transition-colors duration-200 text-xs"
+                  className="text-white hover:text-white transition-colors duration-200 text-xs"
                 >
                   {t("footer.legalNotice")}
                 </Link>

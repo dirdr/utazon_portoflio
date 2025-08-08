@@ -57,7 +57,7 @@ export const Navbar = () => {
           <Button 
             glint={true} 
             as="button" 
-            className="text-base" 
+            className="text-sm" 
             onClick={openContactModal}
           >
             {t("nav.contact")}
@@ -125,7 +125,7 @@ export const Navbar = () => {
 
           <div className="flex justify-center pt-4">
             <Button
-              className="text-base"
+              className="text-sm"
               as="button"
               onClick={() => {
                 openContactModal();

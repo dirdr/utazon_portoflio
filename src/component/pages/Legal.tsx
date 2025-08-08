@@ -19,8 +19,8 @@ export const Legal = () => {
 
   return (
     <div className="min-h-screen">
-      <Container className="py-16 md:py-24">
-        <div className="mb-16 text-center">
+      <Container className="px-8 sm:px-12 md:px-16 lg:px-24 xl:px-32 2xl:px-40 py-16 sm:py-20 md:py-28 lg:py-36 xl:py-44">
+        <div className="mb-8 sm:mb-12 md:mb-16 text-center">
           <h1 className="font-nord text-4xl md:text-6xl font-bold text-white mb-6">
             {t("legal.title")}
           </h1>
@@ -29,36 +29,50 @@ export const Legal = () => {
           </p>
         </div>
 
-        <div className="space-y-12">
-          <section className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
+        <div className="space-y-8 sm:space-y-12 md:space-y-16 lg:space-y-20 xl:space-y-24">
+          <section className="bg-white/5 backdrop-blur-sm rounded-xl md:rounded-2xl p-6 sm:p-8 md:p-10 lg:p-12 xl:p-16 border border-white/10">
             <h2 className="font-nord text-2xl font-bold text-white mb-6">
               {t("legal.editor.title")}
             </h2>
-            <div className="space-y-3 font-neue text-white/80">
+            <div className="space-y-4 font-neue text-white/80">
               <p>
-                <strong className="text-white">{t("legal.editor.name")}</strong>
+                <strong className="text-white">Nom :</strong>{" "}
+                <span className="text-white/80">{t("legal.editor.name")}</span>
               </p>
-              <p>{t("legal.editor.status")}</p>
+              <p>
+                <strong className="text-white">Statut :</strong>{" "}
+                <span className="text-white/80">{t("legal.editor.status")}</span>
+              </p>
               <p>
                 <strong className="text-white">Email :</strong>{" "}
                 <a
                   href="mailto:utazoncontact@gmail.com"
-                  className="text-white hover:text-white/80 transition-colors"
+                  className="text-white/80 hover:text-white transition-colors"
                 >
                   {t("legal.editor.email")}
                 </a>
               </p>
-              <p>Téléphone : {t("legal.editor.phone")}</p>
-              <p className="text-white/60 text-sm italic">
-                {t("legal.editor.siret")}
+              <p>
+                <strong className="text-white">Téléphone :</strong>{" "}
+                <span className="text-white/80">{t("legal.editor.phone")}</span>
               </p>
-              <p>{t("legal.editor.activity")}</p>
-              <p>{t("legal.editor.nafCode")}</p>
+              <p>
+                <strong className="text-white">Code SIRET :</strong>{" "}
+                <span className="text-white/80">{t("legal.editor.siret")}</span>
+              </p>
+              <p>
+                <strong className="text-white">Activité :</strong>{" "}
+                <span className="text-white/80">{t("legal.editor.activity")}</span>
+              </p>
+              <p>
+                <strong className="text-white">Code NAF :</strong>{" "}
+                <span className="text-white/80">{t("legal.editor.nafCode")}</span>
+              </p>
             </div>
           </section>
 
-          <section className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
-            <h2 className="font-nord text-2xl font-bold text-white mb-6">
+          <section className="bg-white/5 backdrop-blur-sm rounded-xl md:rounded-2xl p-6 sm:p-8 md:p-10 lg:p-12 xl:p-16 border border-white/10">
+            <h2 className="font-nord text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6">
               {t("legal.hosting.title")}
             </h2>
             <div className="space-y-3 font-neue text-white/80">
@@ -120,7 +134,7 @@ export const Legal = () => {
           </section>
         </div>
 
-        <div className="mt-16 pt-8 border-t border-white/10">
+        <div className="mt-12 sm:mt-16 md:mt-20 lg:mt-24 xl:mt-32 pt-8 sm:pt-10 md:pt-12 lg:pt-16 xl:pt-20 border-t border-white/10">
           <p className="font-neue text-white/60 text-sm text-center">
             © {currentYear} Antoine Vernez - Tous droits réservés
           </p>
