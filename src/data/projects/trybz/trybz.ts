@@ -11,14 +11,19 @@ export const Trybz: Project = {
   role: "projects.trybz.role",
   showcases: [
     {
-      type: "image-grid",
+      type: "image-single",
       id: "image-1",
       order: 1,
+      image: {
+        src: "/images/projects/trybz/1.webp",
+        alt: "Trybz 1",
+      },
+    },
+    {
+      type: "image-grid",
+      id: "image-grid-1",
+      order: 2,
       images: [
-        {
-          src: "/images/projects/trybz/1.webp",
-          alt: "Trybz 1",
-        },
         {
           src: "/images/projects/trybz/2.webp",
           alt: "Trybz 2",
@@ -27,11 +32,16 @@ export const Trybz: Project = {
           src: "/images/projects/trybz/3.webp",
           alt: "Trybz 3",
         },
-        {
-          src: "/images/projects/trybz/4.webp",
-          alt: "Trybz 4",
-        },
       ],
+    },
+    {
+      type: "image-single",
+      id: "image-2",
+      order: 3,
+      image: {
+        src: "/images/projects/trybz/4.webp",
+        alt: "Trybz 4",
+      },
     },
   ],
 };

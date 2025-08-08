@@ -28,24 +28,5 @@ export const Fooh: Project = {
         light: "/images/projects/fooh/cover.webp",
       },
     },
-    {
-      type: "image-grid",
-      id: "image-1",
-      order: 3,
-      images: [
-        {
-          src: "/images/projects/fooh/1.webp",
-          alt: "Fooh 1",
-        },
-        {
-          src: "/images/projects/fooh/2.webp",
-          alt: "Fooh 2",
-        },
-        {
-          src: "/images/projects/fooh/3.webp",
-          alt: "Fooh 3",
-        },
-      ],
-    },
   ],
 };

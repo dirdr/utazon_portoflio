@@ -52,5 +52,14 @@ export const LimovaMovali: Project = {
         },
       ],
     },
+    {
+      type: "image-single",
+      id: "image-2",
+      order: 5,
+      image: {
+        src: "/images/projects/limova-movali/4.webp",
+        alt: "Limova Movali 4",
+      },
+    },
   ],
 };
