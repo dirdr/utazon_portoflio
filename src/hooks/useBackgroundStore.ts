@@ -41,14 +41,14 @@ export const useBackgroundStore = create<BackgroundStore>((set, get) => ({
           isTransitioning: true,
         });
 
-        // Complete transition after image loads
+        // Complete transition after CSS transition duration
         setTimeout(() => {
           set({
             currentBackground: image,
             nextBackground: null,
             isTransitioning: false,
           });
-        }, 300);
+        }, 500);
       } else {
         // First background - set immediately
         set({

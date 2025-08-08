@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useBackgroundStore } from "../../hooks/useBackgroundStore";
 import { useImageLoadState } from "../../hooks/useImageLoadState";
+import { useRouteBackground } from "../../hooks/useRouteBackground";
 
 export const ImageBackgroundDisplay: React.FC = () => {
-  const { currentBackground, nextBackground, isTransitioning } = useBackgroundStore();
+  const routeBackground = useRouteBackground();
+  const { currentBackground, nextBackground, isTransitioning, setBackgroundImage } = useBackgroundStore();
+
+  useEffect(() => {
+    setBackgroundImage(routeBackground, "ImageBackgroundDisplay");
+    return () => setBackgroundImage(null, "ImageBackgroundDisplay");
+  }, [routeBackground, setBackgroundImage]);
   
   // Use the bridge hook to leverage existing preload system
   const currentBgLoadState = useImageLoadState(currentBackground || "");
@@ -24,7 +31,7 @@ export const ImageBackgroundDisplay: React.FC = () => {
         <div
           className={`
             absolute inset-0 
-            transition-opacity duration-300 ease-in-out
+            transition-opacity duration-500 ease-in-out
             ${isTransitioning ? "opacity-0" : (isCurrentReady ? "opacity-100" : "opacity-0")}
           `}
           style={{
@@ -41,7 +48,7 @@ export const ImageBackgroundDisplay: React.FC = () => {
         <div
           className={`
             absolute inset-0 
-            transition-opacity duration-300 ease-in-out
+            transition-opacity duration-500 ease-in-out
             ${isTransitioning && isNextReady ? "opacity-100" : "opacity-0"}
           `}
           style={{
