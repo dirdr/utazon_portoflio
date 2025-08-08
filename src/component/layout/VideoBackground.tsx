@@ -9,6 +9,7 @@ import {
 import { useLocation } from "wouter";
 import { useAppLoading } from "../../contexts/AppLoadingContext";
 import { RadialGradient } from "../common/RadialGradient";
+import { FadeInContainer } from "../common/FadeInContainer";
 import { useIsMobileHome } from "../../hooks/useIsMobileHome";
 
 const VIDEO_TIMINGS = {

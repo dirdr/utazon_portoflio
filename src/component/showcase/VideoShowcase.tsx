@@ -21,7 +21,6 @@ export const VideoShowcase = ({ data, className = "" }: VideoShowcaseProps) => {
             width="100%"
             height="100%"
             controls
-            light={video.light}
           />
         </div>
       </div>
