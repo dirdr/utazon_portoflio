@@ -152,7 +152,23 @@
     "sending": "Envoi en cours...",
     "sendMessage": "Envoyer",
     "successTitle": "Message envoyé avec succès !",
-    "successDescription": "Merci de m'avoir contacté."
+    "successDescription": "Merci de m'avoir contacté.",
+    "validation": {
+      "firstNameRequired": "Le prénom est requis",
+      "lastNameRequired": "Le nom est requis",
+      "emailRequired": "L'email est requis",
+      "emailInvalid": "Veuillez saisir une adresse email valide",
+      "telephoneRequired": "Le téléphone est requis",
+      "telephoneInvalid": "Veuillez saisir un numéro de téléphone valide",
+      "messageRequired": "Le message est requis",
+      "sendingFailed": "Échec de l'envoi du message"
+    },
+    "closeModal": "Fermer la modale",
+    "social": {
+      "instagram": "Instagram",
+      "linkedin": "LinkedIn", 
+      "behance": "Behance"
+    }
   },
   "legal": {
     "title": "Mentions Légales",

@@ -40,27 +40,27 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
     const newErrors: FormErrors = {};
 
     if (!formData.firstName.trim()) {
-      newErrors.firstName = "First name is required";
+      newErrors.firstName = t("contact.validation.firstNameRequired");
     }
 
     if (!formData.lastName.trim()) {
-      newErrors.lastName = "Last name is required";
+      newErrors.lastName = t("contact.validation.lastNameRequired");
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
+      newErrors.email = t("contact.validation.emailRequired");
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Please enter a valid email address";
+      newErrors.email = t("contact.validation.emailInvalid");
     }
 
     if (!formData.telephone.trim()) {
-      newErrors.telephone = "Telephone is required";
+      newErrors.telephone = t("contact.validation.telephoneRequired");
     } else if (!/^[+]?[0-9\s\-()]{8,}$/.test(formData.telephone)) {
-      newErrors.telephone = "Please enter a valid telephone number";
+      newErrors.telephone = t("contact.validation.telephoneInvalid");
     }
 
     if (!formData.message.trim()) {
-      newErrors.message = "Message is required";
+      newErrors.message = t("contact.validation.messageRequired");
     }
 
     setErrors(newErrors);
@@ -104,13 +104,13 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
           onClose();
         }, 2000);
       } else {
-        throw new Error(result.message || "Failed to send request");
+        throw new Error(result.message || t("contact.validation.sendingFailed"));
       }
     } catch (error) {
       console.error("Error submitting form:", error);
       setErrors({
         general:
-          error instanceof Error ? error.message : "Failed to send message",
+          error instanceof Error ? error.message : t("contact.validation.sendingFailed"),
       });
     } finally {
       setIsSubmitting(false);
@@ -134,7 +134,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
 
   return (
     <div
-      className="p-8 min-h-full bg-cover bg-center bg-no-repeat relative rounded-2xl"
+      className="px-12 py-8 min-h-full bg-cover bg-center bg-no-repeat relative rounded-2xl"
       style={{
         backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/src/assets/images/card_backgrounds/3.webp')`,
       }}
@@ -143,7 +143,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
         <button
           onClick={handleClose}
           className="text-white hover:text-gray-200 transition-colors p-1"
-          aria-label="Close modal"
+          aria-label={t("contact.closeModal", "Close modal")}
           disabled={isSubmitting}
         >
           <svg
@@ -162,8 +162,8 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
         </button>
       </div>
 
-      <div className="mb-6">
-        <p className="text-lg text-white text-center font-nord">
+      <div className="mb-18">
+        <p className="text-xl text-white text-center font-nord">
           {t(
             "contact.description",
             "Share your vision, I'll help you bring it to life",
@@ -172,7 +172,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
       </div>
 
       {isSubmitted && (
-        <div className="mb-6 p-4 bg-green-500/10 border border-green-500/20 rounded-lg text-center">
+        <div className="mb-18 p-4 bg-green-500/10 border border-green-500/20 rounded-lg text-center">
           <div className="text-green-400 mb-2">
             <svg
               className="w-8 h-8 mx-auto"
@@ -188,28 +188,28 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
               />
             </svg>
           </div>
-          <p className="text-green-300 font-medium">
+          <p className="text-green-300 font-nord font-medium">
             {t("contact.successTitle", "Message sent successfully!")}
           </p>
-          <p className="text-green-400 text-sm mt-1">
+          <p className="text-green-400 text-sm mt-1 font-nord font-thin">
             {t("contact.successDescription", "Thank you for reaching out.")}
           </p>
         </div>
       )}
 
       {errors.general && (
-        <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-center">
-          <p className="text-red-400 text-sm">{errors.general}</p>
+        <div className="mb-18 p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-center">
+          <p className="text-red-400 text-sm font-nord font-thin">{errors.general}</p>
         </div>
       )}
 
       {!isSubmitted && (
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-14 mb-18">
             <div>
               <label
                 htmlFor="firstName"
-                className="block text-sm font-medium text-white mb-2 font-nord"
+                className="block text-sm font-thin text-white mb-2 font-nord"
               >
                 {t("contact.firstName", "First Name")}
               </label>
@@ -220,11 +220,11 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                 value={formData.firstName}
                 onChange={handleInputChange}
                 className={cn(
-                  "w-full px-4 py-3 border rounded-xl text-white placeholder-gray-300 font-nord",
-                  "focus:ring-2 focus:ring-primary focus:border-primary transition-colors",
+                  "w-full px-4 py-3 border rounded-lg text-white placeholder-gray-300 font-nord font-thin text-sm",
+                  "focus:outline-none focus:ring-1 focus:ring-white focus:border-white transition-colors",
                   errors.firstName ? "border-red-500" : "border-gray-500",
                 )}
-                style={{ backgroundColor: "#262626", borderColor: "#565656" }}
+                style={{ backgroundColor: "#262626", borderColor: "#565656", fontFamily: 'Nord, "Crimson Text", "Times New Roman", serif' }}
                 disabled={isSubmitting}
               />
               {errors.firstName && (
@@ -235,7 +235,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
             <div>
               <label
                 htmlFor="lastName"
-                className="block text-sm font-medium text-white mb-2 font-nord"
+                className="block text-sm font-thin text-white mb-2 font-nord"
               >
                 {t("contact.lastName", "Last Name")}
               </label>
@@ -246,11 +246,11 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                 value={formData.lastName}
                 onChange={handleInputChange}
                 className={cn(
-                  "w-full px-3 py-2 border rounded-md text-white placeholder-gray-300 font-nord",
-                  "focus:ring-2 focus:ring-primary focus:border-primary transition-colors",
+                  "w-full px-4 py-3 border rounded-lg text-white placeholder-gray-300 font-nord font-thin text-sm",
+                  "focus:outline-none focus:ring-1 focus:ring-white focus:border-white transition-colors",
                   errors.lastName ? "border-red-500" : "border-gray-500",
                 )}
-                style={{ backgroundColor: "#262626", borderColor: "#565656" }}
+                style={{ backgroundColor: "#262626", borderColor: "#565656", fontFamily: 'Nord, "Crimson Text", "Times New Roman", serif' }}
                 disabled={isSubmitting}
               />
               {errors.lastName && (
@@ -259,11 +259,11 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-14 mb-18">
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-white mb-2 font-nord"
+                className="block text-sm font-thin text-white mb-2 font-nord"
               >
                 {t("contact.email", "Email")}
               </label>
@@ -274,11 +274,11 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                 value={formData.email}
                 onChange={handleInputChange}
                 className={cn(
-                  "w-full px-3 py-2 border rounded-md text-white placeholder-gray-300 font-nord",
-                  "focus:ring-2 focus:ring-primary focus:border-primary transition-colors",
+                  "w-full px-4 py-3 border rounded-lg text-white placeholder-gray-300 font-nord font-thin text-sm",
+                  "focus:outline-none focus:ring-1 focus:ring-white focus:border-white transition-colors",
                   errors.email ? "border-red-500" : "border-gray-500",
                 )}
-                style={{ backgroundColor: "#262626", borderColor: "#565656" }}
+                style={{ backgroundColor: "#262626", borderColor: "#565656", fontFamily: 'Nord, "Crimson Text", "Times New Roman", serif' }}
                 disabled={isSubmitting}
               />
               {errors.email && (
@@ -289,7 +289,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
             <div>
               <label
                 htmlFor="telephone"
-                className="block text-sm font-medium text-white mb-2 font-nord"
+                className="block text-sm font-thin text-white mb-2 font-nord"
               >
                 {t("contact.telephone", "Telephone")}
               </label>
@@ -300,11 +300,11 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                 value={formData.telephone}
                 onChange={handleInputChange}
                 className={cn(
-                  "w-full px-3 py-2 border rounded-md text-white placeholder-gray-300 font-nord",
-                  "focus:ring-2 focus:ring-primary focus:border-primary transition-colors",
+                  "w-full px-4 py-3 border rounded-lg text-white placeholder-gray-300 font-nord font-thin text-sm",
+                  "focus:outline-none focus:ring-1 focus:ring-white focus:border-white transition-colors",
                   errors.telephone ? "border-red-500" : "border-gray-500",
                 )}
-                style={{ backgroundColor: "#262626", borderColor: "#565656" }}
+                style={{ backgroundColor: "#262626", borderColor: "#565656", fontFamily: 'Nord, "Crimson Text", "Times New Roman", serif' }}
                 disabled={isSubmitting}
               />
               {errors.telephone && (
@@ -316,7 +316,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
           <div>
             <label
               htmlFor="message"
-              className="block text-sm font-medium text-white mb-2 font-nord"
+              className="block text-sm font-thin text-white mb-2 font-nord"
             >
               {t("contact.message", "Message")}
             </label>
@@ -327,8 +327,8 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
               onChange={handleInputChange}
               rows={4}
               className={cn(
-                "w-full px-4 py-3 border rounded-xl text-white placeholder-gray-300 resize-none font-nord",
-                "focus:ring-2 focus:ring-primary focus:border-primary transition-colors",
+                "w-full px-4 py-3 border rounded-lg text-white placeholder-gray-300 resize-none font-nord font-thin text-sm",
+                "focus:outline-none focus:ring-1 focus:ring-white focus:border-white transition-colors",
                 errors.message ? "border-red-500" : "border-gray-500",
               )}
               style={{
@@ -343,36 +343,39 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
             )}
           </div>
 
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4">
-            <div className="flex items-center gap-4 order-2 sm:order-1">
-              <a
-                href="https://behance.net/utazon"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white hover:text-gray-300 transition-colors"
-                aria-label="Behance"
-              >
-                <BehanceIcon />
-              </a>
-
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-18">
+            <div className="flex items-center gap-6 order-2 sm:order-1">
               <a
                 href="https://instagram.com/utazon"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white hover:text-gray-300 transition-colors"
-                aria-label="Instagram"
+                className="flex items-center gap-2 text-white hover:text-gray-300 transition-colors"
+                aria-label={t("contact.social.instagram", "Instagram")}
               >
                 <InstagramIcon />
+                <span className="text-sm font-nord font-thin">Instagram</span>
               </a>
 
               <a
                 href="https://www.linkedin.com/in/antoine-vernez-b542b8290/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white hover:text-gray-300 transition-colors"
-                aria-label="LinkedIn"
+                className="flex items-center gap-2 text-white hover:text-gray-300 transition-colors"
+                aria-label={t("contact.social.linkedin", "LinkedIn")}
               >
                 <LinkedInIcon />
+                <span className="text-sm font-nord font-thin">LinkedIn</span>
+              </a>
+
+              <a
+                href="https://behance.net/utazon"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-white hover:text-gray-300 transition-colors"
+                aria-label={t("contact.social.behance", "Behance")}
+              >
+                <BehanceIcon />
+                <span className="text-sm font-nord font-thin">Behance</span>
               </a>
             </div>
 

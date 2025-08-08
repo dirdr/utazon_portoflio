@@ -152,7 +152,23 @@
     "sending": "Sending...",
     "sendMessage": "Send",
     "successTitle": "Message sent successfully!",
-    "successDescription": "Thank you for reaching out."
+    "successDescription": "Thank you for reaching out.",
+    "validation": {
+      "firstNameRequired": "First name is required",
+      "lastNameRequired": "Last name is required",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email address",
+      "telephoneRequired": "Telephone is required",
+      "telephoneInvalid": "Please enter a valid telephone number",
+      "messageRequired": "Message is required",
+      "sendingFailed": "Failed to send message"
+    },
+    "closeModal": "Close modal",
+    "social": {
+      "instagram": "Instagram",
+      "linkedin": "LinkedIn",
+      "behance": "Behance"
+    }
   },
   "legal": {
     "title": "Legal Notice",
