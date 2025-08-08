@@ -9,6 +9,7 @@ export const SpidermanTimefreeze: Project = {
   description: "projects.spiderman-timefreeze.description",
   client: "projects.spiderman-timefreeze.client",
   role: "projects.spiderman-timefreeze.role",
+  hasVideo: true,
   images: [],
   showcases: [
     {

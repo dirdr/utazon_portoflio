@@ -9,6 +9,7 @@ export const PixelBreak: Project = {
   description: "projects.pixel-break.description",
   client: "projects.pixel-break.client",
   role: "projects.pixel-break.role",
+  hasVideo: true,
   images: [],
   showcases: [
     {

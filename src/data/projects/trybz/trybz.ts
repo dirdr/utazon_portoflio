@@ -9,6 +9,7 @@ export const Trybz: Project = {
   description: "projects.trybz.description",
   client: "projects.trybz.client",
   role: "projects.trybz.role",
+  hasVideo: false,
   showcases: [
     {
       type: "image-single",

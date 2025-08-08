@@ -40,14 +40,22 @@
   .page-transition {
     transform: translate3d(0, 0, 0);
     contain: layout style paint;
-    will-change: transform, opacity;
     backface-visibility: hidden;
+  }
+  
+  /* Only apply will-change during transitions/animations to reduce memory usage */
+  .page-transition.animating {
+    will-change: transform, opacity;
   }
 
   .gpu-accelerated {
     transform: translate3d(0, 0, 0);
-    will-change: transform;
     backface-visibility: hidden;
+  }
+  
+  /* Only apply will-change when element is being animated */
+  .gpu-accelerated.animating {
+    will-change: transform;
   }
 
   .smooth-animation {

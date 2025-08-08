@@ -20,7 +20,7 @@ export const Home = () => {
 
   if (isMobile) {
     return (
-      <div className="h-full w-full flex flex-col justify-end px-12 pb-8">
+      <div className="h-full w-full flex flex-col justify-end px-4 lg:px-12 pb-8">
         <div className="flex flex-col ">
           <address className="not-italic">
             <p className="text-lg text-muted pb-2">Paris, France</p>
@@ -76,7 +76,7 @@ export const Home = () => {
   }
 
   return (
-    <div className="h-full w-full flex flex-col justify-end px-12 pb-16">
+    <div className="h-full w-full flex flex-col justify-end px-4 lg:px-12 pb-16">
       <div className="flex justify-between items-end">
         <section className="w-165" aria-labelledby="location-heading">
           <address className="not-italic">

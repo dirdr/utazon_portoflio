@@ -9,6 +9,7 @@ export const LimovaMovali: Project = {
   description: "projects.limova-movali.description",
   client: "projects.limova-movali.client",
   role: "projects.limova-movali.role",
+  hasVideo: true,
   showcases: [
     {
       type: "video",

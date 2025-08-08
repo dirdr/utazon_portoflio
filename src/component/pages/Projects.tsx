@@ -33,10 +33,14 @@ export const Projects = () => {
               header: t(project.header),
               date: t(project.date),
             }}
-            thumbnail={{
-              src: `/videos/projects/${project.id}/thumbnail.webm`,
-              alt: t(project.title),
-            }}
+            thumbnail={
+              project.hasVideo !== false
+                ? {
+                    src: `/videos/projects/${project.id}/thumbnail.webm`,
+                    alt: t(project.title),
+                  }
+                : undefined
+            }
             priority={index < 4}
           />
         ))}

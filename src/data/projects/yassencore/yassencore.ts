@@ -9,6 +9,7 @@ export const Yassencore: Project = {
   description: "projects.yassencore.description",
   client: "projects.yassencore.client",
   role: "projects.yassencore.role",
+  hasVideo: true,
   images: [],
   showcases: [
     {

@@ -9,6 +9,7 @@ export const MrHelp: Project = {
   description: "projects.mr-help.description",
   client: "projects.mr-help.client",
   role: "projects.mr-help.role",
+  hasVideo: true,
   showcases: [
     {
       type: "video",

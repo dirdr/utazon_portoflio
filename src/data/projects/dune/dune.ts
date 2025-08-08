@@ -9,6 +9,7 @@ export const Dune: Project = {
   description: "projects.dune.description",
   client: "projects.dune.client",
   role: "projects.dune.role",
+  hasVideo: true,
   images: [],
   showcases: [
     {

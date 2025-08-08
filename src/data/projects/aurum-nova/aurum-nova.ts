@@ -9,6 +9,7 @@ export const AurumNova: Project = {
   description: "projects.aurum-nova.description",
   client: "projects.aurum-nova.client",
   role: "projects.aurum-nova.role",
+  hasVideo: true,
   images: [],
   showcases: [
     {

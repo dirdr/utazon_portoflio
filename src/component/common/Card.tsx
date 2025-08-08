@@ -23,7 +23,7 @@ export interface CardProps {
     src: string;
     alt: string;
   };
-  thumbnail: {
+  thumbnail?: {
     src: string;
     alt: string;
   };
@@ -63,7 +63,7 @@ export const Card = ({
 
   const handleMouseEnter = () => {
     setIsHovered(true);
-    if (videoReady && videoRef.current) {
+    if (thumbnail && videoReady && videoRef.current) {
       videoRef.current.currentTime = 0;
       videoRef.current.play().catch(() => {});
     }
@@ -71,7 +71,7 @@ export const Card = ({
 
   const handleMouseLeave = () => {
     setIsHovered(false);
-    if (videoReady && videoRef.current) {
+    if (thumbnail && videoReady && videoRef.current) {
       videoRef.current.pause();
       videoRef.current.currentTime = 0;
     }
@@ -131,13 +131,13 @@ export const Card = ({
             alt={image.alt}
             className={cn(
               "h-full w-full object-cover transition-all duration-300",
-              videoReady && "group-hover:opacity-0",
+              thumbnail && videoReady && "group-hover:opacity-0",
             )}
             style={{ clipPath: `url(#rounded-diagonal-cut-${project.id})` }}
             loading={priority ? "eager" : "lazy"}
           />
 
-          {!videoError && (
+          {thumbnail && !videoError && (
             <video
               ref={videoRef}
               className={cn(

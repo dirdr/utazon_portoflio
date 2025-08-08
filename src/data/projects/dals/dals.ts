@@ -9,6 +9,7 @@ export const Dals: Project = {
   description: "projects.dals.description",
   client: "projects.dals.client",
   role: "projects.dals.role",
+  hasVideo: true,
   showcases: [
     {
       type: "video",

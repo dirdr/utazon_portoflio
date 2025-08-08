@@ -9,6 +9,7 @@ export const Lyner: Project = {
   description: "projects.lyner.description",
   client: "projects.lyner.client",
   role: "projects.lyner.role",
+  hasVideo: true,
   images: [],
   showcases: [
     {

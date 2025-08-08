@@ -9,6 +9,7 @@ export const ParisMusic2024: Project = {
   description: "projects.paris-music-2024.description",
   client: "projects.paris-music-2024.client",
   role: "projects.paris-music-2024.role",
+  hasVideo: true,
   images: [],
   showcases: [
     {

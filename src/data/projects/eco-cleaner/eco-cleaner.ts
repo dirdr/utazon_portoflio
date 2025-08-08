@@ -9,6 +9,7 @@ export const EcoCleaner: Project = {
   description: "projects.eco-cleaner.description",
   client: "projects.eco-cleaner.client",
   role: "projects.eco-cleaner.role",
+  hasVideo: true,
   images: [],
   showcases: [
     {

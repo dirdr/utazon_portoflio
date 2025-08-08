@@ -9,6 +9,7 @@ export const KarminCorpLecReveal: Project = {
   description: "projects.karmin-corp-lec-reveal.description",
   client: "projects.karmin-corp-lec-reveal.client",
   role: "projects.karmin-corp-lec-reveal.role",
+  hasVideo: true,
   images: [],
   showcases: [
     {

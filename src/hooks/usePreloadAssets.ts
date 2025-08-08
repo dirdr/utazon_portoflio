@@ -87,12 +87,15 @@ export const usePreloadAssets = () => {
         type: "image",
       });
 
-      assets.push({
-        url: `/videos/projects/${project.id}/thumbnail.webm`,
-        loaded: false,
-        error: false,
-        type: "video",
-      });
+      // Only preload thumbnail video if project has one
+      if (project.hasVideo !== false) { // Default to true for backward compatibility
+        assets.push({
+          url: `/videos/projects/${project.id}/thumbnail.webm`,
+          loaded: false,
+          error: false,
+          type: "video",
+        });
+      }
     });
 
     return assets;
@@ -140,26 +143,28 @@ export const usePreloadAssets = () => {
   const preloadVideo = useCallback((url: string): Promise<void> => {
     return new Promise((resolve) => {
       // First check if video exists with a HEAD request to avoid content-type issues
-      fetch(url, { method: "HEAD" })
+      fetch(url, { 
+        method: "HEAD",
+        mode: 'cors',
+        cache: 'no-cache'
+      })
         .then((response) => {
-          if (!response.ok) {
-            console.warn(`Video not found: ${url} (${response.status})`);
-            resolve(); // Don't block the app for missing videos
+          if (!response.ok || !response.headers.get('content-type')?.includes('video')) {
+            resolve(); // Silently skip missing or invalid videos
             return;
           }
 
           const video = document.createElement("video");
           let resolved = false;
 
-          // Fallback timeout for Safari (5 seconds)
+          // Fallback timeout for Safari (3 seconds - reduced for better UX)
           const timeoutId = setTimeout(() => {
             if (!resolved) {
-              console.warn(`Video preload timeout for: ${url}`);
               resolved = true;
               cleanup();
               resolve(); // Resolve instead of reject to not block the app
             }
-          }, 5000);
+          }, 3000);
 
           const handleSuccess = () => {
             if (!resolved) {
@@ -169,12 +174,11 @@ export const usePreloadAssets = () => {
             }
           };
 
-          const handleError = (error: Event) => {
+          const handleError = () => {
             if (!resolved) {
               resolved = true;
               cleanup();
-              console.warn(`Video preload failed: ${url}`, error);
-              resolve(); // Don't block the app
+              resolve(); // Don't block the app or log errors for missing videos
             }
           };
 
@@ -182,6 +186,7 @@ export const usePreloadAssets = () => {
             video.removeEventListener("loadedmetadata", handleSuccess);
             video.removeEventListener("canplay", handleSuccess);
             video.removeEventListener("error", handleError);
+            video.src = "";
             clearTimeout(timeoutId);
           };
 
@@ -194,9 +199,8 @@ export const usePreloadAssets = () => {
           video.muted = true; // Safari requires muted for autoplay
           video.src = url;
         })
-        .catch((error) => {
-          console.warn(`Failed to check video existence: ${url}`, error);
-          resolve(); // Don't block the app for network errors
+        .catch(() => {
+          resolve(); // Silently skip network errors
         });
     });
   }, []);
@@ -249,7 +253,6 @@ export const usePreloadAssets = () => {
   // Add resource hints to document head for critical assets
   const addResourceHints = useCallback(() => {
     const criticalAssets = [
-      { url: `/videos/intro.mp4`, as: "video", type: "video/mp4" },
       { url: backgroundImage, as: "image", type: "image/webp" },
     ];
 
@@ -262,11 +265,6 @@ export const usePreloadAssets = () => {
       link.href = url;
       link.as = as;
       link.type = type;
-
-      // Add crossorigin for video files to prevent CORS issues
-      if (as === "video") {
-        link.crossOrigin = "anonymous";
-      }
 
       document.head.appendChild(link);
     });

@@ -9,6 +9,7 @@ export const FamilyTechDrive: Project = {
   description: "projects.family-tech-drive.description",
   client: "projects.family-tech-drive.client",
   role: "projects.family-tech-drive.role",
+  hasVideo: true,
   images: [],
   showcases: [
     {

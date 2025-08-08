@@ -9,6 +9,7 @@ export const Fooh: Project = {
   description: "projects.fooh.description",
   client: "projects.fooh.client",
   role: "projects.fooh.role",
+  hasVideo: true,
   showcases: [
     {
       type: "video",
