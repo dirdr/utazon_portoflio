@@ -4,7 +4,6 @@ import { Button } from "./Button";
 import { useMemo, useRef, useState } from "react";
 import { LineSweepText } from "./LineSweepText";
 import { useLocation } from "wouter";
-import { useIsMobile } from "../../hooks/useIsMobile";
 
 const getCardBackgrounds = () => {
   const backgrounds = [];
@@ -49,7 +48,6 @@ export const Card = ({
 }: CardProps) => {
   const { t } = useTranslation();
   const [, setLocation] = useLocation();
-  const { isMobile } = useIsMobile();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoReady, setVideoReady] = useState(false);
   const [videoError, setVideoError] = useState(false);
@@ -79,10 +77,13 @@ export const Card = ({
     }
   };
 
-  const handleMobileClick = () => {
-    if (isMobile) {
-      setLocation(`/projects/${project.id}`);
-    }
+  const handleClick = () => {
+    setLocation(`/projects/${project.id}`);
+  };
+
+  const handleButtonClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setLocation(`/projects/${project.id}`);
   };
 
   return (
@@ -94,7 +95,7 @@ export const Card = ({
       style={{ "--glint-card-speed": glintSpeed } as React.CSSProperties}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      onClick={handleMobileClick}
+      onClick={handleClick}
     >
       <div
         className="glint-card-content p-2 sm:p-3 md:p-6"
@@ -197,12 +198,13 @@ export const Card = ({
               proximityIntensity
               maxDistance={200}
               className="text-base"
-              as="link"
-              href={`/projects/${project.id}`}
+              as="button"
+              onClick={handleButtonClick}
             >
               {t("common.seeProject")}
             </Button>
           </div>
+
         </div>
       </div>
     </div>
