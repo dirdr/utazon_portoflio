@@ -18,12 +18,6 @@ export const useBackgroundStore = create<BackgroundStore>((set, get) => ({
   setBackgroundImage: (image: string | null, componentId = "anonymous") => {
     const state = get();
 
-    console.log("🎨 Background change:", {
-      from: state.currentBackground,
-      to: image,
-      componentId,
-    });
-
     if (image !== null) {
       // Component is setting a background - add to active users
       activeBackgroundUsers.add(componentId);
@@ -33,17 +27,14 @@ export const useBackgroundStore = create<BackgroundStore>((set, get) => ({
       if (existingTimeout) {
         clearTimeout(existingTimeout);
         clearTimeouts.delete(componentId);
-        console.log("⏹️ Cancelled pending clear for", componentId);
       }
 
       if (image === state.currentBackground) {
-        console.log("🔄 Same background, updating users");
         return;
       }
 
       // Setting new background - use dual background technique
       if (state.currentBackground !== null) {
-        console.log("🔄 Transitioning backgrounds");
         // Transition from current to new
         set({
           nextBackground: image,
@@ -52,7 +43,6 @@ export const useBackgroundStore = create<BackgroundStore>((set, get) => ({
 
         // Complete transition after image loads
         setTimeout(() => {
-          console.log("✅ Transition complete");
           set({
             currentBackground: image,
             nextBackground: null,
@@ -60,7 +50,6 @@ export const useBackgroundStore = create<BackgroundStore>((set, get) => ({
           });
         }, 300);
       } else {
-        console.log("🆕 Setting first background");
         // First background - set immediately
         set({
           currentBackground: image,
@@ -71,39 +60,22 @@ export const useBackgroundStore = create<BackgroundStore>((set, get) => ({
     } else {
       // Component is clearing background - remove from active users
       activeBackgroundUsers.delete(componentId);
-      console.log(
-        "🗑️ Component clearing background:",
-        componentId,
-        "Active users:",
-        activeBackgroundUsers.size,
-      );
 
       // Only clear if no other components are using backgrounds
       if (activeBackgroundUsers.size === 0) {
-        console.log("🗑️ Clearing background (delayed) - no active users");
         const timeoutId = setTimeout(() => {
           // Double-check no new users were added
           if (activeBackgroundUsers.size === 0) {
-            console.log("🗑️ Actually clearing background");
             set({
               currentBackground: null,
               nextBackground: null,
               isTransitioning: false,
             });
-          } else {
-            console.log(
-              "🚫 Not clearing - new users active:",
-              activeBackgroundUsers.size,
-            );
           }
           clearTimeouts.delete(componentId);
         }, 100);
 
         clearTimeouts.set(componentId, timeoutId);
-      } else {
-        console.log(
-          "🚫 Not clearing - other components still using background",
-        );
       }
     }
   },

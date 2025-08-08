@@ -55,14 +55,13 @@ export const VideoBackground = forwardRef<
     const video = videoRef.current;
     if (!video || !isHomePage || !isMobile) return;
 
-    console.log("📱 Mobile detected - starting video immediately, muted");
 
     video.currentTime = VIDEO_TIMINGS.FRESH_LOAD_START;
     video.muted = true;
 
     requestAnimationFrame(() => {
-      video.play().catch((error) => {
-        console.error("Mobile video autoplay failed:", error);
+      video.play().catch(() => {
+        // Mobile video autoplay failed - expected behavior
       });
     });
   }, [isHomePage, isMobile]);
@@ -78,14 +77,13 @@ export const VideoBackground = forwardRef<
     )
       return;
 
-    console.log("🎬 SPA navigation - jumping to 8s and playing");
 
     video.pause();
     video.currentTime = VIDEO_TIMINGS.SPA_NAV_START;
 
     requestAnimationFrame(() => {
-      video.play().catch((error) => {
-        console.error("Video autoplay failed (expected):", error);
+      video.play().catch(() => {
+        // Video autoplay failed - expected behavior
       });
     });
   }, [
@@ -100,7 +98,6 @@ export const VideoBackground = forwardRef<
     if (!video || !isHomePage || !videoBehavior.shouldPlayFromStart || isMobile)
       return;
 
-    console.log("🎬 Fresh load - setting video to start position, paused");
     video.pause();
     requestAnimationFrame(() => {
       video.currentTime = VIDEO_TIMINGS.FRESH_LOAD_START;
@@ -111,12 +108,11 @@ export const VideoBackground = forwardRef<
     const video = videoRef.current;
     if (!video) return;
 
-    console.log("🎬 Starting video immediately from dive-in button click");
 
     video.currentTime = VIDEO_TIMINGS.FRESH_LOAD_START;
 
-    video.play().catch((error) => {
-      console.error("Video play failed:", error);
+    video.play().catch(() => {
+      // Video play failed
     });
   }, []);
 
@@ -128,9 +124,7 @@ export const VideoBackground = forwardRef<
     [startVideo],
   );
 
-  const handleVideoPlay = () => {
-    console.log("🎬 Video started playing");
-  };
+  const handleVideoPlay = () => {};
 
   if (!isHomePage) {
     return null;
@@ -148,7 +142,7 @@ export const VideoBackground = forwardRef<
         preload="metadata"
         src={videoSource}
         onPlay={handleVideoPlay}
-        onLoadedData={() => console.log("🎬 Video data loaded and ready")}
+        onLoadedData={() => {}}
       />
       {showContent && (
         <RadialGradient

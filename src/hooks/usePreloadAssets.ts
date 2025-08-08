@@ -239,7 +239,7 @@ export const usePreloadAssets = () => {
           await preloadVideo(asset.url);
         }
         updateAssetState(asset.url, true, false);
-        console.log("Preloaded Assets");
+        // Asset preloaded successfully
       } catch (error) {
         console.warn(`Failed to preload asset: ${asset.url}`, error);
         updateAssetState(asset.url, false, true);

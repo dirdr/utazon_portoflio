@@ -36,28 +36,10 @@ export const useAppInitialization = () => {
   const shouldJumpTo8s = (!isFreshLoad || isDiveInActive) && isHomePage;
   const isDiveInFlow = isFreshLoad && isDiveInActive && isHomePage;
 
-  console.log("🚀 useAppInitialization:", {
-    location,
-    isHomePage,
-    globalIsFirstLoad,
-    isFreshLoad,
-    isDiveInActive,
-    showLoader,
-    showDiveInButton,
-    preloadComplete: preloadState.isComplete,
-    isFullyLoaded,
-    shouldPreload,
-    shouldPlayFromStart,
-    shouldJumpTo8s,
-    isDiveInFlow,
-    startTime,
-    elapsedSinceStart: Date.now() - startTime
-  });
 
   // Handle showDiveInButton in useEffect, not useState - this ensures proper timing
   useEffect(() => {
     if (isFreshLoad && isHomePage && isFullyLoaded) {
-      console.log("🚀 Setting showDiveInButton to true - fully loaded");
       setShowDiveInButton(true);
     }
   }, [isFreshLoad, isHomePage, isFullyLoaded]);
@@ -65,7 +47,6 @@ export const useAppInitialization = () => {
   // Handle SPA navigation - immediate show for non-fresh loads
   useEffect(() => {
     if (!isFreshLoad) {
-      console.log("🚀 SPA navigation detected - showing content immediately");
       setShowDiveInButton(false);
       setShowLoader(false);
       setIsInitialized(true);
@@ -75,10 +56,8 @@ export const useAppInitialization = () => {
   // Handle dive-in workflow - reset global state only after video workflow completes
   useEffect(() => {
     if (isDiveInFlow) {
-      console.log("🚀 Dive-in workflow active - maintaining fresh load state");
       // Set a timer to reset the global state after the dive-in workflow completes
       const timer = setTimeout(() => {
-        console.log("🚀 Dive-in workflow complete - resetting global state");
         globalIsFirstLoad = false;
         isDiveInActive = false;
       }, 5000); // Give enough time for the video workflow to complete
@@ -91,7 +70,6 @@ export const useAppInitialization = () => {
   // But only for SPA navigation, not fresh loads to non-home pages
   useEffect(() => {
     if (!isHomePage && !isFreshLoad && (globalIsFirstLoad || isDiveInActive)) {
-      console.log("🚀 User navigated away from home via SPA - resetting global state");
       globalIsFirstLoad = false;
       isDiveInActive = false;
     }
@@ -103,24 +81,15 @@ export const useAppInitialization = () => {
       const elapsedTime = Date.now() - startTime;
       const remainingTime = Math.max(0, MIN_LOADING_TIME - elapsedTime);
 
-      console.log("🚀 Fully loaded - setting timers:", {
-        elapsedTime,
-        remainingTime,
-        minLoadingTime: MIN_LOADING_TIME
-      });
-
       setTimeout(() => {
-        console.log("🚀 Setting isInitialized to true");
         setIsInitialized(true);
 
         setTimeout(() => {
-          console.log("🚀 Setting showLoader to false");
           setShowLoader(false);
           
           // Reset global state for non-home pages after loading completes
           // For home page, preserve fresh load state for dive-in functionality
           if (!isHomePage && isFreshLoad) {
-            console.log("🚀 Resetting global state after non-home fresh load completion");
             globalIsFirstLoad = false;
             isDiveInActive = false;
           }
@@ -130,7 +99,6 @@ export const useAppInitialization = () => {
   }, [shouldPreload, isFullyLoaded, startTime, isHomePage, isFreshLoad]);
 
   const hideDiveInButton = () => {
-    console.log("🚀 hideDiveInButton called - activating dive-in workflow");
     setShowDiveInButton(false);
     // Mark dive-in as active but maintain fresh load state for proper video workflow
     isDiveInActive = true;

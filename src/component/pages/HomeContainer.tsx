@@ -33,15 +33,12 @@ export const HomeContainer = () => {
 
     if (isMobile) {
       // Mobile: show content immediately with no sequencing
-      console.log('📱 Mobile detected - showing content immediately');
       setShowContent(true);
     } else if (!isFreshLoad) {
       // Desktop SPA navigation: show content immediately
-      console.log('🏠 Desktop SPA navigation - showing content immediately');
       setShowContent(true);
     } else {
       // Desktop fresh load: wait for video workflow
-      console.log('🏠 Desktop fresh load - waiting for dive-in workflow');
       setShowContent(false);
     }
   }, [isHomePage, isFreshLoad, isMobile]);
@@ -50,10 +47,8 @@ export const HomeContainer = () => {
   useEffect(() => {
     if (!videoBehavior.isDiveInFlow || isMobile) return;
 
-    console.log('🏠 Desktop dive-in workflow active - setting up content timer');
     // Set up content show timer for dive-in workflow
     const timer = setTimeout(() => {
-      console.log('🏠 Desktop dive-in workflow - showing content after video delay');
       setShowContent(true);
     }, 3000); // 3s delay for dive-in workflow
 
@@ -61,8 +56,6 @@ export const HomeContainer = () => {
   }, [videoBehavior.isDiveInFlow, isMobile]);
 
   const handleDiveIn = useCallback(() => {
-    console.log("🎬 Dive in button clicked - starting video immediately");
-    
     // Start video IMMEDIATELY on button click for instant response
     videoRef.current?.startVideo();
     
@@ -70,18 +63,6 @@ export const HomeContainer = () => {
     hideDiveInButton();
   }, [hideDiveInButton]);
 
-  console.log('🏠 HomeContainer render:', {
-    isHomePage,
-    isMobile,
-    isFreshLoad,
-    showDiveInButton,
-    showContent,
-    videoBehavior: {
-      shouldPlayFromStart: videoBehavior.shouldPlayFromStart,
-      shouldJumpTo8s: videoBehavior.shouldJumpTo8s,
-      isDiveInFlow: videoBehavior.isDiveInFlow
-    }
-  });
 
   if (!isHomePage) {
     return null;

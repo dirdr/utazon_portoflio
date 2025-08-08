@@ -13,7 +13,6 @@ const initialState: HomeState = {
 };
 
 function homeReducer(state: HomeState, action: HomeAction): HomeState {
-  console.log('🏠 HomeContext action:', action.type, action);
   
   switch (action.type) {
     case 'PRELOAD_COMPLETE':
@@ -93,13 +92,6 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
   
   // Sync with AppLoadingContext on mount and location changes
   useEffect(() => {
-    console.log('🏠 Syncing HomeContext with AppLoading:', {
-      isHomePage,
-      isFreshLoad,
-      showDiveInButton,
-      shouldShowContent: isHomePage ? (!isFreshLoad || (isFreshLoad && !showDiveInButton)) : false,
-      logic: `(!${isFreshLoad} || (${isFreshLoad} && !${showDiveInButton}))`
-    });
     
     dispatch({ 
       type: 'SYNC_WITH_APP_LOADING', 
@@ -121,17 +113,6 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
   }, [isHomePage, isFreshLoad]);
   
   const shouldShowDiveIn = isHomePage && state.showDiveInButton && state.isPreloadComplete;
-  
-  console.log('🏠 HomeContext derived state:', {
-    isHomePage,
-    state,
-    shouldShowDiveIn,
-    derivedFactors: {
-      isHomePage,
-      showDiveInButton: state.showDiveInButton,
-      isPreloadComplete: state.isPreloadComplete
-    }
-  });
 
   const value: HomeContextValue = {
     state,
