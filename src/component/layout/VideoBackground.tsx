@@ -8,9 +8,9 @@ import {
 } from "react";
 import { useLocation } from "wouter";
 import { useAppLoading } from "../../contexts/AppLoadingContext";
-import { RadialGradient } from "../common/RadialGradient";
-import { FadeInContainer } from "../common/FadeInContainer";
 import { useIsMobileHome } from "../../hooks/useIsMobileHome";
+import { RadialGradient } from "../common/RadialGradient";
+import { ANIMATION_CLASSES } from "../../constants/animations";
 
 const VIDEO_TIMINGS = {
   FRESH_LOAD_START: 0,
@@ -23,13 +23,14 @@ export interface VideoBackgroundRef {
 }
 
 interface VideoBackgroundProps {
-  showContent?: boolean;
+  showGradient?: boolean;
+  gradientDelay?: number;
 }
 
 export const VideoBackground = forwardRef<
   VideoBackgroundRef,
   VideoBackgroundProps
->(({ showContent = false }, ref) => {
+>(({ showGradient = false, gradientDelay = 0 }, ref) => {
   const [location] = useLocation();
   const isHomePage = location === "/";
   const isMobile = useIsMobileHome();
@@ -132,6 +133,7 @@ export const VideoBackground = forwardRef<
 
   return (
     <div className="fixed inset-0" style={{ zIndex: -20 }}>
+      {/* Video Layer */}
       <video
         ref={videoRef}
         className="w-full h-full object-cover gpu-accelerated"
@@ -144,14 +146,26 @@ export const VideoBackground = forwardRef<
         onPlay={handleVideoPlay}
         onLoadedData={() => {}}
       />
-      {showContent && (
-        <RadialGradient
-          size={1}
-          opacity={0.95}
-          className="absolute inset-0"
-          edgeColor="rgba(0, 0, 0, 1)"
-          centerColor="transparent"
-        />
+      
+      {/* Gradient Overlay - Only affects video background */}
+      {showGradient && !isMobile && (
+        <div
+          className={`fixed inset-0 pointer-events-none ${ANIMATION_CLASSES.TRANSITION} ${
+            showGradient ? ANIMATION_CLASSES.VISIBLE : ANIMATION_CLASSES.HIDDEN
+          }`}
+          style={{
+            zIndex: -19, // Just above video but below content
+            transitionDelay: gradientDelay > 0 ? `${gradientDelay}ms` : undefined,
+          }}
+        >
+          <RadialGradient
+            size={1}
+            opacity={0.95}
+            className="w-full h-full"
+            edgeColor="rgba(0, 0, 0, 1)"
+            centerColor="transparent"
+          />
+        </div>
       )}
     </div>
   );

@@ -7,6 +7,7 @@ interface RadialGradientProps {
   className?: string;
   centerColor?: string;
   edgeColor?: string;
+  style?: React.CSSProperties;
 }
 
 export const RadialGradient: React.FC<RadialGradientProps> = ({
@@ -15,15 +16,17 @@ export const RadialGradient: React.FC<RadialGradientProps> = ({
   className,
   centerColor = "transparent",
   edgeColor = "rgba(0, 0, 0, 0.8)",
+  style,
 }) => {
   const gradientStyle = {
     background: `radial-gradient(circle, ${centerColor} 0%, ${centerColor} ${size}%, ${edgeColor} 100%)`,
     opacity,
+    ...style,
   };
 
   return (
     <div
-      className={cn("pointer-events-none z-10", className)}
+      className={cn("pointer-events-none", className)}
       style={gradientStyle}
       aria-hidden="true"
     />

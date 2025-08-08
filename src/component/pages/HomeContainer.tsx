@@ -75,8 +75,12 @@ export const HomeContainer = () => {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      {/* Video Background */}
-      <VideoBackground ref={videoRef} showContent={showContent} />
+      {/* Video Background with Gradient */}
+      <VideoBackground 
+        ref={videoRef}
+        showGradient={showContent}
+        gradientDelay={isFreshLoad ? 300 : 0}
+      />
       
       {/* Dive In Button Overlay - Desktop Only */}
       <AnimatePresence>

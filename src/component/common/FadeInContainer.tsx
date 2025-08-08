@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, CSSProperties } from "react";
 import { ANIMATION_CLASSES } from "../../constants/animations";
 
 interface FadeInContainerProps {
@@ -6,6 +6,7 @@ interface FadeInContainerProps {
   isVisible: boolean;
   className?: string;
   delay?: number;
+  style?: CSSProperties;
 }
 
 export const FadeInContainer = ({
@@ -13,6 +14,7 @@ export const FadeInContainer = ({
   isVisible,
   className = "",
   delay = 0,
+  style = {},
 }: FadeInContainerProps) => {
   const baseClasses = ANIMATION_CLASSES.TRANSITION;
   const visibilityClasses = isVisible
@@ -20,12 +22,12 @@ export const FadeInContainer = ({
     : ANIMATION_CLASSES.HIDDEN;
 
   const delayStyle = delay > 0 ? { transitionDelay: `${delay}ms` } : {};
-
+  const combinedStyle = { ...delayStyle, ...style };
 
   return (
     <div
       className={`${baseClasses} ${visibilityClasses} ${className}`}
-      style={delayStyle}
+      style={combinedStyle}
     >
       {children}
     </div>
