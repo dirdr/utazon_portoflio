@@ -14,20 +14,20 @@ export const GridImagesShowcase = ({
   className,
 }: GridImagesShowcaseProps) => {
   const { images } = data;
-  
+
   return (
     <Container>
       <div className={cn(SHOWCASE_STYLES.container, className)}>
-        <div className="grid grid-cols-2 gap-8">
+        <div className="grid grid-cols-2 gap-4">
           {images.map((image, index) => (
             <div key={index} className="w-full">
               <ShowcaseImage
                 src={image.src}
                 alt={image.alt}
                 className={cn(
-                  "w-full h-auto object-cover",
+                  "w-full aspect-video object-cover",
                   SHOWCASE_STYLES.borderRadius,
-                  SHOWCASE_STYLES.border
+                  SHOWCASE_STYLES.border,
                 )}
               />
               {image.caption && (
