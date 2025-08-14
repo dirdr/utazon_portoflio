@@ -1,34 +1,4 @@
 @layer base {
-  @media screen and (min-width: 0px) {
-    :root {
-      font-size: 14px;
-    }
-  }
-
-  @media screen and (min-width: 1800px) {
-    :root {
-      font-size: 16px;
-    }
-  }
-
-  @media screen and (min-width: 2400px) {
-    :root {
-      font-size: 18px;
-    }
-  }
-
-  @media screen and (min-width: 2800px) {
-    :root {
-      font-size: 20px;
-    }
-  }
-
-  @media screen and (min-width: 3800px) {
-    :root {
-      font-size: 22px;
-    }
-  }
-
   body {
     @apply bg-background text-foreground font-neue;
   }
