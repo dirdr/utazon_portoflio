@@ -16,7 +16,6 @@ import { OVERLAY_Z_INDEX } from "../common/OverlayManager";
 const VIDEO_TIMINGS = {
   FRESH_LOAD_START: 0,
   SPA_NAV_START: 8,
-  CONTENT_SHOW_DELAY: 3000, // 3 seconds
 } as const;
 
 export interface VideoBackgroundRef {
@@ -40,23 +39,27 @@ export const VideoBackground = forwardRef<
 
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  const videoSource = useMemo(() => {
-    return isMobile ? "/videos/intro_mobile.mp4" : "/videos/intro.mp4";
-  }, [isMobile]);
+  const videoSource = useMemo(() => (
+    isMobile ? "/videos/intro_mobile.mp4" : "/videos/intro.mp4"
+  ), [isMobile]);
 
+  // GPU acceleration optimization
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !isHomePage) return;
 
-    video.style.transform = "translate3d(0, 0, 0)";
-    video.style.willChange = "transform";
-    video.style.backfaceVisibility = "hidden";
+    // Apply GPU acceleration for smooth video playback
+    Object.assign(video.style, {
+      transform: "translate3d(0, 0, 0)",
+      willChange: "transform",
+      backfaceVisibility: "hidden"
+    });
   }, [isHomePage]);
 
+  // Initialize mobile video autoplay
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !isHomePage || !isMobile) return;
-
 
     video.currentTime = VIDEO_TIMINGS.FRESH_LOAD_START;
     video.muted = true;
@@ -68,24 +71,26 @@ export const VideoBackground = forwardRef<
     });
   }, [isHomePage, isMobile]);
 
+  // Handle SPA navigation - jump to 8s
   useEffect(() => {
     const video = videoRef.current;
+    
     if (
       !video ||
       !isHomePage ||
       !videoBehavior.shouldJumpTo8s ||
       videoBehavior.isDiveInFlow ||
       isMobile
-    )
+    ) {
       return;
-
+    }
 
     video.pause();
     video.currentTime = VIDEO_TIMINGS.SPA_NAV_START;
 
     requestAnimationFrame(() => {
       video.play().catch(() => {
-        // Video autoplay failed - expected behavior
+        // Video autoplay failed - expected in some browsers
       });
     });
   }, [
@@ -95,10 +100,13 @@ export const VideoBackground = forwardRef<
     isMobile,
   ]);
 
+  // Handle fresh load - prepare video from start
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || !isHomePage || !videoBehavior.shouldPlayFromStart || isMobile)
+    
+    if (!video || !isHomePage || !videoBehavior.shouldPlayFromStart || isMobile) {
       return;
+    }
 
     video.pause();
     requestAnimationFrame(() => {
@@ -110,11 +118,10 @@ export const VideoBackground = forwardRef<
     const video = videoRef.current;
     if (!video) return;
 
-
     video.currentTime = VIDEO_TIMINGS.FRESH_LOAD_START;
 
     video.play().catch(() => {
-      // Video play failed
+      // Video play failed - expected in some browsers
     });
   }, []);
 
@@ -126,7 +133,6 @@ export const VideoBackground = forwardRef<
     [startVideo],
   );
 
-  const handleVideoPlay = () => {};
 
   if (!isHomePage) {
     return null;
@@ -144,18 +150,16 @@ export const VideoBackground = forwardRef<
         disablePictureInPicture
         preload="metadata"
         src={videoSource}
-        onPlay={handleVideoPlay}
-        onLoadedData={() => {}}
       />
       
-      {/* Gradient Overlay - Only affects video background */}
+      {/* Gradient Overlay - Desktop only */}
       {showGradient && !isMobile && (
         <div
-          className={`fixed inset-0 pointer-events-none ${ANIMATION_CLASSES.TRANSITION} ${
-            showGradient ? ANIMATION_CLASSES.VISIBLE : ANIMATION_CLASSES.HIDDEN
-          }`}
+          className={`fixed inset-0 pointer-events-none ${
+            ANIMATION_CLASSES.TRANSITION
+          } ${ANIMATION_CLASSES.VISIBLE}`}
           style={{
-            zIndex: OVERLAY_Z_INDEX.VIDEO_BACKGROUND + 1, // Just above video but below content
+            zIndex: OVERLAY_Z_INDEX.VIDEO_BACKGROUND + 1,
             transitionDelay: gradientDelay > 0 ? `${gradientDelay}ms` : undefined,
           }}
         >

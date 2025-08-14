@@ -174,7 +174,7 @@ export const Card = ({
                 >
                   <LineSweepText
                     animate={isHovered}
-                    className="text-sm sm:text-base md:text-xl lg:text-2xl xl:text-xl"
+                    className="text-sm sm:text-base md:text-xl lg:text-2xl xl:text-lg 2xl:text-xl"
                   >
                     {project.name}
                   </LineSweepText>

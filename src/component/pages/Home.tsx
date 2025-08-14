@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { Button } from "../common/Button";
 import { LineSweepText } from "../common/LineSweepText";
 import { ROUTES } from "../../constants/routes";
@@ -10,6 +10,26 @@ export const Home = () => {
   const { t } = useTranslation();
   const isMobile = useIsMobileHome();
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+
+  // Memoize title content to avoid repeated string operations
+  const titleContent = useMemo(() => {
+    const title = t("home.title");
+    return title.includes("\n")
+      ? title.split("\n").map((line, index) => (
+          <span key={index} className="block">
+            {line}
+          </span>
+        ))
+      : title;
+  }, [t]);
+
+  const handleVideoModalClose = useCallback(() => {
+    setIsVideoModalOpen(false);
+  }, []);
+
+  const handleShowreelClick = useCallback(() => {
+    setIsVideoModalOpen(true);
+  }, []);
 
   useEffect(() => {
     document.documentElement.classList.add("hide-scrollbars");
@@ -32,15 +52,7 @@ export const Home = () => {
               className="font-nord text-3xl sm:text-4xl md:text-5xl italic text-muted tracking-tight leading-tight pb-4"
               duration={6}
             >
-              {t("home.title").includes("\n")
-                ? t("home.title")
-                    .split("\n")
-                    .map((line, index) => (
-                      <span key={index} className="block">
-                        {line}
-                      </span>
-                    ))
-                : t("home.title")}
+              {titleContent}
             </LineSweepText>
           </section>
 
@@ -65,7 +77,7 @@ export const Home = () => {
             <Button
               as="button"
               glintOnHover={true}
-              onClick={() => setIsVideoModalOpen(true)}
+              onClick={handleShowreelClick}
               className="text-sm sm:text-base md:text-xl"
             >
               {t("nav.showreel")}
@@ -74,40 +86,38 @@ export const Home = () => {
         </div>
         <FullscreenVideoModal
           isOpen={isVideoModalOpen}
-          onClose={() => setIsVideoModalOpen(false)}
+          onClose={handleVideoModalClose}
         />
       </div>
     );
   }
 
   return (
-    <div className="h-full w-full flex flex-col justify-end px-4 lg:px-12 pb-16">
+    <div className="h-full w-full flex flex-col justify-end px-4 lg:px-12 pb-8 xl:pb-16">
       <div className="flex justify-between items-end">
         <section className="w-165" aria-labelledby="location-heading">
           <address className="not-italic">
-            <p id="location-heading" className="text-lg text-muted mb-6">
+            <p
+              id="location-heading"
+              className="sm:text-base md:text-lg xl:text-xl text-muted mb-6"
+            >
               Paris, France
             </p>
           </address>
           <LineSweepText
-            className="font-nord sm:text-lg md:text-xl lg:text-4xl xl:text-5xl 2xl:text-6xl italic text-muted tracking-tight leading-14"
+            className="font-nord text-2xl lg:text-4xl xl:text-5xl 2xl:text-6xl italic text-muted tracking-tight leading-14"
             duration={6}
           >
-            {t("home.title").includes("\n")
-              ? t("home.title")
-                  .split("\n")
-                  .map((line, index) => (
-                    <span key={index} className="block">
-                      {line}
-                    </span>
-                  ))
-              : t("home.title")}
+            {titleContent}
           </LineSweepText>
         </section>
 
         <section className="w-140" aria-labelledby="intro-heading">
           <div className="space-y-4">
-            <p id="intro-heading" className="text-xl text-gray mb-10">
+            <p
+              id="intro-heading"
+              className="text-lg xl:text-xl 2xl:text-2xl text-gray mb-10"
+            >
               {t("home.description")}
             </p>
             <nav className="flex gap-8" aria-label="Actions principales">
@@ -115,15 +125,15 @@ export const Home = () => {
                 as="link"
                 glintOnHover={true}
                 href={ROUTES.PROJECTS}
-                className="text-lg"
+                className="sm:text-base md:text-lg xl:text-xl"
               >
                 {t("home.projects")}
               </Button>
               <Button
                 as="button"
                 glintOnHover={true}
-                onClick={() => setIsVideoModalOpen(true)}
-                className="text-lg"
+                onClick={handleShowreelClick}
+                className="sm:text-base md:text-lg xl:text-xl"
               >
                 {t("nav.showreel")}
               </Button>
@@ -133,7 +143,7 @@ export const Home = () => {
       </div>
       <FullscreenVideoModal
         isOpen={isVideoModalOpen}
-        onClose={() => setIsVideoModalOpen(false)}
+        onClose={handleVideoModalClose}
       />
     </div>
   );

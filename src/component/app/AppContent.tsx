@@ -22,6 +22,7 @@ export const AppContent = () => {
   const isHomePage = location === "/";
   const { isEnabled } = useCursorTrail();
   const isMobile = useIsMobileHome();
+  
 
   return (
     <ModalProvider>
