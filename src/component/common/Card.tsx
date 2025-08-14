@@ -174,20 +174,20 @@ export const Card = ({
                 >
                   <LineSweepText
                     animate={isHovered}
-                    className="text-base md:text-lg lg:text-xl"
+                    className="text-sm sm:text-base md:text-xl lg:text-2xl xl:text-xl"
                   >
                     {project.name}
                   </LineSweepText>
                 </h3>
-                <p className="font-nord text-white font-light">
+                <p className="font-nord text-white font-light text-xs sm:text-xs md:text-base lg:text:lg">
                   {project.header}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="absolute top-2 right-2 sm:top-4 sm:right-4 md:top-6 md:right-6 lg:top-8 lg:right-8">
-            <div className="text-muted font-nord font-light text-xs sm:text-sm md:text-base">
+          <div className="absolute top-[5%] left-[90%]">
+            <div className="text-muted font-nord font-light text-xs sm:text-base md:text-lg lg:text:xl xl:text:lg 2xl:text-xl">
               {project.date}
             </div>
           </div>
@@ -204,7 +204,6 @@ export const Card = ({
               {t("common.seeProject")}
             </Button>
           </div>
-
         </div>
       </div>
     </div>

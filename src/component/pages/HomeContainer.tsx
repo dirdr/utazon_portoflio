@@ -8,6 +8,7 @@ import { FadeInContainer } from "../common/FadeInContainer";
 import { Navbar } from "../layout/Navbar";
 import { Home } from "./Home";
 import { useIsMobileHome } from "../../hooks/useIsMobileHome";
+import { useCursorTrail } from "../../hooks/useCursorTrail";
 
 export const HomeContainer = () => {
   const [location] = useLocation();
@@ -21,6 +22,7 @@ export const HomeContainer = () => {
     videoBehavior
   } = useAppLoading();
   
+  const { setTrailEnabled } = useCursorTrail();
   const videoRef = useRef<VideoBackgroundRef>(null);
   const [showContent, setShowContent] = useState(false);
 
@@ -54,6 +56,12 @@ export const HomeContainer = () => {
 
     return () => clearTimeout(timer);
   }, [videoBehavior.isDiveInFlow, isMobile]);
+
+  // Enable cursor trail when DiveInButton is visible (desktop only)
+  useEffect(() => {
+    const shouldEnable = showDiveInButton && !isMobile;
+    setTrailEnabled(shouldEnable);
+  }, [showDiveInButton, isMobile, setTrailEnabled]);
 
   const handleDiveIn = useCallback(() => {
     // Start video IMMEDIATELY on button click for instant response

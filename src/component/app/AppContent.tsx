@@ -12,12 +12,16 @@ import { getPageConfig } from "../../config/pageConfig";
 import { Route, Switch, useLocation } from "wouter";
 import { ModalProvider } from "../../contexts/ModalContext";
 import { ModalRoot } from "../common/ModalRoot";
+import { CursorTrail } from "../common/CursorTrail";
+import { useCursorTrail } from "../../hooks/useCursorTrail";
+import { useIsMobileHome } from "../../hooks/useIsMobileHome";
 
 export const AppContent = () => {
   const [location] = useLocation();
   const pageConfig = getPageConfig(location);
   const isHomePage = location === "/";
-  
+  const { isEnabled } = useCursorTrail();
+  const isMobile = useIsMobileHome();
 
   return (
     <ModalProvider>
@@ -46,6 +50,7 @@ export const AppContent = () => {
           </div>
         </PageTransition>
       </Layout>
+      <CursorTrail enabled={isEnabled && !isMobile} />
       <ModalRoot />
     </ModalProvider>
   );

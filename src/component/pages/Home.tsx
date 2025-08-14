@@ -23,11 +23,13 @@ export const Home = () => {
       <div className="h-full w-full flex flex-col justify-end px-4 lg:px-12 pb-8">
         <div className="flex flex-col ">
           <address className="not-italic">
-            <p className="text-lg text-muted pb-2">Paris, France</p>
+            <p className="text-lg sm:text-xl md:text-2xl text-muted pb-2">
+              Paris, France
+            </p>
           </address>
           <section aria-labelledby="title-heading">
             <LineSweepText
-              className="font-nord text-4xl italic text-muted tracking-tight leading-tight pb-4"
+              className="font-nord text-3xl sm:text-4xl md:text-5xl italic text-muted tracking-tight leading-tight pb-4"
               duration={6}
             >
               {t("home.title").includes("\n")
@@ -43,17 +45,20 @@ export const Home = () => {
           </section>
 
           <section aria-labelledby="intro-heading">
-            <p id="intro-heading" className="text-lg text-gray pb-8">
+            <p
+              id="intro-heading"
+              className="text-base sm:text-lg md:text-2xl text-gray pb-4 md:pb-8"
+            >
               {t("home.description")}
             </p>
           </section>
 
-          <div className="flex gap-4 justify-start">
+          <div className="flex gap-4 md:gap-8 justify-start">
             <Button
               as="link"
               glintOnHover={true}
               href={ROUTES.PROJECTS}
-              className="text-base"
+              className="text-sm sm:text-base md:text-xl"
             >
               {t("home.projects")}
             </Button>
@@ -61,7 +66,7 @@ export const Home = () => {
               as="button"
               glintOnHover={true}
               onClick={() => setIsVideoModalOpen(true)}
-              className="text-base"
+              className="text-sm sm:text-base md:text-xl"
             >
               {t("nav.showreel")}
             </Button>
@@ -85,7 +90,7 @@ export const Home = () => {
             </p>
           </address>
           <LineSweepText
-            className="font-nord text-6xl italic text-muted tracking-tight leading-14"
+            className="font-nord sm:text-lg md:text-xl lg:text-4xl xl:text-5xl 2xl:text-6xl italic text-muted tracking-tight leading-14"
             duration={6}
           >
             {t("home.title").includes("\n")

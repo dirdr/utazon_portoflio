@@ -10,18 +10,30 @@
     <link rel="icon" type="image/svg+xml" href="/src/assets/images/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>utazon - Antoine Vernez</title>
-    
+
     <!-- DNS prefetch for external resources -->
-    <link rel="dns-prefetch" href="https://analytics.adrienpelfresne.com">
-    
+    <link rel="dns-prefetch" href="https://analytics.adrienpelfresne.com" />
+
     <!-- Critical font preloading - only the most essential weights -->
-    <link rel="preload" href="/fonts/neue/ppneuemontreal-book.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="/fonts/nord/NORD-Regular.woff2" as="font" type="font/woff2" crossorigin>
-    
+    <link
+      rel="preload"
+      href="/fonts/neue/ppneuemontreal-book.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/nord/NORD-Regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
     <!-- Critical video prefetching for better performance -->
-    <link rel="prefetch" href="/videos/intro.mp4" as="video" type="video/mp4">
+    <link rel="prefetch" href="/videos/intro.mp4" as="video" type="video/mp4" />
   </head>
-  <body>
+  <body class="debug-screens">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

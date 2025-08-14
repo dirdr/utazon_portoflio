@@ -32,10 +32,9 @@ export const NavLink = ({
     <Link
       href={href}
       onClick={onClick}
-      className={`hover:text-muted font-nord transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-sm ${className}`}
+      className={`hover:text-muted font-nord transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-sm xl:text-sm 2xl:text-base ${className}`}
     >
       {getNavLabel(href, t) || label}
     </Link>
   );
 };
-

@@ -11,6 +11,7 @@ import { useAppLoading } from "../../contexts/AppLoadingContext";
 import { useIsMobileHome } from "../../hooks/useIsMobileHome";
 import { RadialGradient } from "../common/RadialGradient";
 import { ANIMATION_CLASSES } from "../../constants/animations";
+import { OVERLAY_Z_INDEX } from "../common/OverlayManager";
 
 const VIDEO_TIMINGS = {
   FRESH_LOAD_START: 0,
@@ -132,7 +133,7 @@ export const VideoBackground = forwardRef<
   }
 
   return (
-    <div className="fixed inset-0" style={{ zIndex: -20 }}>
+    <div className="fixed inset-0" style={{ zIndex: OVERLAY_Z_INDEX.VIDEO_BACKGROUND }}>
       {/* Video Layer */}
       <video
         ref={videoRef}
@@ -154,7 +155,7 @@ export const VideoBackground = forwardRef<
             showGradient ? ANIMATION_CLASSES.VISIBLE : ANIMATION_CLASSES.HIDDEN
           }`}
           style={{
-            zIndex: -19, // Just above video but below content
+            zIndex: OVERLAY_Z_INDEX.VIDEO_BACKGROUND + 1, // Just above video but below content
             transitionDelay: gradientDelay > 0 ? `${gradientDelay}ms` : undefined,
           }}
         >
