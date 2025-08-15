@@ -181,21 +181,21 @@ export const VideoBackground = forwardRef<
       />
       
       {/* Gradient Overlay - Desktop only */}
-      {showGradient && !isMobile && (
+      {!isMobile && (
         <div
           className={`fixed inset-0 pointer-events-none ${
             ANIMATION_CLASSES.TRANSITION
-          } ${ANIMATION_CLASSES.VISIBLE}`}
+          } ${showGradient ? ANIMATION_CLASSES.VISIBLE : ANIMATION_CLASSES.HIDDEN}`}
           style={{
             zIndex: OVERLAY_Z_INDEX.VIDEO_BACKGROUND + 1,
             transitionDelay: gradientDelay > 0 ? `${gradientDelay}ms` : undefined,
           }}
         >
           <RadialGradient
-            size={1}
-            opacity={0.95}
+            size={20}
+            opacity={0.8}
             className="w-full h-full"
-            edgeColor="rgba(0, 0, 0, 1)"
+            edgeColor="rgba(255, 0, 0, 0.8)"
             centerColor="transparent"
           />
         </div>
