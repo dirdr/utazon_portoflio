@@ -39,9 +39,10 @@ export const VideoBackground = forwardRef<
 
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  const videoSource = useMemo(() => (
-    isMobile ? "/videos/intro_mobile.mp4" : "/videos/intro.mp4"
-  ), [isMobile]);
+  const videoSource = useMemo(
+    () => (isMobile ? "/videos/intro_mobile.mp4" : "/videos/intro.mp4"),
+    [isMobile],
+  );
 
   // GPU acceleration optimization
   useEffect(() => {
@@ -52,7 +53,7 @@ export const VideoBackground = forwardRef<
     Object.assign(video.style, {
       transform: "translate3d(0, 0, 0)",
       willChange: "transform",
-      backfaceVisibility: "hidden"
+      backfaceVisibility: "hidden",
     });
   }, [isHomePage]);
 
@@ -74,7 +75,7 @@ export const VideoBackground = forwardRef<
   // Handle SPA navigation - jump to 8s
   useEffect(() => {
     const video = videoRef.current;
-    
+
     if (
       !video ||
       !isHomePage ||
@@ -103,8 +104,13 @@ export const VideoBackground = forwardRef<
   // Handle fresh load - prepare video from start
   useEffect(() => {
     const video = videoRef.current;
-    
-    if (!video || !isHomePage || !videoBehavior.shouldPlayFromStart || isMobile) {
+
+    if (
+      !video ||
+      !isHomePage ||
+      !videoBehavior.shouldPlayFromStart ||
+      isMobile
+    ) {
       return;
     }
 
@@ -127,7 +133,7 @@ export const VideoBackground = forwardRef<
         // Desktop: replay from 8 seconds
         video.currentTime = VIDEO_TIMINGS.SPA_NAV_START;
       }
-      
+
       requestAnimationFrame(() => {
         video.play().catch(() => {
           // Video autoplay failed - expected in some browsers
@@ -135,10 +141,10 @@ export const VideoBackground = forwardRef<
       });
     };
 
-    video.addEventListener('ended', handleVideoEnded);
+    video.addEventListener("ended", handleVideoEnded);
 
     return () => {
-      video.removeEventListener('ended', handleVideoEnded);
+      video.removeEventListener("ended", handleVideoEnded);
     };
   }, [isHomePage, isMobile]);
 
@@ -161,13 +167,15 @@ export const VideoBackground = forwardRef<
     [startVideo],
   );
 
-
   if (!isHomePage) {
     return null;
   }
 
   return (
-    <div className="fixed inset-0" style={{ zIndex: OVERLAY_Z_INDEX.VIDEO_BACKGROUND }}>
+    <div
+      className="fixed inset-0"
+      style={{ zIndex: OVERLAY_Z_INDEX.VIDEO_BACKGROUND }}
+    >
       {/* Video Layer */}
       <video
         ref={videoRef}
@@ -179,7 +187,7 @@ export const VideoBackground = forwardRef<
         preload="metadata"
         src={videoSource}
       />
-      
+
       {/* Gradient Overlay - Desktop only */}
       {!isMobile && (
         <div
@@ -187,15 +195,16 @@ export const VideoBackground = forwardRef<
             ANIMATION_CLASSES.TRANSITION
           } ${showGradient ? ANIMATION_CLASSES.VISIBLE : ANIMATION_CLASSES.HIDDEN}`}
           style={{
-            zIndex: OVERLAY_Z_INDEX.VIDEO_BACKGROUND + 1,
-            transitionDelay: gradientDelay > 0 ? `${gradientDelay}ms` : undefined,
+            zIndex: OVERLAY_Z_INDEX.VIDEO_GRADIENT,
+            transitionDelay:
+              gradientDelay > 0 ? `${gradientDelay}ms` : undefined,
           }}
         >
           <RadialGradient
-            size={20}
-            opacity={0.8}
+            size={15}
+            opacity={0.5}
             className="w-full h-full"
-            edgeColor="rgba(255, 0, 0, 0.8)"
+            edgeColor="rgba(0, 0, 0, 0.95)"
             centerColor="transparent"
           />
         </div>

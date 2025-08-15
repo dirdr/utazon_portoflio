@@ -19,7 +19,7 @@ export const RadialGradient: React.FC<RadialGradientProps> = ({
   style,
 }) => {
   const gradientStyle = {
-    background: `radial-gradient(circle, ${centerColor} 0%, ${centerColor} ${size}%, ${edgeColor} 100%)`,
+    background: `radial-gradient(circle at center, ${centerColor} 0%, ${centerColor} ${size}%, ${edgeColor} ${size + 20}%, ${edgeColor} 100%)`,
     opacity,
     ...style,
   };

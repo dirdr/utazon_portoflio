@@ -28,6 +28,13 @@ export const HomeContainer = () => {
 
   // Content show logic based on workflow type
   useEffect(() => {
+    console.log('🏠 HomeContainer - Content visibility logic:', {
+      isHomePage,
+      isFreshLoad,
+      isMobile,
+      showContent
+    });
+
     if (!isHomePage) {
       setShowContent(false);
       return;
@@ -35,12 +42,15 @@ export const HomeContainer = () => {
 
     if (isMobile) {
       // Mobile: show content immediately with no sequencing
+      console.log('📱 Mobile: showing content immediately');
       setShowContent(true);
     } else if (!isFreshLoad) {
       // Desktop SPA navigation: show content immediately
+      console.log('🖥️ Desktop SPA: showing content immediately');
       setShowContent(true);
     } else {
       // Desktop fresh load: wait for video workflow
+      console.log('🖥️ Desktop fresh load: waiting for video workflow');
       setShowContent(false);
     }
   }, [isHomePage, isFreshLoad, isMobile]);
