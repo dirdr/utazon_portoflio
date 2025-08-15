@@ -3,7 +3,7 @@ import backgroundImage from "../assets/images/background.webp";
 
 const ROUTE_BACKGROUNDS: Record<string, string> = {
   "/": "", // Home page - no background
-  "/about": backgroundImage,
+  "/about": "", // About page - solid black background
   "/projects": backgroundImage,
   "/contact": backgroundImage,
   "/showreel": backgroundImage,
