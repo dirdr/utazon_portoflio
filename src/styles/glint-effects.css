@@ -100,7 +100,55 @@
     opacity: 1;
   }
 
+  .glint-card-wrapper-square {
+    @apply relative overflow-hidden rounded-2xl;
+    padding: 2px;
+    --glint-card-speed: 6s;
+  }
+
+  .glint-card-wrapper-square::before {
+    content: "";
+    position: absolute;
+    top: -75%;
+    left: -75%;
+    width: 250%;
+    height: 250%;
+    background: radial-gradient(circle, #565656 0%, #565656 100%);
+    border-radius: 16px;
+    z-index: 1;
+  }
+
+  .glint-card-wrapper-square::after {
+    content: "";
+    position: absolute;
+    top: -75%;
+    left: -75%;
+    width: 250%;
+    height: 250%;
+    background: conic-gradient(
+      from 0deg,
+      transparent 30deg,
+      rgba(255, 255, 255, 0.3) 60deg,
+      rgba(255, 255, 255, 0.9) 90deg,
+      rgba(255, 255, 255, 0.3) 120deg,
+      transparent 150deg,
+      transparent 210deg,
+      rgba(255, 255, 255, 0.3) 240deg,
+      rgba(255, 255, 255, 0.9) 270deg,
+      rgba(255, 255, 255, 0.3) 300deg,
+      transparent 330deg
+    );
+    border-radius: 16px;
+    animation: border-spin var(--glint-card-speed) linear infinite;
+    opacity: 1;
+    z-index: 2;
+  }
+
   .glint-card-content {
     @apply relative w-full h-full rounded-3xl bg-background z-10;
+  }
+
+  .glint-card-content-square {
+    @apply relative w-full h-full rounded-2xl bg-background z-10;
   }
 }

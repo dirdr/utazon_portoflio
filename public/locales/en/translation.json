@@ -15,6 +15,24 @@
     "projects": "PROJECTS",
     "title": "3D ARTIST AND MOTION DESIGNER"
   },
+  "about": {
+    "title": "3D ARTIST AND MOTION DESIGNER",
+    "description": "Creator of Visual Universes in 3D & Motion Design With over 4 years of experience, I design immersive and impactful visual experiences for brands, agencies, and artists. My approach combines strong artistic direction, visual storytelling, and technical mastery to bring unique universes to life",
+    "services": {
+      "motionDesign": {
+        "title": "3D & 2D Motion Design",
+        "description": "Crafting dynamic and aesthetically pleasing animations to enhance your projects."
+      },
+      "artDirection": {
+        "title": "Art Direction",
+        "description": "Developing coherent and impactful visual concepts aligned with your brand identity."
+      },
+      "editingCompositing": {
+        "title": "Editing & Compositing",
+        "description": "Assembling and refining videos for a professional and harmonious result."
+      }
+    }
+  },
   "projects": {
     "aurum-nova": {
       "title": "AURUM NOVA",

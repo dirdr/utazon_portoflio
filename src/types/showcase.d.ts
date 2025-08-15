@@ -27,7 +27,7 @@ export interface VideoShowcaseData extends ShowcaseItem {
   video: {
     src: string;
     title?: string;
-    light: string;
+    light: string | null;
   };
 }
 

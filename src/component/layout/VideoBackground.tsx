@@ -114,6 +114,34 @@ export const VideoBackground = forwardRef<
     });
   }, [isHomePage, videoBehavior.shouldPlayFromStart, isMobile]);
 
+  // Handle video replay when it ends
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !isHomePage) return;
+
+    const handleVideoEnded = () => {
+      if (isMobile) {
+        // Mobile: replay from 0 seconds
+        video.currentTime = VIDEO_TIMINGS.FRESH_LOAD_START;
+      } else {
+        // Desktop: replay from 8 seconds
+        video.currentTime = VIDEO_TIMINGS.SPA_NAV_START;
+      }
+      
+      requestAnimationFrame(() => {
+        video.play().catch(() => {
+          // Video autoplay failed - expected in some browsers
+        });
+      });
+    };
+
+    video.addEventListener('ended', handleVideoEnded);
+
+    return () => {
+      video.removeEventListener('ended', handleVideoEnded);
+    };
+  }, [isHomePage, isMobile]);
+
   const startVideo = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;

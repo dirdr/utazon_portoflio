@@ -1,4 +1,4 @@
-import { createContext } from 'react';
+import { createContext } from "react";
 
 export interface CursorTrailContextValue {
   isEnabled: boolean;
@@ -7,4 +7,7 @@ export interface CursorTrailContextValue {
   setTrailEnabled: (enabled: boolean) => void;
 }
 
-export const CursorTrailContext = createContext<CursorTrailContextValue | null>(null);
+export const CursorTrailContext = createContext<CursorTrailContextValue | null>(
+  null,
+);
+

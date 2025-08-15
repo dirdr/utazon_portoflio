@@ -1,5 +1,5 @@
-import { useEffect, useRef, useCallback } from 'react';
-import { OverlayManager, OVERLAY_Z_INDEX } from './OverlayManager';
+import { useEffect, useRef, useCallback, useState, useMemo } from "react";
+import { OverlayManager, OVERLAY_Z_INDEX } from "./OverlayManager";
 
 interface TrailPoint {
   x: number;
@@ -18,167 +18,326 @@ interface CursorTrailProps {
 
 export const CursorTrail = ({
   enabled = false,
-  maxPoints = 40,
-  fadeTime = 500,
-  rippleSize = 240,
+  maxPoints = 300,
+  fadeTime = 2500,
+  rippleSize = 150,
   intensity = 0.5,
 }: CursorTrailProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number>();
   const pointsRef = useRef<TrailPoint[]>([]);
-  const lastMouseRef = useRef({ x: 0, y: 0, timestamp: 0 });
+  const lastTrailPointRef = useRef({ x: 0, y: 0, timestamp: 0 });
+  // Separate refs for immediate cursor position vs trail points
   const currentMouseRef = useRef({ x: 0, y: 0 });
+  const lastCleanupRef = useRef(0);
+  const canvasSizeRef = useRef({ width: 0, height: 0 });
+  const [responsiveScale, setResponsiveScale] = useState(1);
 
-  const addPoint = useCallback((x: number, y: number, speed: number) => {
-    const now = Date.now();
-    pointsRef.current.push({ x, y, timestamp: now, speed });
-    
-    if (pointsRef.current.length > maxPoints) {
-      pointsRef.current = pointsRef.current.slice(-maxPoints);
-    }
-  }, [maxPoints]);
+  // Memoize scale calculation to prevent unnecessary recalculations
+  const updateResponsiveScale = useCallback(() => {
+    const baseWidth = 1920;
+    const currentWidth = window.innerWidth;
+    const scale = Math.min(Math.max(currentWidth / baseWidth, 0.6), 1.2);
+    setResponsiveScale(scale);
+  }, []);
 
-  const updateCanvasRef = useRef<() => void>();
+  // Optimized point addition with batch cleanup
+  const addPoint = useCallback(
+    (x: number, y: number, speed: number) => {
+      const now = Date.now();
+      const points = pointsRef.current;
 
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    if (!enabled) return;
-    
-    const { clientX, clientY } = e;
-    const now = Date.now();
-    
-    // Always update current mouse position for the persistent spotlight
-    currentMouseRef.current = { x: clientX, y: clientY };
-    
-    const deltaX = Math.abs(clientX - lastMouseRef.current.x);
-    const deltaY = Math.abs(clientY - lastMouseRef.current.y);
-    
-    if (deltaX > 5 || deltaY > 5) {
-      // Calculate speed based on distance and time
-      const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-      const timeDiff = now - lastMouseRef.current.timestamp;
-      const speed = timeDiff > 0 ? distance / timeDiff : 0;
-      
-      addPoint(clientX, clientY, speed);
-      lastMouseRef.current = { x: clientX, y: clientY, timestamp: now };
-    }
-    
-    // Always keep animation running for persistent spotlight
-    if (!animationRef.current && updateCanvasRef.current) {
-      animationRef.current = requestAnimationFrame(updateCanvasRef.current);
-    }
-  }, [enabled, addPoint]);
+      points.push({ x, y, timestamp: now, speed });
 
-  const updateCanvas = useCallback(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+      // Batch cleanup every 50 points or when max is exceeded
+      if (points.length > maxPoints || points.length % 50 === 0) {
+        const cutoff = now - fadeTime;
+        let validStart = 0;
 
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+        // Find first valid point
+        while (
+          validStart < points.length &&
+          points[validStart].timestamp < cutoff
+        ) {
+          validStart++;
+        }
 
-    // Only resize canvas when window size changes, not every frame
-    if (canvas.width !== window.innerWidth || canvas.height !== window.innerHeight) {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
+        if (validStart > 0) {
+          pointsRef.current = points.slice(validStart);
+        }
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    const now = Date.now();
-    pointsRef.current = pointsRef.current.filter(
-      point => now - point.timestamp < fadeTime
-    );
-
-    // Draw discovery spotlight trail effect with speed-based sizing
-    pointsRef.current.forEach((point) => {
-      const age = now - point.timestamp;
-      const ageRatio = age / fadeTime;
-      
-      // More aggressive fade for quicker trail disappearance
-      const trailFade = Math.pow(1 - ageRatio, 2.2);
-      const currentOpacity = intensity * trailFade * 0.6;
-      
-      // Speed-based size variation - faster movement = bigger ripples (slight variation)
-      const speedFactor = Math.max(0.8, Math.min(1.3, 1 + point.speed * 0.15));
-      const sizeWithSpeed = rippleSize * 0.9 * speedFactor; // Bigger trail size (90% of main)
-      const currentSize = sizeWithSpeed * (1 - ageRatio * 0.3);
-      
-      if (currentOpacity > 0.01) {
-        // Create natural speed-deformed trail ripples
-        const gradient = ctx.createRadialGradient(
-          point.x, point.y, 0,
-          point.x, point.y, currentSize
-        );
-        
-        gradient.addColorStop(0, `rgba(120, 120, 120, ${currentOpacity * 0.8})`);
-        gradient.addColorStop(0.3, `rgba(100, 100, 100, ${currentOpacity * 0.4})`);
-        gradient.addColorStop(0.6, `rgba(80, 80, 80, ${currentOpacity * 0.2})`);
-        gradient.addColorStop(1, `rgba(60, 60, 60, 0)`);
-
-        ctx.fillStyle = gradient;
-        ctx.beginPath();
-        ctx.arc(point.x, point.y, currentSize, 0, Math.PI * 2);
-        ctx.fill();
+        // Trim to max points if still over limit
+        if (pointsRef.current.length > maxPoints) {
+          pointsRef.current = pointsRef.current.slice(-maxPoints);
+        }
       }
-    });
-    
-    // Draw large persistent discovery spotlight at current mouse position
-    const currentX = currentMouseRef.current.x;
-    const currentY = currentMouseRef.current.y;
-    
-    if (currentX > 0 && currentY > 0) {
-      const mainSize = rippleSize * 1.2; // 20% bigger main spotlight
-      
-      const mainGradient = ctx.createRadialGradient(
-        currentX, currentY, 0,
-        currentX, currentY, mainSize
+    },
+    [maxPoints, fadeTime],
+  );
+
+  // Immediate mouse position update - no throttling for static glow
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      if (!enabled) return;
+
+      const { clientX, clientY } = e;
+      const now = Date.now();
+
+      // Always update current position immediately for static glow
+      currentMouseRef.current = { x: clientX, y: clientY };
+
+      // Start animation loop if not running
+      if (!animationRef.current) {
+        const animate = () => {
+          const canvas = canvasRef.current;
+          const ctx = canvas?.getContext("2d");
+          if (!canvas || !ctx || !enabled) {
+            animationRef.current = undefined;
+            return;
+          }
+
+          // Check for canvas resize less frequently
+          const needsResize =
+            canvas.width !== window.innerWidth ||
+            canvas.height !== window.innerHeight;
+
+          if (needsResize) {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            canvasSizeRef.current = {
+              width: canvas.width,
+              height: canvas.height,
+            };
+          }
+
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          const currentTime = Date.now();
+
+          // Clean up old points less frequently
+          if (currentTime - lastCleanupRef.current > 100) {
+            const cutoff = currentTime - fadeTime;
+            pointsRef.current = pointsRef.current.filter(
+              (point) => point.timestamp >= cutoff,
+            );
+            lastCleanupRef.current = currentTime;
+          }
+
+          // Draw trail points
+          drawTrailPoints(ctx, currentTime);
+
+          // Draw static glow with current mouse position
+          drawStaticGlow(ctx);
+
+          if (enabled) {
+            animationRef.current = requestAnimationFrame(animate);
+          } else {
+            animationRef.current = undefined;
+          }
+        };
+
+        animationRef.current = requestAnimationFrame(animate);
+      }
+
+      // Add trail points with reduced threshold for smoother trails
+      const deltaX = Math.abs(clientX - lastTrailPointRef.current.x);
+      const deltaY = Math.abs(clientY - lastTrailPointRef.current.y);
+
+      if (deltaX > 5 || deltaY > 5) {
+        const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        const timeDiff = now - lastTrailPointRef.current.timestamp;
+        const speed = timeDiff > 0 ? distance / timeDiff : 0;
+
+        addPoint(clientX, clientY, speed);
+        lastTrailPointRef.current = { x: clientX, y: clientY, timestamp: now };
+      }
+    },
+    [enabled, addPoint, fadeTime],
+  );
+
+  // Memoize drawing functions to prevent recreation
+  const drawTrailPoints = useMemo(() => {
+    return (ctx: CanvasRenderingContext2D, now: number) => {
+      const points = pointsRef.current;
+      const len = points.length;
+
+      for (let i = 0; i < len; i++) {
+        const point = points[i];
+        const age = now - point.timestamp;
+        const ageRatio = age / fadeTime;
+
+        if (ageRatio >= 1) continue; // Skip expired points
+
+        const trailFade = Math.pow(1 - ageRatio, 2);
+        const currentOpacity = intensity * trailFade * 0.065;
+        if (currentOpacity <= 0.002) continue;
+
+        const baseSize = rippleSize * 0.4 * responsiveScale;
+
+        // Expanding ripple effect: each ring grows outward over time
+        const rippleProgress = ageRatio; // 0 to 1 as point ages
+        const maxRippleSize = baseSize * 4; // Maximum expansion size
+        const speedFactor = Math.max(
+          0.9,
+          Math.min(1.1, 1 + point.speed * 0.05),
+        );
+
+        // Create expanding ripple rings that grow outward over time
+        const drawExpandingRing = (ringDelay: number, ringOpacity: number) => {
+          // Each ring starts expanding after a delay
+          const ringProgress = Math.max(0, rippleProgress - ringDelay);
+          if (ringProgress <= 0) return;
+
+          // Ring expands from baseSize to maxRippleSize
+          const currentSize =
+            baseSize + (maxRippleSize - baseSize) * ringProgress;
+
+          // Ring fades as it expands
+          const ringFade = Math.pow(1 - ringProgress, 1.5);
+          const finalOpacity = currentOpacity * ringOpacity * ringFade;
+
+          if (finalOpacity <= 0.001) return;
+
+          // Create expanding wave ring effect - thick ring that's filled
+          const ringThickness = baseSize * 0.5; // Thicker rings
+          const innerRadius = Math.max(0, currentSize - ringThickness);
+
+          // First draw the filled ring
+          const gradient = ctx.createRadialGradient(
+            point.x,
+            point.y,
+            innerRadius,
+            point.x,
+            point.y,
+            currentSize,
+          );
+
+          gradient.addColorStop(
+            0,
+            `rgba(255, 255, 255, ${finalOpacity * 0.3})`,
+          );
+          gradient.addColorStop(
+            0.3,
+            `rgba(255, 255, 255, ${finalOpacity * 0.4})`,
+          );
+          gradient.addColorStop(
+            0.7,
+            `rgba(255, 255, 255, ${finalOpacity * 0.25})`,
+          );
+          gradient.addColorStop(1, `rgba(255, 255, 255, 0)`);
+
+          ctx.fillStyle = gradient;
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, currentSize, 0, Math.PI * 2);
+
+          // Create inner hole for ring effect (if inner radius > 0)
+          if (innerRadius > 0) {
+            ctx.arc(point.x, point.y, innerRadius, 0, Math.PI * 2, true);
+          }
+
+          ctx.fill();
+        };
+
+        // Draw multiple expanding rings with staggered timing
+        drawExpandingRing(0, 0.7); // First ring starts immediately
+        drawExpandingRing(0.2, 0.5); // Second ring starts at 20% progress
+        drawExpandingRing(0.4, 0.35); // Third ring starts at 40% progress
+      }
+    };
+  }, [fadeTime, intensity, rippleSize, responsiveScale]);
+
+  // Memoize static glow drawing function
+  const drawStaticGlow = useMemo(() => {
+    return (ctx: CanvasRenderingContext2D) => {
+      const { x: currentX, y: currentY } = currentMouseRef.current;
+      if (currentX <= 0 || currentY <= 0) return;
+
+      const mainSize = rippleSize * 1.2 * responsiveScale;
+
+      // Inner glow
+      const innerSize = mainSize * 0.08;
+      const innerGradient = ctx.createRadialGradient(
+        currentX,
+        currentY,
+        0,
+        currentX,
+        currentY,
+        innerSize * 3,
       );
-      
-      // Subtle dark gray persistent spotlight
-      mainGradient.addColorStop(0, `rgba(140, 140, 140, ${intensity * 1.0})`);
-      mainGradient.addColorStop(0.15, `rgba(120, 120, 120, ${intensity * 0.8})`);
-      mainGradient.addColorStop(0.4, `rgba(100, 100, 100, ${intensity * 0.4})`);
-      mainGradient.addColorStop(1, `rgba(80, 80, 80, 0)`);
+
+      innerGradient.addColorStop(0, `rgba(255, 255, 255, ${intensity * 0.15})`);
+      innerGradient.addColorStop(
+        0.3,
+        `rgba(255, 255, 255, ${intensity * 0.08})`,
+      );
+      innerGradient.addColorStop(
+        0.7,
+        `rgba(255, 255, 255, ${intensity * 0.02})`,
+      );
+      innerGradient.addColorStop(1, `rgba(255, 255, 255, 0)`);
+
+      ctx.fillStyle = innerGradient;
+      ctx.beginPath();
+      ctx.arc(currentX, currentY, innerSize * 3, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Main glow
+      const mainGradient = ctx.createRadialGradient(
+        currentX,
+        currentY,
+        mainSize * 0.3,
+        currentX,
+        currentY,
+        mainSize,
+      );
+
+      mainGradient.addColorStop(0, `rgba(255, 255, 255, ${intensity * 0.06})`);
+      mainGradient.addColorStop(
+        0.4,
+        `rgba(255, 255, 255, ${intensity * 0.03})`,
+      );
+      mainGradient.addColorStop(
+        0.8,
+        `rgba(255, 255, 255, ${intensity * 0.01})`,
+      );
+      mainGradient.addColorStop(1, `rgba(255, 255, 255, 0)`);
 
       ctx.fillStyle = mainGradient;
       ctx.beginPath();
       ctx.arc(currentX, currentY, mainSize, 0, Math.PI * 2);
       ctx.fill();
-      
-      // Larger outer glow for more dramatic effect
+
+      // Outer glow
+      const outerSize = mainSize * 1.8;
       const outerGlow = ctx.createRadialGradient(
-        currentX, currentY, mainSize * 0.7,
-        currentX, currentY, mainSize * 2.2
+        currentX,
+        currentY,
+        mainSize * 0.6,
+        currentX,
+        currentY,
+        outerSize,
       );
-      
-      outerGlow.addColorStop(0, `rgba(100, 100, 100, 0)`);
-      outerGlow.addColorStop(0.2, `rgba(90, 90, 90, ${intensity * 0.2})`);
-      outerGlow.addColorStop(0.5, `rgba(80, 80, 80, ${intensity * 0.1})`);
-      outerGlow.addColorStop(1, `rgba(70, 70, 70, 0)`);
+
+      outerGlow.addColorStop(0, `rgba(255, 255, 255, 0)`);
+      outerGlow.addColorStop(0.2, `rgba(255, 255, 255, ${intensity * 0.01})`);
+      outerGlow.addColorStop(0.7, `rgba(255, 255, 255, ${intensity * 0.005})`);
+      outerGlow.addColorStop(1, `rgba(255, 255, 255, 0)`);
 
       ctx.fillStyle = outerGlow;
       ctx.beginPath();
-      ctx.arc(currentX, currentY, mainSize * 2.2, 0, Math.PI * 2);
+      ctx.arc(currentX, currentY, outerSize, 0, Math.PI * 2);
       ctx.fill();
-    }
-
-    // Always keep animation running when enabled
-    if (enabled) {
-      animationRef.current = requestAnimationFrame(updateCanvas);
-    } else {
-      animationRef.current = undefined;
-    }
-  }, [enabled, fadeTime, rippleSize, intensity]);
-
-  // Assign to ref so it can be called from handleMouseMove
-  updateCanvasRef.current = updateCanvas;
+    };
+  }, [rippleSize, responsiveScale, intensity]);
 
   const handleResize = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    
+
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-  }, []);
+    updateResponsiveScale();
+  }, [updateResponsiveScale]);
 
   useEffect(() => {
     if (!enabled) {
@@ -189,7 +348,7 @@ export const CursorTrail = ({
       }
       const canvas = canvasRef.current;
       if (canvas) {
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext("2d");
         if (ctx) {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
@@ -197,14 +356,14 @@ export const CursorTrail = ({
       return;
     }
 
-    document.addEventListener('mousemove', handleMouseMove, { passive: true });
-    window.addEventListener('resize', handleResize, { passive: true });
-    
+    document.addEventListener("mousemove", handleMouseMove, { passive: true });
+    window.addEventListener("resize", handleResize, { passive: true });
+
     handleResize();
 
     return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('resize', handleResize);
+      document.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("resize", handleResize);
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
@@ -218,10 +377,10 @@ export const CursorTrail = ({
       <canvas
         ref={canvasRef}
         className="fixed inset-0 pointer-events-none"
-        style={{ 
+        style={{
           zIndex: OVERLAY_Z_INDEX.CURSOR_TRAIL,
-          mixBlendMode: 'normal',
-          willChange: 'auto',
+          mixBlendMode: "normal",
+          willChange: "auto",
         }}
       />
     </OverlayManager>
