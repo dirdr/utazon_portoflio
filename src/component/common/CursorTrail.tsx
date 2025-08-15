@@ -1,5 +1,6 @@
 import { useEffect, useRef, useCallback, useState, useMemo } from "react";
-import { OverlayManager, OVERLAY_Z_INDEX } from "./OverlayManager";
+import { OverlayManager } from "./OverlayManager";
+import { OVERLAY_Z_INDEX } from "../../constants/overlayZIndex";
 
 interface TrailPoint {
   x: number;
@@ -152,6 +153,7 @@ export const CursorTrail = ({
         lastTrailPointRef.current = { x: clientX, y: clientY, timestamp: now };
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [enabled, addPoint, fadeTime],
   );
 
@@ -177,10 +179,6 @@ export const CursorTrail = ({
         // Expanding ripple effect: each ring grows outward over time
         const rippleProgress = ageRatio; // 0 to 1 as point ages
         const maxRippleSize = baseSize * 4; // Maximum expansion size
-        const speedFactor = Math.max(
-          0.9,
-          Math.min(1.1, 1 + point.speed * 0.05),
-        );
 
         // Create expanding ripple rings that grow outward over time
         const drawExpandingRing = (ringDelay: number, ringOpacity: number) => {

@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
 import { Button } from "./Button";
 import { useTranslation } from "react-i18next";
-import { OverlayManager, OVERLAY_Z_INDEX } from './OverlayManager';
+import { OverlayManager } from './OverlayManager';
+import { OVERLAY_Z_INDEX } from '../../constants/overlayZIndex';
 
 interface DiveInButtonProps {
   onDiveIn: () => void;

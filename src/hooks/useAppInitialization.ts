@@ -47,7 +47,7 @@ export const useAppInitialization = () => {
     shouldPlayFromStart: isFreshLoad && isHomePage && !isDiveInActive,
     shouldJumpTo8s: !isFreshLoad && isHomePage && !isDiveInCompleting,
     isDiveInFlow: isFreshLoad && isHomePage && isDiveInActive
-  }), [isFreshLoad, isHomePage, isDiveInActive]);
+  }), [isFreshLoad, isHomePage]);
   
 
   // Handle SPA navigation - immediate ready state for non-fresh loads

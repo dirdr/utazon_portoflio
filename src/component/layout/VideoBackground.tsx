@@ -11,7 +11,7 @@ import { useAppLoading } from "../../contexts/AppLoadingContext";
 import { useIsMobileHome } from "../../hooks/useIsMobileHome";
 import { RadialGradient } from "../common/RadialGradient";
 import { ANIMATION_CLASSES } from "../../constants/animations";
-import { OVERLAY_Z_INDEX } from "../common/OverlayManager";
+import { OVERLAY_Z_INDEX } from "../../constants/overlayZIndex";
 
 const VIDEO_TIMINGS = {
   FRESH_LOAD_START: 0,

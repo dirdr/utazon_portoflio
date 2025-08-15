@@ -53,6 +53,8 @@ export const HomeContainer = () => {
       console.log('🖥️ Desktop fresh load: waiting for video workflow');
       setShowContent(false);
     }
+    // showContent is only being set, not read, so it doesn't need to be in dependencies
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isHomePage, isFreshLoad, isMobile]);
 
   // Listen for dive-in workflow to show content after 3 seconds (desktop only)

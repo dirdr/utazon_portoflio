@@ -9,11 +9,11 @@ export interface NavigationInfo {
   isFreshLoad: boolean;
   navigationType: 'fresh-load' | 'spa-navigation' | 'back-forward' | 'reload';
   method: 'navigation-api' | 'performance-timing' | 'document-ready' | 'fallback';
-  details: any;
+  details: Record<string, unknown>;
 }
 
 // Global state to track navigation across the app lifecycle
-let globalNavigationState = {
+const globalNavigationState = {
   isFirstVisit: true,
   lastNavigationTime: 0,
   routeChangeCount: 0,
@@ -25,16 +25,28 @@ let globalNavigationState = {
  * Most accurate method for detecting navigation types
  */
 const detectWithNavigationAPI = (): NavigationInfo | null => {
-  if (!('navigation' in window) || !(window.navigation as any)?.currentEntry) {
+  if (!('navigation' in window)) {
     return null;
   }
 
   try {
-    const navigation = window.navigation as any;
+    const navigation = window.navigation as {
+      currentEntry?: {
+        id?: string;
+        url?: string;
+        navigationType?: string;
+      };
+      entries?: () => Array<{ id?: string }>;
+    };
+
+    if (!navigation.currentEntry) {
+      return null;
+    }
+
     const currentEntry = navigation.currentEntry;
     
     // Check if this is the first navigation entry
-    const entries = navigation.entries?.() || [];
+    const entries = (typeof navigation.entries === 'function' ? navigation.entries() : []);
     const isFirstEntry = entries.length === 1 && entries[0] === currentEntry;
     
     // Navigation API can tell us about navigation types more precisely
@@ -81,7 +93,6 @@ const detectWithPerformanceTiming = (): NavigationInfo | null => {
       type: entry.type,
       loadEventEnd: entry.loadEventEnd,
       domContentLoadedEventEnd: entry.domContentLoadedEventEnd,
-      navigationStart: entry.navigationStart,
       redirectCount: entry.redirectCount
     };
 
