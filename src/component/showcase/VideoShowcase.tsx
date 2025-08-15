@@ -10,10 +10,10 @@ interface VideoShowcaseProps {
   border?: boolean;
 }
 
-export const VideoShowcase = ({ 
-  data, 
+export const VideoShowcase = ({
+  data,
   className,
-  border = false
+  border = false,
 }: VideoShowcaseProps) => {
   const { video } = data;
   const videoUrl = apiClient.getVideoUrl(video.src);

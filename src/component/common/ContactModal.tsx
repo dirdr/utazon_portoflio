@@ -231,7 +231,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                 style={{
                   backgroundColor: "#262626",
                   borderColor: "#565656",
-                  fontFamily: 'NeueMontreal, sans-serif',
+                  fontFamily: "NeueMontreal, sans-serif",
                   fontWeight: 400,
                 }}
                 disabled={isSubmitting}
@@ -262,7 +262,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                 style={{
                   backgroundColor: "#262626",
                   borderColor: "#565656",
-                  fontFamily: 'NeueMontreal, sans-serif',
+                  fontFamily: "NeueMontreal, sans-serif",
                   fontWeight: 400,
                 }}
                 disabled={isSubmitting}
@@ -295,7 +295,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                 style={{
                   backgroundColor: "#262626",
                   borderColor: "#565656",
-                  fontFamily: 'NeueMontreal, sans-serif',
+                  fontFamily: "NeueMontreal, sans-serif",
                   fontWeight: 400,
                 }}
                 disabled={isSubmitting}
@@ -326,7 +326,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                 style={{
                   backgroundColor: "#262626",
                   borderColor: "#565656",
-                  fontFamily: 'NeueMontreal, sans-serif',
+                  fontFamily: "NeueMontreal, sans-serif",
                   fontWeight: 400,
                 }}
                 disabled={isSubmitting}
@@ -358,7 +358,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
               style={{
                 backgroundColor: "#262626",
                 borderColor: "#565656",
-                fontFamily: 'NeueMontreal, sans-serif',
+                fontFamily: "NeueMontreal, sans-serif",
                 fontWeight: 400,
               }}
               disabled={isSubmitting}
@@ -411,6 +411,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                 disabled={isSubmitting}
                 glint={!isSubmitting}
                 className="text-sm font-normal"
+                proximityIntensity={true}
               >
                 {isSubmitting
                   ? t("contact.sending", "Sending...")

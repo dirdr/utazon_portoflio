@@ -4,9 +4,13 @@ import { VideoCard } from "../common/VideoCard";
 import { VideoShowcase } from "../showcase/VideoShowcase";
 import { useTranslation } from "react-i18next";
 import { Container } from "../layout/Container";
+import { Button } from "../common/Button";
+import { useContactModal } from "../../hooks/useContactModal";
 
 export const About = () => {
   const { t } = useTranslation();
+
+  const { openContactModal } = useContactModal();
 
   const titleContent = useMemo(() => {
     const title = t("about.title");
@@ -22,33 +26,33 @@ export const About = () => {
   return (
     <Container>
       <div className="h-full w-full flex flex-col justify-start pt-32">
-        <div className="grid grid-cols-3 gap-8 items-start mb-16">
-          <section className="" aria-labelledby="title-heading">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-start mb-12 lg:mb-16">
+          <section className="lg:col-span-1" aria-labelledby="title-heading">
             <LineSweepText
-              className="font-nord text-4xl lg:text-5xl italic text-muted tracking-tight "
+              className="font-nord text-3xl md:text-4xl lg:text-5xl italic text-muted tracking-tight"
               duration={6}
             >
               {titleContent}
             </LineSweepText>
           </section>
 
-          <div></div>
+          <div className="hidden lg:block"></div>
 
           <section
-            className="flex items-start"
+            className="flex items-start mt-6 lg:mt-0"
             aria-labelledby="about-description"
           >
-            <div className="w-px bg-gray-600 mr-8 flex-shrink-0 self-stretch"></div>
+            <div className="w-px bg-gray-600 mr-6 lg:mr-8 flex-shrink-0 self-stretch"></div>
             <p
               id="about-description"
-              className="text-base xl:text-lg text-gray"
+              className="text-sm md:text-base xl:text-lg text-gray"
             >
               {t("about.description")}
             </p>
           </section>
         </div>
 
-        <div className="grid grid-cols-3 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8 mb-12 lg:mb-16">
           <VideoCard
             video={{
               src: "/videos/about/card1.mp4",
@@ -75,26 +79,81 @@ export const About = () => {
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="flex items-start justify-start">
-            <h2 className="text-white font-nord text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-wide">
-              {t("about.toolsMastered")}
-            </h2>
+        <div className="relative">
+          <div className="grid grid-cols-1 lg:grid-cols-3">
+            <div className="flex flex-col">
+              <h2 className="text-white font-nord text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold tracking-wide my-16">
+                {t("about.toolsMastered")}
+              </h2>
+
+              <div className="space-y-8 md:space-y-16">
+                <div className="h-px bg-gray-600"></div>
+
+                <div className="flex flex-gap-2 md:gap-3 lg:gap-2">
+                  <span className="text-white font-medium text-base md:text-lg lg:text-xl">
+                    Cinema 4D,
+                  </span>
+                  <span className="text-white font-medium text-base md:text-lg lg:text-xl">
+                    Blender,
+                  </span>
+                  <span className="text-white font-medium text-base md:text-lg lg:text-xl">
+                    Unreal Engine 5
+                  </span>
+                </div>
+
+                <div className="h-px bg-gray-600"></div>
+
+                <div className="flex flex-wrap gap-2 md:gap-3 lg:gap-2">
+                  <span className="text-white font-medium text-base md:text-lg lg:text-xl">
+                    After Effects,
+                  </span>
+                  <span className="text-white font-medium text-base md:text-lg lg:text-xl">
+                    DaVinci Resolve,
+                  </span>
+                </div>
+                <div className="h-px bg-gray-600"></div>
+              </div>
+            </div>
+
+            <div className="lg:col-span-2 w-full mt-8 lg:mt-0">
+              <VideoShowcase
+                data={{
+                  type: "video",
+                  id: "showreel-about",
+                  order: 1,
+                  video: {
+                    src: "showreel.mp4",
+                    title: "Showreel",
+                    light: null,
+                  },
+                }}
+                border={true}
+              />
+            </div>
           </div>
-          <div className="md:col-span-2 w-full">
-            <VideoShowcase
-              data={{
-                type: "video",
-                id: "showreel-about",
-                order: 1,
-                video: {
-                  src: "showreel.mp4",
-                  title: "Showreel",
-                  light: null,
-                },
-              }}
-              border={true}
-            />
+          <div className="w-full my-32 lg:my-48">
+            <div className="max-w-2xl mx-auto text-center">
+              <h2 className="text-white font-nord text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold tracking-wide mb-8">
+                {t("about.commitment")}
+              </h2>
+              <p
+                id="commitment-desc"
+                className="text-white text-sm md:text-base xl:text-lg  leading-relaxed mb-16"
+              >
+                {t("about.commitmentDesc")}
+              </p>
+              <div className="flex justify-center">
+                <Button
+                  glint={true}
+                  as="button"
+                  className="text-xs sm:text-sm md:text-base lg:text-lg px-8 py-3 inline-block w-auto"
+                  onClick={openContactModal}
+                  proximityIntensity={true}
+                >
+                  {t("nav.contact")}
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
