@@ -187,7 +187,7 @@ export const Card = ({
           </div>
 
           <div className="absolute top-[5%] left-[90%]">
-            <div className="text-muted font-nord font-light text-xs sm:text-base md:text-lg lg:text:xl xl:text:lg 2xl:text-xl">
+            <div className="text-muted font-nord font-light text-xs sm:text-base md:text-lg lg:text:xl xl:text:lg">
               {project.date}
             </div>
           </div>

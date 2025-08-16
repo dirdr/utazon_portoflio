@@ -11,7 +11,6 @@ export const Home = () => {
   const isMobile = useIsMobileHome();
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 
-  // Memoize title content to avoid repeated string operations
   const titleContent = useMemo(() => {
     const title = t("home.title");
     return title.includes("\n")
@@ -99,14 +98,14 @@ export const Home = () => {
           <address className="not-italic">
             <p
               id="location-heading"
-              className="sm:text-base md:text-lg xl:text-xl text-muted mb-6"
+              className="text-base xl:text-lg text-muted mb-6"
             >
               Paris, France
             </p>
           </address>
           <LineSweepText
-            className="font-nord text-2xl lg:text-4xl xl:text-5xl 2xl:text-6xl italic text-muted tracking-tight leading-14"
-            duration={6}
+            className="font-nord text-5xl italic text-muted tracking-tight "
+            duration={8}
           >
             {titleContent}
           </LineSweepText>
@@ -116,7 +115,7 @@ export const Home = () => {
           <div className="space-y-4">
             <p
               id="intro-heading"
-              className="text-lg xl:text-xl 2xl:text-2xl text-gray mb-10"
+              className="text-base xl:text-lg text-gray mb-10"
             >
               {t("home.description")}
             </p>
@@ -125,7 +124,7 @@ export const Home = () => {
                 as="link"
                 glintOnHover={true}
                 href={ROUTES.PROJECTS}
-                className="sm:text-base md:text-lg xl:text-xl"
+                className="text-sm lg:text-base"
               >
                 {t("home.projects")}
               </Button>
@@ -133,7 +132,7 @@ export const Home = () => {
                 as="button"
                 glintOnHover={true}
                 onClick={handleShowreelClick}
-                className="sm:text-base md:text-lg xl:text-xl"
+                className="text-sm lg:text-base"
               >
                 {t("nav.showreel")}
               </Button>

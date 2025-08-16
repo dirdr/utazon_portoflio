@@ -28,9 +28,7 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
             className="w-full h-full object-cover object-center scale-110 transform"
             placeholderClassName="w-full h-full"
           />
-          {/* Top gradient */}
           <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-black to-transparent pointer-events-none" />
-          {/* Bottom gradient */}
           <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black to-transparent pointer-events-none" />
         </div>
 
@@ -38,7 +36,7 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
         <div className="bg-black">
           <Container>
             <div className="pb-12">
-              <h1 className="font-nord text-3xl md:text-4xl font-bold mb-2 text-white">
+              <h1 className="font-nord text-xl lg:text-2xl font-bold mb-2 text-white">
                 {t(project.title)}
               </h1>
               <h2 className="font-nord text-lg md:text-xl mb-8 font-thin text-white">
@@ -54,9 +52,7 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
                     <p className="font-neue text-gray">{t(project.date)}</p>
                   </div>
                   <div>
-                    <h3 className="font-nord text-white uppercase">
-                      Client
-                    </h3>
+                    <h3 className="font-nord text-white uppercase">Client</h3>
                     <p className="font-neue text-gray">{t(project.client)}</p>
                   </div>
                   <div>
@@ -70,7 +66,6 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
         </div>
       </div>
 
-      {/* Desktop Layout */}
       <div className="hidden lg:block h-[70vh] relative">
         <div className="absolute top-0 left-0 w-[80%] h-full overflow-hidden">
           <ImageWithLoading
@@ -79,25 +74,22 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
             className="w-full h-full object-cover opacity-60"
             placeholderClassName="w-full h-full"
           />
-          {/* Top gradient */}
           <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black to-transparent pointer-events-none" />
-          {/* Bottom gradient */}
           <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-black to-transparent pointer-events-none" />
-          {/* Right gradient for blending with content area */}
           <div className="absolute inset-y-0 right-0 w-300 bg-gradient-to-l from-black to-transparent pointer-events-none" />
         </div>
 
-        <div className="absolute top-0 right-0 w-[45%] h-full flex items-center">
+        <div className="absolute top-0 right-0 w-[42%] h-full flex items-center">
           <Container>
-            <div className="max-w-196">
+            <div className="max-w-150">
               <div className="pl-8">
-                <h1 className="font-nord text-4xl xl:text-5xl 2xl:text-6xl font-bold mb-2 text-white">
+                <h1 className="font-nord text-2xl lg:text-3xl font-bold italic mb-1 text-white">
                   {t(project.title)}
                 </h1>
-                <h2 className="font-nord text-xl xl:text-2xl mb-8 font-thin text-white">
+                <h2 className="font-nord text-base lg:text-lg mb-8 font-thin text-white">
                   {t(project.header)}
                 </h2>
-                <p className="font-neue text-lg xl:text-xl leading-relaxed text-gray mb-16">
+                <p className="font-neue text-sm xl:text-base leading-relaxed text-gray mb-16">
                   {t(project.description)}
                 </p>
                 <div className="space-y-6">
