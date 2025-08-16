@@ -92,7 +92,8 @@ export const useAppInitialization = () => {
   useEffect(() => {
     if (shouldPreload && isAssetsLoaded) {
       const elapsedTime = Date.now() - startTime;
-      const remainingTime = Math.max(0, MIN_LOADING_TIME - elapsedTime);
+      // Skip minimum loading time for SPA navigation
+      const remainingTime = isFreshLoad ? Math.max(0, MIN_LOADING_TIME - elapsedTime) : 0;
 
       setTimeout(() => {
         setIsAppInitialized(true);
@@ -106,7 +107,7 @@ export const useAppInitialization = () => {
             isDiveInActive = false;
             isDiveInCompleting = false;
           }
-        }, 500); // Small delay for smooth transition
+        }, isFreshLoad ? 500 : 0); // Small delay only for fresh load
       }, remainingTime);
     }
   }, [shouldPreload, isAssetsLoaded, startTime, isHomePage, isFreshLoad, location, navigation]);

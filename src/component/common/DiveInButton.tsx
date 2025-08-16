@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import { Button } from "./Button";
 import { useTranslation } from "react-i18next";
-import { OverlayManager } from './OverlayManager';
-import { OVERLAY_Z_INDEX } from '../../constants/overlayZIndex';
+import { OverlayManager } from "./OverlayManager";
+import { OVERLAY_Z_INDEX } from "../../constants/overlayZIndex";
 
 interface DiveInButtonProps {
   onDiveIn: () => void;
@@ -85,6 +85,7 @@ export const DiveInButton = ({
             as="button"
             onClick={handleClick}
             glint={true}
+            proximityIntensity={true}
             className={`text-base md:text-lg lg:text-xl xl:text-2xl font-nord font-bold tracking-widest uppercase transition-all duration-300 ${
               isReady ? "opacity-100 cursor-pointer" : "opacity-50 cursor-wait"
             }`}

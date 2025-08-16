@@ -1,4 +1,4 @@
-import { useRef, useCallback, useState, useEffect } from "react";
+import { useCallback, useMemo, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useLocation } from "wouter";
 import { useAppLoading } from "../../contexts/AppLoadingContext";
@@ -9,112 +9,76 @@ import { Navbar } from "../layout/Navbar";
 import { Home } from "./Home";
 import { useIsMobileHome } from "../../hooks/useIsMobileHome";
 import { useCursorTrail } from "../../hooks/useCursorTrail";
+import { useVideoWorkflow } from "../../hooks/useVideoWorkflow";
 
 export const HomeContainer = () => {
   const [location] = useLocation();
   const isHomePage = location === "/";
   const isMobile = useIsMobileHome();
-  
-  const { 
-    showDiveInButton, 
-    hideDiveInButton,
-    isFreshLoad,
-    videoBehavior
-  } = useAppLoading();
-  
+
+  const { isFreshLoad } = useAppLoading();
   const { setTrailEnabled } = useCursorTrail();
-  const videoRef = useRef<VideoBackgroundRef>(null);
-  const [showContent, setShowContent] = useState(false);
+  const videoBackgroundRef = useRef<VideoBackgroundRef>(null);
 
-  // Content show logic based on workflow type
+  const videoSrc = useMemo(
+    () => (isMobile ? "/videos/intro_mobile.mp4" : "/videos/intro.mp4"),
+    [isMobile],
+  );
+
+  const getVideoElement = useCallback(() => {
+    return videoBackgroundRef.current?.video || null;
+  }, []);
+
+  const videoWorkflow = useVideoWorkflow({
+    isFreshLoad,
+    isMobile,
+    isHomePage,
+    videoSrc,
+    getVideoElement,
+  });
+
   useEffect(() => {
-    console.log('🏠 HomeContainer - Content visibility logic:', {
-      isHomePage,
-      isFreshLoad,
-      isMobile,
-      showContent
-    });
-
-    if (!isHomePage) {
-      setShowContent(false);
-      return;
-    }
-
-    if (isMobile) {
-      // Mobile: show content immediately with no sequencing
-      console.log('📱 Mobile: showing content immediately');
-      setShowContent(true);
-    } else if (!isFreshLoad) {
-      // Desktop SPA navigation: show content immediately
-      console.log('🖥️ Desktop SPA: showing content immediately');
-      setShowContent(true);
-    } else {
-      // Desktop fresh load: wait for video workflow
-      console.log('🖥️ Desktop fresh load: waiting for video workflow');
-      setShowContent(false);
-    }
-    // showContent is only being set, not read, so it doesn't need to be in dependencies
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isHomePage, isFreshLoad, isMobile]);
-
-  // Listen for dive-in workflow to show content after 3 seconds (desktop only)
-  useEffect(() => {
-    if (!videoBehavior.isDiveInFlow || isMobile) return;
-
-    // Set up content show timer for dive-in workflow
-    const timer = setTimeout(() => {
-      setShowContent(true);
-    }, 3000); // 3s delay for dive-in workflow
-
-    return () => clearTimeout(timer);
-  }, [videoBehavior.isDiveInFlow, isMobile]);
-
-  // Enable cursor trail when DiveInButton is visible (desktop only)
-  useEffect(() => {
-    const shouldEnable = showDiveInButton && !isMobile;
+    const shouldEnable = videoWorkflow.shouldShowDiveIn && !isMobile;
     setTrailEnabled(shouldEnable);
-  }, [showDiveInButton, isMobile, setTrailEnabled]);
+  }, [videoWorkflow.shouldShowDiveIn, isMobile, setTrailEnabled]);
 
   const handleDiveIn = useCallback(() => {
-    // Start video IMMEDIATELY on button click for instant response
-    videoRef.current?.startVideo();
-    
-    // Hide the dive-in button after video starts (no delay needed)
-    hideDiveInButton();
-  }, [hideDiveInButton]);
-
+    videoWorkflow.onDiveInClick();
+  }, [videoWorkflow]);
 
   if (!isHomePage) {
     return null;
   }
 
   return (
-    <motion.div 
+    <motion.div
       className="relative min-h-screen"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: isFreshLoad ? 0.5 : 0 }}
     >
-      {/* Video Background with Gradient */}
-      <VideoBackground 
-        ref={videoRef}
-        showGradient={showContent}
+      <VideoBackground
+        ref={videoBackgroundRef}
+        src={videoSrc}
+        showGradient={videoWorkflow.shouldShowContent}
         gradientDelay={isFreshLoad ? 300 : 0}
+        onLoadedData={videoWorkflow.onVideoLoaded}
+        onTimeUpdate={(e) =>
+          videoWorkflow.onVideoTimeUpdate(e.currentTarget.currentTime)
+        }
+        onEnded={videoWorkflow.onVideoEnded}
       />
-      
-      {/* Dive In Button Overlay - Desktop Only */}
+
       <AnimatePresence>
-        {showDiveInButton && !isMobile && (
-          <DiveInButton 
+        {videoWorkflow.shouldShowDiveIn && (
+          <DiveInButton
             onDiveIn={handleDiveIn}
-            isReady={true}
+            isReady={videoWorkflow.isVideoLoaded}
           />
         )}
       </AnimatePresence>
-      
-      {/* Home Content */}
+
       {isMobile ? (
-        // Mobile: No fade animation, content always visible
         <div className="h-screen relative z-10">
           <Navbar />
           <main className="absolute inset-0 top-auto overflow-hidden">
@@ -122,11 +86,11 @@ export const HomeContainer = () => {
           </main>
         </div>
       ) : (
-        // Desktop: Fade animation based on sequencing
         <FadeInContainer
-          isVisible={showContent}
+          isVisible={videoWorkflow.shouldShowContent}
           className="h-screen relative z-10"
           delay={isFreshLoad ? 300 : 0}
+          instantForSPA={!isFreshLoad}
         >
           <Navbar />
           <main className="absolute inset-0 top-auto overflow-hidden">
@@ -137,3 +101,4 @@ export const HomeContainer = () => {
     </motion.div>
   );
 };
+

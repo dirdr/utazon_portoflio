@@ -7,42 +7,47 @@ import {
   useMemo,
 } from "react";
 import { useLocation } from "wouter";
-import { useAppLoading } from "../../contexts/AppLoadingContext";
 import { useIsMobileHome } from "../../hooks/useIsMobileHome";
 import { RadialGradient } from "../common/RadialGradient";
 import { ANIMATION_CLASSES } from "../../constants/animations";
 import { OVERLAY_Z_INDEX } from "../../constants/overlayZIndex";
 
-const VIDEO_TIMINGS = {
-  FRESH_LOAD_START: 0,
-  SPA_NAV_START: 8,
-} as const;
 
 export interface VideoBackgroundRef {
   startVideo: () => void;
+  video: HTMLVideoElement | null;
 }
 
 interface VideoBackgroundProps {
+  src?: string;
   showGradient?: boolean;
   gradientDelay?: number;
+  onLoadedData?: () => void;
+  onTimeUpdate?: (event: React.SyntheticEvent<HTMLVideoElement>) => void;
+  onEnded?: () => void;
 }
 
 export const VideoBackground = forwardRef<
   VideoBackgroundRef,
   VideoBackgroundProps
->(({ showGradient = false, gradientDelay = 0 }, ref) => {
+>(({ 
+  src,
+  showGradient = false, 
+  gradientDelay = 0,
+  onLoadedData,
+  onTimeUpdate,
+  onEnded
+}, ref) => {
   const [location] = useLocation();
   const isHomePage = location === "/";
   const isMobile = useIsMobileHome();
 
-  const { videoBehavior } = useAppLoading();
-
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  const videoSource = useMemo(
-    () => (isMobile ? "/videos/intro_mobile.mp4" : "/videos/intro.mp4"),
-    [isMobile],
-  );
+  const videoSource = useMemo(() => {
+    if (src) return src;
+    return isMobile ? "/videos/intro_mobile.mp4" : "/videos/intro.mp4";
+  }, [src, isMobile]);
 
   // GPU acceleration optimization
   useEffect(() => {
@@ -57,112 +62,47 @@ export const VideoBackground = forwardRef<
     });
   }, [isHomePage]);
 
-  // Initialize mobile video autoplay
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video || !isHomePage || !isMobile) return;
-
-    video.currentTime = VIDEO_TIMINGS.FRESH_LOAD_START;
-    video.muted = true;
-
-    requestAnimationFrame(() => {
-      video.play().catch(() => {
-        // Mobile video autoplay failed - expected behavior
-      });
-    });
-  }, [isHomePage, isMobile]);
-
-  // Handle SPA navigation - jump to 8s
-  useEffect(() => {
-    const video = videoRef.current;
-
-    if (
-      !video ||
-      !isHomePage ||
-      !videoBehavior.shouldJumpTo8s ||
-      videoBehavior.isDiveInFlow ||
-      isMobile
-    ) {
-      return;
-    }
-
-    video.pause();
-    video.currentTime = VIDEO_TIMINGS.SPA_NAV_START;
-
-    requestAnimationFrame(() => {
-      video.play().catch(() => {
-        // Video autoplay failed - expected in some browsers
-      });
-    });
-  }, [
-    isHomePage,
-    videoBehavior.shouldJumpTo8s,
-    videoBehavior.isDiveInFlow,
-    isMobile,
-  ]);
-
-  // Handle fresh load - prepare video from start
-  useEffect(() => {
-    const video = videoRef.current;
-
-    if (
-      !video ||
-      !isHomePage ||
-      !videoBehavior.shouldPlayFromStart ||
-      isMobile
-    ) {
-      return;
-    }
-
-    video.pause();
-    requestAnimationFrame(() => {
-      video.currentTime = VIDEO_TIMINGS.FRESH_LOAD_START;
-    });
-  }, [isHomePage, videoBehavior.shouldPlayFromStart, isMobile]);
-
-  // Handle video replay when it ends
+  // Handle video events
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !isHomePage) return;
 
-    const handleVideoEnded = () => {
-      if (isMobile) {
-        // Mobile: replay from 0 seconds
-        video.currentTime = VIDEO_TIMINGS.FRESH_LOAD_START;
-      } else {
-        // Desktop: replay from 8 seconds
-        video.currentTime = VIDEO_TIMINGS.SPA_NAV_START;
-      }
-
-      requestAnimationFrame(() => {
-        video.play().catch(() => {
-          // Video autoplay failed - expected in some browsers
-        });
-      });
+    const handleLoadedData = () => {
+      onLoadedData?.();
     };
 
-    video.addEventListener("ended", handleVideoEnded);
+    const handleTimeUpdate = (e: Event) => {
+      onTimeUpdate?.(e as unknown as React.SyntheticEvent<HTMLVideoElement>);
+    };
+
+    const handleEnded = () => {
+      onEnded?.();
+    };
+
+    video.addEventListener('loadeddata', handleLoadedData);
+    video.addEventListener('timeupdate', handleTimeUpdate);
+    video.addEventListener('ended', handleEnded);
 
     return () => {
-      video.removeEventListener("ended", handleVideoEnded);
+      video.removeEventListener('loadeddata', handleLoadedData);
+      video.removeEventListener('timeupdate', handleTimeUpdate);
+      video.removeEventListener('ended', handleEnded);
     };
-  }, [isHomePage, isMobile]);
+  }, [isHomePage, onLoadedData, onTimeUpdate, onEnded]);
 
   const startVideo = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    video.currentTime = VIDEO_TIMINGS.FRESH_LOAD_START;
-
-    video.play().catch(() => {
-      // Video play failed - expected in some browsers
-    });
+    video.currentTime = 0;
+    video.play().catch(console.error);
   }, []);
 
   useImperativeHandle(
     ref,
     () => ({
       startVideo,
+      video: videoRef.current,
     }),
     [startVideo],
   );
@@ -180,7 +120,7 @@ export const VideoBackground = forwardRef<
       <video
         ref={videoRef}
         className="w-full h-full object-cover gpu-accelerated"
-        muted={isMobile}
+        muted
         autoPlay={false}
         playsInline
         disablePictureInPicture
