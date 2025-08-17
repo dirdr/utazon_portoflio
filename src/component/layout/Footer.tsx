@@ -95,12 +95,21 @@ export const Footer = () => {
                   © {currentYear} Antoine Vernez. {t("footer.allRightsReserved")}
                 </p>
                 <p className="text-white text-xs">
-                  Made with ❤️ by{" "}
+                  Designed by{" "}
+                  <a
+                    href="https://www.linkedin.com/in/r%C3%A9mi-inn-485692200/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white hover:text-white transition-colors duration-200 underline"
+                  >
+                    Rémi Inn
+                  </a>
+                  {" "}and developed by{" "}
                   <a
                     href="https://github.com/dirdr"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-white hover:text-white transition-colors duration-200"
+                    className="text-white hover:text-white transition-colors duration-200 underline"
                   >
                     Adrien Pelfresne
                   </a>

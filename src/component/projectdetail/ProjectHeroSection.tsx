@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { Project } from "../../types/project";
 import { Container } from "../layout/Container";
 import { ImageWithLoading } from "../common/ImageWithLoading";
+import { BackButton } from "../common/BackButton";
 
 interface GradientConfig {
   top?: { size: string; enabled: boolean };
@@ -20,6 +21,10 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
 
   return (
     <section className="relative w-full bg-black -mt-20 pt-20">
+      <div className="lg:hidden absolute top-24 left-4 z-10">
+        <BackButton to="/projects" />
+      </div>
+
       <div className="lg:hidden">
         <div className="relative h-[30vh] overflow-hidden">
           <ImageWithLoading
@@ -67,7 +72,11 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
       </div>
 
       <div className="hidden lg:block h-[70vh] relative">
-        <div className="absolute top-0 left-0 w-[80%] h-full overflow-hidden">
+        <div className="absolute top-8 left-32 z-20">
+          <BackButton to="/projects" />
+        </div>
+
+        <div className="absolute top-0 left-0 w-[70%] h-full overflow-hidden">
           <ImageWithLoading
             src={`/images/projects/${project.id}/background.webp`}
             alt={t(project.title)}
@@ -81,7 +90,7 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
 
         <div className="absolute top-0 right-0 w-[42%] h-full flex items-center">
           <Container>
-            <div className="max-w-150">
+            <div className="max-w-135">
               <div className="pl-8">
                 <h1 className="font-nord text-2xl lg:text-3xl font-bold italic mb-1 text-white">
                   {t(project.title)}
@@ -96,15 +105,21 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
                   <div className="grid grid-cols-1 gap-4 text-lg">
                     <div>
                       <h3 className="font-nord text-white uppercase">Date</h3>
-                      <p className="font-neue text-gray">{t(project.date)}</p>
+                      <p className="font-neue text-gray text-sm xl:text-base">
+                        {t(project.date)}
+                      </p>
                     </div>
                     <div>
                       <h3 className="font-nord text-white uppercase">Client</h3>
-                      <p className="font-neue text-gray">{t(project.client)}</p>
+                      <p className="font-neue text-gray  text-sm xl:text-base">
+                        {t(project.client)}
+                      </p>
                     </div>
                     <div>
                       <h3 className="font-nord text-white uppercase">Role</h3>
-                      <p className="font-neue text-gray">{t(project.role)}</p>
+                      <p className="font-neue text-gray text-sm xl:text-base">
+                        {t(project.role)}
+                      </p>
                     </div>
                   </div>
                 </div>
