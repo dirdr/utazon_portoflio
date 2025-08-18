@@ -27,14 +27,17 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
 
       <div className="lg:hidden">
         <div className="relative h-[50vh] overflow-hidden">
-          <ImageWithLoading
-            src={`/images/projects/${project.id}/background.webp`}
-            alt={t(project.title)}
-            className="w-full h-full object-cover object-center scale-110 transform"
-            placeholderClassName="w-full h-full"
-          />
-          <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-black to-transparent pointer-events-none" />
-          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black to-transparent pointer-events-none" />
+          <div className="absolute top-0 left-0 w-[1200px] h-full">
+            <ImageWithLoading
+              src={`/images/projects/${project.id}/background.webp`}
+              alt={t(project.title)}
+              className="w-full h-full object-cover object-left"
+              placeholderClassName="w-full h-full"
+            />
+            {/* Top and bottom gradients */}
+            <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black to-transparent pointer-events-none" />
+            <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-black to-transparent pointer-events-none" />
+          </div>
         </div>
 
         {/* Separate Hero Content Section Below Image */}
@@ -83,18 +86,20 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
             className="w-full h-full object-cover object-left opacity-60"
             placeholderClassName="w-full h-full"
           />
+          {/* Top and bottom gradients */}
           <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black to-transparent pointer-events-none" />
           <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-black to-transparent pointer-events-none" />
+          {/* Right side gradient overlay - positioned within image container */}
+          <div
+            className="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-r from-transparent to-black pointer-events-none"
+            style={{
+              background:
+                "linear-gradient(to right, transparent 0%, transparent 40%, rgba(0,0,0,0.7) 70%, black 100%)",
+            }}
+          />
         </div>
 
         <div className="absolute top-0 right-0 h-full flex items-center w-[50%] xl:w-[42%] min-w-[400px]">
-          <div
-            className="absolute inset-y-0 left-0 right-0 bg-gradient-to-r from-transparent via-transparent via-black to-black pointer-events-none z-0"
-            style={{
-              background:
-                "linear-gradient(to right, transparent 0%, transparent 30%, black 70%, black 100%)",
-            }}
-          />
           <Container className="relative z-10">
             <div className="max-w-full xl:max-w-135">
               <div className="pl-8 pr-8">

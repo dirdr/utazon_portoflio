@@ -18,7 +18,7 @@ export const AurumNova: Project = {
       order: 1,
       video: {
         src: "aurum-nova/details.mp4",
-        light: "/images/projects/aurum-nova/cover.webp",
+        startTime: 10,
       },
     },
     {

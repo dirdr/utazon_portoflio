@@ -32,6 +32,7 @@ export const VideoShowcase = ({
           width="100%"
           height="100%"
           controls
+          startTime={video.startTime}
         />
       </div>
     </div>

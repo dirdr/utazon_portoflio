@@ -18,7 +18,7 @@ export const PixelBreak: Project = {
       order: 1,
       video: {
         src: "pixel-break/details.mp4",
-        light: "/images/projects/pixel-break/cover.webp",
+        startTime: 10,
       },
     },
     {
