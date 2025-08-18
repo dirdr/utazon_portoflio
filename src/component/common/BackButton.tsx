@@ -6,7 +6,10 @@ interface BackButtonProps {
   className?: string;
 }
 
-export const BackButton = ({ to = "/projects", className }: BackButtonProps) => {
+export const BackButton = ({
+  to = "/projects",
+  className,
+}: BackButtonProps) => {
   const [, setLocation] = useLocation();
 
   const handleClick = () => {
@@ -17,13 +20,13 @@ export const BackButton = ({ to = "/projects", className }: BackButtonProps) => 
     <button
       onClick={handleClick}
       className={cn(
-        "group relative w-12 h-12 bg-transparent border-2 border-gray-500/60 hover:border-gray-400/80 rounded-full",
+        "group relative w-14 h-14 bg-transparent border-2 border-gray-500/60 hover:border-gray-400/80 rounded-full",
         "flex items-center justify-center",
         "transition-all duration-200 ease-out",
         "hover:scale-110 hover:shadow-lg",
         "focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2",
         "active:scale-95",
-        className
+        className,
       )}
       aria-label="Go back"
     >
@@ -44,3 +47,4 @@ export const BackButton = ({ to = "/projects", className }: BackButtonProps) => 
     </button>
   );
 };
+

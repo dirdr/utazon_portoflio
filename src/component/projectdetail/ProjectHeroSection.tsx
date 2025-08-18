@@ -26,7 +26,7 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
       </div>
 
       <div className="lg:hidden">
-        <div className="relative h-[30vh] overflow-hidden">
+        <div className="relative h-[50vh] overflow-hidden">
           <ImageWithLoading
             src={`/images/projects/${project.id}/background.webp`}
             alt={t(project.title)}
@@ -71,34 +71,40 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
         </div>
       </div>
 
-      <div className="hidden lg:block h-[70vh] relative">
+      <div className="hidden lg:block h-[70vh] relative overflow-hidden">
         <div className="absolute top-8 left-32 z-20">
           <BackButton to="/projects" />
         </div>
 
-        <div className="absolute top-0 left-0 w-[70%] h-full overflow-hidden">
+        <div className="absolute top-0 left-0 w-[1200px] h-full">
           <ImageWithLoading
             src={`/images/projects/${project.id}/background.webp`}
             alt={t(project.title)}
-            className="w-full h-full object-cover opacity-60"
+            className="w-full h-full object-cover object-left opacity-60"
             placeholderClassName="w-full h-full"
           />
           <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black to-transparent pointer-events-none" />
           <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-black to-transparent pointer-events-none" />
-          <div className="absolute inset-y-0 right-0 w-300 bg-gradient-to-l from-black to-transparent pointer-events-none" />
         </div>
 
-        <div className="absolute top-0 right-0 w-[42%] h-full flex items-center">
-          <Container>
-            <div className="max-w-135">
-              <div className="pl-8">
-                <h1 className="font-nord text-2xl lg:text-3xl font-bold italic mb-1 text-white">
+        <div className="absolute top-0 right-0 h-full flex items-center w-[50%] xl:w-[42%] min-w-[400px]">
+          <div
+            className="absolute inset-y-0 left-0 right-0 bg-gradient-to-r from-transparent via-transparent via-black to-black pointer-events-none z-0"
+            style={{
+              background:
+                "linear-gradient(to right, transparent 0%, transparent 30%, black 70%, black 100%)",
+            }}
+          />
+          <Container className="relative z-10">
+            <div className="max-w-full xl:max-w-135">
+              <div className="pl-8 pr-8">
+                <h1 className="font-nord text-4xl font-bold italic mb-1 text-white">
                   {t(project.title)}
                 </h1>
-                <h2 className="font-nord text-base lg:text-lg mb-8 font-thin text-white">
+                <h2 className="font-nord lg:text-xl mb-8 font-thin text-white">
                   {t(project.header)}
                 </h2>
-                <p className="font-neue text-sm xl:text-base leading-relaxed text-gray mb-16">
+                <p className="font-neue text-base leading-relaxed text-gray mb-12 xl:mb-16">
                   {t(project.description)}
                 </p>
                 <div className="space-y-6">
