@@ -134,4 +134,44 @@
   .animate-modal-scale-out {
     animation: modal-scale-out 0.2s cubic-bezier(0.4, 0, 1, 1);
   }
+
+  /* Sound Player Animations - Sequential Wave Effect */
+  @keyframes sound-wave {
+    0%, 80%, 100% { 
+      transform: scaleY(0.25); /* dot state - minimal scale */
+    }
+    10%, 70% { 
+      transform: scaleY(1); /* bar state - full scale */
+    }
+  }
+
+  .animate-sound-wave-1 {
+    animation: sound-wave 1.2s linear infinite;
+    animation-delay: 0ms;
+    transform-origin: center;
+  }
+
+  .animate-sound-wave-2 {
+    animation: sound-wave 1.2s linear infinite;
+    animation-delay: 0.15s;
+    transform-origin: center;
+  }
+
+  .animate-sound-wave-3 {
+    animation: sound-wave 1.2s linear infinite;
+    animation-delay: 0.3s;
+    transform-origin: center;
+  }
+
+  .animate-sound-wave-4 {
+    animation: sound-wave 1.2s linear infinite;
+    animation-delay: 0.45s;
+    transform-origin: center;
+  }
+
+  .animate-sound-wave-5 {
+    animation: sound-wave 1.2s linear infinite;
+    animation-delay: 0.6s;
+    transform-origin: center;
+  }
 }

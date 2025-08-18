@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { Button } from "../common/Button";
 import { LineSweepText } from "../common/LineSweepText";
+import { SoundPlayer } from "../common/SoundPlayer";
 import { ROUTES } from "../../constants/routes";
 import { useTranslation } from "react-i18next";
 import { useIsMobileHome } from "../../hooks/useIsMobileHome";
@@ -10,6 +11,7 @@ export const Home = () => {
   const { t } = useTranslation();
   const isMobile = useIsMobileHome();
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+  const [isSoundPlaying, setIsSoundPlaying] = useState(false);
 
   const titleContent = useMemo(() => {
     const title = t("home.title");
@@ -30,6 +32,12 @@ export const Home = () => {
     setIsVideoModalOpen(true);
   }, []);
 
+  const handleSoundToggle = useCallback((isPlaying: boolean) => {
+    setIsSoundPlaying(isPlaying);
+    // Here you can add actual audio control logic
+    console.log(`Sound ${isPlaying ? 'playing' : 'muted'}`);
+  }, []);
+
   useEffect(() => {
     document.documentElement.classList.add("hide-scrollbars");
     return () => {
@@ -41,10 +49,17 @@ export const Home = () => {
     return (
       <div className="h-full w-full flex flex-col justify-end px-4 lg:px-12 pb-8">
         <div className="flex flex-col ">
-          <address className="not-italic">
-            <p className="text-lg sm:text-xl md:text-2xl text-muted pb-2">
-              Paris, France
-            </p>
+          <address className="not-italic relative">
+            <div className="flex flex-col gap-2 pb-2">
+              <SoundPlayer 
+                onToggle={handleSoundToggle}
+                initialPlaying={isSoundPlaying}
+                className="self-start"
+              />
+              <p className="text-lg sm:text-xl md:text-2xl text-muted">
+                Paris, France
+              </p>
+            </div>
           </address>
           <section aria-labelledby="title-heading">
             <LineSweepText
@@ -95,13 +110,20 @@ export const Home = () => {
     <div className="h-full w-full flex flex-col justify-end px-4 lg:px-12 pb-8 xl:pb-16">
       <div className="flex justify-between items-end">
         <section className="w-165" aria-labelledby="location-heading">
-          <address className="not-italic">
-            <p
-              id="location-heading"
-              className="text-base xl:text-lg text-muted mb-6"
-            >
-              Paris, France
-            </p>
+          <address className="not-italic relative">
+            <div className="flex flex-col gap-3 mb-6">
+              <SoundPlayer 
+                onToggle={handleSoundToggle}
+                initialPlaying={isSoundPlaying}
+                className="self-start"
+              />
+              <p
+                id="location-heading"
+                className="text-base xl:text-lg text-muted"
+              >
+                Paris, France
+              </p>
+            </div>
           </address>
           <LineSweepText
             className="font-nord text-5xl italic text-muted tracking-tight "
