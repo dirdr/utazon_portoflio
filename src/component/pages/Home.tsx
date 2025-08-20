@@ -56,20 +56,18 @@ export const Home = ({ onVideoMuteToggle }: HomeProps) => {
       <div className="h-full w-full flex flex-col justify-end px-4 lg:px-12 pb-8">
         <div className="flex flex-col ">
           <address className="not-italic relative">
-            <div className="flex flex-col gap-2 pb-2">
-              <SoundPlayer
-                onToggle={handleSoundToggle}
-                initialPlaying={true}
-                className="self-start"
-              />
-              <p className="text-lg sm:text-xl md:text-2xl text-muted">
-                Paris, France
-              </p>
-            </div>
+            <SoundPlayer
+              onToggle={handleSoundToggle}
+              initialPlaying={true}
+              className="self-start mb-2"
+            />
+            <p className="text-base sm:text-lg md:text-xl text-muted mb-2">
+              Paris, France
+            </p>
           </address>
           <section aria-labelledby="title-heading">
             <LineSweepText
-              className="font-nord text-3xl sm:text-4xl md:text-5xl italic text-muted tracking-tight leading-tight pb-4"
+              className="font-nord text-2xl sm:text-3xl md:text-4xl italic text-muted tracking-tight leading-tight mb-2"
               duration={6}
             >
               {titleContent}
@@ -79,7 +77,7 @@ export const Home = ({ onVideoMuteToggle }: HomeProps) => {
           <section aria-labelledby="intro-heading">
             <p
               id="intro-heading"
-              className="text-base sm:text-lg md:text-2xl text-gray pb-4 md:pb-8"
+              className="text-sm sm:text-base text-gray mb-4"
             >
               {t("home.description")}
             </p>
@@ -90,7 +88,7 @@ export const Home = ({ onVideoMuteToggle }: HomeProps) => {
               as="link"
               glintOnHover={true}
               href={ROUTES.PROJECTS}
-              className="text-sm sm:text-base md:text-xl"
+              className="text-xs sm:text-base"
             >
               {t("home.projects")}
             </Button>
@@ -98,7 +96,7 @@ export const Home = ({ onVideoMuteToggle }: HomeProps) => {
               as="button"
               glintOnHover={true}
               onClick={handleShowreelClick}
-              className="text-sm sm:text-base md:text-xl"
+              className="text-xs sm:text-base"
             >
               {t("nav.showreel")}
             </Button>

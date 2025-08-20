@@ -95,7 +95,7 @@ export const SoundPlayer: React.FC<SoundPlayerProps> = ({
         className={cn(
           "group relative",
           "bg-transparent border border-white/20",
-          "rounded-full px-6 py-3",
+          "rounded-full px-4 py-2 sm:px-6 sm:py-3",
           "transition-all duration-300 ease-out",
           "focus:outline-none",
           className,
@@ -110,7 +110,7 @@ export const SoundPlayer: React.FC<SoundPlayerProps> = ({
         <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-white/5 via-white/10 to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
         <div
-          className="relative flex items-center justify-center gap-1 w-10 h-4"
+          className="relative flex items-center justify-center gap-0.5 w-8 h-3 sm:gap-1 sm:w-10 sm:h-4"
           aria-hidden="true"
         >
           {barsConfig.map((bar, index) => (
@@ -118,7 +118,7 @@ export const SoundPlayer: React.FC<SoundPlayerProps> = ({
               key={index}
               ref={(el) => (barsRef.current[index] = el)}
               className={cn(
-                "h-4 bg-white rounded-full transform-gpu",
+                "h-2 md:h-4 bg-white rounded-full transform-gpu",
                 !isPlaying && "scale-y-[0.2]",
                 isPlaying && isAnimating && "animate-sound-wave",
               )}
