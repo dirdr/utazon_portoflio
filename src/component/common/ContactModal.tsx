@@ -138,14 +138,16 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
 
   return (
     <div
-      className="px-16 py-8 min-h-full bg-cover bg-center bg-no-repeat relative rounded-2xl border-2 border-gray-400/30"
+      className="px-4 sm:px-8 lg:px-16 py-4 sm:py-6 lg:py-8 min-h-full max-h-[100vh] overflow-y-auto bg-cover bg-center bg-no-repeat relative rounded-2xl border-2 border-gray-400/30"
+      role="dialog"
+      aria-modal="true"
       style={{
         backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/src/assets/images/card_backgrounds/3.webp')`,
       }}
     >
       <button
         onClick={handleClose}
-        className="absolute top-8 right-16 z-10 p-2 text-white transition-all duration-200 hover:scale-110 focus:outline-none"
+        className="absolute top-4 sm:top-6 lg:top-8 right-4 sm:right-8 lg:right-16 z-10 p-2 text-white transition-all duration-200 hover:scale-110 focus:outline-none"
         aria-label="Close modal"
         disabled={isSubmitting}
       >
@@ -164,7 +166,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
         </svg>
       </button>
 
-      <div className="mt-18 mb-18">
+      <div className="mt-8 sm:mt-12 lg:mt-18 mb-8 sm:mb-12 lg:mb-18">
         <p className="text-lg text-white text-left font-nord">
           {t(
             "contact.description",
@@ -174,7 +176,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
       </div>
 
       {isSubmitted && (
-        <div className="mb-18 p-4 bg-green-500/10 border border-green-500/20 rounded-lg text-center">
+        <div className="mb-8 sm:mb-12 lg:mb-18 p-4 bg-green-500/10 border border-green-500/20 rounded-lg text-center">
           <div className="text-green-400 mb-2">
             <svg
               className="w-8 h-8 mx-auto"
@@ -200,7 +202,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
       )}
 
       {errors.general && (
-        <div className="mb-18 p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-center">
+        <div className="mb-8 sm:mb-12 lg:mb-18 p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-center">
           <p className="text-red-400 text-sm font-nord font-thin">
             {errors.general}
           </p>
@@ -209,7 +211,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
 
       {!isSubmitted && (
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-14 mb-18">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8 lg:gap-14 mb-8 sm:mb-12 lg:mb-18">
             <div>
               <label
                 htmlFor="firstName"
@@ -273,7 +275,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-14 mb-18">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8 lg:gap-14 mb-8 sm:mb-12 lg:mb-18">
             <div>
               <label
                 htmlFor="email"
@@ -368,8 +370,8 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
             )}
           </div>
 
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-18 pb-18">
-            <div className="flex items-center gap-6 order-2 sm:order-1">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-8 sm:pt-12 lg:pt-18 pb-8 sm:pb-12 lg:pb-18">
+            <div className="flex items-center gap-3 sm:gap-4 lg:gap-6 order-2 sm:order-1">
               <a
                 href="https://instagram.com/utazon"
                 target="_blank"
