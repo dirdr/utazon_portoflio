@@ -108,7 +108,7 @@ export const About = () => {
                     After Effects,
                   </span>
                   <span className="text-white font-medium text-base md:text-lg lg:text-xl">
-                    DaVinci Resolve,
+                    DaVinci Resolve
                   </span>
                 </div>
                 <div className="h-px bg-gray-600"></div>
