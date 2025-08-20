@@ -38,9 +38,9 @@ export const HomeContainer = () => {
   });
 
   useEffect(() => {
-    const shouldEnable = videoWorkflow.shouldShowDiveIn && !isMobile;
+    const shouldEnable = (videoWorkflow.shouldShowDiveIn || videoWorkflow.shouldShowContent) && !isMobile;
     setTrailEnabled(shouldEnable);
-  }, [videoWorkflow.shouldShowDiveIn, isMobile, setTrailEnabled]);
+  }, [videoWorkflow.shouldShowDiveIn, videoWorkflow.shouldShowContent, isMobile, setTrailEnabled]);
 
   const handleDiveIn = useCallback(() => {
     videoWorkflow.onDiveInClick();

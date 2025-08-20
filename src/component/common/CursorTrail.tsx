@@ -144,7 +144,7 @@ export const CursorTrail = ({
       const deltaX = Math.abs(clientX - lastTrailPointRef.current.x);
       const deltaY = Math.abs(clientY - lastTrailPointRef.current.y);
 
-      if (deltaX > 5 || deltaY > 5) {
+      if (deltaX > 2 || deltaY > 2) {
         const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
         const timeDiff = now - lastTrailPointRef.current.timestamp;
         const speed = timeDiff > 0 ? distance / timeDiff : 0;

@@ -22,13 +22,14 @@ export const AppContent = () => {
   const isHomePage = location === "/";
   const { isEnabled } = useCursorTrail();
   const isMobile = useIsMobileHome();
-  
 
   return (
     <ModalProvider>
       <Layout>
         <PageTransition pageKey={location}>
-          <div className={`${isHomePage ? "h-full" : "min-h-full"} flex flex-col`}>
+          <div
+            className={`${isHomePage ? "h-full" : "min-h-full"} flex flex-col`}
+          >
             <div className="flex-1">
               <Switch location={location}>
                 <Route path={ROUTES.HOME} component={HomeContainer} />
@@ -51,8 +52,13 @@ export const AppContent = () => {
           </div>
         </PageTransition>
       </Layout>
-      <CursorTrail enabled={isEnabled && !isMobile} />
+      <CursorTrail
+        enabled={isEnabled && !isMobile && isHomePage}
+        maxPoints={1000}
+        fadeTime={2500}
+      />
       <ModalRoot />
     </ModalProvider>
   );
 };
+

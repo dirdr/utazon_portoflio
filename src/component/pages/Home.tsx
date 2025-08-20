@@ -15,7 +15,7 @@ export const Home = ({ onVideoMuteToggle }: HomeProps) => {
   const { t } = useTranslation();
   const isMobile = useIsMobileHome();
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
-  const [isSoundPlaying, setIsSoundPlaying] = useState(true);
+  const [, setIsSoundPlaying] = useState(true);
 
   const titleContent = useMemo(() => {
     const title = t("home.title");
