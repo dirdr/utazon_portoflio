@@ -46,6 +46,10 @@ export const HomeContainer = () => {
     videoWorkflow.onDiveInClick();
   }, [videoWorkflow]);
 
+  const handleVideoMute = useCallback((muted: boolean) => {
+    videoBackgroundRef.current?.setMuted(muted);
+  }, []);
+
   if (!isHomePage) {
     return null;
   }
@@ -82,7 +86,7 @@ export const HomeContainer = () => {
         <div className="h-screen relative z-10">
           <Navbar />
           <main className="absolute inset-0 top-auto overflow-hidden">
-            <Home />
+            <Home onVideoMuteToggle={handleVideoMute} />
           </main>
         </div>
       ) : (
@@ -94,7 +98,7 @@ export const HomeContainer = () => {
         >
           <Navbar />
           <main className="absolute inset-0 top-auto overflow-hidden">
-            <Home />
+            <Home onVideoMuteToggle={handleVideoMute} />
           </main>
         </FadeInContainer>
       )}

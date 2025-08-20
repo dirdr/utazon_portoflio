@@ -7,11 +7,15 @@ import { useTranslation } from "react-i18next";
 import { useIsMobileHome } from "../../hooks/useIsMobileHome";
 import { FullscreenVideoModal } from "../common/FullscreenVideoModal";
 
-export const Home = () => {
+interface HomeProps {
+  onVideoMuteToggle?: (muted: boolean) => void;
+}
+
+export const Home = ({ onVideoMuteToggle }: HomeProps) => {
   const { t } = useTranslation();
   const isMobile = useIsMobileHome();
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
-  const [isSoundPlaying, setIsSoundPlaying] = useState(false);
+  const [isSoundPlaying, setIsSoundPlaying] = useState(true);
 
   const titleContent = useMemo(() => {
     const title = t("home.title");
@@ -32,11 +36,13 @@ export const Home = () => {
     setIsVideoModalOpen(true);
   }, []);
 
-  const handleSoundToggle = useCallback((isPlaying: boolean) => {
-    setIsSoundPlaying(isPlaying);
-    // Here you can add actual audio control logic
-    console.log(`Sound ${isPlaying ? 'playing' : 'muted'}`);
-  }, []);
+  const handleSoundToggle = useCallback(
+    (isPlaying: boolean) => {
+      setIsSoundPlaying(isPlaying);
+      onVideoMuteToggle?.(!isPlaying);
+    },
+    [onVideoMuteToggle],
+  );
 
   useEffect(() => {
     document.documentElement.classList.add("hide-scrollbars");
@@ -51,9 +57,9 @@ export const Home = () => {
         <div className="flex flex-col ">
           <address className="not-italic relative">
             <div className="flex flex-col gap-2 pb-2">
-              <SoundPlayer 
+              <SoundPlayer
                 onToggle={handleSoundToggle}
-                initialPlaying={isSoundPlaying}
+                initialPlaying={true}
                 className="self-start"
               />
               <p className="text-lg sm:text-xl md:text-2xl text-muted">
@@ -112,10 +118,10 @@ export const Home = () => {
         <section className="w-165" aria-labelledby="location-heading">
           <address className="not-italic relative">
             <div className="flex flex-col gap-3 mb-6">
-              <SoundPlayer 
+              <SoundPlayer
                 onToggle={handleSoundToggle}
-                initialPlaying={isSoundPlaying}
-                className="self-start"
+                initialPlaying={true}
+                className="self-start mb-6"
               />
               <p
                 id="location-heading"

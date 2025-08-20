@@ -14,6 +14,7 @@ import { OVERLAY_Z_INDEX } from "../../constants/overlayZIndex";
 
 export interface VideoBackgroundRef {
   startVideo: () => void;
+  setMuted: (muted: boolean) => void;
   video: HTMLVideoElement | null;
 }
 
@@ -87,13 +88,21 @@ export const VideoBackground = forwardRef<
       video.play().catch(console.error);
     }, []);
 
+    const setMuted = useCallback((muted: boolean) => {
+      const video = videoRef.current;
+      if (!video) return;
+      
+      video.muted = muted;
+    }, []);
+
     useImperativeHandle(
       ref,
       () => ({
         startVideo,
+        setMuted,
         video: videoRef.current,
       }),
-      [startVideo],
+      [startVideo, setMuted],
     );
 
     if (!isHomePage) {

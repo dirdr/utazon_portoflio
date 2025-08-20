@@ -192,6 +192,10 @@
       "behance": "Behance"
     }
   },
+  "soundPlayer": {
+    "mute": "Couper le son",
+    "unmute": "Activer le son"
+  },
   "legal": {
     "title": "Mentions Légales",
     "lastUpdated": "Dernière mise à jour",

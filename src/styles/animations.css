@@ -42,7 +42,7 @@
     contain: layout style paint;
     backface-visibility: hidden;
   }
-  
+
   /* Only apply will-change during transitions/animations to reduce memory usage */
   .page-transition.animating {
     will-change: transform, opacity;
@@ -52,7 +52,7 @@
     transform: translate3d(0, 0, 0);
     backface-visibility: hidden;
   }
-  
+
   /* Only apply will-change when element is being animated */
   .gpu-accelerated.animating {
     will-change: transform;
@@ -135,43 +135,26 @@
     animation: modal-scale-out 0.2s cubic-bezier(0.4, 0, 1, 1);
   }
 
-  /* Sound Player Animations - Sequential Wave Effect */
   @keyframes sound-wave {
-    0%, 80%, 100% { 
-      transform: scaleY(0.25); /* dot state - minimal scale */
+    0%,
+    55%,
+    100% {
+      transform: scaleY(0.2) translateY(0);
     }
-    10%, 70% { 
-      transform: scaleY(1); /* bar state - full scale */
+    8% {
+      transform: scaleY(1) translateY(0);
+    }
+    18% {
+      transform: scaleY(1) translateY(-8px);
+    }
+    28% {
+      transform: scaleY(0.2) translateY(0);
     }
   }
 
-  .animate-sound-wave-1 {
-    animation: sound-wave 1.2s linear infinite;
-    animation-delay: 0ms;
+  .animate-sound-wave {
+    animation: sound-wave 2.5s ease-in-out infinite;
     transform-origin: center;
-  }
-
-  .animate-sound-wave-2 {
-    animation: sound-wave 1.2s linear infinite;
-    animation-delay: 0.15s;
-    transform-origin: center;
-  }
-
-  .animate-sound-wave-3 {
-    animation: sound-wave 1.2s linear infinite;
-    animation-delay: 0.3s;
-    transform-origin: center;
-  }
-
-  .animate-sound-wave-4 {
-    animation: sound-wave 1.2s linear infinite;
-    animation-delay: 0.45s;
-    transform-origin: center;
-  }
-
-  .animate-sound-wave-5 {
-    animation: sound-wave 1.2s linear infinite;
-    animation-delay: 0.6s;
-    transform-origin: center;
+    animation-fill-mode: both;
   }
 }
