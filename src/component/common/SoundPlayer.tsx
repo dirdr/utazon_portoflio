@@ -1,4 +1,10 @@
-import React, { useState, useCallback, useMemo, useRef, useEffect } from "react";
+import React, {
+  useState,
+  useCallback,
+  useMemo,
+  useRef,
+  useEffect,
+} from "react";
 import { cn } from "../../utils/cn";
 import { OVERLAY_Z_INDEX } from "../../constants/overlayZIndex";
 import { useTranslation } from "react-i18next";
@@ -21,7 +27,6 @@ export const SoundPlayer: React.FC<SoundPlayerProps> = ({
   const barsRef = useRef<(HTMLDivElement | null)[]>([]);
   const tooltipRef = useRef<HTMLDivElement>(null);
 
-  // Handle initial playing state
   useEffect(() => {
     if (initialPlaying) {
       setTimeout(() => {
@@ -33,18 +38,16 @@ export const SoundPlayer: React.FC<SoundPlayerProps> = ({
   const handleToggle = useCallback(() => {
     const newPlayingState = !isPlaying;
     setIsPlaying(newPlayingState);
-    
+
     if (newPlayingState) {
-      // Force animation restart by toggling animation state
       setIsAnimating(false);
-      // Use setTimeout instead of requestAnimationFrame for more reliable timing
       setTimeout(() => {
         setIsAnimating(true);
       }, 10);
     } else {
       setIsAnimating(false);
     }
-    
+
     onToggle?.(newPlayingState);
   }, [isPlaying, onToggle]);
 
@@ -66,8 +69,9 @@ export const SoundPlayer: React.FC<SoundPlayerProps> = ({
     setIsHovered(false);
   }, []);
 
-  // Dynamic tooltip content and ARIA label
-  const tooltipText = isPlaying ? t("soundPlayer.mute") : t("soundPlayer.unmute");
+  const tooltipText = isPlaying
+    ? t("soundPlayer.mute")
+    : t("soundPlayer.unmute");
   const ariaLabel = tooltipText;
 
   const barsConfig = useMemo(
@@ -105,7 +109,7 @@ export const SoundPlayer: React.FC<SoundPlayerProps> = ({
       >
         <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-white/5 via-white/10 to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-        <div 
+        <div
           className="relative flex items-center justify-center gap-1 w-10 h-4"
           aria-hidden="true"
         >
@@ -115,29 +119,27 @@ export const SoundPlayer: React.FC<SoundPlayerProps> = ({
               ref={(el) => (barsRef.current[index] = el)}
               className={cn(
                 "h-4 bg-white rounded-full transform-gpu",
-                // Default muted state
                 !isPlaying && "scale-y-[0.2]",
-                // Animated state
                 isPlaying && isAnimating && "animate-sound-wave",
               )}
               style={{
-                width: '3px',
-                animationDelay: isPlaying && isAnimating ? `${bar.delay}s` : undefined,
-                transform: isPlaying && !isAnimating ? "scaleY(0.2)" : undefined,
+                width: "3px",
+                animationDelay:
+                  isPlaying && isAnimating ? `${bar.delay}s` : undefined,
+                transform:
+                  isPlaying && !isAnimating ? "scaleY(0.2)" : undefined,
               }}
               role="presentation"
             />
           ))}
         </div>
 
-        {/* Hover Tooltip - positioned relative to button */}
         {isHovered && (
           <div
             ref={tooltipRef}
             id="sound-player-tooltip"
-            className="absolute left-full ml-3 top-1/2 -translate-y-1/2 text-white text-base whitespace-nowrap pointer-events-none"
+            className="absolute left-full ml-3 top-1/2 -translate-y-1/2 text-white text-sm whitespace-nowrap pointer-events-none font-nord"
             style={{
-              fontFamily: 'NeueMontreal, sans-serif',
               fontWeight: 100,
               zIndex: OVERLAY_Z_INDEX.TOOLTIP,
             }}
