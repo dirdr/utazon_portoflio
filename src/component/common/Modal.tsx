@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { cn } from "../../utils/cn";
+import { OVERLAY_Z_INDEX } from "../../constants/overlayZIndex";
 
 interface ModalProps {
   isOpen: boolean;
@@ -89,7 +90,8 @@ export const Modal: React.FC<ModalProps> = ({
 
   const modalContent = (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 flex items-center justify-center p-4"
+      style={{ zIndex: OVERLAY_Z_INDEX.CONTACT_MODAL }}
       onClick={handleBackdropClick}
       role="dialog"
       aria-modal="true"

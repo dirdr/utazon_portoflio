@@ -231,8 +231,8 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                   errors.firstName ? "border-red-500" : "border-gray-500",
                 )}
                 style={{
-                  backgroundColor: "rgba(38, 38, 38, 0.7)",
-                  borderColor: "rgba(86, 86, 86, 0.8)",
+                  backgroundColor: "rgba(38, 38, 38, 0.3)",
+                  borderColor: "rgba(120, 120, 120, 0.8)",
                   fontFamily: "NeueMontreal, sans-serif",
                   fontWeight: 400,
                   backdropFilter: "blur(4px)",
@@ -263,8 +263,8 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                   errors.lastName ? "border-red-500" : "border-gray-500",
                 )}
                 style={{
-                  backgroundColor: "rgba(38, 38, 38, 0.7)",
-                  borderColor: "rgba(86, 86, 86, 0.8)",
+                  backgroundColor: "rgba(38, 38, 38, 0.3)",
+                  borderColor: "rgba(120, 120, 120, 0.8)",
                   fontFamily: "NeueMontreal, sans-serif",
                   fontWeight: 400,
                   backdropFilter: "blur(4px)",
@@ -297,8 +297,8 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                   errors.email ? "border-red-500" : "border-gray-500",
                 )}
                 style={{
-                  backgroundColor: "rgba(38, 38, 38, 0.7)",
-                  borderColor: "rgba(86, 86, 86, 0.8)",
+                  backgroundColor: "rgba(38, 38, 38, 0.3)",
+                  borderColor: "rgba(120, 120, 120, 0.8)",
                   fontFamily: "NeueMontreal, sans-serif",
                   fontWeight: 400,
                   backdropFilter: "blur(4px)",
@@ -329,8 +329,8 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                   errors.telephone ? "border-red-500" : "border-gray-500",
                 )}
                 style={{
-                  backgroundColor: "rgba(38, 38, 38, 0.7)",
-                  borderColor: "rgba(86, 86, 86, 0.8)",
+                  backgroundColor: "rgba(38, 38, 38, 0.3)",
+                  borderColor: "rgba(120, 120, 120, 0.8)",
                   fontFamily: "NeueMontreal, sans-serif",
                   fontWeight: 400,
                   backdropFilter: "blur(4px)",
@@ -362,10 +362,11 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                 errors.message ? "border-red-500" : "border-gray-500",
               )}
               style={{
-                backgroundColor: "#262626",
-                borderColor: "#565656",
+                backgroundColor: "rgba(38, 38, 38, 0.15)",
+                borderColor: "rgba(120, 120, 120, 0.7)",
                 fontFamily: "NeueMontreal, sans-serif",
                 fontWeight: 400,
+                backdropFilter: "blur(4px)",
               }}
               disabled={isSubmitting}
             />
