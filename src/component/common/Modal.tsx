@@ -96,16 +96,17 @@ export const Modal: React.FC<ModalProps> = ({
       aria-labelledby="modal-title"
     >
       <div className={cn(
-        "absolute inset-0 bg-black/50 backdrop-blur-sm",
-        isClosing ? "animate-modal-fade-out" : "animate-modal-fade-in"
+        "absolute inset-0 bg-black/50",
+        isClosing ? "animate-modal-backdrop-out" : "animate-modal-backdrop-in"
       )} />
 
       <div
         ref={modalRef}
         className={cn(
-          "relative z-10 w-full max-w-3xl max-h-[90vh] overflow-y-auto",
+          "relative z-10 w-full max-w-3xl max-h-[80vh]",
           "bg-background rounded-2xl shadow-2xl",
-          isClosing ? "animate-modal-scale-out" : "animate-modal-scale-in",
+          "flex flex-col overflow-hidden",
+          isClosing ? "animate-modal-slide-up-out" : "animate-modal-slide-up-in",
           className,
         )}
         style={{ border: '1px solid #565656' }}

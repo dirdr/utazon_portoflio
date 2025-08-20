@@ -73,41 +73,34 @@
     }
   }
 
-  @keyframes modal-scale-in {
+  @keyframes modal-backdrop-in {
     from {
-      transform: scale(0.95);
       opacity: 0;
     }
     to {
-      transform: scale(1);
       opacity: 1;
     }
   }
 
-  @keyframes modal-slide-in {
+  @keyframes modal-slide-up-in {
     from {
-      transform: translateY(-2rem);
-      opacity: 0;
+      transform: translateY(100%);
     }
     to {
       transform: translateY(0);
-      opacity: 1;
     }
   }
 
-  .animate-modal-fade-in {
-    animation: modal-fade-in 0.2s ease-out;
+  .animate-modal-backdrop-in {
+    animation: modal-backdrop-in 0.5s ease-out;
   }
 
-  .animate-modal-scale-in {
-    animation: modal-scale-in 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  .animate-modal-slide-up-in {
+    animation: modal-slide-up-in 0.5s ease-out;
+    transform: translateZ(0);
   }
 
-  .animate-modal-slide-in {
-    animation: modal-slide-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  @keyframes modal-fade-out {
+  @keyframes modal-backdrop-out {
     from {
       opacity: 1;
     }
@@ -116,23 +109,25 @@
     }
   }
 
-  @keyframes modal-scale-out {
+  @keyframes modal-slide-up-out {
     from {
-      transform: scale(1);
-      opacity: 1;
+      transform: translateY(0);
     }
     to {
-      transform: scale(0.95);
-      opacity: 0;
+      transform: translateY(100vh);
     }
   }
 
-  .animate-modal-fade-out {
-    animation: modal-fade-out 0.2s ease-in;
+  .animate-modal-backdrop-out {
+    animation: modal-backdrop-out 0.5s ease-out;
+    animation-fill-mode: forwards;
   }
 
-  .animate-modal-scale-out {
-    animation: modal-scale-out 0.2s cubic-bezier(0.4, 0, 1, 1);
+  .animate-modal-slide-up-out {
+    animation: modal-slide-up-out 0.5s ease-out;
+    animation-fill-mode: forwards;
+    transform: translateZ(0);
+    will-change: transform;
   }
 
   @keyframes sound-wave {

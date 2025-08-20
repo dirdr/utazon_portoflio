@@ -38,14 +38,13 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
 
   const closeModal = () => {
     setIsClosing(true);
-    // Wait for animation to complete before actually closing
+    
     setTimeout(() => {
       setIsOpen(false);
       setIsClosing(false);
       setModalContent(null);
-      // Restore body scroll when modal is closed
       document.body.style.overflow = 'unset';
-    }, 200); // Match animation duration
+    }, 520);
   };
 
   return (
