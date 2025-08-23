@@ -2,7 +2,6 @@ import { ShowcaseData } from "../../types/showcase";
 import { GridImagesShowcase } from "./GridImagesShowcase";
 import { SingleImageShowcase } from "./SingleImageShowcase";
 import { VideoShowcase } from "./VideoShowcase";
-import { Container } from "../layout/Container";
 
 interface ShowcaseRendererProps {
   showcase: ShowcaseData;
@@ -30,10 +29,8 @@ export const ShowcaseRenderer = ({ showcase }: ShowcaseRendererProps) => {
   };
 
   return (
-    <Container>
-      <div className="max-w-[90%] mx-auto my-4">
-        {renderShowcase()}
-      </div>
-    </Container>
+    <div className="mx-4 lg:mx-32 my-4">
+      {renderShowcase()}
+    </div>
   );
 };

@@ -139,7 +139,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
 
   return (
     <div
-      className="px-4 sm:px-8 lg:px-16 py-16 min-h-full max-h-[100vh] overflow-y-auto bg-cover bg-center bg-no-repeat relative rounded-2xl border-2 border-gray-400/30"
+      className="px-4 sm:px-8 lg:px-16 py-16 min-h-full max-h-[100vh] overflow-y-auto bg-cover bg-center bg-no-repeat relative rounded-2xl border border-gray-500"
       role="dialog"
       aria-modal="true"
       style={{
