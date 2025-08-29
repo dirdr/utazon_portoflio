@@ -18,7 +18,7 @@ export const Lyner: Project = {
       order: 1,
       video: {
         src: "lyner/details.mp4",
-        light: "/images/projects/lyner/cover.webp",
+        startTime: 1,
       },
     },
     {

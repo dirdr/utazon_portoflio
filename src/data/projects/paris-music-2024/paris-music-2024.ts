@@ -18,7 +18,7 @@ export const ParisMusic2024: Project = {
       order: 1,
       video: {
         src: "paris-music-2024/details.mp4",
-        light: "/images/projects/paris-music-2024/cover.webp",
+        startTime: 1,
       },
     },
     {

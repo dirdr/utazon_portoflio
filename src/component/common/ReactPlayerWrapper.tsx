@@ -24,7 +24,7 @@ export const ReactPlayerWrapper = ({
   pip = false,
   playing: externalPlaying,
   volume = 0.8,
-  startTime = 2,
+  startTime = 0,
 }: ReactPlayerWrapperProps) => {
   const [internalPlaying, setInternalPlaying] = useState(false);
   const [hasUserClicked, setHasUserClicked] = useState(false);
@@ -44,7 +44,7 @@ export const ReactPlayerWrapper = ({
   const handleDuration = useCallback(() => {
     const player = playerRef.current;
     if (!player) return;
-    
+
     if (!hasUserClicked && startTime > 0 && player.duration) {
       player.currentTime = startTime;
     }
@@ -54,7 +54,7 @@ export const ReactPlayerWrapper = ({
     if (hasUserClicked) {
       return;
     }
-    
+
     const player = playerRef.current;
     if (player) {
       player.currentTime = 0;
@@ -64,7 +64,7 @@ export const ReactPlayerWrapper = ({
   }, [hasUserClicked]);
 
   return (
-    <div style={{ position: 'relative', width: width, height: height }}>
+    <div style={{ position: "relative", width: width, height: height }}>
       <ReactPlayer
         ref={setPlayerRef}
         src={src}
@@ -83,19 +83,18 @@ export const ReactPlayerWrapper = ({
         <div
           onClick={handleVideoClick}
           style={{
-            position: 'absolute',
+            position: "absolute",
             top: 0,
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: 'transparent',
-            cursor: 'pointer',
+            backgroundColor: "transparent",
+            cursor: "pointer",
             zIndex: 10,
-            pointerEvents: 'auto'
+            pointerEvents: "auto",
           }}
         />
       )}
     </div>
   );
 };
-

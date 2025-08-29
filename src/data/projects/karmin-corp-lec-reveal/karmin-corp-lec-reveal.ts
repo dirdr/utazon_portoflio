@@ -19,6 +19,7 @@ export const KarminCorpLecReveal: Project = {
       video: {
         src: "karmin-corp-lec-reveal/details.mp4",
         light: "/images/projects/karmin-corp-lec-reveal/cover.webp",
+        startTime: 3,
       },
     },
     {

@@ -19,6 +19,7 @@ export const Dune: Project = {
       video: {
         src: "dune/details.mp4",
         light: "/images/projects/dune/cover.webp",
+        startTime: 0,
       },
     },
     {

@@ -17,7 +17,6 @@ export const MrHelp: Project = {
       order: 1,
       video: {
         src: "mr-help/details1.mp4",
-        light: "/images/projects/mr-help/cover.webp",
       },
     },
     {
@@ -26,7 +25,6 @@ export const MrHelp: Project = {
       order: 2,
       video: {
         src: "mr-help/details2.mp4",
-        light: "/images/projects/mr-help/cover.webp",
       },
     },
 

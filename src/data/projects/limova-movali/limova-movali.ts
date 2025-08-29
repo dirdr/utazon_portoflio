@@ -17,7 +17,7 @@ export const LimovaMovali: Project = {
       order: 1,
       video: {
         src: "limova-movali/details1.mp4",
-        light: "/images/projects/limova-movali/cover.webp",
+        startTime: 2,
       },
     },
     {
@@ -27,6 +27,7 @@ export const LimovaMovali: Project = {
       video: {
         src: "limova-movali/details2.mp4",
         light: "/images/projects/limova-movali/cover.webp",
+        startTime: 2,
       },
     },
     {

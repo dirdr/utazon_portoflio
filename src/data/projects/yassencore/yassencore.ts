@@ -18,7 +18,6 @@ export const Yassencore: Project = {
       order: 1,
       video: {
         src: "yassencore/details1.mp4",
-        light: "/images/projects/yassencore/cover.webp",
       },
     },
     {
@@ -27,7 +26,6 @@ export const Yassencore: Project = {
       order: 2,
       video: {
         src: "yassencore/details2.mp4",
-        light: "/images/projects/yassencore/3.webp",
       },
     },
     {
