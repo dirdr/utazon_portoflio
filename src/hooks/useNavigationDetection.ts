@@ -38,7 +38,6 @@ export const useNavigationDetection = () => {
   const isHydrated = useRef(false);
   const hasDetectedInitialNavigation = useRef(false);
 
-  // Track when React has finished initial hydration
   useEffect(() => {
     if (!isHydrated.current) {
       markAppHydrated();
@@ -46,27 +45,23 @@ export const useNavigationDetection = () => {
     }
   }, []);
 
-  // Monitor location changes and update navigation state accordingly
   useEffect(() => {
     const isLocationChange = previousLocation.current !== location;
     
     if (!hasDetectedInitialNavigation.current) {
-      // First time this effect runs - this is the initial page/route
       console.log('[NAV_HOOK] Initial route detection for:', location);
       trackRouteChange(location, true);
       hasDetectedInitialNavigation.current = true;
     } else if (isLocationChange) {
-      // Subsequent route changes - these are SPA navigations
       console.log('[NAV_HOOK] SPA navigation detected from', previousLocation.current, 'to', location);
       
       trackRouteChange(location, false);
       
-      // Update state to reflect SPA navigation
       setNavigationState(prevState => ({
         ...prevState,
         isFreshLoad: false,
         navigationType: 'spa-navigation',
-        detectionMethod: 'navigation-api', // We know this is SPA navigation
+        detectionMethod: 'navigation-api',
         isInitialRender: false
       }));
     }

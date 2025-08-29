@@ -84,7 +84,6 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Only on mount
   
-  // 1. Handle video loading
   const onVideoLoaded = useCallback(() => {
     log('📹 Video loaded successfully');
     setIsVideoLoaded(true);
@@ -112,14 +111,12 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
     }
   }, [isHomePage, isFreshLoad, isMobile, getVideoElement, log]);
   
-  // 2. Handle dive-in click (only for desktop fresh load)
   const onDiveInClick = useCallback(() => {
     log('🎯 Dive-in clicked, starting video');
     
     const video = getVideoElement ? getVideoElement() : videoRef.current;
     if (!video || workflowState !== 'ready') return;
     
-    // Start playing from beginning
     video.currentTime = 0;
     video.play().then(() => {
       setWorkflowState('playing-intro');

@@ -32,7 +32,6 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
     setModalContent(content);
     setIsOpen(true);
     setIsClosing(false);
-    // Prevent body scroll when modal is open
     document.body.style.overflow = 'hidden';
   };
 

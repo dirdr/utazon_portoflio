@@ -28,13 +28,11 @@ export const CursorTrail = ({
   const animationRef = useRef<number>();
   const pointsRef = useRef<TrailPoint[]>([]);
   const lastTrailPointRef = useRef({ x: 0, y: 0, timestamp: 0 });
-  // Separate refs for immediate cursor position vs trail points
   const currentMouseRef = useRef({ x: 0, y: 0 });
   const lastCleanupRef = useRef(0);
   const canvasSizeRef = useRef({ width: 0, height: 0 });
   const [responsiveScale, setResponsiveScale] = useState(1);
 
-  // Memoize scale calculation to prevent unnecessary recalculations
   const updateResponsiveScale = useCallback(() => {
     const baseWidth = 1920;
     const currentWidth = window.innerWidth;
@@ -42,7 +40,6 @@ export const CursorTrail = ({
     setResponsiveScale(scale);
   }, []);
 
-  // Optimized point addition with batch cleanup
   const addPoint = useCallback(
     (x: number, y: number, speed: number) => {
       const now = Date.now();
@@ -50,12 +47,10 @@ export const CursorTrail = ({
 
       points.push({ x, y, timestamp: now, speed });
 
-      // Batch cleanup every 50 points or when max is exceeded
       if (points.length > maxPoints || points.length % 50 === 0) {
         const cutoff = now - fadeTime;
         let validStart = 0;
 
-        // Find first valid point
         while (
           validStart < points.length &&
           points[validStart].timestamp < cutoff
@@ -67,7 +62,6 @@ export const CursorTrail = ({
           pointsRef.current = points.slice(validStart);
         }
 
-        // Trim to max points if still over limit
         if (pointsRef.current.length > maxPoints) {
           pointsRef.current = pointsRef.current.slice(-maxPoints);
         }
@@ -76,7 +70,6 @@ export const CursorTrail = ({
     [maxPoints, fadeTime],
   );
 
-  // Immediate mouse position update - no throttling for static glow
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
       if (!enabled) return;
@@ -84,10 +77,7 @@ export const CursorTrail = ({
       const { clientX, clientY } = e;
       const now = Date.now();
 
-      // Always update current position immediately for static glow
       currentMouseRef.current = { x: clientX, y: clientY };
-
-      // Start animation loop if not running
       if (!animationRef.current) {
         const animate = () => {
           const canvas = canvasRef.current;
@@ -97,7 +87,6 @@ export const CursorTrail = ({
             return;
           }
 
-          // Check for canvas resize less frequently
           const needsResize =
             canvas.width !== window.innerWidth ||
             canvas.height !== window.innerHeight;
@@ -115,7 +104,6 @@ export const CursorTrail = ({
 
           const currentTime = Date.now();
 
-          // Clean up old points less frequently
           if (currentTime - lastCleanupRef.current > 100) {
             const cutoff = currentTime - fadeTime;
             pointsRef.current = pointsRef.current.filter(
@@ -124,10 +112,7 @@ export const CursorTrail = ({
             lastCleanupRef.current = currentTime;
           }
 
-          // Draw trail points
           drawTrailPoints(ctx, currentTime);
-
-          // Draw static glow with current mouse position
           drawStaticGlow(ctx);
 
           if (enabled) {
@@ -139,8 +124,6 @@ export const CursorTrail = ({
 
         animationRef.current = requestAnimationFrame(animate);
       }
-
-      // Add trail points with reduced threshold for smoother trails
       const deltaX = Math.abs(clientX - lastTrailPointRef.current.x);
       const deltaY = Math.abs(clientY - lastTrailPointRef.current.y);
 

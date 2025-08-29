@@ -1,5 +1,5 @@
 import ReactPlayer from "react-player";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useCallback } from "react";
 
 interface ReactPlayerWrapperProps {
   src: string;
@@ -24,57 +24,78 @@ export const ReactPlayerWrapper = ({
   pip = false,
   playing: externalPlaying,
   volume = 0.8,
-  startTime,
+  startTime = 2,
 }: ReactPlayerWrapperProps) => {
   const [internalPlaying, setInternalPlaying] = useState(false);
-  const [hasClicked, setHasClicked] = useState(false);
-  const playerRef = useRef<ReactPlayer>(null);
-  const playing = externalPlaying !== undefined ? externalPlaying : internalPlaying;
+  const [hasUserClicked, setHasUserClicked] = useState(false);
+  const playerRef = useRef<HTMLVideoElement | null>(null);
 
-  // Create the source URL with time fragment for initial load
-  const sourceUrl = React.useMemo(() => {
-    if (startTime && startTime > 0) {
-      // For HTML video time fragments, format properly
-      // Support both integer and fractional seconds
-      const timeFragment = startTime % 1 === 0 
-        ? `${startTime}` 
-        : startTime.toFixed(1);
-      return `${src}#t=${timeFragment}`;
-    }
-    return src;
-  }, [src, startTime]);
+  const playing = externalPlaying ?? internalPlaying;
 
-  const handleClickPreview = () => {
-    setInternalPlaying(true);
-    if (hasClicked && playerRef.current) {
-      // Use v3 API - seekTo method to restart from beginning
-      playerRef.current.seekTo(0);
-    }
-    setHasClicked(true);
-  };
+  const setPlayerRef = useCallback((player: HTMLVideoElement) => {
+    if (!player) return;
+    playerRef.current = player;
+  }, []);
 
-  const handleReady = () => {
-    // After first interaction, remove time fragment for future seeks
-    if (hasClicked && playerRef.current && startTime) {
-      playerRef.current.seekTo(0);
+  const handleReady = useCallback(() => {
+    // Video ready callback
+  }, []);
+
+  const handleDuration = useCallback(() => {
+    const player = playerRef.current;
+    if (!player) return;
+    
+    if (!hasUserClicked && startTime > 0 && player.duration) {
+      player.currentTime = startTime;
     }
-  };
+  }, [hasUserClicked, startTime]);
+
+  const handleVideoClick = useCallback(() => {
+    if (hasUserClicked) {
+      return;
+    }
+    
+    const player = playerRef.current;
+    if (player) {
+      player.currentTime = 0;
+      setInternalPlaying(true);
+      setHasUserClicked(true);
+    }
+  }, [hasUserClicked]);
 
   return (
-    <ReactPlayer
-      ref={playerRef}
-      src={sourceUrl}
-      width={width}
-      height={height}
-      controls={controls}
-      className={className}
-      style={style}
-      pip={pip}
-      playing={playing}
-      volume={volume}
-      onClickPreview={handleClickPreview}
-      onReady={handleReady}
-    />
+    <div style={{ position: 'relative', width: width, height: height }}>
+      <ReactPlayer
+        ref={setPlayerRef}
+        src={src}
+        width={width}
+        height={height}
+        controls={controls}
+        className={className}
+        style={style}
+        pip={pip}
+        playing={playing}
+        volume={volume}
+        onDurationChange={handleDuration}
+        onCanPlay={handleReady}
+      />
+      {!hasUserClicked && (
+        <div
+          onClick={handleVideoClick}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'transparent',
+            cursor: 'pointer',
+            zIndex: 10,
+            pointerEvents: 'auto'
+          }}
+        />
+      )}
+    </div>
   );
 };
 

@@ -31,10 +31,8 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
             backgroundImage: `url(/images/projects/${project.id}/background.webp)`,
           }}
         >
-          {/* Top and bottom gradients */}
           <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black to-transparent pointer-events-none" />
           <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-black to-transparent pointer-events-none" />
-          {/* Responsive right gradient */}
           <div
             className="absolute inset-y-0 right-0 w-2/5 sm:w-1/3 pointer-events-none"
             style={{
@@ -44,7 +42,6 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
           />
         </div>
 
-        {/* Separate Hero Content Section Below Image */}
         <div className="bg-black">
           <Container>
             <div className="pb-12">

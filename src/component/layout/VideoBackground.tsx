@@ -114,7 +114,6 @@ export const VideoBackground = forwardRef<
         className="fixed inset-0"
         style={{ zIndex: OVERLAY_Z_INDEX.VIDEO_BACKGROUND }}
       >
-        {/* Video Layer */}
         <video
           ref={videoRef}
           className="w-full h-full object-cover gpu-accelerated"
