@@ -30,7 +30,6 @@ export const AppContent = () => {
         options={{
           smooth: true,
           multiplier: 0.6,
-          lerp: 0.05,
           smoothMobile: false,
           getDirection: true,
           getSpeed: true,

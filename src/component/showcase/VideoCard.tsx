@@ -4,10 +4,19 @@ interface VideoCardProps {
   src: string;
   title?: string;
   onDurationChange?: (duration: number) => void;
+  onProgress?: (progress: number) => void;
+  onEnded?: () => void;
   isActive: boolean;
 }
 
-export const VideoCard = ({ src, title, onDurationChange, isActive }: VideoCardProps) => {
+export const VideoCard = ({
+  src,
+  title,
+  onDurationChange,
+  onProgress,
+  onEnded,
+  isActive,
+}: VideoCardProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -21,31 +30,49 @@ export const VideoCard = ({ src, title, onDurationChange, isActive }: VideoCardP
       }
     };
 
+    const handleTimeUpdate = () => {
+      if (onProgress && video.duration) {
+        const progress = video.currentTime / video.duration;
+        onProgress(progress);
+      }
+    };
+
     const handleEnded = () => {
       setIsPlaying(false);
+      if (onEnded) {
+        onEnded();
+      }
+      // Reset video to beginning for next play
       video.currentTime = 0;
     };
 
     video.addEventListener("loadedmetadata", handleLoadedMetadata);
+    video.addEventListener("timeupdate", handleTimeUpdate);
     video.addEventListener("ended", handleEnded);
 
     return () => {
       video.removeEventListener("loadedmetadata", handleLoadedMetadata);
+      video.removeEventListener("timeupdate", handleTimeUpdate);
       video.removeEventListener("ended", handleEnded);
     };
-  }, [onDurationChange]);
+  }, [onDurationChange, onProgress, onEnded]);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
     if (isActive && !isPlaying) {
-      video.play().then(() => setIsPlaying(true)).catch(console.error);
+      // Reset to beginning when starting a new video
+      video.currentTime = 0;
+      video
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch(console.error);
     } else if (!isActive && isPlaying) {
       video.pause();
       setIsPlaying(false);
     }
-  }, [isActive, isPlaying]);
+  }, [isActive, isPlaying, src]); // Added src to dependency to reset when video changes
 
   return (
     <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden">
@@ -58,11 +85,7 @@ export const VideoCard = ({ src, title, onDurationChange, isActive }: VideoCardP
         playsInline
         autoPlay
       />
-      {title && (
-        <div className="absolute bottom-2 left-2 text-white text-xs bg-black/50 px-2 py-1 rounded">
-          {title}
-        </div>
-      )}
     </div>
   );
 };
+
