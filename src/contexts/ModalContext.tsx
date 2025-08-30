@@ -32,7 +32,6 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
     setModalContent(content);
     setIsOpen(true);
     setIsClosing(false);
-    document.body.style.overflow = 'hidden';
   };
 
   const closeModal = () => {
@@ -42,7 +41,6 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
       setIsOpen(false);
       setIsClosing(false);
       setModalContent(null);
-      document.body.style.overflow = 'unset';
     }, 520);
   };
 

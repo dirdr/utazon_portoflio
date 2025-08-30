@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { Button } from "../common/Button";
 import { LineSweepText } from "../common/LineSweepText";
 import { SoundPlayer } from "../common/SoundPlayer";
@@ -44,12 +44,6 @@ export const Home = ({ onVideoMuteToggle }: HomeProps) => {
     [onVideoMuteToggle],
   );
 
-  useEffect(() => {
-    document.documentElement.classList.add("hide-scrollbars");
-    return () => {
-      document.documentElement.classList.remove("hide-scrollbars");
-    };
-  }, []);
 
   if (isMobile) {
     return (

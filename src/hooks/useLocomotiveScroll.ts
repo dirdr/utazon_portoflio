@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useMemo } from 'react';
 import LocomotiveScroll from 'locomotive-scroll';
 
 export interface LocomotiveScrollOptions {
@@ -8,6 +8,9 @@ export interface LocomotiveScrollOptions {
   smoothMobile?: boolean;
   getDirection?: boolean;
   getSpeed?: boolean;
+  lerp?: number;
+  reloadOnContextChange?: boolean;
+  touchMultiplier?: number;
 }
 
 export const useLocomotiveScroll = (
@@ -17,16 +20,19 @@ export const useLocomotiveScroll = (
   const scrollRef = useRef<HTMLDivElement>(null);
   const locomotiveScrollRef = useRef<LocomotiveScroll | null>(null);
 
-  const defaultOptions: LocomotiveScrollOptions = {
+  const defaultOptions: LocomotiveScrollOptions = useMemo(() => ({
     smooth: true,
-    multiplier: 1,
+    multiplier: 0.4,
     class: 'is-revealed',
-    smoothMobile: false,
+    smoothMobile: true,
     getDirection: true,
     getSpeed: true,
-  };
+    lerp: 0.08,
+    reloadOnContextChange: false,
+    touchMultiplier: 1,
+  }), []);
 
-  const mergedOptions = { ...defaultOptions, ...options };
+  const mergedOptions = useMemo(() => ({ ...defaultOptions, ...options }), [defaultOptions, options]);
 
   const initScroll = useCallback(() => {
     if (!scrollRef.current) return;
@@ -66,12 +72,13 @@ export const useLocomotiveScroll = (
   }, [scrollTo]);
 
   useEffect(() => {
-    const scroll = initScroll();
+    initScroll();
 
     return () => {
       destroyScroll();
     };
-  }, dependencies);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initScroll, destroyScroll, ...dependencies]);
 
   useEffect(() => {
     const handleResize = () => {

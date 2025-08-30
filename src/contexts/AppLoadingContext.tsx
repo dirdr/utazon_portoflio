@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect } from 'react';
+import React, { createContext, useContext } from 'react';
 import { useAppInitialization } from '../hooks/useAppInitialization';
 
 interface AppLoadingState {
@@ -45,18 +45,7 @@ interface AppLoadingProviderProps {
 export const AppLoadingProvider: React.FC<AppLoadingProviderProps> = ({ children }) => {
   const appInit = useAppInitialization();
 
-  // Prevent body scroll while loader is active
-  useEffect(() => {
-    if (appInit.showLoader) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [appInit.showLoader]);
+  // Note: Scroll blocking removed - only home page should be non-scrollable
 
   const value: AppLoadingState = {
     showLoader: appInit.showLoader,

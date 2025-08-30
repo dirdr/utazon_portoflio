@@ -11,7 +11,6 @@ interface VideoCardProps {
 
 export const VideoCard = ({
   src,
-  title,
   onDurationChange,
   onEnded,
   onPlay,

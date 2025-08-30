@@ -1,5 +1,4 @@
 import { ImageBackgroundDisplay } from "./ImageBackgroundDisplay";
-import { Navbar } from "./Navbar";
 import { useLocation } from "wouter";
 
 interface LayoutProps {
@@ -17,10 +16,7 @@ const LayoutContent = ({ children }: LayoutProps) => {
   return (
     <div className="relative min-h-screen">
       <ImageBackgroundDisplay />
-      <div className="min-h-screen">
-        <Navbar />
-        <main>{children}</main>
-      </div>
+      <main>{children}</main>
     </div>
   );
 };

@@ -1,11 +1,4 @@
 @layer utilities {
-  .hide-scrollbars {
-    overflow-x: hidden;
-    scrollbar-width: none;
-  }
-  
-  .hide-scrollbars::-webkit-scrollbar {
-    display: none;
-  }
+  /* Note: hide-scrollbars class removed - scroll locking now handled via useScrollLock hook */
 }
 

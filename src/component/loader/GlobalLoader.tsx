@@ -1,15 +1,9 @@
 import { motion } from "framer-motion";
-import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import logo from "../../assets/images/logo.svg";
 
 export const GlobalLoader = () => {
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, []);
+  // Note: Scroll blocking removed - only home page should be non-scrollable
 
   const { t } = useTranslation();
 

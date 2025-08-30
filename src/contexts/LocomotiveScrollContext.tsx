@@ -13,6 +13,7 @@ interface LocomotiveScrollContextValue {
 
 const LocomotiveScrollContext = createContext<LocomotiveScrollContextValue | null>(null);
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useLocomotiveScrollContext = () => {
   const context = useContext(LocomotiveScrollContext);
   if (!context) {
@@ -43,9 +44,7 @@ export const LocomotiveScrollProvider: React.FC<LocomotiveScrollProviderProps> =
         data-scroll-container
         className={className}
       >
-        <div data-scroll-section>
-          {children}
-        </div>
+        {children}
       </div>
     </LocomotiveScrollContext.Provider>
   );

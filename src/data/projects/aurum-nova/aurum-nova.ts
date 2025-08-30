@@ -22,18 +22,9 @@ export const AurumNova: Project = {
       },
     },
     {
-      type: "image-single",
-      id: "image-1",
-      order: 2,
-      image: {
-        src: "/images/projects/aurum-nova/1.webp",
-        alt: "Aurum Nova 1",
-      },
-    },
-    {
       type: "image-grid",
       id: "image-grid-1",
-      order: 3,
+      order: 2,
       images: [
         {
           src: `/images/projects/aurum-nova/2.webp`,
@@ -44,6 +35,15 @@ export const AurumNova: Project = {
           alt: "Aurum Nova 3",
         },
       ],
+    },
+    {
+      type: "image-single",
+      id: "image-1",
+      order: 3,
+      image: {
+        src: "/images/projects/aurum-nova/1.webp",
+        alt: "Aurum Nova 1",
+      },
     },
   ],
 };

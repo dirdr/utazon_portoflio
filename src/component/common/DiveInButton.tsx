@@ -86,7 +86,7 @@ export const DiveInButton = ({
             onClick={handleClick}
             glint={true}
             proximityIntensity={true}
-            className={`text-base md:text-lg lg:text-xl xl:text-2xl font-nord font-bold tracking-widest uppercase transition-all duration-300 ${
+            className={`text-base md:text-lg lg:text-xl xl:text-2xl font-nord  tracking-widest uppercase transition-all duration-300 ${
               isReady ? "opacity-100 cursor-pointer" : "opacity-50 cursor-wait"
             }`}
             disabled={!isReady}
