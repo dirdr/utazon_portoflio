@@ -18,26 +18,29 @@ export const VideoCarouselShowcase = ({
 }: VideoCarouselShowcaseProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [videoDuration, setVideoDuration] = useState(0);
-  const [videoProgress, setVideoProgress] = useState(0);
   const [isVideoEnded, setIsVideoEnded] = useState(false);
+  const [animationKey, setAnimationKey] = useState(0);
+  const [isProgressRunning, setIsProgressRunning] = useState(false);
 
   const handleDotClick = (index: number) => {
     setCurrentIndex(index);
-    setVideoProgress(0);
     setIsVideoEnded(false);
+    setIsProgressRunning(false);
+    setAnimationKey(prev => prev + 1); // Reset animation
   };
 
   const handleDurationChange = (duration: number) => {
     setVideoDuration(duration);
   };
 
-  const handleVideoProgress = (progress: number) => {
-    setVideoProgress(progress);
-  };
-
   const handleVideoEnd = () => {
     setIsVideoEnded(true);
-    setVideoProgress(0);
+    setIsProgressRunning(false);
+  };
+
+  const handleVideoPlay = () => {
+    setIsProgressRunning(true);
+    setAnimationKey(prev => prev + 1); // Reset animation when video starts playing
   };
 
   // Auto-advance to next video when current one ends
@@ -46,12 +49,19 @@ export const VideoCarouselShowcase = ({
       const timer = setTimeout(() => {
         const nextIndex = (currentIndex + 1) % data.videos.length;
         setCurrentIndex(nextIndex);
-        setVideoProgress(0);
         setIsVideoEnded(false);
+        setIsProgressRunning(false);
+        setAnimationKey(prev => prev + 1); // Reset animation
       }, 500);
       return () => clearTimeout(timer);
     }
   }, [isVideoEnded, currentIndex, data.videos.length]);
+
+  // Reset progress state when video changes
+  useEffect(() => {
+    setIsProgressRunning(false);
+    setAnimationKey(prev => prev + 1);
+  }, [currentIndex]);
 
   return (
     <div className={cn("w-full", className)}>
@@ -74,8 +84,8 @@ export const VideoCarouselShowcase = ({
               src={data.videos[currentIndex].src}
               title={data.videos[currentIndex].title}
               onDurationChange={handleDurationChange}
-              onProgress={handleVideoProgress}
               onEnded={handleVideoEnd}
+              onPlay={handleVideoPlay}
               isActive={true}
             />
           </motion.div>
@@ -96,29 +106,28 @@ export const VideoCarouselShowcase = ({
               {index === currentIndex ? (
                 <motion.div
                   key={`expanded-${index}`}
-                  className="w-12 h-2 bg-gray-600 rounded-full relative overflow-hidden"
-                  initial={{ width: 8, height: 8, borderRadius: "50%" }}
-                  animate={{ width: 48, height: 8, borderRadius: "9999px" }}
-                  exit={{ width: 8, height: 8, borderRadius: "50%" }}
+                  className="w-16 h-3 bg-gray-600 rounded-full relative overflow-hidden"
+                  initial={{ width: 12, height: 12, borderRadius: "50%" }}
+                  animate={{ width: 64, height: 12, borderRadius: "9999px" }}
+                  exit={{ width: 12, height: 12, borderRadius: "50%" }}
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                 >
-                  <motion.div
-                    className="h-full bg-white rounded-full"
-                    initial={{ width: "0%" }}
-                    animate={{ width: `${videoProgress * 100}%` }}
-                    transition={{ 
-                      duration: 0.1, 
-                      ease: "linear" 
+                  <div
+                    key={animationKey}
+                    className="h-full bg-white rounded-full animate-progress-bar"
+                    style={{
+                      animationDuration: `${videoDuration || 10}s`,
+                      animationPlayState: isProgressRunning ? 'running' : 'paused'
                     }}
                   />
                 </motion.div>
               ) : (
                 <motion.div 
                   key={`collapsed-${index}`}
-                  className="w-2 h-2 bg-white rounded-full hover:bg-white/80" 
-                  initial={{ width: 48, height: 8, borderRadius: "9999px" }}
-                  animate={{ width: 8, height: 8, borderRadius: "50%" }}
-                  exit={{ width: 48, height: 8, borderRadius: "9999px" }}
+                  className="w-3 h-3 bg-white rounded-full hover:bg-white/80" 
+                  initial={{ width: 64, height: 12, borderRadius: "9999px" }}
+                  animate={{ width: 12, height: 12, borderRadius: "50%" }}
+                  exit={{ width: 64, height: 12, borderRadius: "9999px" }}
                   whileHover={{ backgroundColor: "rgba(255, 255, 255, 0.8)" }}
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                 />

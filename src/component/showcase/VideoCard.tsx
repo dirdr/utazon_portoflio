@@ -4,8 +4,8 @@ interface VideoCardProps {
   src: string;
   title?: string;
   onDurationChange?: (duration: number) => void;
-  onProgress?: (progress: number) => void;
   onEnded?: () => void;
+  onPlay?: () => void;
   isActive: boolean;
 }
 
@@ -13,8 +13,8 @@ export const VideoCard = ({
   src,
   title,
   onDurationChange,
-  onProgress,
   onEnded,
+  onPlay,
   isActive,
 }: VideoCardProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -30,39 +30,36 @@ export const VideoCard = ({
       }
     };
 
-    const handleTimeUpdate = () => {
-      if (onProgress && video.duration) {
-        const progress = video.currentTime / video.duration;
-        onProgress(progress);
-      }
-    };
-
     const handleEnded = () => {
       setIsPlaying(false);
       if (onEnded) {
         onEnded();
       }
-      // Reset video to beginning for next play
       video.currentTime = 0;
     };
 
+    const handlePlay = () => {
+      if (onPlay) {
+        onPlay();
+      }
+    };
+
     video.addEventListener("loadedmetadata", handleLoadedMetadata);
-    video.addEventListener("timeupdate", handleTimeUpdate);
     video.addEventListener("ended", handleEnded);
+    video.addEventListener("play", handlePlay);
 
     return () => {
       video.removeEventListener("loadedmetadata", handleLoadedMetadata);
-      video.removeEventListener("timeupdate", handleTimeUpdate);
       video.removeEventListener("ended", handleEnded);
+      video.removeEventListener("play", handlePlay);
     };
-  }, [onDurationChange, onProgress, onEnded]);
+  }, [onDurationChange, onEnded, onPlay]);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
     if (isActive && !isPlaying) {
-      // Reset to beginning when starting a new video
       video.currentTime = 0;
       video
         .play()
@@ -72,7 +69,7 @@ export const VideoCard = ({
       video.pause();
       setIsPlaying(false);
     }
-  }, [isActive, isPlaying, src]); // Added src to dependency to reset when video changes
+  }, [isActive, isPlaying, src]);
 
   return (
     <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden">
@@ -88,4 +85,3 @@ export const VideoCard = ({
     </div>
   );
 };
-

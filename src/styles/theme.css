@@ -3,6 +3,7 @@
   --color-foreground: oklch(100% 0 0);
   --color-muted: oklch(65.2% 0 0);
   --color-gray: oklch(85.5% 0 0);
+  --color-dark-gray: #BEBEBE;
   --color-muted-foreground: oklch(15.5% 0 0);
 
   --color-button-border: #565656;
