@@ -1,4 +1,12 @@
 @layer base {
+  * {
+    scroll-behavior: auto !important;
+  }
+  
+  html, body {
+    overflow-x: hidden;
+  }
+
   body {
     @apply bg-background text-foreground font-neue;
   }

@@ -35,9 +35,6 @@ export const PageTransition = ({
     <div className="relative w-full min-h-full">
       <AnimatePresence
         mode="wait"
-        onExitComplete={() => {
-          window.scrollTo(0, 0);
-        }}
       >
         <motion.div
           key={pageKey}

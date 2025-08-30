@@ -12,30 +12,33 @@ export const Dals: Project = {
   hasVideo: true,
   showcases: [
     {
-      type: "video",
-      id: "video-1",
-      order: 1,
-      video: {
-        src: "dals/details.mp4",
-        light: "/images/projects/dals/cover.webp",
-      },
-    },
-    {
-      type: "image-grid",
-      id: "image-1",
+      type: "video-carousel",
+      id: "video-carousel-1",
       order: 2,
-      images: [
+      videos: [
         {
-          src: "/images/projects/dals/1.webp",
-          alt: "Dals 1",
+          src: "/videos/projects/dals/boat_compressed.mp4",
+          title: "Boat",
         },
         {
-          src: "/images/projects/dals/2.webp",
-          alt: "Dals 2",
+          src: "/videos/projects/dals/bus_compressed.mp4",
+          title: "Bus",
         },
         {
-          src: "/images/projects/dals/3.webp",
-          alt: "Dals 3",
+          src: "/videos/projects/dals/jungeli_compressed.mp4",
+          title: "Jungeli",
+        },
+        {
+          src: "/videos/projects/dals/lenie_compressed.mp4",
+          title: "Lenie",
+        },
+        {
+          src: "/videos/projects/dals/miami_compressed.mp4",
+          title: "Miami",
+        },
+        {
+          src: "/videos/projects/dals/pirate_compressed.mp4",
+          title: "Pirate",
         },
       ],
     },

@@ -2,6 +2,7 @@ import { ShowcaseData } from "../../types/showcase";
 import { GridImagesShowcase } from "./GridImagesShowcase";
 import { SingleImageShowcase } from "./SingleImageShowcase";
 import { VideoShowcase } from "./VideoShowcase";
+import { VideoCarouselShowcase } from "./VideoCarouselShowcase";
 
 interface ShowcaseRendererProps {
   showcase: ShowcaseData;
@@ -19,6 +20,9 @@ export const ShowcaseRenderer = ({ showcase }: ShowcaseRendererProps) => {
 
       case "video":
         return <VideoShowcase data={showcase} border={true} />;
+
+      case "video-carousel":
+        return <VideoCarouselShowcase data={showcase} border={true} />;
 
       default:
         console.warn(

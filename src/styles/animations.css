@@ -152,4 +152,18 @@
     transform-origin: center;
     animation-fill-mode: both;
   }
+
+  @keyframes progress-bar {
+    0% {
+      width: 0%;
+    }
+    100% {
+      width: 100%;
+    }
+  }
+
+  .animate-progress-bar {
+    animation: progress-bar linear;
+    width: 0%;
+  }
 }

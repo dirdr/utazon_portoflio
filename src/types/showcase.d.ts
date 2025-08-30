@@ -1,5 +1,5 @@
 export interface ShowcaseItem {
-  type: "image-single" | "image-grid" | "video";
+  type: "image-single" | "image-grid" | "video" | "video-carousel";
   id: string;
   order: number;
 }
@@ -32,7 +32,16 @@ export interface VideoShowcaseData extends ShowcaseItem {
   };
 }
 
+export interface VideoCarouselShowcaseData extends ShowcaseItem {
+  type: "video-carousel";
+  videos: {
+    src: string;
+    title?: string;
+  }[];
+}
+
 export type ShowcaseData =
   | SingleImageShowcaseData
   | GridImagesShowcaseData
-  | VideoShowcaseData;
+  | VideoShowcaseData
+  | VideoCarouselShowcaseData;
