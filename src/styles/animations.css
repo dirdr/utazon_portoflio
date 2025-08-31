@@ -51,16 +51,43 @@
   .gpu-accelerated {
     transform: translate3d(0, 0, 0);
     backface-visibility: hidden;
+    contain: layout style paint;
+    content-visibility: auto;
   }
 
   /* Only apply will-change when element is being animated */
   .gpu-accelerated.animating {
     will-change: transform;
+    contain: layout style paint size;
   }
 
   .smooth-animation {
     contain: layout style paint;
     transform-style: preserve-3d;
+    isolation: isolate;
+    content-visibility: auto;
+  }
+
+  /* Enhanced containment for complex animations */
+  .complex-animation {
+    contain: strict;
+    isolation: isolate;
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+
+  /* Video-specific optimizations */
+  .video-container {
+    contain: layout style paint size;
+    content-visibility: auto;
+    transform: translateZ(0);
+  }
+
+  /* Canvas optimizations - less aggressive containment for canvas */
+  .canvas-container {
+    contain: layout style paint;
+    will-change: auto;
   }
 
   /* Modal animations */

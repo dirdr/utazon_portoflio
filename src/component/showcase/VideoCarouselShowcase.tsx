@@ -106,11 +106,12 @@ export const VideoCarouselShowcase = ({
               {index === currentIndex ? (
                 <motion.div
                   key={`expanded-${index}`}
-                  className="w-16 h-3 bg-gray-600 rounded-full relative overflow-hidden"
+                  className="w-16 h-3 bg-gray-600 rounded-full relative overflow-hidden smooth-animation"
                   initial={{ width: 12, height: 12, borderRadius: "50%" }}
                   animate={{ width: 64, height: 12, borderRadius: "9999px" }}
                   exit={{ width: 12, height: 12, borderRadius: "50%" }}
                   transition={{ duration: 0.3, ease: "easeInOut" }}
+                  style={{ contentVisibility: 'auto' }}
                 >
                   <div
                     key={animationKey}

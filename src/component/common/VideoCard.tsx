@@ -38,17 +38,24 @@ export const VideoCard = ({
       style={{ "--glint-card-speed": glintSpeed } as React.CSSProperties}
     >
       <div className="glint-card-content-square">
-        <div className="relative aspect-[4/3] w-full rounded-2xl overflow-hidden">
+        <div className="relative aspect-[4/3] w-full rounded-2xl overflow-hidden video-container">
           <div className="relative h-[65%] w-full">
             {!videoError && (
               <video
                 ref={videoRef}
-                className="h-full w-full object-cover"
+                className="h-full w-full object-cover gpu-accelerated"
                 src={video.src}
                 muted
                 loop
                 playsInline
+                disablePictureInPicture
+                disableRemotePlayback
                 preload="metadata"
+                crossOrigin="anonymous"
+                style={{
+                  contentVisibility: 'auto',
+                  willChange: 'auto',
+                }}
                 onLoadedData={() => {
                   setVideoReady(true);
                 }}

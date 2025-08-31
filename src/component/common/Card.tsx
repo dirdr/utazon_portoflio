@@ -5,18 +5,13 @@ import { useMemo, useRef, useState } from "react";
 import { LineSweepText } from "./LineSweepText";
 import { useLocation } from "wouter";
 
-const getCardBackgrounds = () => {
-  const backgrounds = [];
-  for (let i = 1; i <= 3; i++) {
-    backgrounds.push(
-      new URL(`../../assets/images/card_backgrounds/${i}.webp`, import.meta.url)
-        .href,
-    );
-  }
-  return backgrounds;
-};
+// Import card backgrounds directly (same as preload system)
+import p1 from "../../assets/images/card_backgrounds/1.webp";
+import p2 from "../../assets/images/card_backgrounds/2.webp";
+import p3 from "../../assets/images/card_backgrounds/3.webp";
 
-const cardBackgrounds = getCardBackgrounds();
+// Use static imports to match preload system
+const cardBackgrounds = [p1, p2, p3];
 
 export interface CardProps {
   image: {

@@ -357,11 +357,12 @@ export const CursorTrail = ({
     <OverlayManager>
       <canvas
         ref={canvasRef}
-        className="fixed inset-0 pointer-events-none"
+        className="fixed inset-0 pointer-events-none canvas-container"
         style={{
           zIndex: OVERLAY_Z_INDEX.CURSOR_TRAIL,
           mixBlendMode: "normal",
           willChange: "auto",
+          contentVisibility: 'auto',
         }}
       />
     </OverlayManager>

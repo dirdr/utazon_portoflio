@@ -45,6 +45,13 @@ export const usePreloadAssets = () => {
     });
 
     assets.push({
+      url: `/videos/intro_mobile.mp4`,
+      loaded: false,
+      error: false,
+      type: "video",
+    });
+
+    assets.push({
       url: backgroundImage,
       loaded: false,
       error: false,
@@ -87,8 +94,7 @@ export const usePreloadAssets = () => {
         type: "image",
       });
 
-      // Only preload thumbnail video if project has one
-      if (project.hasVideo !== false) { // Default to true for backward compatibility
+      if (project.hasVideo !== false) {
         assets.push({
           url: `/videos/projects/${project.id}/thumbnail.webm`,
           loaded: false,
@@ -126,43 +132,42 @@ export const usePreloadAssets = () => {
       img.addEventListener("load", handleLoad);
       img.addEventListener("error", handleError);
 
-      // Set src last to trigger loading
       img.src = url;
 
-      // Add timeout for stuck images
       setTimeout(() => {
         if (!img.complete) {
           console.warn(`Image preload timeout for: ${url}`);
           cleanup();
-          resolve(); // Resolve to not block the app
+          resolve();
         }
-      }, 10000); // 10 second timeout
+      }, 10000);
     });
   }, []);
 
   const preloadVideo = useCallback((url: string): Promise<void> => {
     return new Promise((resolve) => {
-      // First check if video exists with a HEAD request to avoid content-type issues
-      fetch(url, { 
+      fetch(url, {
         method: "HEAD",
-        mode: 'cors',
-        cache: 'no-cache'
+        mode: "cors",
+        cache: "no-cache",
       })
         .then((response) => {
-          if (!response.ok || !response.headers.get('content-type')?.includes('video')) {
-            resolve(); // Silently skip missing or invalid videos
+          if (
+            !response.ok ||
+            !response.headers.get("content-type")?.includes("video")
+          ) {
+            resolve();
             return;
           }
 
           const video = document.createElement("video");
           let resolved = false;
 
-          // Fallback timeout for Safari (3 seconds - reduced for better UX)
           const timeoutId = setTimeout(() => {
             if (!resolved) {
               resolved = true;
               cleanup();
-              resolve(); // Resolve instead of reject to not block the app
+              resolve();
             }
           }, 3000);
 
@@ -178,7 +183,7 @@ export const usePreloadAssets = () => {
             if (!resolved) {
               resolved = true;
               cleanup();
-              resolve(); // Don't block the app or log errors for missing videos
+              resolve();
             }
           };
 
@@ -190,17 +195,16 @@ export const usePreloadAssets = () => {
             clearTimeout(timeoutId);
           };
 
-          // Safari-friendly event listeners
           video.addEventListener("loadedmetadata", handleSuccess);
           video.addEventListener("canplay", handleSuccess);
           video.addEventListener("error", handleError);
 
           video.preload = "metadata";
-          video.muted = true; // Safari requires muted for autoplay
+          video.muted = true;
           video.src = url;
         })
         .catch(() => {
-          resolve(); // Silently skip network errors
+          resolve();
         });
     });
   }, []);
@@ -241,7 +245,6 @@ export const usePreloadAssets = () => {
           await preloadVideo(asset.url);
         }
         updateAssetState(asset.url, true, false);
-        // Asset preloaded successfully
       } catch (error) {
         console.warn(`Failed to preload asset: ${asset.url}`, error);
         updateAssetState(asset.url, false, true);
@@ -250,14 +253,12 @@ export const usePreloadAssets = () => {
     [preloadImage, preloadVideo, updateAssetState],
   );
 
-  // Add resource hints to document head for critical assets
   const addResourceHints = useCallback(() => {
     const criticalAssets = [
       { url: backgroundImage, as: "image", type: "image/webp" },
     ];
 
     criticalAssets.forEach(({ url, as, type }) => {
-      // Check if hint already exists
       if (document.querySelector(`link[href="${url}"]`)) return;
 
       const link = document.createElement("link");
@@ -273,7 +274,6 @@ export const usePreloadAssets = () => {
   const startPreloading = useCallback(async () => {
     const assetsList = generateAssetsList();
 
-    // Add resource hints for critical assets
     addResourceHints();
 
     setState({
@@ -285,7 +285,6 @@ export const usePreloadAssets = () => {
       progress: 0,
     });
 
-    // Prioritize critical assets by loading them first
     const criticalAssets = assetsList.filter(
       (asset) =>
         asset.url.includes("intro.mp4") || asset.url === backgroundImage,
@@ -294,12 +293,10 @@ export const usePreloadAssets = () => {
       (asset) => !criticalAssets.includes(asset),
     );
 
-    // Load critical assets first, then non-critical ones in parallel
     const criticalPromises = criticalAssets.map((asset) => preloadAsset(asset));
     await Promise.allSettled(criticalPromises);
 
-    // Load remaining assets in batches to avoid overwhelming the browser
-    const batchSize = 6; // Reasonable concurrent requests
+    const batchSize = 6;
     for (let i = 0; i < nonCriticalAssets.length; i += batchSize) {
       const batch = nonCriticalAssets.slice(i, i + batchSize);
       const batchPromises = batch.map((asset) => preloadAsset(asset));

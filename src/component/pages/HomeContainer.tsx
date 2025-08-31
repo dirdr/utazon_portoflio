@@ -25,9 +25,8 @@ export const HomeContainer = () => {
     isHomePage,
     isFreshLoad,
     isMobile,
-    timestamp: Date.now()
+    timestamp: Date.now(),
   });
-
 
   const videoSrc = useMemo(
     () => (isMobile ? "/videos/intro_mobile.mp4" : "/videos/intro.mp4"),
@@ -47,9 +46,16 @@ export const HomeContainer = () => {
   });
 
   useEffect(() => {
-    const shouldEnable = (videoWorkflow.shouldShowDiveIn || videoWorkflow.shouldShowContent) && !isMobile;
+    const shouldEnable =
+      (videoWorkflow.shouldShowDiveIn || videoWorkflow.shouldShowContent) &&
+      !isMobile;
     setTrailEnabled(shouldEnable);
-  }, [videoWorkflow.shouldShowDiveIn, videoWorkflow.shouldShowContent, isMobile, setTrailEnabled]);
+  }, [
+    videoWorkflow.shouldShowDiveIn,
+    videoWorkflow.shouldShowContent,
+    isMobile,
+    setTrailEnabled,
+  ]);
 
   const handleDiveIn = useCallback(() => {
     videoWorkflow.onDiveInClick();
@@ -109,4 +115,3 @@ export const HomeContainer = () => {
     </div>
   );
 };
-

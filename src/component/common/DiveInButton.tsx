@@ -33,7 +33,7 @@ export const DiveInButton = ({
   return (
     <OverlayManager>
       <motion.div
-        className={`fixed inset-0 flex items-center justify-center ${className}`}
+        className={`fixed inset-0 flex items-center justify-center complex-animation ${className}`}
         style={{ zIndex: OVERLAY_Z_INDEX.DIVE_IN_BUTTON_CONTAINER }}
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -73,8 +73,11 @@ export const DiveInButton = ({
               damping: 20,
             },
           }}
-          className="cursor-pointer focus:outline-none relative"
-          style={{ zIndex: OVERLAY_Z_INDEX.DIVE_IN_BUTTON_ELEMENT }}
+          className="cursor-pointer focus:outline-none relative smooth-animation"
+          style={{ 
+            zIndex: OVERLAY_Z_INDEX.DIVE_IN_BUTTON_ELEMENT,
+            contentVisibility: 'auto',
+          }}
           tabIndex={isReady ? 0 : -1}
           onKeyDown={handleKeyDown}
           role="button"

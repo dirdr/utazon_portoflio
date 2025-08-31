@@ -1,5 +1,5 @@
-import { useEffect, useRef, useCallback, useMemo } from 'react';
-import LocomotiveScroll from 'locomotive-scroll';
+import { useEffect, useRef, useCallback, useMemo } from "react";
+import LocomotiveScroll from "locomotive-scroll";
 
 export interface LocomotiveScrollOptions {
   smooth?: boolean;
@@ -15,30 +15,38 @@ export interface LocomotiveScrollOptions {
 
 export const useLocomotiveScroll = (
   options: LocomotiveScrollOptions = {},
-  dependencies: unknown[] = []
+  dependencies: unknown[] = [],
 ) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const locomotiveScrollRef = useRef<LocomotiveScroll | null>(null);
 
-  const defaultOptions: LocomotiveScrollOptions = useMemo(() => ({
-    smooth: true,
-    multiplier: 0.4,
-    class: 'is-revealed',
-    smoothMobile: true,
-    getDirection: true,
-    getSpeed: true,
-    lerp: 0.08,
-    reloadOnContextChange: false,
-    touchMultiplier: 1,
-  }), []);
+  const defaultOptions: LocomotiveScrollOptions = useMemo(
+    () => ({
+      smooth: true,
+      multiplier: 0.8,
+      class: "is-revealed",
+      smoothMobile: true,
+      getDirection: true,
+      getSpeed: true,
+      lerp: 0.12,
+      reloadOnContextChange: false,
+      touchMultiplier: 1,
+    }),
+    [],
+  );
 
-  const mergedOptions = useMemo(() => ({ ...defaultOptions, ...options }), [defaultOptions, options]);
+  const mergedOptions = useMemo(
+    () => ({ ...defaultOptions, ...options }),
+    [defaultOptions, options],
+  );
 
   const initScroll = useCallback(() => {
     if (!scrollRef.current) return;
 
     // Find the data-scroll-container element
-    const scrollContainer = scrollRef.current.querySelector('[data-scroll-container]') || scrollRef.current;
+    const scrollContainer =
+      scrollRef.current.querySelector("[data-scroll-container]") ||
+      scrollRef.current;
 
     locomotiveScrollRef.current = new LocomotiveScroll({
       el: scrollContainer,
@@ -85,8 +93,8 @@ export const useLocomotiveScroll = (
       updateScroll();
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, [updateScroll]);
 
   return {
@@ -98,3 +106,4 @@ export const useLocomotiveScroll = (
     destroyScroll,
   };
 };
+

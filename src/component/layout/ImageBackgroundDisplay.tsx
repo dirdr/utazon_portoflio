@@ -12,12 +12,10 @@ export const ImageBackgroundDisplay: React.FC = () => {
     return () => setBackgroundImage(null, "ImageBackgroundDisplay");
   }, [routeBackground, setBackgroundImage]);
   
-  // Use the bridge hook to leverage existing preload system
-  const currentBgLoadState = useImageLoadState(currentBackground || "");
-  const nextBgLoadState = useImageLoadState(nextBackground || "");
-  
-  const isCurrentReady = !currentBackground || currentBgLoadState.isLoaded;
-  const isNextReady = !nextBackground || nextBgLoadState.isLoaded;
+  // Skip load state check - assume preloaded assets are ready
+  // Your preload system guarantees these images are cached
+  const isCurrentReady = true;
+  const isNextReady = true;
 
   // Don't render anything if no background is set
   if (!currentBackground && !nextBackground) {

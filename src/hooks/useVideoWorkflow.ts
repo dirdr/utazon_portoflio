@@ -121,20 +121,34 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
       video.currentTime = 0;
       setWorkflowState('ready');
     } else {
-      // Desktop SPA: Jump to 8s, play immediately, show content
-      log('🖥️ SPA: Jumping to 8s and showing content', { timestamp });
+      // Desktop SPA: Seek first, then play to avoid playback interruption
+      log('🖥️ SPA: Seeking to loop start and playing', { timestamp });
       console.log('⏰ VideoWorkflow: Setting currentTime to', LOOP_START_DESKTOP, { timestamp });
+      
+      // Pause video first to ensure clean seek
+      video.pause();
       video.currentTime = LOOP_START_DESKTOP;
-      console.log('🎬 VideoWorkflow: Calling video.play()', { timestamp });
-      video.play().then(() => {
-        console.log('✅ VideoWorkflow: SPA video play() resolved', { 
+      
+      // Wait for seek to complete before playing
+      const handleSeeked = () => {
+        video.removeEventListener('seeked', handleSeeked);
+        console.log('🎬 VideoWorkflow: Seek completed, starting playback', { 
           currentTime: video.currentTime,
-          paused: video.paused,
           timestamp: Date.now() 
         });
-      }).catch((error) => {
-        console.error('❌ VideoWorkflow: SPA video play() failed', error, { timestamp: Date.now() });
-      });
+        
+        video.play().then(() => {
+          console.log('✅ VideoWorkflow: SPA video play() resolved', { 
+            currentTime: video.currentTime,
+            paused: video.paused,
+            timestamp: Date.now() 
+          });
+        }).catch((error) => {
+          console.error('❌ VideoWorkflow: SPA video play() failed', error, { timestamp: Date.now() });
+        });
+      };
+      
+      video.addEventListener('seeked', handleSeeked);
       setWorkflowState('spa-playing');
     }
   }, [isHomePage, isFreshLoad, isMobile, getVideoElement, workflowState, log]);

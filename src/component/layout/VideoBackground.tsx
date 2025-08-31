@@ -153,7 +153,7 @@ export const VideoBackground = forwardRef<
 
     return (
       <div
-        className="fixed inset-0"
+        className="fixed inset-0 video-container"
         style={{ zIndex: OVERLAY_Z_INDEX.VIDEO_BACKGROUND }}
       >
         <video
@@ -163,8 +163,14 @@ export const VideoBackground = forwardRef<
           autoPlay={false}
           playsInline
           disablePictureInPicture
+          disableRemotePlayback
           preload="metadata"
+          crossOrigin="anonymous"
           src={videoSource}
+          style={{
+            contentVisibility: 'auto',
+            willChange: 'auto',
+          }}
         />
 
         {!isMobile && (
