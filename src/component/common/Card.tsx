@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "./Button";
 import { useMemo, useRef, useState } from "react";
 import { LineSweepText } from "./LineSweepText";
-import { useLocation } from "wouter";
+import { useTransitionContext } from "../../contexts/TransitionContext";
 
 // Import card backgrounds directly (same as preload system)
 import p1 from "../../assets/images/card_backgrounds/1.webp";
@@ -42,7 +42,7 @@ export const Card = ({
   priority = false,
 }: CardProps) => {
   const { t } = useTranslation();
-  const [, setLocation] = useLocation();
+  const { navigateWithTransition } = useTransitionContext();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoReady, setVideoReady] = useState(false);
   const [videoError, setVideoError] = useState(false);
@@ -55,6 +55,7 @@ export const Card = ({
     const index = Math.abs(hash) % cardBackgrounds.length;
     return cardBackgrounds[index];
   }, [project.name]);
+
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -72,13 +73,13 @@ export const Card = ({
     }
   };
 
-  const handleClick = () => {
-    setLocation(`/projects/${project.id}`);
+  const handleClick = async () => {
+    await navigateWithTransition(`/projects/${project.id}`, { id: project.id });
   };
 
-  const handleButtonClick = (e: React.MouseEvent) => {
+  const handleButtonClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    setLocation(`/projects/${project.id}`);
+    await navigateWithTransition(`/projects/${project.id}`, { id: project.id });
   };
 
   return (
@@ -129,7 +130,7 @@ export const Card = ({
               thumbnail && videoReady && "group-hover:opacity-0",
             )}
             style={{ clipPath: `url(#rounded-diagonal-cut-${project.id})` }}
-            loading={priority ? "eager" : "lazy"}
+            loading="eager"
           />
 
           {thumbnail && !videoError && (

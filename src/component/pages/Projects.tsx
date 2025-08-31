@@ -3,15 +3,19 @@ import { allProjectsSortedByPriority } from "../../data/projects";
 import { useTranslation } from "react-i18next";
 import { Container } from "../layout/Container";
 import { useBackgroundStore } from "../../hooks/useBackgroundStore";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import backgroundImage from "../../assets/images/background.webp";
 import { ScrollablePageWrapper } from "../common/ScrollablePageWrapper";
+import { useTransitionContext } from "../../contexts/TransitionContext";
 
 export const Projects = () => {
   const { t } = useTranslation();
   const setBackgroundImage = useBackgroundStore(
     (state) => state.setBackgroundImage,
   );
+
+  // Access transition context (for future navigation if needed)
+  const { navigateWithTransition } = useTransitionContext();
 
   useEffect(() => {
     setBackgroundImage(backgroundImage, "Projects");

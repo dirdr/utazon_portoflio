@@ -1,5 +1,5 @@
-import { useLocation } from "wouter";
 import { cn } from "../../utils/cn";
+import { useTransitionContext } from "../../contexts/TransitionContext";
 
 interface BackButtonProps {
   to?: string;
@@ -10,10 +10,10 @@ export const BackButton = ({
   to = "/projects",
   className,
 }: BackButtonProps) => {
-  const [, setLocation] = useLocation();
+  const { navigateWithTransition } = useTransitionContext();
 
-  const handleClick = () => {
-    setLocation(to);
+  const handleClick = async () => {
+    await navigateWithTransition(to);
   };
 
   return (

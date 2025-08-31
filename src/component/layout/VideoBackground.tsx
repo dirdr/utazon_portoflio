@@ -164,7 +164,7 @@ export const VideoBackground = forwardRef<
           playsInline
           disablePictureInPicture
           disableRemotePlayback
-          preload="metadata"
+          preload="auto"
           crossOrigin="anonymous"
           src={videoSource}
           style={{

@@ -111,8 +111,19 @@ export const usePreloadAssets = () => {
     return new Promise((resolve, reject) => {
       const img = new Image();
 
+      // Safari/Firefox specific optimizations
+      const isSafari = /^((?!chrome|android).)*safari/i.test(
+        navigator.userAgent,
+      );
+      const isFirefox = navigator.userAgent.toLowerCase().includes("firefox");
+
       img.decoding = "async";
       img.loading = "eager";
+
+      // Help Safari/Firefox with WebP loading
+      if (isSafari || isFirefox) {
+        img.crossOrigin = "anonymous";
+      }
 
       const handleLoad = () => {
         cleanup();
@@ -163,18 +174,34 @@ export const usePreloadAssets = () => {
           const video = document.createElement("video");
           let resolved = false;
 
+          // Longer timeout for critical videos that need full preload
+          const isCriticalVideo =
+            url.includes("intro.mp4") || url.includes("intro_mobile.mp4");
+          const isSafari = /^((?!chrome|android).)*safari/i.test(
+            navigator.userAgent,
+          );
+          const timeoutDuration = isCriticalVideo
+            ? 10000
+            : isSafari
+              ? 8000
+              : 3000; // Safari needs more time for .webm
+
           const timeoutId = setTimeout(() => {
             if (!resolved) {
               resolved = true;
               cleanup();
+              console.warn(
+                `⏰ Video preload timeout (${timeoutDuration}ms): ${url}`,
+              );
               resolve();
             }
-          }, 3000);
+          }, timeoutDuration);
 
           const handleSuccess = () => {
             if (!resolved) {
               resolved = true;
               cleanup();
+              console.log(`✅ Video preloaded: ${url}`);
               resolve();
             }
           };
@@ -183,23 +210,31 @@ export const usePreloadAssets = () => {
             if (!resolved) {
               resolved = true;
               cleanup();
+              console.warn(`❌ Video preload failed: ${url}`);
               resolve();
             }
           };
 
           const cleanup = () => {
-            video.removeEventListener("loadedmetadata", handleSuccess);
-            video.removeEventListener("canplay", handleSuccess);
+            if (isCriticalVideo) {
+              video.removeEventListener("canplaythrough", handleSuccess);
+            } else {
+              video.removeEventListener("loadedmetadata", handleSuccess);
+            }
             video.removeEventListener("error", handleError);
             video.src = "";
+            video.remove?.();
             clearTimeout(timeoutId);
           };
 
-          video.addEventListener("loadedmetadata", handleSuccess);
-          video.addEventListener("canplay", handleSuccess);
+          if (isCriticalVideo) {
+            video.addEventListener("canplaythrough", handleSuccess);
+          } else {
+            video.addEventListener("loadedmetadata", handleSuccess);
+          }
           video.addEventListener("error", handleError);
 
-          video.preload = "metadata";
+          video.preload = isCriticalVideo ? "auto" : "metadata";
           video.muted = true;
           video.src = url;
         })

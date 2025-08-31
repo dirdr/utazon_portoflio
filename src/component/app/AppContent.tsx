@@ -8,22 +8,43 @@ import { Legal } from "../pages/Legal";
 import { ROUTES } from "../../constants/routes";
 import { Route, Switch, useLocation } from "wouter";
 import { ModalProvider } from "../../contexts/ModalContext";
+import { TransitionProvider } from "../../contexts/TransitionContext";
 import { ModalRoot } from "../common/ModalRoot";
 import { CursorTrail } from "../common/CursorTrail";
 import { useCursorTrail } from "../../hooks/useCursorTrail";
 import { useIsMobileHome } from "../../hooks/useIsMobileHome";
+import { PageTransitionOverlay } from "../layout/PageTransitionOverlay";
+import { useTransitionRouter } from "../../hooks/useTransitionRouter";
 
 export const AppContent = () => {
-  const [location] = useLocation();
-  const isHomePage = location === "/";
   const { isEnabled } = useCursorTrail();
   const isMobile = useIsMobileHome();
 
+  // Transition router with proper navigation control
+  const { 
+    isTransitioning, 
+    currentLocation, 
+    progress, 
+    navigateWithTransition,
+    duration,
+    onFadeInComplete
+  } = useTransitionRouter({
+    duration: 600,
+  });
+
+  const isHomePage = currentLocation === "/";
+
   return (
     <ModalProvider>
-      <Layout>
+      <TransitionProvider value={{
+        navigateWithTransition,
+        navigate: navigateWithTransition, // For now, always use transitions
+        isTransitioning,
+        currentLocation,
+      }}>
+        <Layout>
         <div className={`${isHomePage ? "h-full" : "min-h-full"}`}>
-          <Switch location={location}>
+          <Switch location={currentLocation}>
             <Route path={ROUTES.HOME} component={HomeContainer} />
             <Route path={ROUTES.ABOUT} component={About} />
             <Route path={ROUTES.PROJECTS} component={Projects} />
@@ -40,13 +61,22 @@ export const AppContent = () => {
             </Route>
           </Switch>
         </div>
-      </Layout>
-      <CursorTrail
-        enabled={isEnabled && !isMobile && isHomePage}
-        maxPoints={1000}
-        fadeTime={2500}
-      />
-      <ModalRoot />
+        </Layout>
+        <CursorTrail
+          enabled={isEnabled && !isMobile && isHomePage}
+          maxPoints={1000}
+          fadeTime={2500}
+        />
+        <ModalRoot />
+        
+        {/* Global page transition overlay */}
+        <PageTransitionOverlay
+          isTransitioning={isTransitioning}
+          progress={progress}
+          duration={duration}
+          onFadeInComplete={onFadeInComplete}
+        />
+      </TransitionProvider>
     </ModalProvider>
   );
 };

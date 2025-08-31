@@ -1,7 +1,7 @@
 import { Button } from "../common/Button";
 import logo from "../../assets/images/logo.svg";
 import { useState } from "react";
-import { Link } from "wouter";
+import { useTransitionContext } from "../../contexts/TransitionContext";
 import { NAVIGATION_ITEMS } from "../../constants/routes";
 import { LanguageSwitcher } from "../common/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
@@ -17,8 +17,14 @@ export const Navbar = () => {
   const { t } = useTranslation();
   const [currentPath] = useLocation();
   const { openContactModal } = useContactModal();
+  const { navigateWithTransition } = useTransitionContext();
 
   const pageConfig = getPageConfig(currentPath);
+
+  const handleHomeClick = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    await navigateWithTransition('/');
+  };
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
@@ -32,22 +38,25 @@ export const Navbar = () => {
     <>
       <div className="flex items-center justify-between h-16">
         <div className="flex flex-col items-start">
-          <Link href="/" className="text-sm md:text-base lg:text-lg font-nord">
+          <button 
+            onClick={handleHomeClick}
+            className="text-sm md:text-base lg:text-lg font-nord hover:text-white transition-colors cursor-pointer text-left"
+          >
             UTAZON
-          </Link>
-          <Link
-            href="/"
-            className="font-nord text-muted text-xs md:sm lg:text-base"
+          </button>
+          <button
+            onClick={handleHomeClick}
+            className="font-nord text-muted text-xs md:sm lg:text-base hover:text-white transition-colors cursor-pointer text-left"
           >
             ANTOINE VERNEZ
-          </Link>
+          </button>
         </div>
 
         {pageConfig.showNavbarLogo && (
           <div className="hidden xl:flex absolute left-1/2 transform -translate-x-1/2">
-            <Link href="/">
-              <img src={logo} alt="Utazon Logo" className="h-10 w-auto cursor-pointer" />
-            </Link>
+            <button onClick={handleHomeClick}>
+              <img src={logo} alt="Utazon Logo" className="h-10 w-auto cursor-pointer hover:opacity-80 transition-opacity" />
+            </button>
           </div>
         )}
 

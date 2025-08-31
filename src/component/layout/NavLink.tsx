@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
-import { Link } from "wouter";
 import { ROUTES } from "../../constants/routes";
+import { useTransitionContext } from "../../contexts/TransitionContext";
 
 interface NavLinkProps {
   href: string;
@@ -27,14 +27,25 @@ export const NavLink = ({
   className = "",
 }: NavLinkProps) => {
   const { t } = useTranslation();
+  const { navigateWithTransition } = useTransitionContext();
+
+  const handleClick = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    
+    // Execute transition - route assets determined automatically
+    await navigateWithTransition(href);
+    
+    // Call original onClick if provided
+    onClick?.();
+  };
 
   return (
-    <Link
+    <a
       href={href}
-      onClick={onClick}
-      className={`hover:text-muted font-nord transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-sm xl:text-sm 2xl:text-base ${className}`}
+      onClick={handleClick}
+      className={`hover:text-muted font-nord transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-sm xl:text-sm 2xl:text-base cursor-pointer ${className}`}
     >
       {getNavLabel(href, t) || label}
-    </Link>
+    </a>
   );
 };
