@@ -20,7 +20,7 @@ export const Projects = () => {
 
   return (
     <ScrollablePageWrapper>
-      <Container className="py-8">
+      <Container className="py-8 mb-10">
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6 lg:gap-8 card-container">
           {allProjectsSortedByPriority.map((project, index) => (
             <Card

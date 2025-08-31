@@ -48,7 +48,7 @@ export const useBackgroundStore = create<BackgroundStore>((set, get) => ({
             nextBackground: null,
             isTransitioning: false,
           });
-        }, 500);
+        }, 300);
       } else {
         // First background - set immediately
         set({

@@ -4,6 +4,7 @@ import { Container } from "../layout/Container";
 import { ProjectHeroSection } from "../projectdetail/ProjectHeroSection";
 import { useRef, useEffect } from "react";
 import { ShowcaseList } from "../showcase/ShowcaseList";
+import { ScrollablePageWrapper } from "../common/ScrollablePageWrapper";
 
 export const ProjectDetail = () => {
   const [, params] = useRoute("/projects/:id");
@@ -29,16 +30,18 @@ export const ProjectDetail = () => {
   }
 
   return (
-    <div>
-      <div className="mb-4 md:mb-16">
-        <ProjectHeroSection project={displayProject} />
+    <ScrollablePageWrapper>
+      <div className="mb-4 lg:mb-16">
+        <div className="mb-4 md:mb-16">
+          <ProjectHeroSection project={displayProject} />
+        </div>
+        {displayProject.showcases && displayProject.showcases.length > 0 && (
+          <ShowcaseList
+            showcases={displayProject.showcases}
+            project={displayProject}
+          />
+        )}
       </div>
-      {displayProject.showcases && displayProject.showcases.length > 0 && (
-        <ShowcaseList
-          showcases={displayProject.showcases}
-          project={displayProject}
-        />
-      )}
-    </div>
+    </ScrollablePageWrapper>
   );
 };

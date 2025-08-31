@@ -16,7 +16,7 @@ export const RouteBackground: React.FC = () => {
     <>
       {currentBackground && (
         <div
-          className="fixed inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-500 ease-out"
+          className="fixed inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-300 ease-out"
           style={{
             zIndex: -2,
             backgroundImage: `url(${currentBackground})`,
@@ -26,7 +26,7 @@ export const RouteBackground: React.FC = () => {
       )}
       {nextBackground && isTransitioning && (
         <div
-          className="fixed inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-500 ease-out"
+          className="fixed inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-300 ease-out"
           style={{
             zIndex: -1,
             backgroundImage: `url(${nextBackground})`,

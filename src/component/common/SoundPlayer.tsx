@@ -138,7 +138,7 @@ export const SoundPlayer: React.FC<SoundPlayerProps> = ({
           <div
             ref={tooltipRef}
             id="sound-player-tooltip"
-            className="absolute left-full ml-3 top-1/2 -translate-y-1/2 text-white text-sm whitespace-nowrap pointer-events-none font-nord"
+            className="absolute left-full ml-3 top-1/2 -translate-y-1/2 text-white text-sm whitespace-nowrap pointer-events-none font-nord hidden sm:block"
             style={{
               fontWeight: 100,
               zIndex: OVERLAY_Z_INDEX.TOOLTIP,

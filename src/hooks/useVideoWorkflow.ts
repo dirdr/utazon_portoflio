@@ -65,10 +65,9 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
   const videoRef = useRef<HTMLVideoElement>(null);
   const loopStartTime = isMobile ? LOOP_START_MOBILE : LOOP_START_DESKTOP;
   
-  // Computed state - FIXED LOGIC FOR IMMEDIATE SPA CONTENT
+  // Computed state
   const shouldShowContent = 
     isMobile ||                                    // Mobile: always show content
-    !isFreshLoad ||                               // SPA: show content immediately  
     workflowState === 'content-showing' ||        // Fresh load: after intro completes
     workflowState === 'spa-playing';              // SPA: confirmed playing
   const shouldShowDiveIn = workflowState === 'ready' && !isMobile;
@@ -85,31 +84,60 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
   }, []); // Only on mount
   
   const onVideoLoaded = useCallback(() => {
-    log('📹 Video loaded successfully');
+    const timestamp = Date.now();
+    log('📹 Video loaded successfully', { timestamp });
     setIsVideoLoaded(true);
     
     const video = getVideoElement ? getVideoElement() : videoRef.current;
     if (!video || !isHomePage) return;
     
+    // Don't override current workflow if already in progress
+    if (workflowState === 'playing-intro' || workflowState === 'content-showing') {
+      log('⏭️ Skipping video setup - workflow already in progress', { workflowState, timestamp });
+      return;
+    }
+    
+    console.log('🎯 VideoWorkflow: About to handle loaded video', {
+      isMobile,
+      isFreshLoad,
+      readyState: video.readyState,
+      paused: video.paused,
+      currentTime: video.currentTime,
+      workflowState,
+      timestamp
+    });
+    
     if (isMobile) {
       // Mobile: Start playing immediately from 0s, show content
-      log('📱 Mobile: Starting video and showing content');
+      log('📱 Mobile: Starting video and showing content', { timestamp });
       video.currentTime = 0;
-      video.play().catch(console.error);
+      video.play().then(() => {
+        console.log('✅ VideoWorkflow: Mobile video play() resolved', { timestamp: Date.now() });
+      }).catch(console.error);
       setWorkflowState('content-showing');
     } else if (isFreshLoad) {
       // Desktop fresh load: Show dive-in button, pause at 0s
-      log('🖥️ Fresh load: Video ready, showing dive-in button');
+      log('🖥️ Fresh load: Video ready, showing dive-in button', { timestamp });
       video.currentTime = 0;
       setWorkflowState('ready');
     } else {
       // Desktop SPA: Jump to 8s, play immediately, show content
-      log('🖥️ SPA: Jumping to 8s and showing content');
+      log('🖥️ SPA: Jumping to 8s and showing content', { timestamp });
+      console.log('⏰ VideoWorkflow: Setting currentTime to', LOOP_START_DESKTOP, { timestamp });
       video.currentTime = LOOP_START_DESKTOP;
-      video.play().catch(console.error);
+      console.log('🎬 VideoWorkflow: Calling video.play()', { timestamp });
+      video.play().then(() => {
+        console.log('✅ VideoWorkflow: SPA video play() resolved', { 
+          currentTime: video.currentTime,
+          paused: video.paused,
+          timestamp: Date.now() 
+        });
+      }).catch((error) => {
+        console.error('❌ VideoWorkflow: SPA video play() failed', error, { timestamp: Date.now() });
+      });
       setWorkflowState('spa-playing');
     }
-  }, [isHomePage, isFreshLoad, isMobile, getVideoElement, log]);
+  }, [isHomePage, isFreshLoad, isMobile, getVideoElement, workflowState, log]);
   
   const onDiveInClick = useCallback(() => {
     log('🎯 Dive-in clicked, starting video');

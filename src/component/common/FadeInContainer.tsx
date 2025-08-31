@@ -24,7 +24,8 @@ export const FadeInContainer = ({
     ? ANIMATION_CLASSES.VISIBLE
     : ANIMATION_CLASSES.HIDDEN;
 
-  const delayStyle = (delay > 0 && !instantForSPA) ? { transitionDelay: `${delay}ms` } : {};
+  const delayStyle =
+    delay > 0 && !instantForSPA ? { transitionDelay: `${delay}ms` } : {};
   const combinedStyle = { ...delayStyle, ...style };
 
   return (

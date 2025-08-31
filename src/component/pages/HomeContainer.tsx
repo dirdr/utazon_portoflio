@@ -20,6 +20,15 @@ export const HomeContainer = () => {
   const { setTrailEnabled } = useCursorTrail();
   const videoBackgroundRef = useRef<VideoBackgroundRef>(null);
 
+  console.log("🏠 HomeContainer: Render", {
+    location,
+    isHomePage,
+    isFreshLoad,
+    isMobile,
+    timestamp: Date.now()
+  });
+
+
   const videoSrc = useMemo(
     () => (isMobile ? "/videos/intro_mobile.mp4" : "/videos/intro.mp4"),
     [isMobile],
@@ -55,12 +64,7 @@ export const HomeContainer = () => {
   }
 
   return (
-    <motion.div
-      className="relative min-h-screen"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: isFreshLoad ? 0.5 : 0 }}
-    >
+    <div className="relative min-h-screen">
       <VideoBackground
         ref={videoBackgroundRef}
         src={videoSrc}
@@ -102,7 +106,7 @@ export const HomeContainer = () => {
           </main>
         </FadeInContainer>
       )}
-    </motion.div>
+    </div>
   );
 };
 

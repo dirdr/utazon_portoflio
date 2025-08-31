@@ -34,7 +34,7 @@
 
   .glint-card-wrapper {
     @apply relative overflow-hidden rounded-3xl;
-    padding: 2px;
+    padding: 1px;
     --glint-card-speed: 4s;
   }
 
@@ -88,7 +88,7 @@
 
   .glint-card-wrapper-static {
     @apply relative overflow-hidden rounded-3xl;
-    padding: 2px;
+    padding: 1px;
   }
 
   .glint-card-wrapper-static::before,
@@ -102,7 +102,7 @@
 
   .glint-card-wrapper-square {
     @apply relative overflow-hidden rounded-2xl;
-    padding: 2px;
+    padding: 1px;
     --glint-card-speed: 6s;
   }
 
