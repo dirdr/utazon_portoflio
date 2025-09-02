@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import { useBackgroundStore } from "../../hooks/useBackgroundStore";
+import { useBackgroundImageStore } from "../../hooks/useBackgroundImageStore";
 import { Container } from "../layout/Container";
 import backgroundImage from "../../assets/images/background.webp";
 
 export const Contact = () => {
-  const setBackgroundImage = useBackgroundStore(
+  const setBackgroundImage = useBackgroundImageStore(
     (state) => state.setBackgroundImage,
   );
 

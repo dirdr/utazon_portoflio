@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { LineSweepText } from "../common/LineSweepText";
-import { VideoCard } from "../common/VideoCard";
+import { ProjectVideoCard } from "../common/ProjectVideoCard";
 import { VideoShowcase } from "../showcase/VideoShowcase";
 import { useTranslation } from "react-i18next";
 import { Container } from "../layout/Container";
@@ -55,7 +55,7 @@ export const About = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8 mb-12 lg:mb-16">
-            <VideoCard
+            <ProjectVideoCard
               video={{
                 src: "/videos/about/card1.mp4",
                 alt: "Motion Design video",
@@ -63,7 +63,7 @@ export const About = () => {
               title={t("about.services.motionDesign.title")}
               description={t("about.services.motionDesign.description")}
             />
-            <VideoCard
+            <ProjectVideoCard
               video={{
                 src: "/videos/about/card2.webm",
                 alt: "Art Direction video",
@@ -71,7 +71,7 @@ export const About = () => {
               title={t("about.services.artDirection.title")}
               description={t("about.services.artDirection.description")}
             />
-            <VideoCard
+            <ProjectVideoCard
               video={{
                 src: "/videos/about/card3.mp4",
                 alt: "Editing & Compositing video",

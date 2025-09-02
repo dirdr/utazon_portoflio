@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import { useBackgroundStore } from "./useBackgroundStore";
+import { useBackgroundImageStore } from "./useBackgroundImageStore";
 import { Project } from "../types/project";
 
 export const useProjectBackground = (project: Project | null) => {
-  const setBackgroundImage = useBackgroundStore(
+  const setBackgroundImage = useBackgroundImageStore(
     (state) => state.setBackgroundImage,
   );
 

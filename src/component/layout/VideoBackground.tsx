@@ -7,7 +7,7 @@ import {
   useMemo,
 } from "react";
 import { useLocation } from "wouter";
-import { useIsMobileHome } from "../../hooks/useIsMobileHome";
+import { useHomeMobileBreakpoint } from "../../hooks/useHomeMobileBreakpoint";
 import { RadialGradient } from "../common/RadialGradient";
 import { ANIMATION_CLASSES } from "../../constants/animations";
 import { OVERLAY_Z_INDEX } from "../../constants/overlayZIndex";
@@ -44,7 +44,7 @@ export const VideoBackground = forwardRef<
   ) => {
     const [location] = useLocation();
     const isHomePage = location === "/";
-    const isMobile = useIsMobileHome();
+    const isMobile = useHomeMobileBreakpoint();
 
     const videoRef = useRef<HTMLVideoElement>(null);
 

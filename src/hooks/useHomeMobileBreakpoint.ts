@@ -1,6 +1,6 @@
 import { useIsMobileSimple } from "./useIsMobile";
 
-export const useIsMobileHome = (): boolean => {
+export const useHomeMobileBreakpoint = (): boolean => {
   return useIsMobileSimple({
     breakpoint: 1024,
     treatTabletsAsMobile: true,

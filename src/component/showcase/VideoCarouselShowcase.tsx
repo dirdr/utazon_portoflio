@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { VideoCarouselShowcaseData } from "../../types/showcase";
-import { VideoCard } from "./VideoCard";
+import { CarouselVideoCard } from "./CarouselVideoCard";
 import { SHOWCASE_STYLES } from "../../constants/showcaseStyles";
 import { cn } from "../../utils/cn";
 
@@ -80,7 +80,7 @@ export const VideoCarouselShowcase = ({
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
           >
-            <VideoCard
+            <CarouselVideoCard
               src={data.videos[currentIndex].src}
               title={data.videos[currentIndex].title}
               onDurationChange={handleDurationChange}

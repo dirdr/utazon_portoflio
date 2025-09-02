@@ -4,7 +4,7 @@ import { LineSweepText } from "../common/LineSweepText";
 import { SoundPlayer } from "../common/SoundPlayer";
 import { ROUTES } from "../../constants/routes";
 import { useTranslation } from "react-i18next";
-import { useIsMobileHome } from "../../hooks/useIsMobileHome";
+import { useHomeMobileBreakpoint } from "../../hooks/useHomeMobileBreakpoint";
 import { FullscreenVideoModal } from "../common/FullscreenVideoModal";
 
 interface HomeProps {
@@ -13,7 +13,7 @@ interface HomeProps {
 
 export const Home = ({ onVideoMuteToggle }: HomeProps) => {
   const { t } = useTranslation();
-  const isMobile = useIsMobileHome();
+  const isMobile = useHomeMobileBreakpoint();
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [, setIsSoundPlaying] = useState(true);
 

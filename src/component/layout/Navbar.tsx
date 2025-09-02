@@ -6,7 +6,7 @@ import { NAVIGATION_ITEMS } from "../../constants/routes";
 import { LanguageSwitcher } from "../common/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
 import { NavLink } from "./NavLink";
-import { useAutoCloseMobileMenu } from "../../hooks/useAutoCloseMobileMenu";
+import { useMenuAutoClose } from "../../hooks/useMenuAutoClose";
 import { getPageConfig } from "../../config/pageConfig";
 import { cn } from "../../utils/cn";
 import { useLocation } from "wouter";
@@ -29,7 +29,7 @@ export const Navbar = () => {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
 
-  const menuRef = useAutoCloseMobileMenu({
+  const menuRef = useMenuAutoClose({
     isOpen: isMenuOpen,
     onClose: closeMenu,
   });

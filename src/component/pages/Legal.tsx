@@ -1,13 +1,13 @@
 import { useTranslation } from "react-i18next";
 import { Container } from "../layout/Container";
-import { useBackgroundStore } from "../../hooks/useBackgroundStore";
+import { useBackgroundImageStore } from "../../hooks/useBackgroundImageStore";
 import { useEffect } from "react";
 import backgroundImage from "../../assets/images/background.webp";
 import { ScrollablePageWrapper } from "../common/ScrollablePageWrapper";
 
 export const Legal = () => {
   const { t } = useTranslation();
-  const setBackgroundImage = useBackgroundStore(
+  const setBackgroundImage = useBackgroundImageStore(
     (state) => state.setBackgroundImage,
   );
 

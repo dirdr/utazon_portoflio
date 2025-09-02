@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-interface VideoCardProps {
+interface CarouselVideoCardProps {
   src: string;
   title?: string;
   onDurationChange?: (duration: number) => void;
@@ -9,13 +9,13 @@ interface VideoCardProps {
   isActive: boolean;
 }
 
-export const VideoCard = ({
+export const CarouselVideoCard = ({
   src,
   onDurationChange,
   onEnded,
   onPlay,
   isActive,
-}: VideoCardProps) => {
+}: CarouselVideoCardProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 

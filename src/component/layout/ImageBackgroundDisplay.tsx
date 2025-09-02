@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import { useBackgroundStore } from "../../hooks/useBackgroundStore";
+import { useBackgroundImageStore } from "../../hooks/useBackgroundImageStore";
 import { useImageLoadState } from "../../hooks/useImageLoadState";
 import { useRouteBackground } from "../../hooks/useRouteBackground";
 
 export const ImageBackgroundDisplay: React.FC = () => {
   const routeBackground = useRouteBackground();
-  const { currentBackground, nextBackground, isTransitioning, setBackgroundImage } = useBackgroundStore();
+  const { currentBackground, nextBackground, isTransitioning, setBackgroundImage } = useBackgroundImageStore();
 
   useEffect(() => {
     setBackgroundImage(routeBackground, "ImageBackgroundDisplay");

@@ -1,7 +1,7 @@
 import { ReactNode, CSSProperties } from "react";
 import { ANIMATION_CLASSES } from "../../constants/animations";
 
-interface FadeInContainerProps {
+interface HomeFadeInContainerProps {
   children: ReactNode;
   isVisible: boolean;
   className?: string;
@@ -10,14 +10,14 @@ interface FadeInContainerProps {
   instantForSPA?: boolean;
 }
 
-export const FadeInContainer = ({
+export const HomeFadeInContainer = ({
   children,
   isVisible,
   className = "",
   delay = 0,
   style = {},
   instantForSPA = false,
-}: FadeInContainerProps) => {
+}: HomeFadeInContainerProps) => {
   // For SPA navigation, skip transitions entirely
   const baseClasses = instantForSPA ? "" : ANIMATION_CLASSES.TRANSITION;
   const visibilityClasses = isVisible

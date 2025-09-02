@@ -1,11 +1,11 @@
 import { useEffect, useRef } from 'react';
 
-interface UseAutoCloseMobileMenuProps {
+interface UseMenuAutoCloseProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const useAutoCloseMobileMenu = ({ isOpen, onClose }: UseAutoCloseMobileMenuProps) => {
+export const useMenuAutoClose = ({ isOpen, onClose }: UseMenuAutoCloseProps) => {
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

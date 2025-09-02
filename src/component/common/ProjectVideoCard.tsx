@@ -1,7 +1,7 @@
 import { cn } from "../../utils/cn";
 import { useRef, useState, useEffect } from "react";
 
-export interface VideoCardProps {
+export interface ProjectVideoCardProps {
   video: {
     src: string;
     alt: string;
@@ -12,13 +12,13 @@ export interface VideoCardProps {
   glintSpeed?: string;
 }
 
-export const VideoCard = ({
+export const ProjectVideoCard = ({
   video,
   title,
   description,
   className,
   glintSpeed = "6s",
-}: VideoCardProps) => {
+}: ProjectVideoCardProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoReady, setVideoReady] = useState(false);
   const [videoError, setVideoError] = useState(false);

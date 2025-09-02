@@ -12,13 +12,13 @@ import { TransitionProvider } from "../../contexts/TransitionContext";
 import { ModalRoot } from "../common/ModalRoot";
 import { CursorTrail } from "../common/CursorTrail";
 import { useCursorTrail } from "../../hooks/useCursorTrail";
-import { useIsMobileHome } from "../../hooks/useIsMobileHome";
+import { useHomeMobileBreakpoint } from "../../hooks/useHomeMobileBreakpoint";
 import { PageTransitionOverlay } from "../layout/PageTransitionOverlay";
 import { useTransitionRouter } from "../../hooks/useTransitionRouter";
 
 export const AppContent = () => {
   const { isEnabled } = useCursorTrail();
-  const isMobile = useIsMobileHome();
+  const isMobile = useHomeMobileBreakpoint();
 
   // Transition router with proper navigation control
   const { 

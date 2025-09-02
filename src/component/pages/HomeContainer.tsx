@@ -4,17 +4,17 @@ import { useLocation } from "wouter";
 import { useAppLoading } from "../../contexts/AppLoadingContext";
 import { VideoBackground, VideoBackgroundRef } from "../layout/VideoBackground";
 import { DiveInButton } from "../common/DiveInButton";
-import { FadeInContainer } from "../common/FadeInContainer";
+import { HomeFadeInContainer } from "../common/HomeFadeInContainer";
 import { Navbar } from "../layout/Navbar";
 import { Home } from "./Home";
-import { useIsMobileHome } from "../../hooks/useIsMobileHome";
+import { useHomeMobileBreakpoint } from "../../hooks/useHomeMobileBreakpoint";
 import { useCursorTrail } from "../../hooks/useCursorTrail";
 import { useVideoWorkflow } from "../../hooks/useVideoWorkflow";
 
 export const HomeContainer = () => {
   const [location] = useLocation();
   const isHomePage = location === "/";
-  const isMobile = useIsMobileHome();
+  const isMobile = useHomeMobileBreakpoint();
 
   const { isFreshLoad } = useAppLoading();
   const { setTrailEnabled } = useCursorTrail();
@@ -100,7 +100,7 @@ export const HomeContainer = () => {
           </main>
         </div>
       ) : (
-        <FadeInContainer
+        <HomeFadeInContainer
           isVisible={videoWorkflow.shouldShowContent}
           className="h-screen relative z-10"
           delay={isFreshLoad ? 300 : 0}
@@ -110,7 +110,7 @@ export const HomeContainer = () => {
           <main className="absolute inset-0 top-auto overflow-hidden">
             <Home onVideoMuteToggle={handleVideoMute} />
           </main>
-        </FadeInContainer>
+        </HomeFadeInContainer>
       )}
     </div>
   );

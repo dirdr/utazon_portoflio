@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-interface BackgroundStore {
+interface BackgroundImageStore {
   currentBackground: string | null;
   nextBackground: string | null;
   isTransitioning: boolean;
@@ -10,7 +10,7 @@ interface BackgroundStore {
 const activeBackgroundUsers = new Set<string>();
 const clearTimeouts = new Map<string, number>();
 
-export const useBackgroundStore = create<BackgroundStore>((set, get) => ({
+export const useBackgroundImageStore = create<BackgroundImageStore>((set, get) => ({
   currentBackground: null,
   nextBackground: null,
   isTransitioning: false,
