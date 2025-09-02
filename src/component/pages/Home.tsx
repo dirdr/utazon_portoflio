@@ -6,6 +6,7 @@ import { ROUTES } from "../../constants/routes";
 import { useTranslation } from "react-i18next";
 import { useHomeMobileBreakpoint } from "../../hooks/useHomeMobileBreakpoint";
 import { FullscreenVideoModal } from "../common/FullscreenVideoModal";
+import { useTransitionContext } from "../../contexts/TransitionContext";
 
 interface HomeProps {
   onVideoMuteToggle?: (muted: boolean) => void;
@@ -14,6 +15,7 @@ interface HomeProps {
 export const Home = ({ onVideoMuteToggle }: HomeProps) => {
   const { t } = useTranslation();
   const isMobile = useHomeMobileBreakpoint();
+  const { navigateWithTransition } = useTransitionContext();
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [, setIsSoundPlaying] = useState(true);
 
@@ -43,6 +45,10 @@ export const Home = ({ onVideoMuteToggle }: HomeProps) => {
     },
     [onVideoMuteToggle],
   );
+
+  const handleProjectsClick = useCallback(() => {
+    navigateWithTransition(ROUTES.PROJECTS);
+  }, [navigateWithTransition]);
 
 
   if (isMobile) {
@@ -79,9 +85,9 @@ export const Home = ({ onVideoMuteToggle }: HomeProps) => {
 
           <div className="flex gap-4 md:gap-8 justify-start">
             <Button
-              as="link"
+              as="button"
               glintOnHover={true}
-              href={ROUTES.PROJECTS}
+              onClick={handleProjectsClick}
               className="text-xs sm:text-base"
             >
               {t("home.projects")}
@@ -141,9 +147,9 @@ export const Home = ({ onVideoMuteToggle }: HomeProps) => {
             </p>
             <nav className="flex gap-8" aria-label="Actions principales">
               <Button
-                as="link"
+                as="button"
                 glintOnHover={true}
-                href={ROUTES.PROJECTS}
+                onClick={handleProjectsClick}
                 className="text-sm lg:text-base"
               >
                 {t("home.projects")}

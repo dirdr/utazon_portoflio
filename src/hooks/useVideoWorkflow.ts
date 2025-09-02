@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTransitionContext } from '../contexts/TransitionContext';
 
 export type VideoWorkflowState = 
   | 'loading'           // Video is loading
@@ -45,6 +46,7 @@ const INTRO_DURATION = 3;     // Intro plays for 3s before content shows
  */
 export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResult => {
   const { isFreshLoad, isMobile, isHomePage, videoSrc, getVideoElement } = config;
+  const { isTransitioning } = useTransitionContext();
   
   // Logging helper
   const log = useCallback((message: string, data?: Record<string, unknown>) => {
@@ -90,6 +92,12 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
     
     const video = getVideoElement ? getVideoElement() : videoRef.current;
     if (!video || !isHomePage) return;
+
+    // Don't do any video operations during transitions
+    if (isTransitioning) {
+      log('🛡️ Skipping video setup - transition in progress', { timestamp });
+      return;
+    }
     
     // Don't override current workflow if already in progress
     if (workflowState === 'playing-intro' || workflowState === 'content-showing') {
@@ -151,7 +159,7 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
       video.addEventListener('seeked', handleSeeked);
       setWorkflowState('spa-playing');
     }
-  }, [isHomePage, isFreshLoad, isMobile, getVideoElement, workflowState, log]);
+  }, [isHomePage, isFreshLoad, isMobile, getVideoElement, workflowState, isTransitioning, log]);
   
   const onDiveInClick = useCallback(() => {
     log('🎯 Dive-in clicked, starting video');
@@ -189,12 +197,26 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
   
   // 5. Initialize state based on page/navigation type
   useEffect(() => {
+    console.log('🎬 VideoWorkflow: Navigation effect triggered', { 
+      isHomePage, 
+      isTransitioning,
+      willChangeState: !isHomePage && !isTransitioning
+    });
+
+    // Early return for any non-home page scenarios during transitions
     if (!isHomePage) {
-      setWorkflowState('content-showing');
-      return;
+      if (isTransitioning) {
+        console.log('🛡️ VideoWorkflow: Prevented ALL operations during transition');
+        return;
+      } else {
+        console.log('📺 VideoWorkflow: Changing to content-showing (off home page)');
+        setWorkflowState('content-showing');
+        return;
+      }
     }
     
-    // Reset for navigation changes
+    // Only execute the rest if we're on the home page
+    console.log('🏠 VideoWorkflow: Processing home page logic');
     setHasCompletedIntro(false);
     
     if (isVideoLoaded) {
@@ -209,7 +231,7 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
     } else {
       setWorkflowState('loading');
     }
-  }, [isHomePage, isFreshLoad, isMobile, isVideoLoaded]);
+  }, [isHomePage, isFreshLoad, isMobile, isVideoLoaded, isTransitioning]);
   
   // 6. Preload video when needed (with guards to prevent infinite loops)
   useEffect(() => {

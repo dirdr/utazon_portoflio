@@ -76,21 +76,32 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
 
   // Callback for when fade-in completes
   const handleFadeInComplete = useCallback(async () => {
-    if (!state.pendingLocation) return;
+    console.log('🎬 TransitionRouter: handleFadeInComplete called', { 
+      pendingLocation: state.pendingLocation,
+      isTransitioning: state.isTransitioning 
+    });
+
+    if (!state.pendingLocation) {
+      console.log('❌ TransitionRouter: No pending location, aborting');
+      return;
+    }
 
     const newLocation = state.pendingLocation;
+    console.log('🔄 TransitionRouter: Starting route switch to', newLocation);
     const shouldPreload = shouldPreloadRoute(newLocation);
     const cacheUrls = shouldPreload ? getRouteAssets(newLocation) : [];
 
     setState(prev => ({ ...prev, progress: 50 }));
 
     // Phase 3: Switch routes during black screen
+    console.log('🎯 TransitionRouter: Switching to new route:', newLocation);
     setLocation(newLocation);
     setState(prev => ({ 
       ...prev, 
       currentLocation: newLocation,
       progress: 60,
     }));
+    console.log('✅ TransitionRouter: Route switched successfully');
 
     // Phase 4: Cache verification (only if needed)
     if (cacheUrls.length > 0) {
@@ -103,12 +114,14 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
     setState(prev => ({ ...prev, progress: 100 }));
 
     // Phase 6: Complete transition - start fade out
+    console.log('🏁 TransitionRouter: Completing transition - fade out');
     setState(prev => ({
       ...prev,
       isTransitioning: false,
       pendingLocation: null,
       fadeInComplete: false,
     }));
+    console.log('✨ TransitionRouter: Transition completed successfully');
   }, [state.pendingLocation, setLocation, verifyCacheUrls]);
 
   // Navigate with transition (automatically determines assets to preload)
@@ -116,8 +129,18 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
     newLocation: string, 
     routeParams?: Record<string, string>
   ) => {
-    if (newLocation === state.currentLocation) return;
+    console.log('🚀 TransitionRouter: navigateWithTransition called', { 
+      newLocation, 
+      currentLocation: state.currentLocation,
+      isTransitioning: state.isTransitioning 
+    });
 
+    if (newLocation === state.currentLocation) {
+      console.log('⏭️ TransitionRouter: Same location, skipping transition');
+      return;
+    }
+
+    console.log('▶️ TransitionRouter: Starting transition - Phase 1');
     // Phase 1: Start transition - fade in overlay
     setState(prev => ({
       ...prev,

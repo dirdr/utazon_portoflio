@@ -6,10 +6,33 @@ import { Link } from "wouter";
 import { InstagramIcon } from "../common/InstagramIcon";
 import { LinkedInIcon } from "../common/LinkedInIcon";
 import { BehanceIcon } from "../common/BehanceIcon";
+import { useTransitionContext } from "../../contexts/TransitionContext";
+import { useCallback } from "react";
 
 export const Footer = () => {
   const { t } = useTranslation();
+  const { navigateWithTransition } = useTransitionContext();
   const currentYear = new Date().getFullYear();
+
+  const handleLegalClick = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    navigateWithTransition(ROUTES.LEGAL);
+  }, [navigateWithTransition]);
+
+  const handleProjectsClick = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    navigateWithTransition(ROUTES.PROJECTS);
+  }, [navigateWithTransition]);
+
+  const handleAboutClick = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    navigateWithTransition(ROUTES.ABOUT);
+  }, [navigateWithTransition]);
+
+  const handleContactClick = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    navigateWithTransition(ROUTES.CONTACT);
+  }, [navigateWithTransition]);
 
   return (
     <footer className="text-white">
@@ -33,18 +56,21 @@ export const Footer = () => {
               <h4 className="text-muted text-base mb-3">Menu</h4>
               <Link
                 href={ROUTES.PROJECTS}
+                onClick={handleProjectsClick}
                 className="text-white hover:text-white transition-colors duration-200 mb-2"
               >
                 {t("nav.projects")}
               </Link>
               <Link
                 href={ROUTES.ABOUT}
+                onClick={handleAboutClick}
                 className="text-white hover:text-white transition-colors duration-200 mb-2"
               >
                 {t("nav.about")}
               </Link>
               <Link
                 href={ROUTES.CONTACT}
+                onClick={handleContactClick}
                 className="text-white hover:text-white transition-colors duration-200"
               >
                 {t("nav.contact")}
@@ -119,6 +145,7 @@ export const Footer = () => {
               <div className="flex items-center gap-6">
                 <Link
                   href="/legal"
+                  onClick={handleLegalClick}
                   className="text-white hover:text-white transition-colors duration-200 text-xs"
                 >
                   {t("footer.legalNotice")}
