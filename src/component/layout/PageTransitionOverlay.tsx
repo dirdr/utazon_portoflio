@@ -3,14 +3,12 @@ import { scrollPositionStore } from '../../stores/scrollPositionStore';
 
 interface PageTransitionOverlayProps {
   isTransitioning: boolean;
-  progress: number;
   duration: number;
   onFadeInComplete?: () => void;
 }
 
 export const PageTransitionOverlay = ({
   isTransitioning,
-  progress,
   duration,
   onFadeInComplete,
 }: PageTransitionOverlayProps) => {

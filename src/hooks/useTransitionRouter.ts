@@ -1,7 +1,6 @@
-import { useState, useCallback, useEffect, useContext } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { getRouteAssets, shouldPreloadRoute } from '../config/routeAssets';
-import { useLocomotiveScrollContext } from '../contexts/LocomotiveScrollContext';
 import { scrollPositionStore } from '../stores/scrollPositionStore';
 
 const preloadHomeVideo = (): Promise<void> => {
@@ -30,13 +29,6 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
   const { duration = 600 } = config;
   const [location, setLocation] = useLocation();
   
-  // Use locomotive scroll if available, fallback to regular scroll
-  let locomotiveScroll = null;
-  try {
-    locomotiveScroll = useLocomotiveScrollContext();
-  } catch {
-    // Locomotive scroll context not available, will use fallback
-  }
   
   const [state, setState] = useState<TransitionState>({
     isTransitioning: false,
@@ -147,12 +139,11 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
     
     // End transition in scroll store
     scrollPositionStore.endTransition();
-  }, [state.pendingLocation, setLocation, verifyCacheUrls, duration, locomotiveScroll]);
+  }, [state.pendingLocation, setLocation, verifyCacheUrls, duration]);
 
   // Navigate with transition (automatically determines assets to preload)
   const navigateWithTransition = useCallback(async (
-    newLocation: string, 
-    routeParams?: Record<string, string>
+    newLocation: string
   ) => {
     if (newLocation === state.currentLocation) {
       return;
@@ -176,7 +167,7 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
 
     // Phase 2: Fade-in completion is handled by handleFadeInComplete callback
 
-  }, [state.currentLocation, duration, locomotiveScroll]);
+  }, [state.currentLocation]);
 
   // Simple navigate (no transition, for same-page or immediate changes)
   const navigate = useCallback((newLocation: string) => {

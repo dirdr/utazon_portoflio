@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { ROUTES } from "../../constants/routes";
-import { useTransitionContext } from "../../contexts/TransitionContext";
+import { useTransitionContext } from "../../hooks/useTransitionContext";
 
 interface NavLinkProps {
   href: string;

@@ -1,7 +1,7 @@
 import { Button } from "../common/Button";
 import logo from "../../assets/images/logo.svg";
 import { useState } from "react";
-import { useTransitionContext } from "../../contexts/TransitionContext";
+import { useTransitionContext } from "../../hooks/useTransitionContext";
 import { NAVIGATION_ITEMS } from "../../constants/routes";
 import { LanguageSwitcher } from "../common/LanguageSwitcher";
 import { useTranslation } from "react-i18next";

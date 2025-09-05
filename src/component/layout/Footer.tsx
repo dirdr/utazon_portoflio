@@ -6,7 +6,7 @@ import { Link } from "wouter";
 import { InstagramIcon } from "../common/InstagramIcon";
 import { LinkedInIcon } from "../common/LinkedInIcon";
 import { BehanceIcon } from "../common/BehanceIcon";
-import { useTransitionContext } from "../../contexts/TransitionContext";
+import { useTransitionContext } from "../../hooks/useTransitionContext";
 import { useCallback } from "react";
 
 export const Footer = () => {

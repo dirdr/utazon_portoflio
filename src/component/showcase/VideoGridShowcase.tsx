@@ -1,5 +1,4 @@
 import { VideoGridShowcaseData } from "../../types/showcase";
-import { apiClient } from "../../services/api";
 import { SHOWCASE_STYLES } from "../../constants/showcaseStyles";
 import { cn } from "../../utils/cn";
 

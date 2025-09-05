@@ -6,7 +6,7 @@ import { ProjectDetail } from "../pages/ProjectDetail";
 import { Contact } from "../pages/Contact";
 import { Legal } from "../pages/Legal";
 import { ROUTES } from "../../constants/routes";
-import { Route, Switch, useLocation } from "wouter";
+import { Route, Switch } from "wouter";
 import { ModalProvider } from "../../contexts/ModalContext";
 import { TransitionProvider } from "../../contexts/TransitionContext";
 import { ModalRoot } from "../common/ModalRoot";
@@ -26,7 +26,6 @@ export const AppContent = () => {
   const { 
     isTransitioning, 
     currentLocation, 
-    progress, 
     navigateWithTransition,
     duration,
     onFadeInComplete
@@ -91,7 +90,6 @@ export const AppContent = () => {
           {/* Global page transition overlay */}
           <PageTransitionOverlay
             isTransitioning={isTransitioning}
-            progress={progress}
             duration={duration}
             onFadeInComplete={onFadeInComplete}
           />

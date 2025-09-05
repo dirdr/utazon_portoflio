@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { useTransitionContext } from '../contexts/TransitionContext';
+import { useTransitionContext } from './useTransitionContext';
 import { isDiveInCompleted, markDiveInCompleted } from '../utils/diveInStorage';
 
 export type VideoWorkflowState = 
@@ -62,8 +62,6 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
   const videoRef = useRef<HTMLVideoElement>(null);
   const loopStartTime = isMobile ? LOOP_START_MOBILE : LOOP_START_DESKTOP;
   
-  // Track transition changes for debugging
-  const previousTransitionState = useRef(isTransitioning);
   
   
   // Computed state
@@ -250,7 +248,7 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
     } else {
       setWorkflowState('loading');
     }
-  }, [isHomePage, isFreshLoad, isMobile, isVideoLoaded, isTransitioning]);
+  }, [isHomePage, isFreshLoad, isMobile, isVideoLoaded, isTransitioning, log, workflowState]);
   
   // 6. Preload video when needed (with guards to prevent infinite loops)
   useEffect(() => {

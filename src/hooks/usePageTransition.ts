@@ -33,7 +33,6 @@ export const usePageTransition = (config: PageTransitionConfig = {}) => {
     previousPage: null,
   });
 
-  const [transitionStartTime, setTransitionStartTime] = useState<number>(0);
 
   // Cache verification function
   const verifyCacheUrls = useCallback(
@@ -90,8 +89,6 @@ export const usePageTransition = (config: PageTransitionConfig = {}) => {
     if (location === state.currentPage) return;
 
     // Start transition
-    const startTime = Date.now();
-    setTransitionStartTime(startTime);
     
     setState(prev => ({
       ...prev,

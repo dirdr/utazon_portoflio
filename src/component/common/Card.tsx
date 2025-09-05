@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "./Button";
 import { useMemo, useRef, useState } from "react";
 import { LineSweepText } from "./LineSweepText";
-import { useTransitionContext } from "../../contexts/TransitionContext";
+import { useTransitionContext } from "../../hooks/useTransitionContext";
 
 // Import card backgrounds directly (same as preload system)
 import p1 from "../../assets/images/card_backgrounds/1.webp";
@@ -39,7 +39,6 @@ export const Card = ({
   project,
   className,
   glintSpeed = "6s",
-  priority = false,
 }: CardProps) => {
   const { t } = useTranslation();
   const { navigateWithTransition } = useTransitionContext();

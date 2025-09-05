@@ -208,7 +208,7 @@ export const detectNavigationType = (): NavigationInfo => {
  * Track SPA route changes
  * Call this when the router navigates to a new route
  */
-export const trackRouteChange = (newPath: string, isInitialRender = false) => {
+export const trackRouteChange = (_newPath: string, isInitialRender = false) => {
   const now = performance.now();
   
   if (!isInitialRender) {
@@ -257,7 +257,7 @@ export const initializeNavigationDetection = () => {
     });
 
     // Listen for popstate (back/forward button)
-    window.addEventListener('popstate', (event) => {
+    window.addEventListener('popstate', () => {
       globalNavigationState.routeChangeCount++;
       globalNavigationState.lastNavigationTime = performance.now();
     });

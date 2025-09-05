@@ -3,7 +3,6 @@
  * Resets on every page refresh/reload but persists during SPA navigation
  */
 
-const DIVE_IN_COMPLETED_KEY = 'dive_in_completed';
 const PAGE_LOAD_KEY = 'page_load_id';
 
 // Generate a unique ID for this page load

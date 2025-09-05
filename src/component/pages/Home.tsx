@@ -6,7 +6,7 @@ import { ROUTES } from "../../constants/routes";
 import { useTranslation } from "react-i18next";
 import { useHomeMobileBreakpoint } from "../../hooks/useHomeMobileBreakpoint";
 import { FullscreenVideoModal } from "../common/FullscreenVideoModal";
-import { useTransitionContext } from "../../contexts/TransitionContext";
+import { useTransitionContext } from "../../hooks/useTransitionContext";
 
 interface HomeProps {
   onVideoMuteToggle?: (muted: boolean) => void;

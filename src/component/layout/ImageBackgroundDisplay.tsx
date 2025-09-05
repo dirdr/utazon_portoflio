@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useBackgroundImageStore } from "../../hooks/useBackgroundImageStore";
-import { useImageLoadState } from "../../hooks/useImageLoadState";
 import { useRouteBackground } from "../../hooks/useRouteBackground";
 
 export const ImageBackgroundDisplay: React.FC = () => {

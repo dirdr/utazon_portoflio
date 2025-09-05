@@ -1,5 +1,5 @@
 import { cn } from "../../utils/cn";
-import { useTransitionContext } from "../../contexts/TransitionContext";
+import { useTransitionContext } from "../../hooks/useTransitionContext";
 
 interface BackButtonProps {
   to?: string;

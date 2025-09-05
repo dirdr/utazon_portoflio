@@ -63,7 +63,7 @@ export const useLocomotiveScroll = (
     });
 
     // Update global scroll position store on scroll
-    locomotiveScrollRef.current.on('scroll', (args) => {
+    locomotiveScrollRef.current.on('scroll', (args: { scroll: { y: number } }) => {
       scrollPositionStore.setPosition(args.scroll.y);
     });
     
@@ -111,13 +111,17 @@ export const useLocomotiveScroll = (
     scrollTo(0);
   }, [scrollTo]);
 
+  // Stable options string for dependency array
+  const optionsString = useMemo(() => JSON.stringify(mergedOptions), [mergedOptions]);
+
   useEffect(() => {
     initScroll();
 
     return () => {
       destroyScroll();
     };
-  }, [scrollRef.current, JSON.stringify(mergedOptions), ...dependencies]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initScroll, destroyScroll, optionsString, ...dependencies]);
 
   useEffect(() => {
     const handleResize = () => {

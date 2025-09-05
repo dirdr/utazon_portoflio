@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useEffect, useRef } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { useLocation } from "wouter";
 import { useAppLoading } from "../../contexts/AppLoadingContext";
 import { VideoBackground, VideoBackgroundRef } from "../layout/VideoBackground";
