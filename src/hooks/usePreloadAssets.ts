@@ -147,7 +147,6 @@ export const usePreloadAssets = () => {
 
       setTimeout(() => {
         if (!img.complete) {
-          console.warn(`Image preload timeout for: ${url}`);
           cleanup();
           resolve();
         }
@@ -190,9 +189,6 @@ export const usePreloadAssets = () => {
             if (!resolved) {
               resolved = true;
               cleanup();
-              console.warn(
-                `⏰ Video preload timeout (${timeoutDuration}ms): ${url}`,
-              );
               resolve();
             }
           }, timeoutDuration);
@@ -201,7 +197,6 @@ export const usePreloadAssets = () => {
             if (!resolved) {
               resolved = true;
               cleanup();
-              console.log(`✅ Video preloaded: ${url}`);
               resolve();
             }
           };
@@ -210,7 +205,6 @@ export const usePreloadAssets = () => {
             if (!resolved) {
               resolved = true;
               cleanup();
-              console.warn(`❌ Video preload failed: ${url}`);
               resolve();
             }
           };
@@ -281,7 +275,6 @@ export const usePreloadAssets = () => {
         }
         updateAssetState(asset.url, true, false);
       } catch (error) {
-        console.warn(`Failed to preload asset: ${asset.url}`, error);
         updateAssetState(asset.url, false, true);
       }
     },

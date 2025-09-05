@@ -24,7 +24,6 @@ export const useNavigationDetection = () => {
   const [navigationState, setNavigationState] = useState<NavigationState>(() => {
     // Initial detection on first render
     const detection = detectNavigationType();
-    console.log('[NAV_HOOK] Initial detection:', detection);
     
     return {
       isFreshLoad: detection.isFreshLoad,
@@ -49,11 +48,9 @@ export const useNavigationDetection = () => {
     const isLocationChange = previousLocation.current !== location;
     
     if (!hasDetectedInitialNavigation.current) {
-      console.log('[NAV_HOOK] Initial route detection for:', location);
       trackRouteChange(location, true);
       hasDetectedInitialNavigation.current = true;
     } else if (isLocationChange) {
-      console.log('[NAV_HOOK] SPA navigation detected from', previousLocation.current, 'to', location);
       
       trackRouteChange(location, false);
       
@@ -77,7 +74,6 @@ export const useNavigationDetection = () => {
       isFreshLoad: false,
       isInitialRender: false
     }));
-    console.log('[NAV_HOOK] Navigation state reset - future navigations will be treated as SPA');
   };
 
   // Method to force re-detection (useful for debugging)
@@ -89,7 +85,6 @@ export const useNavigationDetection = () => {
       detectionMethod: detection.method,
       isInitialRender: false
     });
-    console.log('[NAV_HOOK] Re-detection forced:', detection);
   };
 
   return {

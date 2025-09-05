@@ -42,5 +42,28 @@ export const Dals: Project = {
         },
       ],
     },
+    {
+      type: "video-grid",
+      id: "video-grid-1",
+      order: 3,
+      videos: [
+        {
+          src: "/videos/projects/dals/boat_live_compressed.mp4",
+          title: "Boat Live",
+        },
+        {
+          src: "/videos/projects/dals/jungeli_live_compressed.mp4",
+          title: "Jungeli Live",
+        },
+        {
+          src: "/videos/projects/dals/lenie_live_compressed.mp4",
+          title: "Lenie Live",
+        },
+        {
+          src: "/videos/projects/dals/pirate_live.mp4",
+          title: "Pirate Live",
+        },
+      ],
+    },
   ],
 };

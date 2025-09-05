@@ -3,6 +3,7 @@ import { GridImagesShowcase } from "./GridImagesShowcase";
 import { SingleImageShowcase } from "./SingleImageShowcase";
 import { VideoShowcase } from "./VideoShowcase";
 import { VideoCarouselShowcase } from "./VideoCarouselShowcase";
+import { VideoGridShowcase } from "./VideoGridShowcase";
 
 interface ShowcaseRendererProps {
   showcase: ShowcaseData;
@@ -24,16 +25,16 @@ export const ShowcaseRenderer = ({ showcase }: ShowcaseRendererProps) => {
       case "video-carousel":
         return <VideoCarouselShowcase data={showcase} border={true} />;
 
+      case "video-grid":
+        return <VideoGridShowcase data={showcase} border={true} />;
+
       default:
-        console.warn(
-          `Unknown showcase type: ${(showcase as { type: string }).type}`,
-        );
         return null;
     }
   };
 
   return (
-    <div className="mx-4 lg:mx-32 my-4">
+    <div className="mx-4 lg:mx-32 my-8 lg:my-12">
       {renderShowcase()}
     </div>
   );

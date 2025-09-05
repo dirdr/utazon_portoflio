@@ -132,7 +132,12 @@
       "description": "Creation of 3D-mapped stage visuals for the French TV show Danse avec les Stars (TF1), working with talents like Lénie, Jungeli, Claude Dartois, Florent Manaudou and Adil Rami. Each tableau was designed to enhance the choreography with bespoke visuals and real-time projection mapping.",
       "role": "Design and creation of 3D stage visuals",
       "client": "Blackmotion / Client: TF1 – Danse avec les Stars",
-      "date": "2024"
+      "date": "2024",
+      "carouselDescription": [
+        "For the 14th season of Danse avec les Stars, I collaborated with the agency Blackmotion on the creation of several visual environments designed to accompany the performances of the dancers and celebrities.",
+        "My role was to design and produce animated digital backdrops, broadcast live during the show, in order to enrich the visual experience of the performance.",
+        "Each set was conceived to support the choreographic storytelling and create an immersive atmosphere, tailored to the identity of each dancer and the style of dance performed. This project was broadcast live in prime time, reaching several million viewers."
+      ]
     },
     "yassencore": {
       "title": "YASSENCORE – Twitch Waiting Screen",

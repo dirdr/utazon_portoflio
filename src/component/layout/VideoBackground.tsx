@@ -47,32 +47,33 @@ export const VideoBackground = forwardRef<
     const isMobile = useHomeMobileBreakpoint();
 
     const videoRef = useRef<HTMLVideoElement>(null);
+    
+    // Track loaded state per video source to prevent duplicate load callbacks
+    const loadedSources = useRef(new Set<string>());
 
     const videoSource = useMemo(() => {
       if (src) return src;
       return isMobile ? "/videos/intro_mobile.mp4" : "/videos/intro.mp4";
     }, [src, isMobile]);
 
+    // Clean up loaded sources when video source changes
+    useEffect(() => {
+      loadedSources.current.clear();
+    }, [videoSource]);
+
     useEffect(() => {
       const video = videoRef.current;
       if (!video || !isHomePage) return;
 
-      console.log("📺 VideoBackground: Setting up video events", {
-        readyState: video.readyState,
-        currentSrc: video.currentSrc,
-        paused: video.paused,
-        currentTime: video.currentTime,
-        timestamp: Date.now()
-      });
+      const currentSource = video.src;
+      const hasAlreadyNotifiedLoad = loadedSources.current.has(currentSource);
 
       const handleLoadedData = () => {
-        console.log("🎬 VideoBackground: loadeddata event fired", {
-          readyState: video.readyState,
-          currentTime: video.currentTime,
-          paused: video.paused,
-          timestamp: Date.now()
-        });
-        onLoadedData?.();
+        // Only call onLoadedData once per video source
+        if (!loadedSources.current.has(currentSource)) {
+          loadedSources.current.add(currentSource);
+          onLoadedData?.();
+        }
       };
 
       const handleTimeUpdate = (e: Event) => {
@@ -80,22 +81,13 @@ export const VideoBackground = forwardRef<
       };
 
       const handleEnded = () => {
-        console.log("🏁 VideoBackground: Video ended");
         onEnded?.();
       };
 
       const handlePlay = () => {
-        console.log("▶️ VideoBackground: Video started playing", {
-          currentTime: video.currentTime,
-          timestamp: Date.now()
-        });
       };
 
       const handlePause = () => {
-        console.log("⏸️ VideoBackground: Video paused", {
-          currentTime: video.currentTime,
-          timestamp: Date.now()
-        });
       };
 
       video.addEventListener("loadeddata", handleLoadedData);
@@ -104,12 +96,9 @@ export const VideoBackground = forwardRef<
       video.addEventListener("play", handlePlay);
       video.addEventListener("pause", handlePause);
 
-      // If video is already loaded, trigger callback immediately
-      if (video.readyState >= 2) { // HAVE_CURRENT_DATA or higher
-        console.log("⚡ VideoBackground: Video already loaded, triggering callback immediately", {
-          readyState: video.readyState,
-          timestamp: Date.now()
-        });
+      // If video is already loaded and we haven't notified yet, trigger callback
+      if (video.readyState >= 2 && !hasAlreadyNotifiedLoad) {
+        loadedSources.current.add(currentSource);
         setTimeout(() => onLoadedData?.(), 0);
       }
 
@@ -127,7 +116,7 @@ export const VideoBackground = forwardRef<
       if (!video) return;
 
       video.currentTime = 0;
-      video.play().catch(console.error);
+      video.play().catch(() => {});
     }, []);
 
     const setMuted = useCallback((muted: boolean) => {

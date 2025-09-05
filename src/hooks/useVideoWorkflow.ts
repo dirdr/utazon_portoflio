@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useTransitionContext } from '../contexts/TransitionContext';
+import { isDiveInCompleted, markDiveInCompleted } from '../utils/diveInStorage';
 
 export type VideoWorkflowState = 
   | 'loading'           // Video is loading
@@ -48,14 +49,8 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
   const { isFreshLoad, isMobile, isHomePage, videoSrc, getVideoElement } = config;
   const { isTransitioning } = useTransitionContext();
   
-  // Logging helper
   const log = useCallback((message: string, data?: Record<string, unknown>) => {
-    const prefix = '🎬 VideoWorkflow';
-    if (data) {
-      console.log(`${prefix}: ${message}`, data);
-    } else {
-      console.log(`${prefix}: ${message}`);
-    }
+    console.log(`[VideoWorkflow] ${message}`, data || '');
   }, []);
   
   // Core state
@@ -67,12 +62,16 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
   const videoRef = useRef<HTMLVideoElement>(null);
   const loopStartTime = isMobile ? LOOP_START_MOBILE : LOOP_START_DESKTOP;
   
+  // Track transition changes for debugging
+  const previousTransitionState = useRef(isTransitioning);
+  
+  
   // Computed state
   const shouldShowContent = 
     isMobile ||                                    // Mobile: always show content
     workflowState === 'content-showing' ||        // Fresh load: after intro completes
     workflowState === 'spa-playing';              // SPA: confirmed playing
-  const shouldShowDiveIn = workflowState === 'ready' && !isMobile;
+  const shouldShowDiveIn = workflowState === 'ready' && !isMobile && !isDiveInCompleted();
   
   // Log initial config (only on mount to prevent spam)
   useEffect(() => {
@@ -87,16 +86,35 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
   
   const onVideoLoaded = useCallback(() => {
     const timestamp = Date.now();
-    log('📹 Video loaded successfully', { timestamp });
+    const video = getVideoElement ? getVideoElement() : videoRef.current;
+    
+    log('📹 Video loaded callback triggered', { 
+      timestamp, 
+      hasVideo: !!video, 
+      isHomePage,
+      videoSrc: video?.src,
+      readyState: video?.readyState,
+      currentTime: video?.currentTime 
+    });
+    
     setIsVideoLoaded(true);
     
-    const video = getVideoElement ? getVideoElement() : videoRef.current;
     if (!video || !isHomePage) return;
 
-    // Don't do any video operations during transitions
-    if (isTransitioning) {
-      log('🛡️ Skipping video setup - transition in progress', { timestamp });
+    // Smart transition handling: prevent operations when transitioning AWAY from home,
+    // but ALLOW operations when transitioning TO home (for asset preparation)
+    const shouldAllowDuringTransition = !isFreshLoad; // SPA navigation to home
+    if (isTransitioning && !shouldAllowDuringTransition) {
+      log('🛡️ Skipping video setup - fresh load transition in progress', { timestamp });
       return;
+    }
+    
+    if (isTransitioning && shouldAllowDuringTransition) {
+      log('🎬 Video setup during SPA transition to home - preparing for smooth transition', { 
+        timestamp, 
+        isTransitioning, 
+        isFreshLoad 
+      });
     }
     
     // Don't override current workflow if already in progress
@@ -105,23 +123,13 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
       return;
     }
     
-    console.log('🎯 VideoWorkflow: About to handle loaded video', {
-      isMobile,
-      isFreshLoad,
-      readyState: video.readyState,
-      paused: video.paused,
-      currentTime: video.currentTime,
-      workflowState,
-      timestamp
-    });
     
     if (isMobile) {
       // Mobile: Start playing immediately from 0s, show content
       log('📱 Mobile: Starting video and showing content', { timestamp });
       video.currentTime = 0;
       video.play().then(() => {
-        console.log('✅ VideoWorkflow: Mobile video play() resolved', { timestamp: Date.now() });
-      }).catch(console.error);
+      }).catch(() => {});
       setWorkflowState('content-showing');
     } else if (isFreshLoad) {
       // Desktop fresh load: Show dive-in button, pause at 0s
@@ -130,8 +138,12 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
       setWorkflowState('ready');
     } else {
       // Desktop SPA: Seek first, then play to avoid playback interruption
-      log('🖥️ SPA: Seeking to loop start and playing', { timestamp });
-      console.log('⏰ VideoWorkflow: Setting currentTime to', LOOP_START_DESKTOP, { timestamp });
+      log('🖥️ SPA: Seeking to loop start and playing', { 
+        timestamp, 
+        isTransitioning, 
+        currentTime: video.currentTime,
+        targetTime: LOOP_START_DESKTOP 
+      });
       
       // Pause video first to ensure clean seek
       video.pause();
@@ -140,19 +152,21 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
       // Wait for seek to complete before playing
       const handleSeeked = () => {
         video.removeEventListener('seeked', handleSeeked);
-        console.log('🎬 VideoWorkflow: Seek completed, starting playback', { 
+        
+        log('🎯 SPA: Seek completed, starting playback', { 
           currentTime: video.currentTime,
-          timestamp: Date.now() 
+          isTransitioning 
         });
         
         video.play().then(() => {
-          console.log('✅ VideoWorkflow: SPA video play() resolved', { 
+          log('✅ HomeContainer video playing successfully', { 
             currentTime: video.currentTime,
-            paused: video.paused,
-            timestamp: Date.now() 
+            isTransitioning,
+            videoSrc: video.src,
+            bufferedRanges: video.buffered.length > 0 ? `${video.buffered.start(0).toFixed(2)}-${video.buffered.end(video.buffered.length-1).toFixed(2)}` : 'none'
           });
         }).catch((error) => {
-          console.error('❌ VideoWorkflow: SPA video play() failed', error, { timestamp: Date.now() });
+          log('❌ SPA: Video play failed', { error, isTransitioning });
         });
       };
       
@@ -167,10 +181,13 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
     const video = getVideoElement ? getVideoElement() : videoRef.current;
     if (!video || workflowState !== 'ready') return;
     
+    // Mark dive-in as completed for this session
+    markDiveInCompleted();
+    
     video.currentTime = 0;
     video.play().then(() => {
       setWorkflowState('playing-intro');
-    }).catch(console.error);
+    }).catch(() => {});
   }, [workflowState, getVideoElement, log]);
   
   // 3. Handle video time updates (only for intro completion)
@@ -192,31 +209,33 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
     
     // Reset to loop start time and continue playing
     video.currentTime = loopStartTime;
-    video.play().catch(console.error);
+    video.play().catch(() => {});
   }, [loopStartTime, getVideoElement, log]);
   
   // 5. Initialize state based on page/navigation type
   useEffect(() => {
-    console.log('🎬 VideoWorkflow: Navigation effect triggered', { 
-      isHomePage, 
+    log('🔄 Page/navigation state change', {
+      isHomePage,
+      isFreshLoad,
+      isMobile,
+      isVideoLoaded,
       isTransitioning,
-      willChangeState: !isHomePage && !isTransitioning
+      currentWorkflowState: workflowState
     });
 
     // Early return for any non-home page scenarios during transitions
     if (!isHomePage) {
       if (isTransitioning) {
-        console.log('🛡️ VideoWorkflow: Prevented ALL operations during transition');
+        log('🚫 Not home page during transition - waiting', { isTransitioning });
         return;
       } else {
-        console.log('📺 VideoWorkflow: Changing to content-showing (off home page)');
+        log('📄 Not home page - setting content showing');
         setWorkflowState('content-showing');
         return;
       }
     }
     
     // Only execute the rest if we're on the home page
-    console.log('🏠 VideoWorkflow: Processing home page logic');
     setHasCompletedIntro(false);
     
     if (isVideoLoaded) {
@@ -251,17 +270,8 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
     video.load();
   }, [isHomePage, videoSrc, getVideoElement, isVideoLoaded, log]);
   
-  // Log state changes (only on core state changes to prevent cascading)
-  useEffect(() => {
-    log('📊 State update', {
-      workflowState,
-      shouldShowContent,
-      shouldShowDiveIn,
-      isVideoLoaded,
-      hasCompletedIntro
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [workflowState, isVideoLoaded, log]); // Only trigger on core state changes
+
+
   
   return {
     // State

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { scrollPositionStore } from '../../stores/scrollPositionStore';
 
 interface PageTransitionOverlayProps {
   isTransitioning: boolean;
@@ -20,18 +21,19 @@ export const PageTransitionOverlay = ({
       // Start fade in
       setPhase('fading-in');
       
-      // Wait for next render, then trigger CSS transition
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          setPhase('visible');
-          
-          // Notify when fade-in completes
-          setTimeout(() => {
-            onFadeInComplete?.();
-          }, duration / 2);
-        });
-      });
+      // Use setTimeout instead of requestAnimationFrame for consistent timing
+      setTimeout(() => {
+        setPhase('visible');
+        
+        // Notify when fade-in completes
+        setTimeout(() => {
+          onFadeInComplete?.();
+        }, duration / 2);
+      }, 16); // One frame delay to ensure CSS transition starts
     } else if (!isTransitioning && phase === 'visible') {
+      // Reset scroll position right at the start of fade-out
+      scrollPositionStore.scrollToTop();
+      
       // Start fade out
       setPhase('fading-out');
       

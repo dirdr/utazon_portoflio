@@ -4,7 +4,6 @@ import { Container } from "../layout/Container";
 import { ProjectHeroSection } from "../projectdetail/ProjectHeroSection";
 import { useRef, useEffect } from "react";
 import { ShowcaseList } from "../showcase/ShowcaseList";
-import { ScrollablePageWrapper } from "../common/ScrollablePageWrapper";
 
 export const ProjectDetail = () => {
   const [, params] = useRoute("/projects/:id");
@@ -30,8 +29,8 @@ export const ProjectDetail = () => {
   }
 
   return (
-    <ScrollablePageWrapper>
-      <div className="mb-4 lg:mb-16">
+    <div className="min-h-screen flex flex-col">
+      <div className="flex-1 mb-4 lg:mb-16">
         <div className="mb-4 md:mb-16">
           <ProjectHeroSection project={displayProject} />
         </div>
@@ -42,6 +41,6 @@ export const ProjectDetail = () => {
           />
         )}
       </div>
-    </ScrollablePageWrapper>
+    </div>
   );
 };

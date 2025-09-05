@@ -37,10 +37,6 @@ export const ReactPlayerWrapper = ({
     playerRef.current = player;
   }, []);
 
-  const handleReady = useCallback(() => {
-    // Video ready callback
-  }, []);
-
   const handleDuration = useCallback(() => {
     const player = playerRef.current;
     if (!player) return;
@@ -77,7 +73,6 @@ export const ReactPlayerWrapper = ({
         playing={playing}
         volume={volume}
         onDurationChange={handleDuration}
-        onCanPlay={handleReady}
       />
       {!hasUserClicked && (
         <div

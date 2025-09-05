@@ -3,7 +3,6 @@ import { Container } from "../layout/Container";
 import { useBackgroundImageStore } from "../../hooks/useBackgroundImageStore";
 import { useEffect } from "react";
 import backgroundImage from "../../assets/images/background.webp";
-import { ScrollablePageWrapper } from "../common/ScrollablePageWrapper";
 
 export const Legal = () => {
   const { t } = useTranslation();
@@ -19,7 +18,6 @@ export const Legal = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <ScrollablePageWrapper>
       <div className="min-h-screen">
         <Container className="px-8 sm:px-12 md:px-16 lg:px-24 xl:px-32 2xl:px-40 py-16 sm:py-20 md:py-28 lg:py-36 xl:py-44">
           <div className="mb-8 sm:mb-12 md:mb-16 text-center">
@@ -143,6 +141,5 @@ export const Legal = () => {
           </div>
         </Container>
       </div>
-    </ScrollablePageWrapper>
   );
 };

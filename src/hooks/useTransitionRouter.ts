@@ -1,6 +1,12 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useContext } from 'react';
 import { useLocation } from 'wouter';
 import { getRouteAssets, shouldPreloadRoute } from '../config/routeAssets';
+import { useLocomotiveScrollContext } from '../contexts/LocomotiveScrollContext';
+import { scrollPositionStore } from '../stores/scrollPositionStore';
+
+const preloadHomeVideo = (): Promise<void> => {
+  return Promise.resolve();
+};
 
 interface TransitionConfig {
   duration?: number;
@@ -13,6 +19,7 @@ interface TransitionState {
   pendingLocation: string | null;
   progress: number;
   fadeInComplete: boolean;
+  preservedScrollPosition: number;
 }
 
 /**
@@ -23,12 +30,21 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
   const { duration = 600 } = config;
   const [location, setLocation] = useLocation();
   
+  // Use locomotive scroll if available, fallback to regular scroll
+  let locomotiveScroll = null;
+  try {
+    locomotiveScroll = useLocomotiveScrollContext();
+  } catch {
+    // Locomotive scroll context not available, will use fallback
+  }
+  
   const [state, setState] = useState<TransitionState>({
     isTransitioning: false,
     currentLocation: location,
     pendingLocation: null,
     progress: 0,
     fadeInComplete: false,
+    preservedScrollPosition: 0,
   });
 
   // Cache verification function
@@ -76,32 +92,29 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
 
   // Callback for when fade-in completes
   const handleFadeInComplete = useCallback(async () => {
-    console.log('🎬 TransitionRouter: handleFadeInComplete called', { 
-      pendingLocation: state.pendingLocation,
-      isTransitioning: state.isTransitioning 
-    });
-
     if (!state.pendingLocation) {
-      console.log('❌ TransitionRouter: No pending location, aborting');
       return;
     }
 
+    const blackScreenStartTime = Date.now();
+    const minBlackScreenDuration = duration / 3; // Minimum 200ms for 600ms total
+    
     const newLocation = state.pendingLocation;
-    console.log('🔄 TransitionRouter: Starting route switch to', newLocation);
     const shouldPreload = shouldPreloadRoute(newLocation);
     const cacheUrls = shouldPreload ? getRouteAssets(newLocation) : [];
+
 
     setState(prev => ({ ...prev, progress: 50 }));
 
     // Phase 3: Switch routes during black screen
-    console.log('🎯 TransitionRouter: Switching to new route:', newLocation);
+    
     setLocation(newLocation);
     setState(prev => ({ 
       ...prev, 
       currentLocation: newLocation,
       progress: 60,
     }));
-    console.log('✅ TransitionRouter: Route switched successfully');
+    
 
     // Phase 4: Cache verification (only if needed)
     if (cacheUrls.length > 0) {
@@ -109,38 +122,47 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
     }
     setState(prev => ({ ...prev, progress: 90 }));
 
-    // Phase 5: Small buffer then fade out
-    await new Promise(resolve => setTimeout(resolve, 100));
+    if (newLocation === '/') {
+      await preloadHomeVideo();
+    }
+    
+    // Phase 6: Ensure minimum black screen duration for smooth transitions
+    const processingTime = Date.now() - blackScreenStartTime;
+    const remainingTime = Math.max(0, minBlackScreenDuration - processingTime);
+    
+    if (remainingTime > 0) {
+      await new Promise(resolve => setTimeout(resolve, remainingTime));
+    }
+    
     setState(prev => ({ ...prev, progress: 100 }));
 
     // Phase 6: Complete transition - start fade out
-    console.log('🏁 TransitionRouter: Completing transition - fade out');
     setState(prev => ({
       ...prev,
       isTransitioning: false,
       pendingLocation: null,
       fadeInComplete: false,
+      preservedScrollPosition: 0,
     }));
-    console.log('✨ TransitionRouter: Transition completed successfully');
-  }, [state.pendingLocation, setLocation, verifyCacheUrls]);
+    
+    // End transition in scroll store
+    scrollPositionStore.endTransition();
+  }, [state.pendingLocation, setLocation, verifyCacheUrls, duration, locomotiveScroll]);
 
   // Navigate with transition (automatically determines assets to preload)
   const navigateWithTransition = useCallback(async (
     newLocation: string, 
     routeParams?: Record<string, string>
   ) => {
-    console.log('🚀 TransitionRouter: navigateWithTransition called', { 
-      newLocation, 
-      currentLocation: state.currentLocation,
-      isTransitioning: state.isTransitioning 
-    });
-
     if (newLocation === state.currentLocation) {
-      console.log('⏭️ TransitionRouter: Same location, skipping transition');
       return;
     }
-
-    console.log('▶️ TransitionRouter: Starting transition - Phase 1');
+    
+    // Preserve scroll position for the transition
+    scrollPositionStore.startTransition();
+    const currentScrollY = scrollPositionStore.getPosition();
+    
+    
     // Phase 1: Start transition - fade in overlay
     setState(prev => ({
       ...prev,
@@ -148,11 +170,13 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
       pendingLocation: newLocation,
       progress: 0,
       fadeInComplete: false,
+      preservedScrollPosition: currentScrollY,
     }));
+    
 
     // Phase 2: Fade-in completion is handled by handleFadeInComplete callback
 
-  }, [state.currentLocation]);
+  }, [state.currentLocation, duration, locomotiveScroll]);
 
   // Simple navigate (no transition, for same-page or immediate changes)
   const navigate = useCallback((newLocation: string) => {

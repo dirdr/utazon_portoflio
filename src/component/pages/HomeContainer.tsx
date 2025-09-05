@@ -20,13 +20,6 @@ export const HomeContainer = () => {
   const { setTrailEnabled } = useCursorTrail();
   const videoBackgroundRef = useRef<VideoBackgroundRef>(null);
 
-  console.log("🏠 HomeContainer: Render", {
-    location,
-    isHomePage,
-    isFreshLoad,
-    isMobile,
-    timestamp: Date.now(),
-  });
 
   const videoSrc = useMemo(
     () => (isMobile ? "/videos/intro_mobile.mp4" : "/videos/intro.mp4"),

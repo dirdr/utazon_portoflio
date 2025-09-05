@@ -25,7 +25,14 @@ export const ProjectVideoCard = ({
 
   useEffect(() => {
     if (videoReady && videoRef.current) {
-      videoRef.current.play().catch(() => {});
+      // Safari-friendly autoplay attempt
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Autoplay failed, likely due to Safari restrictions
+          // Video will show first frame and can be played on user interaction
+        });
+      }
     }
   }, [videoReady]);
 
@@ -38,12 +45,12 @@ export const ProjectVideoCard = ({
       style={{ "--glint-card-speed": glintSpeed } as React.CSSProperties}
     >
       <div className="glint-card-content-square">
-        <div className="relative aspect-[4/3] w-full rounded-2xl overflow-hidden video-container">
-          <div className="relative h-[65%] w-full">
+        <div className="relative aspect-[4/3] w-full rounded-2xl overflow-hidden video-container flex flex-col bg-black">
+          <div className="relative flex-[55] w-full">
             {!videoError && (
               <video
                 ref={videoRef}
-                className="h-full w-full object-cover gpu-accelerated"
+                className="h-full w-full object-cover"
                 src={video.src}
                 muted
                 loop
@@ -51,15 +58,29 @@ export const ProjectVideoCard = ({
                 disablePictureInPicture
                 disableRemotePlayback
                 preload="metadata"
-                crossOrigin="anonymous"
+                webkit-playsinline="true"
+                x5-playsinline="true"
                 style={{
-                  contentVisibility: 'auto',
-                  willChange: 'auto',
+                  transform: 'translateZ(0)',
+                  backfaceVisibility: 'hidden',
                 }}
                 onLoadedData={() => {
                   setVideoReady(true);
                 }}
-                onError={() => {
+                onLoadedMetadata={() => {
+                  // Additional Safari compatibility
+                  if (videoRef.current) {
+                    setVideoReady(true);
+                  }
+                }}
+                onCanPlay={() => {
+                  // Safari needs this event too
+                  if (videoRef.current) {
+                    setVideoReady(true);
+                  }
+                }}
+                onError={(e) => {
+                  console.error('Video load error:', e);
                   setVideoReady(false);
                   setVideoError(true);
                 }}
@@ -75,11 +96,11 @@ export const ProjectVideoCard = ({
             <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black to-transparent pointer-events-none" />
           </div>
 
-          <div className="h-[35%] bg-black flex flex-col justify-center px-14 py-14">
-            <h3 className="font-nord text-white text-xl font-bold italic mb-4">
+          <div className="flex-[45] bg-black flex flex-col justify-center px-14">
+            <h3 className="font-nord text-white text-sm sm:text-base md:text-lg xl:text-base 2xl:text-xl font-bold italic mb-1 sm:mb-2 md:mb-3 xl:mb-2 2xl:mb-4">
               {title}
             </h3>
-            <p className="text-white font-light text-base">{description}</p>
+            <p className="text-white font-light text-xs sm:text-sm md:text-base xl:text-sm 2xl:text-base">{description}</p>
           </div>
         </div>
       </div>

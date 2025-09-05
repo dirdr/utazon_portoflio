@@ -1,5 +1,6 @@
 import { useEffect, useRef, useCallback, useMemo } from "react";
 import LocomotiveScroll from "locomotive-scroll";
+import { scrollPositionStore } from "../stores/scrollPositionStore";
 
 export interface LocomotiveScrollOptions {
   smooth?: boolean;
@@ -11,6 +12,13 @@ export interface LocomotiveScrollOptions {
   lerp?: number;
   reloadOnContextChange?: boolean;
   touchMultiplier?: number;
+  firefoxMultiplier?: number;
+  tablet?: {
+    smooth?: boolean;
+  };
+  smartphone?: {
+    smooth?: boolean;
+  };
 }
 
 export const useLocomotiveScroll = (
@@ -23,12 +31,12 @@ export const useLocomotiveScroll = (
   const defaultOptions: LocomotiveScrollOptions = useMemo(
     () => ({
       smooth: true,
-      multiplier: 0.8,
+      multiplier: 0.6,
       class: "is-revealed",
       smoothMobile: true,
       getDirection: true,
       getSpeed: true,
-      lerp: 0.12,
+      lerp: 0.1,
       reloadOnContextChange: false,
       touchMultiplier: 1,
     }),
@@ -43,6 +51,7 @@ export const useLocomotiveScroll = (
   const initScroll = useCallback(() => {
     if (!scrollRef.current) return;
 
+
     // Find the data-scroll-container element
     const scrollContainer =
       scrollRef.current.querySelector("[data-scroll-container]") ||
@@ -53,6 +62,28 @@ export const useLocomotiveScroll = (
       ...mergedOptions,
     });
 
+    // Update global scroll position store on scroll
+    locomotiveScrollRef.current.on('scroll', (args) => {
+      scrollPositionStore.setPosition(args.scroll.y);
+    });
+    
+    // Store locomotive scroll instance globally
+    scrollPositionStore.setLocomotiveScroll(locomotiveScrollRef.current);
+
+    // If we're in a transition and have a preserved position, restore it
+    if (scrollPositionStore.isTransitioning && scrollPositionStore.preservedPosition > 0) {
+      // Restore the scroll position after a short delay to ensure locomotive is ready
+      setTimeout(() => {
+        if (locomotiveScrollRef.current) {
+          locomotiveScrollRef.current.scrollTo(scrollPositionStore.preservedPosition, {
+            disableLerp: true,
+            duration: 0
+          });
+          scrollPositionStore.setPosition(scrollPositionStore.preservedPosition);
+        }
+      }, 50);
+    }
+
     return locomotiveScrollRef.current;
   }, [mergedOptions]);
 
@@ -60,6 +91,7 @@ export const useLocomotiveScroll = (
     if (locomotiveScrollRef.current) {
       locomotiveScrollRef.current.destroy();
       locomotiveScrollRef.current = null;
+      scrollPositionStore.setLocomotiveScroll(null);
     }
   }, []);
 
@@ -85,8 +117,7 @@ export const useLocomotiveScroll = (
     return () => {
       destroyScroll();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initScroll, destroyScroll, ...dependencies]);
+  }, [scrollRef.current, JSON.stringify(mergedOptions), ...dependencies]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -106,4 +137,3 @@ export const useLocomotiveScroll = (
     destroyScroll,
   };
 };
-

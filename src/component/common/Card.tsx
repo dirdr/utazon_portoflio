@@ -56,12 +56,18 @@ export const Card = ({
     return cardBackgrounds[index];
   }, [project.name]);
 
-
   const handleMouseEnter = () => {
     setIsHovered(true);
     if (thumbnail && videoReady && videoRef.current) {
       videoRef.current.currentTime = 0;
-      videoRef.current.play().catch(() => {});
+      // Safari-friendly autoplay attempt
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Autoplay failed, likely due to Safari restrictions
+          // Video will show first frame and can be played on user interaction
+        });
+      }
     }
   };
 
@@ -145,11 +151,26 @@ export const Card = ({
               muted
               loop
               playsInline
+              webkit-playsinline="true"
+              x5-playsinline="true"
               preload="metadata"
               onLoadedData={() => {
                 setVideoReady(true);
               }}
-              onError={() => {
+              onLoadedMetadata={() => {
+                // Additional Safari compatibility
+                if (videoRef.current) {
+                  setVideoReady(true);
+                }
+              }}
+              onCanPlay={() => {
+                // Safari needs this event too
+                if (videoRef.current) {
+                  setVideoReady(true);
+                }
+              }}
+              onError={(e) => {
+                console.error('Card video load error:', e);
                 setVideoReady(false);
                 setVideoError(true);
               }}

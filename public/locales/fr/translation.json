@@ -132,7 +132,12 @@
       "description": "Création de tableaux en 3D mapping projetés en live pour l'émission Danse avec les Stars (TF1), au sein de l'agence Blackmotion. Chaque univers a été conçu pour amplifier l'émotion des chorégraphies de Lénie, Jungeli, Claude Dartois, Florent Manaudou ou Adil Rami.",
       "role": "Création des tableaux en 3D mapping pour plusieurs chorégraphies",
       "client": "Blackmotion / Client : TF1 – Danse avec les Stars",
-      "date": "2025"
+      "date": "2025",
+      "carouselDescription": [
+        "Pour la saison 14 de Danse avec les Stars, j’ai collaboré avec l’agence Blackmotion sur la création de plusieurs univers visuels destinés à accompagner les prestations des danseurs et stars.",
+        "Mon rôle a consisté à concevoir et produire des décors numériques animés, diffusés en direct pendant les performances, afin d’enrichir l’expérience visuelle du spectacle.",
+        "Chaque tableau a été pensé pour soutenir la narration chorégraphique et créer une atmosphère immersive, adaptée à l’identité de chaque danseur et au style de danse présenté. Ce projet a été diffusé en prime-time devant plusieurs millions de spectateurs."
+      ]
     },
     "yassencore": {
       "title": "YASSENCORE – Twitch Waiting Screen",

@@ -63,7 +63,7 @@ export const CarouselVideoCard = ({
       video
         .play()
         .then(() => setIsPlaying(true))
-        .catch(console.error);
+        .catch(() => {});
     } else if (!isActive && isPlaying) {
       video.pause();
       setIsPlaying(false);

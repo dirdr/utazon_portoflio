@@ -1,6 +1,9 @@
-import React, { createContext, useContext, ReactNode } from 'react';
-import { useLocomotiveScroll, LocomotiveScrollOptions } from '../hooks/useLocomotiveScroll';
-import LocomotiveScroll from 'locomotive-scroll';
+import React, { createContext, useContext, ReactNode } from "react";
+import {
+  useLocomotiveScroll,
+  LocomotiveScrollOptions,
+} from "../hooks/useLocomotiveScroll";
+import LocomotiveScroll from "locomotive-scroll";
 
 interface LocomotiveScrollContextValue {
   scrollRef: React.RefObject<HTMLDivElement>;
@@ -11,13 +14,16 @@ interface LocomotiveScrollContextValue {
   destroyScroll: () => void;
 }
 
-const LocomotiveScrollContext = createContext<LocomotiveScrollContextValue | null>(null);
+const LocomotiveScrollContext =
+  createContext<LocomotiveScrollContextValue | null>(null);
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const useLocomotiveScrollContext = () => {
   const context = useContext(LocomotiveScrollContext);
   if (!context) {
-    throw new Error('useLocomotiveScrollContext must be used within LocomotiveScrollProvider');
+    throw new Error(
+      "useLocomotiveScrollContext must be used within LocomotiveScrollProvider",
+    );
   }
   return context;
 };
@@ -29,12 +35,9 @@ interface LocomotiveScrollProviderProps {
   className?: string;
 }
 
-export const LocomotiveScrollProvider: React.FC<LocomotiveScrollProviderProps> = ({
-  children,
-  options = {},
-  dependencies = [],
-  className = '',
-}) => {
+export const LocomotiveScrollProvider: React.FC<
+  LocomotiveScrollProviderProps
+> = ({ children, options = {}, dependencies = [], className = "" }) => {
   const locomotiveScroll = useLocomotiveScroll(options, dependencies);
 
   return (
@@ -49,3 +52,4 @@ export const LocomotiveScrollProvider: React.FC<LocomotiveScrollProviderProps> =
     </LocomotiveScrollContext.Provider>
   );
 };
+

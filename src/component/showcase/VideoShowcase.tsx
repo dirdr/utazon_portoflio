@@ -31,7 +31,7 @@ export const VideoShowcase = ({
           src={videoUrl}
           width="100%"
           height="100%"
-          controls
+          controls={true}
           startTime={video.startTime}
         />
       </div>

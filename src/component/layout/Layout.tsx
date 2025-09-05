@@ -1,26 +1,18 @@
-import { ImageBackgroundDisplay } from "./ImageBackgroundDisplay";
 import { useLocation } from "wouter";
+import { HomeLayout } from "./HomeLayout";
+import { StandardLayout } from "./StandardLayout";
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
-const LayoutContent = ({ children }: LayoutProps) => {
+export const Layout = ({ children }: LayoutProps) => {
   const [location] = useLocation();
   const isHomePage = location === "/";
 
   if (isHomePage) {
-    return <>{children}</>;
+    return <HomeLayout>{children}</HomeLayout>;
   }
 
-  return (
-    <div className="relative min-h-screen">
-      <ImageBackgroundDisplay />
-      <main>{children}</main>
-    </div>
-  );
-};
-
-export const Layout = ({ children }: LayoutProps) => {
-  return <LayoutContent>{children}</LayoutContent>;
+  return <StandardLayout>{children}</StandardLayout>;
 };

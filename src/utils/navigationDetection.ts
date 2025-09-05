@@ -65,7 +65,6 @@ const detectWithNavigationAPI = (): NavigationInfo | null => {
     // - navigationType is 'reload' or undefined (initial load)
     const isFreshLoad = isFirstEntry || navigationType === 'reload' || globalNavigationState.isFirstVisit;
 
-    console.log('[NAV_DETECTION] Navigation API:', details, 'isFreshLoad:', isFreshLoad);
 
     return {
       isFreshLoad,
@@ -74,7 +73,6 @@ const detectWithNavigationAPI = (): NavigationInfo | null => {
       details
     };
   } catch (error) {
-    console.warn('[NAV_DETECTION] Navigation API failed:', error);
     return null;
   }
 };
@@ -109,7 +107,6 @@ const detectWithPerformanceTiming = (): NavigationInfo | null => {
       (isRecentNavigation || globalNavigationState.isFirstVisit)
     );
 
-    console.log('[NAV_DETECTION] Performance Timing:', details, 'navigationAge:', navigationAge, 'isFreshLoad:', isFreshLoad);
 
     return {
       isFreshLoad,
@@ -118,7 +115,6 @@ const detectWithPerformanceTiming = (): NavigationInfo | null => {
       details
     };
   } catch (error) {
-    console.warn('[NAV_DETECTION] Performance Timing failed:', error);
     return null;
   }
 };
@@ -152,7 +148,6 @@ const detectWithDocumentReady = (): NavigationInfo | null => {
       (hasMinimalRouteChanges && globalNavigationState.isFirstVisit)
     );
 
-    console.log('[NAV_DETECTION] Document Ready:', details, 'isFreshLoad:', isFreshLoad);
 
     return {
       isFreshLoad,
@@ -161,7 +156,6 @@ const detectWithDocumentReady = (): NavigationInfo | null => {
       details
     };
   } catch (error) {
-    console.warn('[NAV_DETECTION] Document Ready failed:', error);
     return null;
   }
 };
@@ -179,7 +173,6 @@ const detectWithFallback = (): NavigationInfo => {
 
   const isFreshLoad = globalNavigationState.isFirstVisit && globalNavigationState.routeChangeCount === 0;
 
-  console.log('[NAV_DETECTION] Fallback:', details, 'isFreshLoad:', isFreshLoad);
 
   return {
     isFreshLoad,
@@ -224,11 +217,6 @@ export const trackRouteChange = (newPath: string, isInitialRender = false) => {
     globalNavigationState.isHydrating = false;
   }
 
-  console.log('[NAV_TRACKING] Route change to:', newPath, {
-    routeChangeCount: globalNavigationState.routeChangeCount,
-    isInitialRender,
-    isFirstVisit: globalNavigationState.isFirstVisit
-  });
 };
 
 /**
@@ -237,7 +225,6 @@ export const trackRouteChange = (newPath: string, isInitialRender = false) => {
  */
 export const markAppHydrated = () => {
   globalNavigationState.isHydrating = false;
-  console.log('[NAV_TRACKING] App hydrated');
 };
 
 /**
@@ -246,7 +233,6 @@ export const markAppHydrated = () => {
  */
 export const resetNavigationState = () => {
   globalNavigationState.isFirstVisit = false;
-  console.log('[NAV_TRACKING] Navigation state reset - subsequent navigations will be SPA');
 };
 
 /**
@@ -267,17 +253,14 @@ export const initializeNavigationDetection = () => {
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'visible') {
         // Page became visible - could be back/forward navigation
-        console.log('[NAV_TRACKING] Page visibility changed to visible');
       }
     });
 
     // Listen for popstate (back/forward button)
     window.addEventListener('popstate', (event) => {
-      console.log('[NAV_TRACKING] Popstate event detected:', event.state);
       globalNavigationState.routeChangeCount++;
       globalNavigationState.lastNavigationTime = performance.now();
     });
   }
 
-  console.log('[NAV_DETECTION] Navigation detection initialized');
 };

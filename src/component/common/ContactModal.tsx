@@ -110,7 +110,6 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
         );
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
       setErrors({
         general:
           error instanceof Error
