@@ -7,3 +7,4 @@ interface HomeLayoutProps {
 export const HomeLayout = ({ children }: HomeLayoutProps) => {
   return <>{children}</>;
 };
+

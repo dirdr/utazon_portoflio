@@ -18,7 +18,6 @@ export const HomeFadeInContainer = ({
   style = {},
   instantForSPA = false,
 }: HomeFadeInContainerProps) => {
-  // For SPA navigation, skip transitions entirely
   const baseClasses = instantForSPA ? "" : ANIMATION_CLASSES.TRANSITION;
   const visibilityClasses = isVisible
     ? ANIMATION_CLASSES.VISIBLE

@@ -71,6 +71,20 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
     workflowState === 'spa-playing';              // SPA: confirmed playing
   const shouldShowDiveIn = workflowState === 'ready' && !isMobile && !isDiveInCompleted();
   
+  // Debug: Log shouldShowContent changes
+  useEffect(() => {
+    log('🎭 shouldShowContent changed', { 
+      shouldShowContent, 
+      workflowState, 
+      isMobile,
+      reasons: {
+        mobile: isMobile,
+        contentShowing: workflowState === 'content-showing',
+        spaPlaying: workflowState === 'spa-playing'
+      }
+    });
+  }, [shouldShowContent, workflowState, isMobile, log]);
+  
   // Log initial config (only on mount to prevent spam)
   useEffect(() => {
     log('🚀 Initializing video workflow', {
@@ -174,22 +188,37 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
   }, [isHomePage, isFreshLoad, isMobile, getVideoElement, workflowState, isTransitioning, log]);
   
   const onDiveInClick = useCallback(() => {
-    log('🎯 Dive-in clicked, starting video');
+    log('🎯 Dive-in clicked, starting video', { currentWorkflowState: workflowState });
     
     const video = getVideoElement ? getVideoElement() : videoRef.current;
-    if (!video || workflowState !== 'ready') return;
+    if (!video || workflowState !== 'ready') {
+      log('❌ Dive-in aborted', { hasVideo: !!video, workflowState, expectedState: 'ready' });
+      return;
+    }
     
     // Mark dive-in as completed for this session
     markDiveInCompleted();
     
     video.currentTime = 0;
     video.play().then(() => {
+      log('✅ Video play started, setting state to playing-intro');
       setWorkflowState('playing-intro');
-    }).catch(() => {});
+    }).catch((error) => {
+      log('❌ Video play failed', { error });
+    });
   }, [workflowState, getVideoElement, log]);
   
   // 3. Handle video time updates (only for intro completion)
   const onVideoTimeUpdate = useCallback((currentTime: number) => {
+    // Debug: Log every time update to see what's happening
+    if (workflowState === 'playing-intro') {
+      log(`⏰ Time update: ${currentTime.toFixed(2)}s (waiting for ${INTRO_DURATION}s)`, { 
+        workflowState, 
+        hasCompletedIntro, 
+        shouldTransition: currentTime >= INTRO_DURATION && !hasCompletedIntro 
+      });
+    }
+    
     // Only care about intro completion on fresh load
     if (workflowState === 'playing-intro' && currentTime >= INTRO_DURATION && !hasCompletedIntro) {
       log(`⏰ Intro completed at ${currentTime.toFixed(2)}s, showing content`);
@@ -248,7 +277,8 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
     } else {
       setWorkflowState('loading');
     }
-  }, [isHomePage, isFreshLoad, isMobile, isVideoLoaded, isTransitioning, log, workflowState]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isHomePage, isFreshLoad, isMobile, isVideoLoaded, isTransitioning, log]);
   
   // 6. Preload video when needed (with guards to prevent infinite loops)
   useEffect(() => {

@@ -8,7 +8,7 @@ import { Legal } from "../pages/Legal";
 import { ROUTES } from "../../constants/routes";
 import { Route, Switch } from "wouter";
 import { ModalProvider } from "../../contexts/ModalContext";
-import { TransitionProvider } from "../../contexts/TransitionProvider.tsx";
+import { TransitionProvider } from "../../contexts/TransitionProvider";
 import { ModalRoot } from "../common/ModalRoot";
 import { CursorTrail } from "../common/CursorTrail";
 import { useCursorTrail } from "../../hooks/useCursorTrail";
