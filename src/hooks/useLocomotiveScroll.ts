@@ -1,5 +1,5 @@
 import { useEffect, useRef, useCallback, useMemo } from "react";
-import LocomotiveScroll from "locomotive-scroll";
+import LocomotiveScroll, { ScrollEventArgs } from "locomotive-scroll";
 import { scrollPositionStore } from "../stores/scrollPositionStore";
 
 export interface LocomotiveScrollOptions {
@@ -63,7 +63,7 @@ export const useLocomotiveScroll = (
     });
 
     // Update global scroll position store on scroll
-    locomotiveScrollRef.current.on('scroll', (args: { scroll: { y: number } }) => {
+    locomotiveScrollRef.current.on('scroll', (args: ScrollEventArgs) => {
       scrollPositionStore.setPosition(args.scroll.y);
     });
     
