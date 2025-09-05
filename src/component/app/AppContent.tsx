@@ -8,7 +8,7 @@ import { Legal } from "../pages/Legal";
 import { ROUTES } from "../../constants/routes";
 import { Route, Switch } from "wouter";
 import { ModalProvider } from "../../contexts/ModalContext";
-import { TransitionProvider } from "../../contexts/TransitionContext";
+import { TransitionProvider } from "../../contexts/TransitionProvider.tsx";
 import { ModalRoot } from "../common/ModalRoot";
 import { CursorTrail } from "../common/CursorTrail";
 import { useCursorTrail } from "../../hooks/useCursorTrail";
@@ -21,14 +21,12 @@ export const AppContent = () => {
   const { isEnabled } = useCursorTrail();
   const isMobile = useHomeMobileBreakpoint();
 
-
-  // Transition router with proper navigation control
-  const { 
-    isTransitioning, 
-    currentLocation, 
+  const {
+    isTransitioning,
+    currentLocation,
     navigateWithTransition,
     duration,
-    onFadeInComplete
+    onFadeInComplete,
   } = useTransitionRouter({
     duration: 600,
   });
@@ -56,12 +54,14 @@ export const AppContent = () => {
         }}
         className="min-h-screen"
       >
-        <TransitionProvider value={{
-          navigateWithTransition,
-          navigate: navigateWithTransition, // For now, always use transitions
-          isTransitioning,
-          currentLocation,
-        }}>
+        <TransitionProvider
+          value={{
+            navigateWithTransition,
+            navigate: navigateWithTransition, // For now, always use transitions
+            isTransitioning,
+            currentLocation,
+          }}
+        >
           <Layout>
             <Switch location={currentLocation}>
               <Route path={ROUTES.HOME} component={HomeContainer} />
@@ -86,7 +86,7 @@ export const AppContent = () => {
             fadeTime={2500}
           />
           <ModalRoot />
-          
+
           {/* Global page transition overlay */}
           <PageTransitionOverlay
             isTransitioning={isTransitioning}

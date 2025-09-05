@@ -1,4 +1,4 @@
-import { createContext, ReactNode } from "react";
+import { createContext } from "react";
 
 export interface TransitionContextType {
   navigateWithTransition: (
@@ -13,18 +13,3 @@ export interface TransitionContextType {
 export const TransitionContext = createContext<TransitionContextType | null>(
   null,
 );
-
-interface TransitionProviderProps {
-  children: ReactNode;
-  value: TransitionContextType;
-}
-
-export const TransitionProvider = ({
-  children,
-  value,
-}: TransitionProviderProps) => (
-  <TransitionContext.Provider value={value}>
-    {children}
-  </TransitionContext.Provider>
-);
-
