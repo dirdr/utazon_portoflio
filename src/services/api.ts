@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_UTAZON_API_URL;
+const API_URL = import.meta.env.VITE_UTAZON_API_URL || 'https://utazon-backend.adrienpelfresne.com';
 
 class ApiClient {
   private baseUrl: string;
