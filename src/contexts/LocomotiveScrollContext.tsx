@@ -1,4 +1,4 @@
-import React, { createContext, useContext, ReactNode } from "react";
+import React, { createContext, useContext, ReactNode, useMemo, useRef } from "react";
 import {
   useLocomotiveScroll,
   LocomotiveScrollOptions,
@@ -38,7 +38,36 @@ interface LocomotiveScrollProviderProps {
 export const LocomotiveScrollProvider: React.FC<
   LocomotiveScrollProviderProps
 > = ({ children, options = {}, dependencies = [], className = "" }) => {
-  const locomotiveScroll = useLocomotiveScroll(options, dependencies);
+  // Create stable references that only change when content actually changes
+  const prevOptionsRef = useRef<LocomotiveScrollOptions>();
+  const prevDependenciesRef = useRef<unknown[]>();
+  
+  const stableOptions = useMemo(() => {
+    // Deep comparison for options
+    const optionsChanged = !prevOptionsRef.current || 
+      JSON.stringify(prevOptionsRef.current) !== JSON.stringify(options);
+    
+    if (optionsChanged) {
+      prevOptionsRef.current = options;
+    }
+    
+    return prevOptionsRef.current;
+  }, [options]);
+  
+  const stableDependencies = useMemo(() => {
+    // Shallow comparison for dependencies array
+    const depsChanged = !prevDependenciesRef.current ||
+      prevDependenciesRef.current.length !== dependencies.length ||
+      prevDependenciesRef.current.some((dep, index) => dep !== dependencies[index]);
+    
+    if (depsChanged) {
+      prevDependenciesRef.current = dependencies;
+    }
+    
+    return prevDependenciesRef.current;
+  }, [dependencies]);
+  
+  const locomotiveScroll = useLocomotiveScroll(stableOptions, stableDependencies);
 
   return (
     <LocomotiveScrollContext.Provider value={locomotiveScroll}>

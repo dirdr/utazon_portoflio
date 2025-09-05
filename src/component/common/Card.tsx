@@ -168,8 +168,7 @@ export const Card = ({
                   setVideoReady(true);
                 }
               }}
-              onError={(e) => {
-                console.error('Card video load error:', e);
+              onError={() => {
                 setVideoReady(false);
                 setVideoError(true);
               }}

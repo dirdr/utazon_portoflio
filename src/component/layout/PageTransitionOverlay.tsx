@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { scrollPositionStore } from '../../stores/scrollPositionStore';
 
 interface PageTransitionOverlayProps {
   isTransitioning: boolean;
@@ -29,13 +28,10 @@ export const PageTransitionOverlay = ({
         }, duration / 2);
       }, 16); // One frame delay to ensure CSS transition starts
     } else if (!isTransitioning && phase === 'visible') {
-      // Reset scroll position right at the start of fade-out
-      scrollPositionStore.scrollToTop();
-      
-      // Start fade out
+      // Start fade out (scroll was already reset during route switch)
       setPhase('fading-out');
       
-      // Hide completely after fade out
+      // Hide overlay after fade-out completes
       setTimeout(() => {
         setPhase('hidden');
       }, duration / 2);

@@ -49,8 +49,9 @@ export const useLocomotiveScroll = (
   );
 
   const initScroll = useCallback(() => {
-    if (!scrollRef.current) return;
-
+    if (!scrollRef.current) {
+      return;
+    }
 
     // Find the data-scroll-container element
     const scrollContainer =
@@ -70,19 +71,7 @@ export const useLocomotiveScroll = (
     // Store locomotive scroll instance globally
     scrollPositionStore.setLocomotiveScroll(locomotiveScrollRef.current);
 
-    // If we're in a transition and have a preserved position, restore it
-    if (scrollPositionStore.isTransitioning && scrollPositionStore.preservedPosition > 0) {
-      // Restore the scroll position after a short delay to ensure locomotive is ready
-      setTimeout(() => {
-        if (locomotiveScrollRef.current) {
-          locomotiveScrollRef.current.scrollTo(scrollPositionStore.preservedPosition, {
-            disableLerp: true,
-            duration: 0
-          });
-          scrollPositionStore.setPosition(scrollPositionStore.preservedPosition);
-        }
-      }, 50);
-    }
+    // No scroll restoration - new pages start at top
 
     return locomotiveScrollRef.current;
   }, [mergedOptions]);

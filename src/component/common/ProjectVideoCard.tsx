@@ -79,8 +79,7 @@ export const ProjectVideoCard = ({
                     setVideoReady(true);
                   }
                 }}
-                onError={(e) => {
-                  console.error('Video load error:', e);
+                onError={() => {
                   setVideoReady(false);
                   setVideoError(true);
                 }}

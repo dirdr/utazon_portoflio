@@ -95,11 +95,9 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
     const shouldPreload = shouldPreloadRoute(newLocation);
     const cacheUrls = shouldPreload ? getRouteAssets(newLocation) : [];
 
-
     setState(prev => ({ ...prev, progress: 50 }));
 
     // Phase 3: Switch routes during black screen
-    
     setLocation(newLocation);
     setState(prev => ({ 
       ...prev, 
@@ -107,6 +105,8 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
       progress: 60,
     }));
     
+    // Reset scroll position immediately after route switch (during black screen)
+    scrollPositionStore.scrollToTop();
 
     // Phase 4: Cache verification (only if needed)
     if (cacheUrls.length > 0) {
@@ -136,9 +136,6 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
       fadeInComplete: false,
       preservedScrollPosition: 0,
     }));
-    
-    // End transition in scroll store
-    scrollPositionStore.endTransition();
   }, [state.pendingLocation, setLocation, verifyCacheUrls, duration]);
 
   // Navigate with transition (automatically determines assets to preload)
@@ -149,21 +146,15 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
       return;
     }
     
-    // Preserve scroll position for the transition
-    scrollPositionStore.startTransition();
-    const currentScrollY = scrollPositionStore.getPosition();
-    
-    
-    // Phase 1: Start transition - fade in overlay
+    // Phase 1: Start transition - fade in overlay (no scroll changes yet)
     setState(prev => ({
       ...prev,
       isTransitioning: true,
       pendingLocation: newLocation,
       progress: 0,
       fadeInComplete: false,
-      preservedScrollPosition: currentScrollY,
+      preservedScrollPosition: 0,
     }));
-    
 
     // Phase 2: Fade-in completion is handled by handleFadeInComplete callback
 

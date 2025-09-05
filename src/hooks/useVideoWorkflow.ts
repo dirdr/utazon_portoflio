@@ -49,9 +49,6 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
   const { isFreshLoad, isMobile, isHomePage, videoSrc, getVideoElement } = config;
   const { isTransitioning } = useTransitionContext();
   
-  const log = useCallback((message: string, data?: Record<string, unknown>) => {
-    console.log(`[VideoWorkflow] ${message}`, data || '');
-  }, []);
   
   // Core state
   const [workflowState, setWorkflowState] = useState<VideoWorkflowState>('loading');
@@ -71,43 +68,11 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
     workflowState === 'spa-playing';              // SPA: confirmed playing
   const shouldShowDiveIn = workflowState === 'ready' && !isMobile && !isDiveInCompleted();
   
-  // Debug: Log shouldShowContent changes
-  useEffect(() => {
-    log('🎭 shouldShowContent changed', { 
-      shouldShowContent, 
-      workflowState, 
-      isMobile,
-      reasons: {
-        mobile: isMobile,
-        contentShowing: workflowState === 'content-showing',
-        spaPlaying: workflowState === 'spa-playing'
-      }
-    });
-  }, [shouldShowContent, workflowState, isMobile, log]);
   
-  // Log initial config (only on mount to prevent spam)
-  useEffect(() => {
-    log('🚀 Initializing video workflow', {
-      isFreshLoad,
-      isMobile,
-      isHomePage,
-      videoSrc
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Only on mount
   
   const onVideoLoaded = useCallback(() => {
-    const timestamp = Date.now();
     const video = getVideoElement ? getVideoElement() : videoRef.current;
     
-    log('📹 Video loaded callback triggered', { 
-      timestamp, 
-      hasVideo: !!video, 
-      isHomePage,
-      videoSrc: video?.src,
-      readyState: video?.readyState,
-      currentTime: video?.currentTime 
-    });
     
     setIsVideoLoaded(true);
     
@@ -117,45 +82,28 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
     // but ALLOW operations when transitioning TO home (for asset preparation)
     const shouldAllowDuringTransition = !isFreshLoad; // SPA navigation to home
     if (isTransitioning && !shouldAllowDuringTransition) {
-      log('🛡️ Skipping video setup - fresh load transition in progress', { timestamp });
       return;
     }
     
-    if (isTransitioning && shouldAllowDuringTransition) {
-      log('🎬 Video setup during SPA transition to home - preparing for smooth transition', { 
-        timestamp, 
-        isTransitioning, 
-        isFreshLoad 
-      });
-    }
     
     // Don't override current workflow if already in progress
     if (workflowState === 'playing-intro' || workflowState === 'content-showing') {
-      log('⏭️ Skipping video setup - workflow already in progress', { workflowState, timestamp });
       return;
     }
     
     
     if (isMobile) {
       // Mobile: Start playing immediately from 0s, show content
-      log('📱 Mobile: Starting video and showing content', { timestamp });
       video.currentTime = 0;
       video.play().then(() => {
       }).catch(() => {});
       setWorkflowState('content-showing');
     } else if (isFreshLoad) {
       // Desktop fresh load: Show dive-in button, pause at 0s
-      log('🖥️ Fresh load: Video ready, showing dive-in button', { timestamp });
       video.currentTime = 0;
       setWorkflowState('ready');
     } else {
       // Desktop SPA: Seek first, then play to avoid playback interruption
-      log('🖥️ SPA: Seeking to loop start and playing', { 
-        timestamp, 
-        isTransitioning, 
-        currentTime: video.currentTime,
-        targetTime: LOOP_START_DESKTOP 
-      });
       
       // Pause video first to ensure clean seek
       video.pause();
@@ -165,34 +113,22 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
       const handleSeeked = () => {
         video.removeEventListener('seeked', handleSeeked);
         
-        log('🎯 SPA: Seek completed, starting playback', { 
-          currentTime: video.currentTime,
-          isTransitioning 
-        });
         
         video.play().then(() => {
-          log('✅ HomeContainer video playing successfully', { 
-            currentTime: video.currentTime,
-            isTransitioning,
-            videoSrc: video.src,
-            bufferedRanges: video.buffered.length > 0 ? `${video.buffered.start(0).toFixed(2)}-${video.buffered.end(video.buffered.length-1).toFixed(2)}` : 'none'
-          });
-        }).catch((error) => {
-          log('❌ SPA: Video play failed', { error, isTransitioning });
+        }).catch(() => {
+          // Ignore video play errors
         });
       };
       
       video.addEventListener('seeked', handleSeeked);
       setWorkflowState('spa-playing');
     }
-  }, [isHomePage, isFreshLoad, isMobile, getVideoElement, workflowState, isTransitioning, log]);
+  }, [isHomePage, isFreshLoad, isMobile, getVideoElement, workflowState, isTransitioning]);
   
   const onDiveInClick = useCallback(() => {
-    log('🎯 Dive-in clicked, starting video', { currentWorkflowState: workflowState });
     
     const video = getVideoElement ? getVideoElement() : videoRef.current;
     if (!video || workflowState !== 'ready') {
-      log('❌ Dive-in aborted', { hasVideo: !!video, workflowState, expectedState: 'ready' });
       return;
     }
     
@@ -201,35 +137,23 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
     
     video.currentTime = 0;
     video.play().then(() => {
-      log('✅ Video play started, setting state to playing-intro');
       setWorkflowState('playing-intro');
-    }).catch((error) => {
-      log('❌ Video play failed', { error });
+    }).catch(() => {
     });
-  }, [workflowState, getVideoElement, log]);
+  }, [workflowState, getVideoElement]);
   
   // 3. Handle video time updates (only for intro completion)
   const onVideoTimeUpdate = useCallback((currentTime: number) => {
-    // Debug: Log every time update to see what's happening
-    if (workflowState === 'playing-intro') {
-      log(`⏰ Time update: ${currentTime.toFixed(2)}s (waiting for ${INTRO_DURATION}s)`, { 
-        workflowState, 
-        hasCompletedIntro, 
-        shouldTransition: currentTime >= INTRO_DURATION && !hasCompletedIntro 
-      });
-    }
     
     // Only care about intro completion on fresh load
     if (workflowState === 'playing-intro' && currentTime >= INTRO_DURATION && !hasCompletedIntro) {
-      log(`⏰ Intro completed at ${currentTime.toFixed(2)}s, showing content`);
       setHasCompletedIntro(true);
       setWorkflowState('content-showing');
     }
-  }, [workflowState, hasCompletedIntro, log]);
+  }, [workflowState, hasCompletedIntro]);
   
   // 4. Handle video ending (for looping)
   const onVideoEnded = useCallback(() => {
-    log('🔚 Video ended, looping to start time', { loopStartTime });
     
     const video = getVideoElement ? getVideoElement() : videoRef.current;
     if (!video) return;
@@ -237,26 +161,16 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
     // Reset to loop start time and continue playing
     video.currentTime = loopStartTime;
     video.play().catch(() => {});
-  }, [loopStartTime, getVideoElement, log]);
+  }, [loopStartTime, getVideoElement]);
   
   // 5. Initialize state based on page/navigation type
   useEffect(() => {
-    log('🔄 Page/navigation state change', {
-      isHomePage,
-      isFreshLoad,
-      isMobile,
-      isVideoLoaded,
-      isTransitioning,
-      currentWorkflowState: workflowState
-    });
 
     // Early return for any non-home page scenarios during transitions
     if (!isHomePage) {
       if (isTransitioning) {
-        log('🚫 Not home page during transition - waiting', { isTransitioning });
         return;
       } else {
-        log('📄 Not home page - setting content showing');
         setWorkflowState('content-showing');
         return;
       }
@@ -277,8 +191,7 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
     } else {
       setWorkflowState('loading');
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isHomePage, isFreshLoad, isMobile, isVideoLoaded, isTransitioning, log]);
+  }, [isHomePage, isFreshLoad, isMobile, isVideoLoaded, isTransitioning]);
   
   // 6. Preload video when needed (with guards to prevent infinite loops)
   useEffect(() => {
@@ -289,14 +202,12 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
     
     // Only reload if video source actually changed or video not loaded
     if (video.src.endsWith(videoSrc) && isVideoLoaded) {
-      log('⏭️ Skipping video preload - already loaded', { videoSrc, currentSrc: video.src });
       return;
     }
     
-    log('📺 Preloading video', { videoSrc, currentSrc: video.src, isVideoLoaded });
     setIsVideoLoaded(false);
     video.load();
-  }, [isHomePage, videoSrc, getVideoElement, isVideoLoaded, log]);
+  }, [isHomePage, videoSrc, getVideoElement, isVideoLoaded]);
   
 
 
