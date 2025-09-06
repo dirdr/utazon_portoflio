@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { useLocation } from "wouter";
 import { getRouteAssets, shouldPreloadRoute } from "../config/routeAssets";
+import { useLenis } from "../contexts/LenisContext";
 
 const preloadHomeVideo = (): Promise<void> => {
   return Promise.resolve();
@@ -26,6 +27,7 @@ interface TransitionState {
 export const useTransitionRouter = (config: TransitionConfig = {}) => {
   const { duration = 600 } = config;
   const [location, setLocation] = useLocation();
+  const { scrollToTop } = useLenis();
 
   const [state, setState] = useState<TransitionState>({
     isTransitioning: false,
@@ -102,7 +104,7 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
       progress: 60,
     }));
 
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    scrollToTop();
 
     // Phase 4: Cache verification (only if needed)
     if (cacheUrls.length > 0) {
