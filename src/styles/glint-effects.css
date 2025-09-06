@@ -71,14 +71,18 @@
       transparent 310deg
     );
     border-radius: 24px;
-    animation: border-spin var(--glint-card-speed) linear infinite;
     opacity: 0;
     transition: opacity 0.3s ease;
     z-index: 2;
   }
 
   .glint-card-wrapper[data-animate="true"]::after {
+    animation: border-spin var(--glint-card-speed) linear infinite;
     will-change: transform;
+  }
+
+  .glint-card-wrapper[data-animate="false"]::after {
+    animation: none;
   }
 
   .glint-card-wrapper:hover::after {
@@ -143,9 +147,17 @@
       transparent 330deg
     );
     border-radius: 16px;
-    animation: border-spin var(--glint-card-speed) linear infinite;
     opacity: 1;
     z-index: 2;
+  }
+
+  .glint-card-wrapper-square[data-animate="true"]::after {
+    animation: border-spin var(--glint-card-speed) linear infinite;
+    will-change: transform;
+  }
+
+  .glint-card-wrapper-square[data-animate="false"]::after {
+    animation: none;
   }
 
   .glint-card-content {

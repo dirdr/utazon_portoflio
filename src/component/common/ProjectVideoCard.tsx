@@ -1,5 +1,6 @@
 import { cn } from "../../utils/cn";
 import { useRef, useState, useEffect } from "react";
+import { useAnimationControl } from "../../hooks/useAnimationControl";
 
 export interface ProjectVideoCardProps {
   video: {
@@ -22,6 +23,11 @@ export const ProjectVideoCard = ({
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoReady, setVideoReady] = useState(false);
   const [videoError, setVideoError] = useState(false);
+  
+  const { ref: animationRef, shouldAnimate } = useAnimationControl({
+    threshold: 0.2,
+    rootMargin: "100px",
+  });
 
   useEffect(() => {
     if (videoReady && videoRef.current) {
@@ -38,10 +44,12 @@ export const ProjectVideoCard = ({
 
   return (
     <div
+      ref={animationRef}
       className={cn(
         "group glint-card-wrapper-square w-full",
         className,
       )}
+      data-animate={shouldAnimate}
       style={{ "--glint-card-speed": glintSpeed } as React.CSSProperties}
     >
       <div className="glint-card-content-square">
