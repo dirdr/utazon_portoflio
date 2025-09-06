@@ -50,7 +50,6 @@ export const Home = ({ onVideoMuteToggle }: HomeProps) => {
     navigateWithTransition(ROUTES.PROJECTS);
   }, [navigateWithTransition]);
 
-
   if (isMobile) {
     return (
       <div className="h-full w-full flex flex-col justify-end px-4 lg:px-12 pb-8">
@@ -137,33 +136,31 @@ export const Home = ({ onVideoMuteToggle }: HomeProps) => {
           </LineSweepText>
         </section>
 
-        <section className="w-140" aria-labelledby="intro-heading">
-          <div className="space-y-4">
-            <p
-              id="intro-heading"
-              className="text-base xl:text-lg text-gray mb-10"
+        <section className="w-120 2xl:w-140" aria-labelledby="intro-heading">
+          <p
+            id="intro-heading"
+            className="text-base 2xl:text-lg text-gray mb-8"
+          >
+            {t("home.description")}
+          </p>
+          <nav className="flex gap-8" aria-label="Actions principales">
+            <Button
+              as="button"
+              glintOnHover={true}
+              onClick={handleProjectsClick}
+              className="text-sm 2xl:text-base"
             >
-              {t("home.description")}
-            </p>
-            <nav className="flex gap-8" aria-label="Actions principales">
-              <Button
-                as="button"
-                glintOnHover={true}
-                onClick={handleProjectsClick}
-                className="text-sm lg:text-base"
-              >
-                {t("home.projects")}
-              </Button>
-              <Button
-                as="button"
-                glintOnHover={true}
-                onClick={handleShowreelClick}
-                className="text-sm lg:text-base"
-              >
-                {t("nav.showreel")}
-              </Button>
-            </nav>
-          </div>
+              {t("home.projects")}
+            </Button>
+            <Button
+              as="button"
+              glintOnHover={true}
+              onClick={handleShowreelClick}
+              className="text-sm 2xl:text-base"
+            >
+              {t("nav.showreel")}
+            </Button>
+          </nav>
         </section>
       </div>
       <FullscreenVideoModal
