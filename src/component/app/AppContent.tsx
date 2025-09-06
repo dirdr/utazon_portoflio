@@ -5,7 +5,9 @@ import { AppRouter } from "./AppRouter";
 export const AppContent = () => {
   return (
     <ModalProvider>
-      <LenisProvider options={{ lerp: 0.05, duration: 1.2, wheelMultiplier: 0.8 }}>
+      <LenisProvider
+        options={{ lerp: 0.04, duration: 1.2, wheelMultiplier: 0.5 }}
+      >
         <AppRouter />
       </LenisProvider>
     </ModalProvider>
