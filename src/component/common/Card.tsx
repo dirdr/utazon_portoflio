@@ -4,6 +4,7 @@ import { Button } from "./Button";
 import { useMemo, useRef, useState } from "react";
 import { LineSweepText } from "./LineSweepText";
 import { useTransitionContext } from "../../hooks/useTransitionContext";
+import { useAnimationControl } from "../../hooks/useAnimationControl";
 
 // Import card backgrounds directly (same as preload system)
 import p1 from "../../assets/images/card_backgrounds/1.webp";
@@ -46,6 +47,11 @@ export const Card = ({
   const [videoReady, setVideoReady] = useState(false);
   const [videoError, setVideoError] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  
+  const { ref: animationRef, shouldAnimate } = useAnimationControl({
+    threshold: 0.2,
+    rootMargin: "100px",
+  });
 
   const randomBackground = useMemo(() => {
     const hash = project.name.split("").reduce((acc, char) => {
@@ -89,10 +95,12 @@ export const Card = ({
 
   return (
     <div
+      ref={animationRef}
       className={cn(
         "group glint-card-wrapper cursor-pointer w-full card-item",
         className,
       )}
+      data-animate={shouldAnimate}
       style={{ "--glint-card-speed": glintSpeed } as React.CSSProperties}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -105,28 +113,6 @@ export const Card = ({
         }}
       >
         <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden group">
-          <svg className="absolute w-0 h-0">
-            <defs>
-              <clipPath
-                id={`rounded-diagonal-cut-${project.id}`}
-                clipPathUnits="objectBoundingBox"
-              >
-                <path
-                  d="
-          M0,0
-          L0.73,0
-          Q0.75,0 0.76,0.01
-          L0.99,0.24
-          Q1,0.25 1,0.27
-          L1,1
-          L0,1
-          Z
-        "
-                />
-              </clipPath>
-            </defs>
-          </svg>
-
           <img
             src={image.src}
             alt={image.alt}
@@ -134,7 +120,9 @@ export const Card = ({
               "h-full w-full object-cover transition-all duration-300",
               thumbnail && videoReady && "group-hover:opacity-0",
             )}
-            style={{ clipPath: `url(#rounded-diagonal-cut-${project.id})` }}
+            style={{ 
+              clipPath: "polygon(0% 0%, 73% 0%, 76% 1%, 99% 24%, 100% 27%, 100% 100%, 0% 100%)"
+            }}
             loading="eager"
           />
 
@@ -145,14 +133,16 @@ export const Card = ({
                 "absolute inset-0 h-full w-full object-cover transition-all duration-300",
                 videoReady ? "opacity-0 group-hover:opacity-100" : "hidden",
               )}
-              style={{ clipPath: `url(#rounded-diagonal-cut-${project.id})` }}
+              style={{ 
+                clipPath: "polygon(0% 0%, 73% 0%, 76% 1%, 99% 24%, 100% 27%, 100% 100%, 0% 100%)"
+              }}
               src={thumbnail.src}
               muted
               loop
               playsInline
               webkit-playsinline="true"
               x5-playsinline="true"
-              preload="metadata"
+              preload={shouldAnimate ? "metadata" : "none"}
               onLoadedData={() => {
                 setVideoReady(true);
               }}
@@ -207,7 +197,7 @@ export const Card = ({
             </div>
           </div>
 
-          <div className="absolute bottom-8 right-8 transform translate-x-full opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 ease-out">
+          <div className="absolute bottom-8 right-8 transform translate-x-full opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 ease-out will-change-transform">
             <Button
               glint
               proximityIntensity

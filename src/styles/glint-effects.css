@@ -77,6 +77,10 @@
     z-index: 2;
   }
 
+  .glint-card-wrapper[data-animate="true"]::after {
+    will-change: transform;
+  }
+
   .glint-card-wrapper:hover::after {
     opacity: 1;
   }
@@ -146,6 +150,7 @@
 
   .glint-card-content {
     @apply relative w-full h-full rounded-3xl bg-background z-10;
+    contain: layout style paint;
   }
 
   .glint-card-content-square {
