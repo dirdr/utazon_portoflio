@@ -18,7 +18,7 @@ export const Projects = () => {
   }, [setBackgroundImage]);
 
   return (
-    <Container className="py-8 mb-10">
+    <Container className="pt-4 sm:pt-8 pb-8 mb-10">
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6 lg:gap-8 card-container">
         {allProjectsSortedByPriority.map((project, index) => (
           <Card

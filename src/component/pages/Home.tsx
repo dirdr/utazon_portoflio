@@ -58,7 +58,7 @@ export const Home = ({ onVideoMuteToggle }: HomeProps) => {
           <address className="not-italic relative">
             <SoundPlayer
               onToggle={handleSoundToggle}
-              initialPlaying={true}
+              initialPlaying={!isMobile}
               className="self-start mb-2"
             />
             <p className="text-base sm:text-lg md:text-xl text-muted mb-2">
@@ -118,7 +118,7 @@ export const Home = ({ onVideoMuteToggle }: HomeProps) => {
             <div className="flex flex-col gap-3 mb-6">
               <SoundPlayer
                 onToggle={handleSoundToggle}
-                initialPlaying={true}
+                initialPlaying={!isMobile}
                 className="self-start mb-6"
               />
               <p

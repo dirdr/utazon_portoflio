@@ -103,7 +103,7 @@ export const ProjectVideoCard = ({
             <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black to-transparent pointer-events-none" />
           </div>
 
-          <div className="flex-[45] bg-black flex flex-col justify-center px-14">
+          <div className="flex-[45] bg-black flex flex-col justify-center items-start px-14">
             <h3 className="font-nord text-white text-sm sm:text-base md:text-lg xl:text-base 2xl:text-xl font-bold italic mb-1 sm:mb-2 md:mb-3 xl:mb-2 2xl:mb-4">
               {title}
             </h3>

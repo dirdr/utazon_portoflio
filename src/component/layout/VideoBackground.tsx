@@ -148,8 +148,8 @@ export const VideoBackground = forwardRef<
         <video
           ref={videoRef}
           className="w-full h-full object-cover gpu-accelerated"
-          muted={false}
-          autoPlay={false}
+          muted={isMobile}
+          autoPlay={isMobile}
           playsInline
           disablePictureInPicture
           disableRemotePlayback

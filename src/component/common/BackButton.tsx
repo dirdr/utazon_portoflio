@@ -20,7 +20,7 @@ export const BackButton = ({
     <button
       onClick={handleClick}
       className={cn(
-        "group relative w-14 h-14 bg-transparent border-2 border-gray-500/60 hover:border-gray-400/80 rounded-full",
+        "group relative w-10 h-10 sm:w-14 sm:h-14 bg-transparent border-2 border-gray-500/60 hover:border-gray-400/80 rounded-full",
         "flex items-center justify-center",
         "transition-all duration-200 ease-out",
         "hover:scale-110 hover:shadow-lg",
@@ -31,7 +31,7 @@ export const BackButton = ({
       aria-label="Go back"
     >
       <svg
-        className="w-4 h-4 text-white transition-transform duration-200 ease-out group-hover:-translate-x-0.5"
+        className="w-3 h-3 sm:w-4 sm:h-4 text-white transition-transform duration-200 ease-out group-hover:-translate-x-0.5"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"

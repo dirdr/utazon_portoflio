@@ -89,28 +89,27 @@ export const Navbar = () => {
           <span className="sr-only">
             {isMenuOpen ? "Close menu" : "Open menu"}
           </span>
-          <svg
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            {isMenuOpen ? (
+          {isMenuOpen ? (
+            <svg
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
                 d="M6 18L18 6M6 6l12 12"
               />
-            ) : (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            )}
-          </svg>
+            </svg>
+          ) : (
+            <div className="h-6 w-6 flex flex-col justify-center items-end gap-1">
+              <div className="h-0.5 bg-current w-full"></div>
+              <div className="h-0.5 bg-current w-3/4"></div>
+              <div className="h-0.5 bg-current w-1/2"></div>
+            </div>
+          )}
         </button>
       </div>
 
@@ -118,42 +117,44 @@ export const Navbar = () => {
         id="mobile-menu"
         className={`xl:hidden overflow-hidden transition-all duration-300 ease-in-out ${
           isMenuOpen
-            ? "transform translate-y-0 opacity-100 pb-2 border-t border-gray-400/20"
+            ? "transform translate-y-0 opacity-100 pb-2"
             : "transform -translate-y-4 opacity-0 max-h-0"
         }`}
       >
-        <nav
-          className="flex flex-col space-y-4 pt-4"
-          role="navigation"
-          aria-label="Mobile navigation"
-        >
-          {NAVIGATION_ITEMS.map(({ label, href }) => (
-            <NavLink
-              key={href}
-              href={href}
-              label={label}
-              onClick={closeMenu}
-              className="text-center py-1"
-            />
-          ))}
+        <div className="mt-4 rounded-2xl border border-gray-500 bg-black/60 backdrop-blur-sm p-6">
+          <nav
+            className="flex flex-col space-y-4"
+            role="navigation"
+            aria-label="Mobile navigation"
+          >
+            {NAVIGATION_ITEMS.map(({ label, href }) => (
+              <NavLink
+                key={href}
+                href={href}
+                label={label}
+                onClick={closeMenu}
+                className="text-center py-1"
+              />
+            ))}
 
-          <div className="flex justify-center pt-2">
-            <Button
-              className="text-sm sm:text-base md:text-lg lg:text-base"
-              as="button"
-              onClick={() => {
-                openContactModal();
-                closeMenu();
-              }}
-            >
-              {t("nav.contact")}
-            </Button>
-          </div>
+            <div className="flex justify-center pt-2">
+              <Button
+                className="text-sm sm:text-base md:text-lg lg:text-base"
+                as="button"
+                onClick={() => {
+                  openContactModal();
+                  closeMenu();
+                }}
+              >
+                {t("nav.contact")}
+              </Button>
+            </div>
 
-          <div className="flex justify-center pt-2">
-            <LanguageSwitcher />
-          </div>
-        </nav>
+            <div className="flex justify-center pt-2">
+              <LanguageSwitcher />
+            </div>
+          </nav>
+        </div>
       </div>
     </>
   );

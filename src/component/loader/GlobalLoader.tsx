@@ -15,7 +15,7 @@ export const GlobalLoader = () => {
       aria-labelledby="loader-title"
       aria-live="polite"
     >
-      <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12 font-nord h-full px-4">
+      <div className="flex flex-col lg:flex-row items-center justify-center gap-4 lg:gap-12 font-nord h-full px-4">
         <div className="flex items-center gap-4 flex-shrink-0">
           <motion.a
             href="/"
@@ -24,14 +24,14 @@ export const GlobalLoader = () => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, ease: [0.25, 1, 0.5, 1] }}
           >
-            <img src={logo} alt="Utazon Logo" className="h-12 w-auto" />
+            <img src={logo} alt="Utazon Logo" className="h-8 lg:h-12 w-auto" />
           </motion.a>
 
           <div className="flex flex-col items-start">
             <div className="overflow-hidden">
               <motion.a
                 href="/"
-                className="text-2xl text-white block"
+                className="text-lg lg:text-2xl text-white block"
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 transition={{
@@ -45,7 +45,7 @@ export const GlobalLoader = () => {
             </div>
             <div className="overflow-hidden">
               <motion.span
-                className="text-muted text-base block"
+                className="text-muted text-xs lg:text-base block"
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 transition={{
@@ -61,7 +61,7 @@ export const GlobalLoader = () => {
         </div>
 
         <motion.div
-          className="relative w-52 h-0.5 bg-gray-600 overflow-hidden"
+          className="relative w-42 lg:w-52 h-0.5 bg-gray-600 overflow-hidden"
           initial={{ scaleX: 0, opacity: 0 }}
           animate={{ scaleX: 1, opacity: 1 }}
           transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1], delay: 0.6 }}

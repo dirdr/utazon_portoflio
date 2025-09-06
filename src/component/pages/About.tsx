@@ -25,34 +25,30 @@ export const About = () => {
 
   return (
     <Container>
-      <div className="h-full w-full flex flex-col justify-start pt-32">
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 lg:gap-12 items-start mb-12 lg:mb-16">
-          <section className="xl:col-span-1" aria-labelledby="title-heading">
-            <LineSweepText
-              className="font-nord text-3xl md:text-4xl lg:text-5xl italic text-muted tracking-tight"
-              duration={6}
-            >
-              {titleContent}
-            </LineSweepText>
-          </section>
-
-          <div className="hidden xl:block"></div>
-
-          <section
-            className="flex items-start mt-6 xl:mt-0"
-            aria-labelledby="about-description"
+      <div className="h-full w-full flex flex-col justify-start pt-4 sm:pt-32">
+        <section className="xl:col-span-1 mb-8 sm:mb-12 lg:mb-16" aria-labelledby="title-heading">
+          <LineSweepText
+            className="font-nord text-3xl md:text-4xl lg:text-5xl italic text-muted tracking-tight"
+            duration={6}
           >
-            <div className="w-px bg-gray-600 mr-6 lg:mr-8 flex-shrink-0 self-stretch"></div>
-            <p
-              id="about-description"
-              className="text-sm md:text-base xl:text-lg text-gray"
-            >
-              {t("about.description")}
-            </p>
-          </section>
-        </div>
+            {titleContent}
+          </LineSweepText>
+        </section>
 
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 md:gap-8 xl:gap-4 2xl:gap-8 mb-12 lg:mb-16">
+        <section
+          className="flex items-start mb-8 sm:mb-12 lg:mb-16"
+          aria-labelledby="about-description"
+        >
+          <div className="w-px bg-gray-600 mr-6 lg:mr-8 flex-shrink-0 self-stretch"></div>
+          <p
+            id="about-description"
+            className="text-sm md:text-base xl:text-lg text-gray"
+          >
+            {t("about.description")}
+          </p>
+        </section>
+
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 md:gap-8 xl:gap-4 2xl:gap-8 mb-8 sm:mb-12 lg:mb-16">
           <ProjectVideoCard
             video={{
               src: "/videos/about/card1.mp4",
@@ -79,10 +75,10 @@ export const About = () => {
           />
         </div>
 
-        <div className="relative mt-16 xl:mt-32">
+        <div className="relative">
           <div className="grid grid-cols-1 xl:grid-cols-3">
             <div className="flex flex-col">
-              <div className="my-4 xl:my-20">
+              <div className="mb-4 xl:my-20">
                 <LineSweepText
                   className="text-muted font-nord text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold tracking-wide"
                   duration={6}

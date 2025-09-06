@@ -26,7 +26,7 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
 
       <div className="lg:hidden">
         <div
-          className="relative h-[50vh] overflow-hidden bg-cover bg-left bg-no-repeat"
+          className="relative h-[50vh] overflow-hidden bg-cover bg-center sm:bg-left bg-no-repeat"
           style={{
             backgroundImage: `url(/images/projects/${project.id}/background.webp)`,
           }}
@@ -78,7 +78,7 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
       <div className="hidden lg:block h-[70vh] relative overflow-hidden">
         <div className="absolute inset-0 opacity-90">
           <div
-            className="absolute inset-0 bg-cover bg-left bg-no-repeat"
+            className="absolute inset-0 bg-cover bg-center md:bg-left bg-no-repeat"
             style={{
               backgroundImage: `url(/images/projects/${project.id}/background.webp)`,
             }}

@@ -138,14 +138,14 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
 
   return (
     <div
-      className="px-4 sm:px-8 lg:px-16 py-16 min-h-full max-h-[100vh] overflow-y-auto bg-cover bg-center bg-no-repeat relative rounded-2xl border border-gray-500"
+      className="px-6 sm:px-8 lg:px-16 pt-8 sm:pt-16 pb-8 sm:pb-16 min-h-full max-h-[100vh] overflow-y-auto bg-cover bg-center bg-no-repeat relative rounded-2xl border border-gray-500"
       role="dialog"
       aria-modal="true"
       style={{
         backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${backgroundImage})`,
       }}
     >
-      <div className="flex justify-between items-center mb-16">
+      <div className="flex justify-between items-center mb-8 sm:mb-16">
         <p className="text-base text-white font-nord">
           {t(
             "contact.description",
@@ -210,7 +210,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
 
       {!isSubmitted && (
         <form onSubmit={handleSubmit} className="space-y-3">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 lg:gap-10 mb-6 sm:mb-8 lg:mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 lg:gap-10 mb-3 sm:mb-8 lg:mb-12">
             <div>
               <label
                 htmlFor="firstName"
@@ -276,7 +276,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 lg:gap-10 mb-6 sm:mb-8 lg:mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 lg:gap-10 mb-3 sm:mb-8 lg:mb-12">
             <div>
               <label
                 htmlFor="email"
@@ -374,7 +374,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
             )}
           </div>
 
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:pt-24">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4 sm:pt-24">
             <div className="flex items-center gap-3 sm:gap-4 lg:gap-6 order-2 sm:order-1">
               <a
                 href="https://instagram.com/utazon"
@@ -383,7 +383,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                 className="flex items-center gap-2 text-white hover:text-gray-300 transition-colors"
                 aria-label={t("contact.social.instagram", "Instagram")}
               >
-                <InstagramIcon />
+                <InstagramIcon width={16} height={16} className="sm:w-6 sm:h-6" />
                 <span className="text-xs font-nord font-thin">Instagram</span>
               </a>
 
@@ -394,7 +394,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                 className="flex items-center gap-2 text-white hover:text-gray-300 transition-colors"
                 aria-label={t("contact.social.linkedin", "LinkedIn")}
               >
-                <LinkedInIcon />
+                <LinkedInIcon width={16} height={16} className="sm:w-6 sm:h-6" />
                 <span className="text-xs font-nord font-thin">LinkedIn</span>
               </a>
 
@@ -405,7 +405,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                 className="flex items-center gap-2 text-white hover:text-gray-300 transition-colors"
                 aria-label={t("contact.social.behance", "Behance")}
               >
-                <BehanceIcon />
+                <BehanceIcon width={16} height={16} className="sm:w-6 sm:h-6" />
                 <span className="text-xs font-nord font-thin">Behance</span>
               </a>
             </div>
