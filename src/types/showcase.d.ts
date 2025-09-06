@@ -48,6 +48,9 @@ export interface VideoGridShowcaseData extends ShowcaseItem {
     light?: string | null;
     startTime?: number;
   }[];
+  copyright?: {
+    key: string;
+  };
 }
 
 export type ShowcaseData =

@@ -24,7 +24,7 @@ export const ParisMusic2024: Project = {
     {
       type: "image-single",
       id: "image-1",
-      order: 2,
+      order: 3,
       image: {
         src: "/images/projects/paris-music-2024/1.webp",
         alt: "Paris Music 2024 1",
@@ -33,7 +33,7 @@ export const ParisMusic2024: Project = {
     {
       type: "image-grid",
       id: "image-grid-1",
-      order: 3,
+      order: 2,
       images: [
         {
           src: `/images/projects/paris-music-2024/2.webp`,

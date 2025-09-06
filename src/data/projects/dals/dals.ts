@@ -17,28 +17,28 @@ export const Dals: Project = {
       order: 2,
       videos: [
         {
-          src: "/videos/projects/dals/boat_compressed.mp4",
-          title: "Boat",
-        },
-        {
-          src: "/videos/projects/dals/bus_compressed.mp4",
-          title: "Bus",
+          src: "/videos/projects/dals/pirate_compressed.mp4",
+          title: "Pirate",
         },
         {
           src: "/videos/projects/dals/jungeli_compressed.mp4",
           title: "Jungeli",
         },
         {
-          src: "/videos/projects/dals/lenie_compressed.mp4",
-          title: "Lenie",
+          src: "/videos/projects/dals/bus_compressed.mp4",
+          title: "Bus",
         },
         {
           src: "/videos/projects/dals/miami_compressed.mp4",
           title: "Miami",
         },
         {
-          src: "/videos/projects/dals/pirate_compressed.mp4",
-          title: "Pirate",
+          src: "/videos/projects/dals/lenie_compressed.mp4",
+          title: "Lenie",
+        },
+        {
+          src: "/videos/projects/dals/boat_compressed.mp4",
+          title: "Boat",
         },
       ],
     },
@@ -64,6 +64,9 @@ export const Dals: Project = {
           title: "Pirate Live",
         },
       ],
+      copyright: {
+        key: "copyright.videoCopyright",
+      },
     },
   ],
 };

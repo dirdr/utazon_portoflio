@@ -1,6 +1,7 @@
 import { VideoGridShowcaseData } from "../../types/showcase";
 import { SHOWCASE_STYLES } from "../../constants/showcaseStyles";
 import { cn } from "../../utils/cn";
+import { useTranslation } from "react-i18next";
 
 interface VideoGridShowcaseProps {
   data: VideoGridShowcaseData;
@@ -13,6 +14,7 @@ export const VideoGridShowcase = ({
   className,
   border = false,
 }: VideoGridShowcaseProps) => {
+  const { t } = useTranslation();
   const { videos } = data;
 
   return (
@@ -41,6 +43,15 @@ export const VideoGridShowcase = ({
           );
         })}
       </div>
+      
+      {/* Copyright Text */}
+      {data.copyright && (
+        <div className="text-center mt-4">
+          <p className="text-xs text-gray-500 text-muted">
+            {t(data.copyright.key)}
+          </p>
+        </div>
+      )}
     </div>
   );
 };

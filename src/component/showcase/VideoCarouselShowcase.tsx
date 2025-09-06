@@ -21,7 +21,7 @@ export const VideoCarouselShowcase = ({
   const { t } = useTranslation();
   const params = useParams();
   const projectId = params.id;
-  
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [videoDuration, setVideoDuration] = useState(0);
   const [isVideoEnded, setIsVideoEnded] = useState(false);
@@ -32,7 +32,7 @@ export const VideoCarouselShowcase = ({
     setCurrentIndex(index);
     setIsVideoEnded(false);
     setIsProgressRunning(false);
-    setAnimationKey(prev => prev + 1);
+    setAnimationKey((prev) => prev + 1);
   };
 
   const handleDurationChange = (duration: number) => {
@@ -46,10 +46,9 @@ export const VideoCarouselShowcase = ({
 
   const handleVideoPlay = () => {
     setIsProgressRunning(true);
-    setAnimationKey(prev => prev + 1); // Reset animation when video starts playing
+    setAnimationKey((prev) => prev + 1); // Reset animation when video starts playing
   };
 
-  // Auto-advance to next video when current one ends
   useEffect(() => {
     if (isVideoEnded) {
       const timer = setTimeout(() => {
@@ -57,7 +56,7 @@ export const VideoCarouselShowcase = ({
         setCurrentIndex(nextIndex);
         setIsVideoEnded(false);
         setIsProgressRunning(false);
-        setAnimationKey(prev => prev + 1);
+        setAnimationKey((prev) => prev + 1);
       }, 500);
       return () => clearTimeout(timer);
     }
@@ -65,23 +64,31 @@ export const VideoCarouselShowcase = ({
 
   useEffect(() => {
     setIsProgressRunning(false);
-    setAnimationKey(prev => prev + 1);
+    setAnimationKey((prev) => prev + 1);
   }, [currentIndex]);
 
   return (
-    <div className={cn("w-full max-w-none mx-auto xl:px-16", className)}>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
-        {/* Left Column - Text Content */}
+    <div className={cn("w-full  mx-auto ", className)}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-4 items-center">
         <div className="flex items-start">
           <div className="w-px bg-gray-600 mr-6 lg:mr-8 flex-shrink-0 self-stretch"></div>
-          <div className="space-y-6">
-            {projectId && t(`projects.${projectId}.carouselDescription`, { returnObjects: true }) && 
-              (t(`projects.${projectId}.carouselDescription`, { returnObjects: true }) as string[]).map((paragraph, index) => (
-                <p key={index} className="text-gray-300 text-base md:text-lg xl:text-sm 2xl:text-base leading-relaxed">
+          <div className="space-y-6 max-w-xl">
+            {projectId &&
+              t(`projects.${projectId}.carouselDescription`, {
+                returnObjects: true,
+              }) &&
+              (
+                t(`projects.${projectId}.carouselDescription`, {
+                  returnObjects: true,
+                }) as string[]
+              ).map((paragraph, index) => (
+                <p
+                  key={index}
+                  className="text-gray-300 text-base md:text-lg xl:text-sm 2xl:text-base leading-relaxed"
+                >
                   {paragraph}
                 </p>
-              ))
-            }
+              ))}
           </div>
         </div>
 
@@ -114,7 +121,7 @@ export const VideoCarouselShowcase = ({
               </motion.div>
             </AnimatePresence>
           </div>
-          
+
           {/* Navigation Dots - Under Video */}
           <div className="flex justify-center items-center gap-1.5">
             {data.videos.map((_, index) => (
@@ -132,28 +139,40 @@ export const VideoCarouselShowcase = ({
                       key={`expanded-${index}`}
                       className="w-12 h-2.5 bg-gray-600 rounded-full relative overflow-hidden smooth-animation"
                       initial={{ width: 10, height: 10, borderRadius: "50%" }}
-                      animate={{ width: 48, height: 10, borderRadius: "9999px" }}
+                      animate={{
+                        width: 48,
+                        height: 10,
+                        borderRadius: "9999px",
+                      }}
                       exit={{ width: 10, height: 10, borderRadius: "50%" }}
                       transition={{ duration: 0.3, ease: "easeInOut" }}
-                      style={{ contentVisibility: 'auto' }}
+                      style={{ contentVisibility: "auto" }}
                     >
                       <div
                         key={animationKey}
                         className="h-full bg-white rounded-full animate-progress-bar"
                         style={{
                           animationDuration: `${videoDuration || 10}s`,
-                          animationPlayState: isProgressRunning ? 'running' : 'paused'
+                          animationPlayState: isProgressRunning
+                            ? "running"
+                            : "paused",
                         }}
                       />
                     </motion.div>
                   ) : (
-                    <motion.div 
+                    <motion.div
                       key={`collapsed-${index}`}
-                      className="w-2.5 h-2.5 bg-white rounded-full hover:bg-white/80" 
-                      initial={{ width: 48, height: 10, borderRadius: "9999px" }}
+                      className="w-2.5 h-2.5 bg-white rounded-full hover:bg-white/80"
+                      initial={{
+                        width: 48,
+                        height: 10,
+                        borderRadius: "9999px",
+                      }}
                       animate={{ width: 10, height: 10, borderRadius: "50%" }}
                       exit={{ width: 48, height: 10, borderRadius: "9999px" }}
-                      whileHover={{ backgroundColor: "rgba(255, 255, 255, 0.8)" }}
+                      whileHover={{
+                        backgroundColor: "rgba(255, 255, 255, 0.8)",
+                      }}
                       transition={{ duration: 0.3, ease: "easeInOut" }}
                     />
                   )}
@@ -166,4 +185,3 @@ export const VideoCarouselShowcase = ({
     </div>
   );
 };
-

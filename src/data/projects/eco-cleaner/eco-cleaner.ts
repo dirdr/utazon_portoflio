@@ -24,7 +24,7 @@ export const EcoCleaner: Project = {
     {
       type: "image-single",
       id: "image-1",
-      order: 2,
+      order: 3,
       image: {
         src: "/images/projects/eco-cleaner/1.webp",
         alt: "Eco Cleaner 1",
@@ -33,7 +33,7 @@ export const EcoCleaner: Project = {
     {
       type: "image-grid",
       id: "image-grid-1",
-      order: 3,
+      order: 2,
       images: [
         {
           src: `/images/projects/eco-cleaner/2.webp`,

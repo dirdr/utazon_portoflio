@@ -88,6 +88,7 @@ export const Home = ({ onVideoMuteToggle }: HomeProps) => {
               glintOnHover={true}
               onClick={handleProjectsClick}
               className="text-xs sm:text-base"
+              speed={3}
             >
               {t("home.projects")}
             </Button>
@@ -96,6 +97,7 @@ export const Home = ({ onVideoMuteToggle }: HomeProps) => {
               glintOnHover={true}
               onClick={handleShowreelClick}
               className="text-xs sm:text-base"
+              speed={3}
             >
               {t("nav.showreel")}
             </Button>
@@ -122,7 +124,7 @@ export const Home = ({ onVideoMuteToggle }: HomeProps) => {
               />
               <p
                 id="location-heading"
-                className="text-base xl:text-lg text-muted"
+                className="text-sm sm:text-base text-muted"
               >
                 Paris, France
               </p>

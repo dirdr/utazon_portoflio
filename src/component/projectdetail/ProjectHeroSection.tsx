@@ -114,19 +114,19 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
                 <div className="grid grid-cols-1 gap-4 text-lg">
                   <div>
                     <h3 className="font-nord text-white uppercase">Date</h3>
-                    <p className="font-neue text-dark-gray text-sm 2xl:text-base">
+                    <p className="font-neue text-dark-gray text-xs sm:text-base">
                       {t(project.date)}
                     </p>
                   </div>
                   <div>
                     <h3 className="font-nord text-white uppercase">Client</h3>
-                    <p className="font-neue text-dark-gray text-sm 2xl:text-base">
+                    <p className="font-neue text-dark-gray text-xs sm:text-base">
                       {t(project.client)}
                     </p>
                   </div>
                   <div>
                     <h3 className="font-nord text-white uppercase">Role</h3>
-                    <p className="font-neue text-dark-gray text-sm 2xl:text-base">
+                    <p className="font-neue text-dark-gray text-xs sm:text-base">
                       {t(project.role)}
                     </p>
                   </div>

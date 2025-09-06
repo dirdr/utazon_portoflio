@@ -14,7 +14,7 @@
     "description": "3D Artist and Motion Designer based in Paris, I craft precisely designed worlds with polished and impactful visuals for brands, agencies, and artists.",
     "projects": "PROJECTS",
     "title": "3D ARTIST AND MOTION DESIGNER",
-    "diveIn": "Dive In"
+    "diveIn": "Enter"
   },
   "about": {
     "title": "3D ARTIST AND MOTION DESIGNER",
@@ -71,7 +71,7 @@
       "date": "2024"
     },
     "paris-music-2024": {
-      "title": "PARIS – Fête de la Musique 2024",
+      "title": "Fête de la Musique",
       "header": "3D Cinematic Animation",
       "description": "A 2-week short film built in Unreal Engine 5. The story follows a character exploring Paris during the Fête de la Musique, told through dynamic sequences and atmospheric cinematography.",
       "role": "Full solo creation",
@@ -140,7 +140,7 @@
       ]
     },
     "yassencore": {
-      "title": "YASSENCORE – Twitch Waiting Screen",
+      "title": "YASSENCORE – Twitch",
       "header": "3D Cinematic Animation",
       "description": "A tailor-made waiting screen for Twitch streamer YassEncore, reflecting his favorite universes: Breaking Bad, Dragon Ball, football... Designed to kick off streams with personality and atmosphere.",
       "role": "Full concept and production",
@@ -200,6 +200,9 @@
   "soundPlayer": {
     "mute": "Mute sound",
     "unmute": "Unmute sound"
+  },
+  "copyright": {
+    "videoCopyright": "Excerpts © TF1 – All rights reserved"
   },
   "legal": {
     "title": "Legal Notice",

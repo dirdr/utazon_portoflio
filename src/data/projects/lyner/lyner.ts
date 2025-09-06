@@ -22,18 +22,9 @@ export const Lyner: Project = {
       },
     },
     {
-      type: "image-single",
-      id: "image-1",
-      order: 2,
-      image: {
-        src: "/images/projects/lyner/1.webp",
-        alt: "Lyner 1",
-      },
-    },
-    {
       type: "image-grid",
       id: "image-grid-1",
-      order: 3,
+      order: 2,
       images: [
         {
           src: `/images/projects/lyner/2.webp`,
@@ -44,6 +35,15 @@ export const Lyner: Project = {
           alt: "Lyner 3",
         },
       ],
+    },
+    {
+      type: "image-single",
+      id: "image-1",
+      order: 3,
+      image: {
+        src: "/images/projects/lyner/1.webp",
+        alt: "Lyner 1",
+      },
     },
   ],
 };

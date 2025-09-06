@@ -6,7 +6,13 @@ export const AppContent = () => {
   return (
     <ModalProvider>
       <LenisProvider
-        options={{ lerp: 0.04, duration: 1.2, wheelMultiplier: 0.5 }}
+        options={{
+          lerp: 0.1,
+          duration: 1.2,
+          smoothWheel: true,
+          wheelMultiplier: 0.8,
+          touchMultiplier: 1,
+        }}
       >
         <AppRouter />
       </LenisProvider>

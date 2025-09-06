@@ -25,7 +25,7 @@ export const Dune: Project = {
     {
       type: "image-single",
       id: "image-1",
-      order: 2,
+      order: 3,
       image: {
         src: "/images/projects/dune/1.webp",
         alt: "Dune 1",
@@ -34,7 +34,7 @@ export const Dune: Project = {
     {
       type: "image-grid",
       id: "image-grid-1",
-      order: 3,
+      order: 2,
       images: [
         {
           src: `/images/projects/dune/2.webp`,

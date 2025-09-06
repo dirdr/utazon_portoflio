@@ -27,25 +27,5 @@ export const MrHelp: Project = {
         src: "mr-help/details2.mp4",
       },
     },
-
-    {
-      type: "image-grid",
-      id: "image-1",
-      order: 3,
-      images: [
-        {
-          src: "/images/projects/mr-help/1.webp",
-          alt: "Mr Help 1",
-        },
-        {
-          src: "/images/projects/mr-help/2.webp",
-          alt: "Mr Help 2",
-        },
-        {
-          src: "/images/projects/mr-help/3.webp",
-          alt: "Mr Help 3",
-        },
-      ],
-    },
   ],
 };

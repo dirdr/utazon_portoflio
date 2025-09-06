@@ -14,7 +14,7 @@
     "description": "Artiste 3D et Motion Designer à Paris, je conçois avec grande précision des univers aux visuels soignés et percutants au service des marques, agences et artistes.",
     "projects": "PROJETS",
     "title": "ARTISTE 3D\nMOTION DESIGNER",
-    "diveIn": "Immersion"
+    "diveIn": "Entrer"
   },
   "about": {
     "title": "ARTISTE 3D\nMOTION DESIGNER",
@@ -71,7 +71,7 @@
       "date": "2024"
     },
     "paris-music-2024": {
-      "title": "PARIS – Fête de la Musique 2024",
+      "title": "Fête de la Musique",
       "header": "Cinématique 3D",
       "description": "Court-métrage réalisé en deux semaines. Le récit suit un personnage explorant la Fête de la Musique dans les rues parisiennes à travers des scènes immersives et une narration rythmée.",
       "role": "Création complète",
@@ -140,7 +140,7 @@
       ]
     },
     "yassencore": {
-      "title": "YASSENCORE – Twitch Waiting Screen",
+      "title": "YASSENCORE – Twitch",
       "header": "Cinématique 3D",
       "description": "Création d'un écran d'attente Twitch sur mesure pour le streamer YassEncore, imaginé comme un hommage visuel à ses univers préférés : Breaking Bad, Dragon Ball, le football... Un décor animé unique et immersif pour ouvrir chaque live avec impact.",
       "role": "Conception et réalisation complète du waiting screen",
@@ -200,6 +200,9 @@
   "soundPlayer": {
     "mute": "Couper le son",
     "unmute": "Activer le son"
+  },
+  "copyright": {
+    "videoCopyright": "Extraits © TF1 – Tous droits réservés"
   },
   "legal": {
     "title": "Mentions Légales",

@@ -18,12 +18,12 @@ export const ProjectVideoCard = ({
   title,
   description,
   className,
-  glintSpeed = "6s",
+  glintSpeed = "3s",
 }: ProjectVideoCardProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoReady, setVideoReady] = useState(false);
   const [videoError, setVideoError] = useState(false);
-  
+
   const { ref: animationRef, shouldAnimate } = useAnimationControl({
     threshold: 0.2,
     rootMargin: "100px",
@@ -31,13 +31,9 @@ export const ProjectVideoCard = ({
 
   useEffect(() => {
     if (videoReady && videoRef.current) {
-      // Safari-friendly autoplay attempt
       const playPromise = videoRef.current.play();
       if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          // Autoplay failed, likely due to Safari restrictions
-          // Video will show first frame and can be played on user interaction
-        });
+        playPromise.catch(() => {});
       }
     }
   }, [videoReady]);
@@ -45,10 +41,7 @@ export const ProjectVideoCard = ({
   return (
     <div
       ref={animationRef}
-      className={cn(
-        "group glint-card-wrapper-square w-full",
-        className,
-      )}
+      className={cn("group glint-card-wrapper-square w-full", className)}
       data-animate={shouldAnimate}
       style={{ "--glint-card-speed": glintSpeed } as React.CSSProperties}
     >
@@ -69,8 +62,8 @@ export const ProjectVideoCard = ({
                 webkit-playsinline="true"
                 x5-playsinline="true"
                 style={{
-                  transform: 'translateZ(0)',
-                  backfaceVisibility: 'hidden',
+                  transform: "translateZ(0)",
+                  backfaceVisibility: "hidden",
                 }}
                 onLoadedData={() => {
                   setVideoReady(true);
@@ -107,7 +100,9 @@ export const ProjectVideoCard = ({
             <h3 className="font-nord text-white text-sm sm:text-base md:text-lg xl:text-base 2xl:text-xl font-bold italic mb-1 sm:mb-2 md:mb-3 xl:mb-2 2xl:mb-4">
               {title}
             </h3>
-            <p className="text-white font-light text-xs sm:text-sm md:text-base xl:text-sm 2xl:text-base">{description}</p>
+            <p className="text-white font-light text-xs sm:text-sm md:text-base xl:text-sm 2xl:text-base">
+              {description}
+            </p>
           </div>
         </div>
       </div>

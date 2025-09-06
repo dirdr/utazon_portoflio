@@ -21,16 +21,22 @@ export const LenisProvider = ({
 }: LenisProviderProps) => {
   const lenisRef = useRef<Lenis | null>(null);
 
-  const defaultOptions = useMemo(() => ({
-    lerp: 0.05,
-    duration: 1.2,
-    smoothWheel: true,
-    wheelMultiplier: 1,
-    touchMultiplier: 2,
-    ...options,
-  }), [options]);
+  const defaultOptions = useMemo(
+    () => ({
+      lerp: 0.1,
+      duration: 1,
+      smoothWheel: true,
+      wheelMultiplier: 2,
+      touchMultiplier: 2,
+      ...options,
+    }),
+    [options],
+  );
 
-  const scrollTo = (target: string | number, options?: LenisScrollToOptions) => {
+  const scrollTo = (
+    target: string | number,
+    options?: LenisScrollToOptions,
+  ) => {
     if (lenisRef.current) {
       lenisRef.current.scrollTo(target, options);
     }
@@ -66,4 +72,3 @@ export const LenisProvider = ({
     </LenisContext.Provider>
   );
 };
-

@@ -25,7 +25,7 @@ export const KarminCorpLecReveal: Project = {
     {
       type: "image-single",
       id: "image-1",
-      order: 2,
+      order: 3,
       image: {
         src: "/images/projects/karmin-corp-lec-reveal/1.webp",
         alt: "Karmin Corp Lec Reveal 1",
@@ -34,7 +34,7 @@ export const KarminCorpLecReveal: Project = {
     {
       type: "image-grid",
       id: "image-grid-1",
-      order: 3,
+      order: 2,
       images: [
         {
           src: `/images/projects/karmin-corp-lec-reveal/2.webp`,

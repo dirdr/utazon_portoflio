@@ -47,7 +47,7 @@ export const Card = ({
   const [videoReady, setVideoReady] = useState(false);
   const [videoError, setVideoError] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  
+
   const { ref: animationRef, shouldAnimate } = useAnimationControl({
     threshold: 0.2,
     rootMargin: "100px",
@@ -120,8 +120,9 @@ export const Card = ({
               "h-full w-full object-cover transition-all duration-300",
               thumbnail && videoReady && "group-hover:opacity-0",
             )}
-            style={{ 
-              clipPath: "polygon(0% 0%, 73% 0%, 76% 1%, 99% 24%, 100% 27%, 100% 100%, 0% 100%)"
+            style={{
+              clipPath:
+                "polygon(0% 0%, 73% 0%, 76% 1%, 99% 24%, 100% 27%, 100% 100%, 0% 100%)",
             }}
             loading="eager"
           />
@@ -133,8 +134,9 @@ export const Card = ({
                 "absolute inset-0 h-full w-full object-cover transition-all duration-300",
                 videoReady ? "opacity-0 group-hover:opacity-100" : "hidden",
               )}
-              style={{ 
-                clipPath: "polygon(0% 0%, 73% 0%, 76% 1%, 99% 24%, 100% 27%, 100% 100%, 0% 100%)"
+              style={{
+                clipPath:
+                  "polygon(0% 0%, 73% 0%, 76% 1%, 99% 24%, 100% 27%, 100% 100%, 0% 100%)",
               }}
               src={thumbnail.src}
               muted
@@ -205,6 +207,7 @@ export const Card = ({
               className="text-base"
               as="button"
               onClick={handleButtonClick}
+              speed={3}
             >
               {t("common.seeProject")}
             </Button>

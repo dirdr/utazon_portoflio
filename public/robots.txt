@@ -1,0 +1,45 @@
+# Robots.txt for utazon.fr - Antoine Vernez Portfolio  
+# https://utazon.fr/robots.txt
+
+User-agent: *
+Allow: /
+
+# Block access to development and build files
+Disallow: /src/
+Disallow: /node_modules/
+Disallow: /.git/
+Disallow: /dist/
+Disallow: /scripts/
+
+# Allow crawling of all portfolio content
+Allow: /projects/
+Allow: /images/
+Allow: /videos/
+Allow: /fonts/
+
+# Block specific file types that shouldn't be indexed
+Disallow: /*.json$
+Disallow: /*.ts$
+Disallow: /*.tsx$
+Disallow: /*.js.map$
+Disallow: /*.css.map$
+
+# Allow common social media crawlers
+User-agent: facebookexternalhit/*
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+# Sitemap location
+Sitemap: https://utazon.fr/sitemap.xml
+Sitemap: https://utazon.fr/sitemap-images.xml
+
+# Crawl-delay (optional - adjust based on server capacity)
+# Crawl-delay: 1

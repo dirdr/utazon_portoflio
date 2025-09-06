@@ -31,7 +31,7 @@ export const Yassencore: Project = {
     {
       type: "image-single",
       id: "image-1",
-      order: 3,
+      order: 4,
       image: {
         src: "/images/projects/yassencore/1.webp",
         alt: "Yassencore 1",
@@ -40,7 +40,7 @@ export const Yassencore: Project = {
     {
       type: "image-grid",
       id: "image-grid-1",
-      order: 4,
+      order: 3,
       images: [
         {
           src: `/images/projects/yassencore/2.webp`,

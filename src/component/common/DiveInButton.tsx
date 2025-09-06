@@ -74,9 +74,9 @@ export const DiveInButton = ({
             },
           }}
           className="cursor-pointer focus:outline-none relative smooth-animation"
-          style={{ 
+          style={{
             zIndex: OVERLAY_Z_INDEX.DIVE_IN_BUTTON_ELEMENT,
-            contentVisibility: 'auto',
+            contentVisibility: "auto",
           }}
           tabIndex={isReady ? 0 : -1}
           onKeyDown={handleKeyDown}
@@ -89,7 +89,7 @@ export const DiveInButton = ({
             onClick={handleClick}
             glint={true}
             proximityIntensity={true}
-            className={`text-base md:text-lg lg:text-xl xl:text-2xl font-nord  tracking-widest uppercase transition-all duration-300 ${
+            className={`text-xs md:text-sm lg:text-base 2xl:text-lg font-nord tracking-widest uppercase transition-all duration-300 ${
               isReady ? "opacity-100 cursor-pointer" : "opacity-50 cursor-wait"
             }`}
             disabled={!isReady}

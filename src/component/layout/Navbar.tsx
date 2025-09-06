@@ -23,7 +23,7 @@ export const Navbar = () => {
 
   const handleHomeClick = async (e: React.MouseEvent) => {
     e.preventDefault();
-    await navigateWithTransition('/');
+    await navigateWithTransition("/");
   };
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -38,15 +38,15 @@ export const Navbar = () => {
     <>
       <div className="flex items-center justify-between h-16">
         <div className="flex flex-col items-start">
-          <button 
+          <button
             onClick={handleHomeClick}
-            className="text-sm md:text-base lg:text-lg font-nord hover:text-white transition-colors cursor-pointer text-left"
+            className="text-sm lg:text-base 2xl:text-lg font-nord hover:text-white transition-colors cursor-pointer text-left"
           >
             UTAZON
           </button>
           <button
             onClick={handleHomeClick}
-            className="font-nord text-muted text-xs md:sm lg:text-base hover:text-white transition-colors cursor-pointer text-left"
+            className="font-nord text-muted text-xs lg:text-small 2xl:text-base hover:text-white transition-colors cursor-pointer text-left"
           >
             ANTOINE VERNEZ
           </button>
@@ -55,7 +55,11 @@ export const Navbar = () => {
         {pageConfig.showNavbarLogo && (
           <div className="hidden xl:flex absolute left-1/2 transform -translate-x-1/2">
             <button onClick={handleHomeClick}>
-              <img src={logo} alt="Utazon Logo" className="h-10 w-auto cursor-pointer hover:opacity-80 transition-opacity" />
+              <img
+                src={logo}
+                alt="Utazon Logo"
+                className="h-10 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+              />
             </button>
           </div>
         )}
@@ -71,8 +75,9 @@ export const Navbar = () => {
           <Button
             glint={true}
             as="button"
-            className="text-xs sm:text-sm md:text-base lg:text-sm"
+            className="text-sm 2xl:text-base"
             onClick={openContactModal}
+            speed={3}
           >
             {t("nav.contact")}
           </Button>

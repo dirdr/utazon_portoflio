@@ -24,7 +24,7 @@ export const FamilyTechDrive: Project = {
     {
       type: "image-single",
       id: "image-1",
-      order: 2,
+      order: 3,
       image: {
         src: "/images/projects/family-tech-drive/1.webp",
         alt: "Family Tech Drive 1",
@@ -33,7 +33,7 @@ export const FamilyTechDrive: Project = {
     {
       type: "image-grid",
       id: "image-grid-1",
-      order: 3,
+      order: 2,
       images: [
         {
           src: `/images/projects/family-tech-drive/2.webp`,
