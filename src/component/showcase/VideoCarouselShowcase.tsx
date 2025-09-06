@@ -32,7 +32,7 @@ export const VideoCarouselShowcase = ({
     setCurrentIndex(index);
     setIsVideoEnded(false);
     setIsProgressRunning(false);
-    setAnimationKey(prev => prev + 1); // Reset animation
+    setAnimationKey(prev => prev + 1);
   };
 
   const handleDurationChange = (duration: number) => {
@@ -57,13 +57,12 @@ export const VideoCarouselShowcase = ({
         setCurrentIndex(nextIndex);
         setIsVideoEnded(false);
         setIsProgressRunning(false);
-        setAnimationKey(prev => prev + 1); // Reset animation
+        setAnimationKey(prev => prev + 1);
       }, 500);
       return () => clearTimeout(timer);
     }
   }, [isVideoEnded, currentIndex, data.videos.length]);
 
-  // Reset progress state when video changes
   useEffect(() => {
     setIsProgressRunning(false);
     setAnimationKey(prev => prev + 1);

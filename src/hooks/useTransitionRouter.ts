@@ -1,7 +1,6 @@
-import { useState, useCallback, useEffect } from 'react';
-import { useLocation } from 'wouter';
-import { getRouteAssets, shouldPreloadRoute } from '../config/routeAssets';
-import { scrollPositionStore } from '../stores/scrollPositionStore';
+import { useState, useCallback, useEffect } from "react";
+import { useLocation } from "wouter";
+import { getRouteAssets, shouldPreloadRoute } from "../config/routeAssets";
 
 const preloadHomeVideo = (): Promise<void> => {
   return Promise.resolve();
@@ -18,7 +17,6 @@ interface TransitionState {
   pendingLocation: string | null;
   progress: number;
   fadeInComplete: boolean;
-  preservedScrollPosition: number;
 }
 
 /**
@@ -28,18 +26,15 @@ interface TransitionState {
 export const useTransitionRouter = (config: TransitionConfig = {}) => {
   const { duration = 600 } = config;
   const [location, setLocation] = useLocation();
-  
-  
+
   const [state, setState] = useState<TransitionState>({
     isTransitioning: false,
     currentLocation: location,
     pendingLocation: null,
     progress: 0,
     fadeInComplete: false,
-    preservedScrollPosition: 0,
   });
 
-  // Cache verification function
   const verifyCacheUrls = useCallback((urls: string[]): Promise<void> => {
     if (urls.length === 0) return Promise.resolve();
 
@@ -50,28 +45,30 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
       const checkComplete = () => {
         completedCount++;
         const progress = (completedCount / totalCount) * 100;
-        setState(prev => ({ 
-          ...prev, 
-          progress: 50 + (progress * 0.4) // 50-90% range during cache verification
+        setState((prev) => ({
+          ...prev,
+          progress: 50 + progress * 0.4,
         }));
-        
+
         if (completedCount === totalCount) {
           resolve();
         }
       };
 
       // Safari/Firefox cache coordination
-      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-      const isFirefox = navigator.userAgent.toLowerCase().includes('firefox');
+      const isSafari = /^((?!chrome|android).)*safari/i.test(
+        navigator.userAgent,
+      );
+      const isFirefox = navigator.userAgent.toLowerCase().includes("firefox");
 
       urls.forEach((url, index) => {
         const img = new Image();
-        
-        img.addEventListener('load', checkComplete);
-        img.addEventListener('error', checkComplete);
+
+        img.addEventListener("load", checkComplete);
+        img.addEventListener("error", checkComplete);
 
         if (isSafari || isFirefox) {
-          img.crossOrigin = 'anonymous';
+          img.crossOrigin = "anonymous";
           setTimeout(() => {
             img.src = url;
           }, index * 15);
@@ -90,86 +87,86 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
 
     const blackScreenStartTime = Date.now();
     const minBlackScreenDuration = duration / 3; // Minimum 200ms for 600ms total
-    
+
     const newLocation = state.pendingLocation;
     const shouldPreload = shouldPreloadRoute(newLocation);
     const cacheUrls = shouldPreload ? getRouteAssets(newLocation) : [];
 
-    setState(prev => ({ ...prev, progress: 50 }));
+    setState((prev) => ({ ...prev, progress: 50 }));
 
     // Phase 3: Switch routes during black screen
     setLocation(newLocation);
-    setState(prev => ({ 
-      ...prev, 
+    setState((prev) => ({
+      ...prev,
       currentLocation: newLocation,
       progress: 60,
     }));
-    
-    // Reset scroll position immediately after route switch (during black screen)
-    scrollPositionStore.scrollToTop();
+
+    await new Promise((resolve) => setTimeout(resolve, 100));
 
     // Phase 4: Cache verification (only if needed)
     if (cacheUrls.length > 0) {
       await verifyCacheUrls(cacheUrls);
     }
-    setState(prev => ({ ...prev, progress: 90 }));
+    setState((prev) => ({ ...prev, progress: 90 }));
 
-    if (newLocation === '/') {
+    if (newLocation === "/") {
       await preloadHomeVideo();
     }
-    
+
     // Phase 6: Ensure minimum black screen duration for smooth transitions
     const processingTime = Date.now() - blackScreenStartTime;
     const remainingTime = Math.max(0, minBlackScreenDuration - processingTime);
-    
+
     if (remainingTime > 0) {
-      await new Promise(resolve => setTimeout(resolve, remainingTime));
+      await new Promise((resolve) => setTimeout(resolve, remainingTime));
     }
-    
-    setState(prev => ({ ...prev, progress: 100 }));
+
+    setState((prev) => ({ ...prev, progress: 100 }));
 
     // Phase 6: Complete transition - start fade out
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       isTransitioning: false,
       pendingLocation: null,
       fadeInComplete: false,
-      preservedScrollPosition: 0,
     }));
   }, [state.pendingLocation, setLocation, verifyCacheUrls, duration]);
 
   // Navigate with transition (automatically determines assets to preload)
-  const navigateWithTransition = useCallback(async (
-    newLocation: string
-  ) => {
-    if (newLocation === state.currentLocation) {
-      return;
-    }
-    
-    // Phase 1: Start transition - fade in overlay (no scroll changes yet)
-    setState(prev => ({
-      ...prev,
-      isTransitioning: true,
-      pendingLocation: newLocation,
-      progress: 0,
-      fadeInComplete: false,
-      preservedScrollPosition: 0,
-    }));
+  const navigateWithTransition = useCallback(
+    async (newLocation: string) => {
+      if (newLocation === state.currentLocation) {
+        return;
+      }
 
-    // Phase 2: Fade-in completion is handled by handleFadeInComplete callback
+      // Phase 1: Start transition - fade in overlay
+      setState((prev) => ({
+        ...prev,
+        isTransitioning: true,
+        pendingLocation: newLocation,
+        progress: 0,
+        fadeInComplete: false,
+      }));
 
-  }, [state.currentLocation]);
+      // Phase 2: Fade-in completion is handled by handleFadeInComplete callback
+    },
+    [state.currentLocation],
+  );
 
   // Simple navigate (no transition, for same-page or immediate changes)
-  const navigate = useCallback((newLocation: string) => {
-    setLocation(newLocation);
-    setState(prev => ({ ...prev, currentLocation: newLocation }));
-  }, [setLocation]);
+  const navigate = useCallback(
+    (newLocation: string) => {
+      setLocation(newLocation);
+      setState((prev) => ({ ...prev, currentLocation: newLocation }));
+    },
+    [setLocation],
+  );
 
   // Sync with external location changes (back/forward buttons)
   useEffect(() => {
     if (location !== state.currentLocation && !state.isTransitioning) {
-      setState(prev => ({ ...prev, currentLocation: location }));
+      setState((prev) => ({ ...prev, currentLocation: location }));
     }
   }, [location, state.currentLocation, state.isTransitioning]);
 
@@ -181,3 +178,4 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
     onFadeInComplete: handleFadeInComplete,
   };
 };
+

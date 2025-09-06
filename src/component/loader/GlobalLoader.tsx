@@ -3,8 +3,6 @@ import { useTranslation } from "react-i18next";
 import logo from "../../assets/images/logo.svg";
 
 export const GlobalLoader = () => {
-  // Note: Scroll blocking removed - only home page should be non-scrollable
-
   const { t } = useTranslation();
 
   return (

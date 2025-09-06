@@ -1,24 +1,24 @@
-import React, { createContext, useContext } from 'react';
-import { useAppInitialization } from '../hooks/useAppInitialization';
+import React, { createContext, useContext } from "react";
+import { useAppInitialization } from "../hooks/useAppInitialization";
 
 interface AppLoadingState {
   // Loading state
   showLoader: boolean;
   isInitialized: boolean;
-  
+
   // Asset preloading
   progress: number;
   loadedAssets: number;
   totalAssets: number;
   failedAssets: number;
-  
+
   // Navigation state
   isFreshLoad: boolean;
-  
+
   // Home-specific dive-in state (for integration with HomeContext)
   showDiveInButton: boolean;
   hideDiveInButton: () => void;
-  
+
   // Video behavior (for integration with HomeContext)
   videoBehavior: {
     shouldPlayFromStart: boolean;
@@ -33,7 +33,7 @@ const AppLoadingContext = createContext<AppLoadingState | null>(null);
 export const useAppLoading = (): AppLoadingState => {
   const context = useContext(AppLoadingContext);
   if (!context) {
-    throw new Error('useAppLoading must be used within AppLoadingProvider');
+    throw new Error("useAppLoading must be used within AppLoadingProvider");
   }
   return context;
 };
@@ -42,10 +42,10 @@ interface AppLoadingProviderProps {
   children: React.ReactNode;
 }
 
-export const AppLoadingProvider: React.FC<AppLoadingProviderProps> = ({ children }) => {
+export const AppLoadingProvider: React.FC<AppLoadingProviderProps> = ({
+  children,
+}) => {
   const appInit = useAppInitialization();
-
-  // Note: Scroll blocking removed - only home page should be non-scrollable
 
   const value: AppLoadingState = {
     showLoader: appInit.showLoader,
@@ -66,3 +66,4 @@ export const AppLoadingProvider: React.FC<AppLoadingProviderProps> = ({ children
     </AppLoadingContext.Provider>
   );
 };
+

@@ -21,7 +21,6 @@ export const StandardLayout = ({
     <div className="relative min-h-screen">
       <ImageBackgroundDisplay />
       <div
-        data-scroll-section
         className={`min-h-screen flex flex-col ${className}`}
       >
         <Navbar />

@@ -1,9 +1,6 @@
 @layer base {
-  * {
-    scroll-behavior: auto !important;
-  }
-  
-  html, body {
+  html,
+  body {
     overflow-x: hidden;
   }
 
