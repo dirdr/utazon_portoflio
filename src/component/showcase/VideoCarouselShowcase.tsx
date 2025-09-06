@@ -69,7 +69,7 @@ export const VideoCarouselShowcase = ({
   }, [currentIndex]);
 
   return (
-    <div className={cn("w-full max-w-none mx-auto px-8 lg:px-16", className)}>
+    <div className={cn("w-full max-w-none mx-auto xl:px-16", className)}>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
         {/* Left Column - Text Content */}
         <div className="flex items-start">
@@ -77,7 +77,7 @@ export const VideoCarouselShowcase = ({
           <div className="space-y-6">
             {projectId && t(`projects.${projectId}.carouselDescription`, { returnObjects: true }) && 
               (t(`projects.${projectId}.carouselDescription`, { returnObjects: true }) as string[]).map((paragraph, index) => (
-                <p key={index} className="text-gray-300 text-lg leading-relaxed">
+                <p key={index} className="text-gray-300 text-base md:text-lg xl:text-sm 2xl:text-base leading-relaxed">
                   {paragraph}
                 </p>
               ))
