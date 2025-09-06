@@ -30,9 +30,9 @@ interface LenisProviderProps {
   options?: LenisOptions;
 }
 
-export const LenisProvider = ({ 
-  children, 
-  options = {} 
+export const LenisProvider = ({
+  children,
+  options = {},
 }: LenisProviderProps) => {
   const lenisRef = useRef<Lenis | null>(null);
 
@@ -42,7 +42,7 @@ export const LenisProvider = ({
     smoothWheel: true,
     wheelMultiplier: 1,
     touchMultiplier: 2,
-    ...options
+    ...options,
   };
 
   const scrollTo = (target: string | number, options?: any) => {
@@ -58,7 +58,7 @@ export const LenisProvider = ({
   useEffect(() => {
     lenisRef.current = new Lenis({
       ...defaultOptions,
-      autoRaf: true
+      autoRaf: true,
     });
 
     return () => {
@@ -70,12 +70,15 @@ export const LenisProvider = ({
   }, []);
 
   return (
-    <LenisContext.Provider value={{
-      lenis: lenisRef.current,
-      scrollTo,
-      scrollToTop
-    }}>
+    <LenisContext.Provider
+      value={{
+        lenis: lenisRef.current,
+        scrollTo,
+        scrollToTop,
+      }}
+    >
       {children}
     </LenisContext.Provider>
   );
 };
+
