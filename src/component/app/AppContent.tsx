@@ -1,5 +1,5 @@
 import { ModalProvider } from "../../contexts/ModalContext";
-import { LenisProvider } from "../../contexts/LenisContext";
+import { LenisProvider } from "../../contexts/LenisProvider";
 import { AppRouter } from "./AppRouter";
 
 export const AppContent = () => {

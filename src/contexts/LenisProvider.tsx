@@ -1,5 +1,6 @@
-import { createContext, useContext, useEffect, useRef, ReactNode } from "react";
+import { useEffect, useRef, ReactNode, useMemo } from "react";
 import Lenis from "lenis";
+import { LenisContext, LenisScrollToOptions } from "./LenisContext";
 
 interface LenisOptions {
   lerp?: number;
@@ -8,22 +9,6 @@ interface LenisOptions {
   wheelMultiplier?: number;
   touchMultiplier?: number;
 }
-
-interface LenisContextValue {
-  lenis: Lenis | null;
-  scrollTo: (target: string | number, options?: any) => void;
-  scrollToTop: () => void;
-}
-
-const LenisContext = createContext<LenisContextValue | null>(null);
-
-export const useLenis = () => {
-  const context = useContext(LenisContext);
-  if (!context) {
-    throw new Error("useLenis must be used within LenisProvider");
-  }
-  return context;
-};
 
 interface LenisProviderProps {
   children: ReactNode;
@@ -36,16 +21,16 @@ export const LenisProvider = ({
 }: LenisProviderProps) => {
   const lenisRef = useRef<Lenis | null>(null);
 
-  const defaultOptions = {
+  const defaultOptions = useMemo(() => ({
     lerp: 0.05,
     duration: 1.2,
     smoothWheel: true,
     wheelMultiplier: 1,
     touchMultiplier: 2,
     ...options,
-  };
+  }), [options]);
 
-  const scrollTo = (target: string | number, options?: any) => {
+  const scrollTo = (target: string | number, options?: LenisScrollToOptions) => {
     if (lenisRef.current) {
       lenisRef.current.scrollTo(target, options);
     }
@@ -67,7 +52,7 @@ export const LenisProvider = ({
         lenisRef.current = null;
       }
     };
-  }, []);
+  }, [defaultOptions]);
 
   return (
     <LenisContext.Provider

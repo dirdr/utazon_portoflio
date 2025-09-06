@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { useLocation } from "wouter";
 import { getRouteAssets, shouldPreloadRoute } from "../config/routeAssets";
-import { useLenis } from "../contexts/LenisContext";
+import { useLenis } from "./useLenis";
 
 const preloadHomeVideo = (): Promise<void> => {
   return Promise.resolve();
@@ -133,7 +133,7 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
       pendingLocation: null,
       fadeInComplete: false,
     }));
-  }, [state.pendingLocation, setLocation, verifyCacheUrls, duration]);
+  }, [state.pendingLocation, setLocation, verifyCacheUrls, duration, scrollToTop]);
 
   // Navigate with transition (automatically determines assets to preload)
   const navigateWithTransition = useCallback(
