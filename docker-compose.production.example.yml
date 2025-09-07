@@ -1,0 +1,48 @@
+# Example docker-compose configuration for production environment
+# Place this in your utazon_portfolio_iac repository
+
+version: '3.8'
+
+services:
+  # Sitemap generator (init container)
+  utazon-sitemap-production:
+    image: ${DOCKER_USERNAME}/${APP_NAME}:${IMAGE_VERSION}
+    container_name: ${APP_NAME}-sitemap-production
+    target: sitemap-generator  # Use the sitemap-generator stage from Dockerfile
+    environment:
+      - VITE_SITE_URL=https://${UTAZON_DOMAIN_PRODUCTION}
+    volumes:
+      - sitemap_production:/app/sitemaps
+    networks:
+      - traefik_public
+    restart: "no"  # Run once and exit
+    profiles:
+      - init  # Use profile to control when this runs
+
+  # Main application
+  utazon-production:
+    image: ${DOCKER_USERNAME}/${APP_NAME}:${IMAGE_VERSION}
+    container_name: ${APP_NAME}-production
+    depends_on:
+      - utazon-sitemap-production
+    volumes:
+      - sitemap_production:/usr/share/nginx/html/sitemaps:ro
+    expose:
+      - 80
+    networks:
+      - traefik_public
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${APP_NAME}-production.rule=Host(`${UTAZON_DOMAIN_PRODUCTION}`)"
+      - "traefik.http.routers.${APP_NAME}-production.tls=true"
+      - "traefik.http.routers.${APP_NAME}-production.entrypoints=web,websecure"
+      - "traefik.http.routers.${APP_NAME}-production.tls.certresolver=letsencrypt"
+      - "traefik.http.services.${APP_NAME}-production.loadbalancer.server.port=80"
+
+volumes:
+  sitemap_production:
+
+networks:
+  traefik_public:
+    external: true

@@ -1,4 +1,5 @@
 import type { Project } from '../types/project';
+import { getBaseUrl, getOgImageUrl } from './env';
 
 // Base organization schema
 export const getOrganizationSchema = () => ({
@@ -6,8 +7,8 @@ export const getOrganizationSchema = () => ({
   "@type": "Organization",
   "name": "utazon",
   "alternateName": "Antoine Vernez",
-  "url": "https://utazon.com",
-  "logo": "https://utazon.com/src/assets/images/logo.svg",
+  "url": getBaseUrl(),
+  "logo": getOgImageUrl("images/logo.svg"),
   "sameAs": [
     "https://www.instagram.com/utazon/", // Replace with actual social links
     "https://www.linkedin.com/in/antoine-vernez/",
@@ -16,7 +17,7 @@ export const getOrganizationSchema = () => ({
   "contactPoint": {
     "@type": "ContactPoint",
     "contactType": "business",
-    "email": "contact@utazon.com" // Replace with actual email
+    "email": `contact@${getBaseUrl().replace(/^https?:\/\//, '')}` // Dynamic email based on domain
   }
 });
 
@@ -31,8 +32,8 @@ export const getPersonSchema = () => ({
     "@type": "Organization",
     "name": "utazon"
   },
-  "url": "https://utazon.com",
-  "image": "https://utazon.com/images/antoine-vernez.jpg", // Add profile image
+  "url": getBaseUrl(),
+  "image": getOgImageUrl("images/antoine-vernez.jpg"), // Add profile image
   "sameAs": [
     "https://www.instagram.com/utazon/",
     "https://www.linkedin.com/in/antoine-vernez/",
@@ -56,7 +57,7 @@ export const getWebsiteSchema = () => ({
   "@type": "WebSite",
   "name": "utazon - Antoine Vernez Portfolio",
   "alternateName": "utazon",
-  "url": "https://utazon.com",
+  "url": getBaseUrl(),
   "author": {
     "@type": "Person",
     "name": "Antoine Vernez"
@@ -65,7 +66,7 @@ export const getWebsiteSchema = () => ({
   "inLanguage": "fr-FR",
   "potentialAction": {
     "@type": "SearchAction",
-    "target": "https://utazon.com/projects?search={search_term_string}",
+    "target": `${getBaseUrl()}/projects?search={search_term_string}`,
     "query-input": "required name=search_term_string"
   }
 });
@@ -81,17 +82,17 @@ export const getCreativeWorkSchema = (project: Project) => ({
     "name": "Antoine Vernez",
     "alternateName": "utazon"
   },
-  "url": `https://utazon.com/projects/${project.id}`,
-  "image": `https://utazon.com/images/projects/${project.id}/cover.webp`,
-  "dateCreated": project.year.toString(),
-  "genre": project.tags?.join(', '),
-  "keywords": project.tags?.join(', '),
+  "url": `${getBaseUrl()}/projects/${project.id}`,
+  "image": getOgImageUrl(`images/projects/${project.id}/cover.webp`),
+  "dateCreated": project.date,
+  "genre": project.role,
+  "keywords": `${project.role}, ${project.client}, creative direction, video production`,
   "workExample": {
     "@type": "VideoObject",
     "name": project.title,
     "description": project.description,
-    "thumbnailUrl": `https://utazon.com/images/projects/${project.id}/cover.webp`,
-    "uploadDate": project.year.toString()
+    "thumbnailUrl": getOgImageUrl(`images/projects/${project.id}/cover.webp`),
+    "uploadDate": project.date
   }
 });
 
@@ -101,7 +102,7 @@ export const getPortfolioSchema = (projects: Project[]) => ({
   "@type": "CollectionPage",
   "name": "Projects - utazon Portfolio",
   "description": "Collection of creative projects by Antoine Vernez (utazon)",
-  "url": "https://utazon.com/projects",
+  "url": `${getBaseUrl()}/projects`,
   "author": {
     "@type": "Person",
     "name": "Antoine Vernez",
@@ -116,8 +117,8 @@ export const getPortfolioSchema = (projects: Project[]) => ({
       "item": {
         "@type": "CreativeWork",
         "name": project.title,
-        "url": `https://utazon.com/projects/${project.id}`,
-        "image": `https://utazon.com/images/projects/${project.id}/cover.webp`
+        "url": `${getBaseUrl()}/projects/${project.id}`,
+        "image": getOgImageUrl(`images/projects/${project.id}/cover.webp`)
       }
     }))
   }
@@ -153,7 +154,7 @@ export const getFAQSchema = () => ({
       "name": "How can I contact utazon for a project?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "You can contact Antoine Vernez through the contact form on the website or via email at contact@utazon.com."
+        "text": `You can contact Antoine Vernez through the contact form on the website or via email at contact@${getBaseUrl().replace(/^https?:\/\//, '')}.`
       }
     }
   ]

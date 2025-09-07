@@ -75,7 +75,7 @@ export const useBackgroundImageStore = create<BackgroundImageStore>((set, get) =
           clearTimeouts.delete(componentId);
         }, 100);
 
-        clearTimeouts.set(componentId, timeoutId);
+        clearTimeouts.set(componentId, timeoutId as unknown as number);
       }
     }
   },

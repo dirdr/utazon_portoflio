@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { getBaseUrl, getCanonicalUrl, getOgImageUrl } from '../../utils/env';
 
 export interface SEOProps {
   title?: string;
@@ -15,9 +16,9 @@ const DEFAULT_SEO: SEOProps = {
   title: 'utazon - Antoine Vernez | Creative Director & Visual Artist',
   description: 'Portfolio of Antoine Vernez (utazon) - Creative Director, Visual Artist and Video Producer. Discover innovative projects in advertising, music videos, and digital art.',
   keywords: 'Antoine Vernez, utazon, creative director, visual artist, video producer, advertising, music videos, digital art, motion graphics, post-production, France',
-  ogImage: 'https://utazon.com/images/og-image.jpg', // Add this image to public/images/
+  ogImage: getOgImageUrl('images/og-image.jpg'),
   ogType: 'website',
-  canonicalUrl: 'https://utazon.com',
+  canonicalUrl: getCanonicalUrl(),
 };
 
 export const SEOHead: React.FC<SEOProps> = ({
@@ -30,11 +31,11 @@ export const SEOHead: React.FC<SEOProps> = ({
   structuredData,
   noIndex = false,
 }) => {
-  const seoTitle = title || DEFAULT_SEO.title;
-  const seoDescription = description || DEFAULT_SEO.description;
-  const seoKeywords = keywords || DEFAULT_SEO.keywords;
-  const seoOgImage = ogImage || DEFAULT_SEO.ogImage;
-  const seoCanonicalUrl = canonicalUrl || DEFAULT_SEO.canonicalUrl;
+  const seoTitle = title || DEFAULT_SEO.title!;
+  const seoDescription = description || DEFAULT_SEO.description!;
+  const seoKeywords = keywords || DEFAULT_SEO.keywords!;
+  const seoOgImage = ogImage || DEFAULT_SEO.ogImage!;
+  const seoCanonicalUrl = canonicalUrl || DEFAULT_SEO.canonicalUrl!;
 
   useEffect(() => {
     // Update document title

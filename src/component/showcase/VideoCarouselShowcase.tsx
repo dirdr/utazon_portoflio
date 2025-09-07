@@ -72,7 +72,7 @@ export const VideoCarouselShowcase = ({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-4 items-center">
         <div className="flex items-start">
           <div className="w-px bg-gray-600 mr-6 lg:mr-8 flex-shrink-0 self-stretch"></div>
-          <div className="space-y-6 max-w-xl">
+          <div className="space-y-6 max-w-lg xl:max-w-xl 2xl:max-w:3xl">
             {projectId &&
               t(`projects.${projectId}.carouselDescription`, {
                 returnObjects: true,

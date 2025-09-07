@@ -103,7 +103,11 @@ jobs:
 
             docker-compose pull
 
-            docker-compose up -d
+            echo "🗺️  Generating sitemap..."
+            docker-compose --profile init up utazon-sitemap-$ENVIRONMENT
+
+            echo "🚀 Starting main application..."
+            docker-compose up -d utazon-$ENVIRONMENT
 
             sleep 5
 
@@ -120,7 +124,7 @@ jobs:
               
               mv ".env.backup" ".env"
               
-              docker-compose up -d
+              docker-compose up -d utazon-$ENVIRONMENT
               
               echo "📜 Error logs:"
               docker-compose logs --tail=50
