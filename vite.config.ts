@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [tailwindcss(), react()],
   assetsInclude: ['**/*.woff', '**/*.woff2', '**/*.ttf', '**/*.eot'],
   build: {
+    chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
         assetFileNames: (assetInfo) => {
@@ -17,7 +18,11 @@ export default defineConfig({
         manualChunks: {
           vendor: ['react', 'react-dom'],
           framer: ['framer-motion'],
-          ui: ['wouter', 'zustand']
+          ui: ['wouter', 'zustand'],
+          i18n: ['i18next', 'react-i18next', 'i18next-browser-languagedetector', 'i18next-http-backend'],
+          player: ['react-player', 'react-hover-video-player'],
+          intersection: ['react-intersection-observer'],
+          lenis: ['lenis']
         }
       }
     }

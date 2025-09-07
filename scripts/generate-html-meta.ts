@@ -82,7 +82,7 @@ const updateIndexHtml = () => {
 
   // Update structured data image URLs
   content = content.replace(
-    /("image": ")[^"]*\/images\/([^"]*\")/g,
+    /("image": ")[^"]*\/images\/([^"]*")/g,
     `$1${domain}/images/$2`,
   );
 
