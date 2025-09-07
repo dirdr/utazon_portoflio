@@ -9,6 +9,10 @@
     "build:staging": "VITE_SITE_URL=https://staging.utazon.fr npm run build",
     "build:production": "VITE_SITE_URL=https://utazon.fr npm run build",
     "update-meta": "tsx scripts/generate-html-meta.ts",
+    "generate:sitemap": "tsx scripts/generate-sitemap.ts",
+    "generate:robots": "tsx scripts/generate-robots.ts",
+    "sitemap:docker": "npm run generate:sitemap",
+    "robots:docker": "npm run generate:robots",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
