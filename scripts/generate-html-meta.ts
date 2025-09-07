@@ -1,7 +1,6 @@
 import fs from "fs";
 import path from "path";
 
-// Same environment detection as sitemap
 const getDomainFromEnv = (): string => {
   if (process.env.VITE_SITE_URL) {
     return process.env.VITE_SITE_URL;
@@ -83,7 +82,7 @@ const updateIndexHtml = () => {
 
   // Update structured data image URLs
   content = content.replace(
-    /("image": ")[^"]*\/images\/([^"]*")/g,
+    /("image": ")[^"]*\/images\/([^"]*\")/g,
     `$1${domain}/images/$2`,
   );
 

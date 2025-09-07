@@ -106,6 +106,9 @@ jobs:
             echo "🗺️  Generating sitemap and robots.txt..."
             docker-compose --profile init up utazon-sitemap-$ENVIRONMENT utazon-robots-$ENVIRONMENT
 
+            echo "🛑 Stopping existing containers..."
+            docker-compose down utazon-$ENVIRONMENT || true
+
             echo "🚀 Starting main application..."
             docker-compose up -d utazon-$ENVIRONMENT
 
