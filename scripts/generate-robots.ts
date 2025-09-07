@@ -16,7 +16,7 @@ Sitemap: ${SITE_URL}/sitemap.xml
 Crawl-delay: 1
 `;
 
-  const outputPath = resolve('/app/robots.txt');
+  const outputPath = resolve('/usr/share/nginx/html/seo/robots.txt');
   writeFileSync(outputPath, robotsTxtContent, 'utf8');
   
   console.log(`Robots.txt generated successfully at ${outputPath}`);

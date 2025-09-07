@@ -61,14 +61,35 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push Docker image
+      - name: Build and push main application image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/utazon-portfolio:${{ github.event.inputs.tag }}
+          target: production
           build-args: |
             VITE_UTAZON_API_URL=${{ secrets.VITE_UTAZON_API_URL }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build and push sitemap generator image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/utazon-portfolio:${{ github.event.inputs.tag }}-sitemap
+          target: sitemap-generator
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build and push robots generator image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/utazon-portfolio:${{ github.event.inputs.tag }}-robots
+          target: robots-generator
           cache-from: type=gha
           cache-to: type=gha,mode=max
 

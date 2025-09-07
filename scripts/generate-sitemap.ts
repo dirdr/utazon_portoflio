@@ -17,7 +17,7 @@ async function generateSitemap() {
 
   // Create a stream to write to
   const sitemapStream = new SitemapStream({ hostname: SITE_URL });
-  const writeStream = createWriteStream(resolve('/app/sitemap.xml'));
+  const writeStream = createWriteStream(resolve('/usr/share/nginx/html/seo/sitemap.xml'));
   
   sitemapStream.pipe(writeStream);
 
@@ -36,7 +36,7 @@ async function generateSitemap() {
   // Wait for the sitemap to be written
   await streamToPromise(sitemapStream);
   
-  console.log('Sitemap generated successfully at /app/sitemap.xml');
+  console.log('Sitemap generated successfully at /usr/share/nginx/html/seo/sitemap.xml');
 }
 
 generateSitemap().catch(console.error);
