@@ -5,15 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run update-meta && tsc && vite build && npm run robots",
+    "build": "npm run update-meta && tsc && vite build",
     "build:staging": "VITE_SITE_URL=https://staging.utazon.fr npm run build",
     "build:production": "VITE_SITE_URL=https://utazon.fr npm run build",
-    "sitemap": "tsx scripts/generate-sitemap.ts",
-    "sitemap:docker": "node scripts/generate-sitemap-docker.js",
-    "robots": "tsx scripts/generate-robots.ts",
     "update-meta": "tsx scripts/generate-html-meta.ts",
-    "sitemap:dev": "NODE_ENV=development tsx scripts/generate-sitemap.ts",
-    "sitemap:preview": "NODE_ENV=preview tsx scripts/generate-sitemap.ts",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },

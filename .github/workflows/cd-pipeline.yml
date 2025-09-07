@@ -103,8 +103,8 @@ jobs:
 
             docker-compose pull
 
-            echo "🗺️  Generating sitemap..."
-            docker-compose --profile init up utazon-sitemap-$ENVIRONMENT
+            echo "🗺️  Generating sitemap and robots.txt..."
+            docker-compose --profile init up utazon-sitemap-$ENVIRONMENT utazon-robots-$ENVIRONMENT
 
             echo "🚀 Starting main application..."
             docker-compose up -d utazon-$ENVIRONMENT
