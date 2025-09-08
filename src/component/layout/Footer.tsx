@@ -7,11 +7,14 @@ import { InstagramIcon } from "../common/InstagramIcon";
 import { LinkedInIcon } from "../common/LinkedInIcon";
 import { BehanceIcon } from "../common/BehanceIcon";
 import { useTransitionContext } from "../../hooks/useTransitionContext";
+import { useModal } from "../../contexts/ModalContext";
+import { ContactModal } from "../common/ContactModal";
 import { useCallback } from "react";
 
 export const Footer = () => {
   const { t } = useTranslation();
   const { navigateWithTransition } = useTransitionContext();
+  const { openModal, closeModal } = useModal();
   const currentYear = new Date().getFullYear();
 
   const handleLegalClick = useCallback(
@@ -41,9 +44,9 @@ export const Footer = () => {
   const handleContactClick = useCallback(
     (e: React.MouseEvent) => {
       e.preventDefault();
-      navigateWithTransition(ROUTES.CONTACT);
+      openModal(<ContactModal onClose={closeModal} />);
     },
-    [navigateWithTransition],
+    [openModal, closeModal],
   );
 
   return (
@@ -80,13 +83,12 @@ export const Footer = () => {
               >
                 {t("nav.about")}
               </Link>
-              <Link
-                href={ROUTES.CONTACT}
+              <button
                 onClick={handleContactClick}
-                className="text-white hover:text-white transition-colors duration-200 text-sm"
+                className="text-white hover:text-white transition-colors duration-200 text-sm text-left"
               >
                 {t("nav.contact")}
-              </Link>
+              </button>
             </nav>
 
             <div className="flex flex-col items-start gap-3">

@@ -3,7 +3,6 @@ import { About } from "../pages/About";
 import { HomeContainer } from "../pages/HomeContainer";
 import { Projects } from "../pages/Projects";
 import { ProjectDetail } from "../pages/ProjectDetail";
-import { Contact } from "../pages/Contact";
 import { Legal } from "../pages/Legal";
 import { ROUTES } from "../../constants/routes";
 import { Route, Switch } from "wouter";
@@ -46,7 +45,6 @@ export const AppRouter = () => {
           <Route path={ROUTES.ABOUT} component={About} />
           <Route path={ROUTES.PROJECTS} component={Projects} />
           <Route path="/projects/:id" component={ProjectDetail} />
-          <Route path={ROUTES.CONTACT} component={Contact} />
           <Route path={ROUTES.LEGAL} component={Legal} />
           <Route>
             <div className="min-h-screen bg-background flex items-center justify-center">

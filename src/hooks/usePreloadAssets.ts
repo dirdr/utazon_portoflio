@@ -102,6 +102,32 @@ export const usePreloadAssets = () => {
           type: "video",
         });
       }
+
+      // Add DALS project carousel videos to preloading
+      if (project.id === "dals" && project.showcases) {
+        project.showcases.forEach((showcase) => {
+          if (showcase.type === "video-carousel" && showcase.videos) {
+            showcase.videos.forEach((video) => {
+              assets.push({
+                url: video.src,
+                loaded: false,
+                error: false,
+                type: "video",
+              });
+            });
+          }
+          if (showcase.type === "video-grid" && showcase.videos) {
+            showcase.videos.forEach((video) => {
+              assets.push({
+                url: video.src,
+                loaded: false,
+                error: false,
+                type: "video",
+              });
+            });
+          }
+        });
+      }
     });
 
     return assets;
