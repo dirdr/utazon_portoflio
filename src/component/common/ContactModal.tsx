@@ -138,13 +138,13 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
 
   return (
     <div
-      className="px-4 sm:px-6 lg:px-8 xl:px-16 pt-4 sm:pt-8 lg:pt-12 pb-4 sm:pb-8 lg:pb-12 h-full overflow-y-auto bg-cover bg-center bg-no-repeat relative"
+      className="px-3 sm:px-6 lg:px-8 xl:px-16 pt-4 sm:pt-8 lg:pt-12 pb-4 sm:pb-8 lg:pb-12 h-full overflow-y-auto bg-cover bg-center bg-no-repeat relative"
       style={{
         backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${backgroundImage})`,
       }}
     >
       <div className="flex justify-between items-center mb-4 sm:mb-8 lg:mb-12">
-        <p className="text-xs sm:text-base text-white font-nord">
+        <p className="text-xs sm:text-base text-white font-nord flex-1 pr-2">
           {t(
             "contact.description",
             "Share your vision, I'll help you bring it to life",
@@ -152,7 +152,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
         </p>
         <button
           onClick={handleClose}
-          className="ml-4 p-2 text-white transition-all duration-200 hover:scale-110 focus:outline-none"
+          className="flex-shrink-0 p-2 text-white transition-all duration-200 hover:scale-110 focus:outline-none"
           aria-label="Close modal"
           disabled={isSubmitting}
         >
@@ -208,7 +208,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
 
       {!isSubmitted && (
         <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 lg:gap-6 xl:gap-10 mb-3 sm:mb-6 lg:mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 lg:gap-6 xl:gap-10 mb-3 sm:mb-6 lg:mb-8">
             <div>
               <label
                 htmlFor="firstName"
@@ -274,7 +274,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 lg:gap-6 xl:gap-10 mb-3 sm:mb-6 lg:mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 lg:gap-6 xl:gap-10 mb-3 sm:mb-6 lg:mb-8">
             <div>
               <label
                 htmlFor="email"

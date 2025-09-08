@@ -125,10 +125,9 @@ export const Modal: React.FC<ModalProps> = ({
       <div
         ref={modalRef}
         className={cn(
-          "fixed left-1/2 top-1/2 w-full max-w-3xl max-h-[90vh]",
+          "fixed left-1/2 top-1/2 w-[calc(100vw-2rem)] sm:w-[calc(100vw-4rem)] max-w-3xl max-h-[90vh]",
           "bg-background rounded-2xl shadow-2xl",
           "flex flex-col overflow-hidden",
-          "mx-4",
           isClosing ? "animate-modal-content-out" : "animate-modal-content-in",
           className,
         )}
