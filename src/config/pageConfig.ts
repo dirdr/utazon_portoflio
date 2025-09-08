@@ -22,11 +22,6 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     showNavbarLogo: true,
     navbarMode: "normal",
   },
-  [ROUTES.CONTACT]: {
-    showFooter: true,
-    showNavbarLogo: true,
-    navbarMode: "normal",
-  },
   [ROUTES.LEGAL]: {
     showFooter: true,
     showNavbarLogo: true,

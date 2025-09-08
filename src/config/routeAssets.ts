@@ -5,7 +5,7 @@ export interface RouteAssetConfig {
   images?: string[];
   videos?: string[];
   fonts?: string[];
-  priority?: 'low' | 'medium' | 'high';
+  priority?: "low" | "medium" | "high";
 }
 
 /**
@@ -17,27 +17,27 @@ export const ROUTE_ASSETS: Record<string, RouteAssetConfig> = {
     images: [
       // Already handled by global loader
     ],
-    priority: 'high',
+    priority: "high",
   },
 
   [ROUTES.PROJECTS]: {
     images: [
       // All project cover images
-      ...allProjectsSortedByPriority.map(project => 
-        `/images/projects/${project.id}/cover.webp`
+      ...allProjectsSortedByPriority.map(
+        (project) => `/images/projects/${project.id}/cover.webp`,
       ),
       // All project background images
-      ...allProjectsSortedByPriority.map(project => 
-        `/images/projects/${project.id}/background.webp`
+      ...allProjectsSortedByPriority.map(
+        (project) => `/images/projects/${project.id}/background.webp`,
       ),
     ],
     videos: [
       // Project thumbnails (optional)
       ...allProjectsSortedByPriority
-        .filter(project => project.hasVideo !== false)
-        .map(project => `/videos/projects/${project.id}/thumbnail.webm`),
+        .filter((project) => project.hasVideo !== false)
+        .map((project) => `/videos/projects/${project.id}/thumbnail.webm`),
     ],
-    priority: 'high',
+    priority: "high",
   },
 
   [ROUTES.ABOUT]: {
@@ -46,19 +46,12 @@ export const ROUTE_ASSETS: Record<string, RouteAssetConfig> = {
       // '/images/about/profile.webp',
       // '/images/about/skills.webp',
     ],
-    priority: 'medium',
-  },
-
-  [ROUTES.CONTACT]: {
-    images: [
-      // Contact page assets
-    ],
-    priority: 'low',
+    priority: "medium",
   },
 
   [ROUTES.LEGAL]: {
     images: [],
-    priority: 'low',
+    priority: "low",
   },
 };
 
@@ -66,9 +59,12 @@ export const ROUTE_ASSETS: Record<string, RouteAssetConfig> = {
  * Dynamic route patterns (e.g., /projects/:id)
  * Returns assets based on route parameters
  */
-export const getDynamicRouteAssets = (route: string, params: Record<string, string>): RouteAssetConfig => {
+export const getDynamicRouteAssets = (
+  route: string,
+  params: Record<string, string>,
+): RouteAssetConfig => {
   // Project detail pages
-  if (route.startsWith('/projects/') && params.id) {
+  if (route.startsWith("/projects/") && params.id) {
     const projectId = params.id;
     return {
       images: [
@@ -76,25 +72,28 @@ export const getDynamicRouteAssets = (route: string, params: Record<string, stri
         `/images/projects/${projectId}/background.webp`,
       ],
       videos: [],
-      priority: 'high',
+      priority: "high",
     };
   }
 
-  return { images: [], priority: 'low' };
+  return { images: [], priority: "low" };
 };
 
 /**
  * Get all assets for a given route
  */
-export const getRouteAssets = (route: string, params?: Record<string, string>): string[] => {
+export const getRouteAssets = (
+  route: string,
+  params?: Record<string, string>,
+): string[] => {
   let config: RouteAssetConfig;
 
   // Check for dynamic routes first
   if (params && Object.keys(params).length > 0) {
     config = getDynamicRouteAssets(route, params);
-  } else if (route.startsWith('/projects/')) {
+  } else if (route.startsWith("/projects/")) {
     // Handle project detail routes without explicit params
-    const projectId = route.split('/projects/')[1];
+    const projectId = route.split("/projects/")[1];
     config = getDynamicRouteAssets(route, { id: projectId });
   } else {
     // Static routes
@@ -113,11 +112,12 @@ export const getRouteAssets = (route: string, params?: Record<string, string>): 
  */
 export const shouldPreloadRoute = (route: string): boolean => {
   const config = ROUTE_ASSETS[route];
-  
+
   // Project detail routes should preload
-  if (route.startsWith('/projects/')) {
+  if (route.startsWith("/projects/")) {
     return true;
   }
-  
-  return config?.priority === 'high' || config?.priority === 'medium';
+
+  return config?.priority === "high" || config?.priority === "medium";
 };
+
