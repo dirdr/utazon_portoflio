@@ -15,7 +15,6 @@ ENV VITE_SITE_URL=$VITE_SITE_URL
 
 RUN npm run build
 
-# Production stage for serving static files
 FROM nginx:stable-alpine as production
 
 COPY --from=build /app/dist /usr/share/nginx/html
@@ -25,32 +24,26 @@ EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
 
-# Utility stage for sitemap generation (init container)
 FROM node:22-alpine as sitemap-generator
 
 WORKDIR /app
 
-# Copy package files and install dependencies (need tsx for TypeScript execution)
 COPY package*.json ./
 RUN npm ci
 
-# Copy scripts needed for sitemap generation
 COPY scripts/ ./scripts/
+COPY src/ ./src/
 
-# Set default command for sitemap generation
 CMD ["npm", "run", "sitemap:docker"]
 
-# Utility stage for robots.txt generation (init container)
 FROM node:22-alpine as robots-generator
 
 WORKDIR /app
 
-# Copy package files and install dependencies (need tsx for TypeScript execution)
 COPY package*.json ./
 RUN npm ci
 
-# Copy scripts needed for robots.txt generation
 COPY scripts/ ./scripts/
+COPY src/ ./src/
 
-# Set default command for robots.txt generation
 CMD ["npm", "run", "robots:docker"]
