@@ -26,35 +26,30 @@ export const About = () => {
   return (
     <Container>
       <div className="h-full w-full flex flex-col justify-start pt-4 sm:pt-32">
-        <section className="mb-8 sm:mb-12 lg:mb-16">
+        <header className="mb-8 sm:mb-12 lg:mb-16">
           <div className="lg:grid lg:grid-cols-3 lg:gap-8 xl:gap-16">
-            <div className="mb-8 lg:mb-0" aria-labelledby="title-heading">
-              <LineSweepText
-                className="font-nord text-3xl md:text-4xl lg:text-5xl italic text-muted tracking-tight"
-                duration={6}
-              >
-                {titleContent}
-              </LineSweepText>
+            <div className="mb-8 lg:mb-0">
+              <h1 className="font-nord text-3xl md:text-4xl lg:text-5xl italic text-muted tracking-tight">
+                <LineSweepText duration={6}>
+                  {titleContent}
+                </LineSweepText>
+              </h1>
             </div>
 
             <div className="hidden lg:block"></div>
 
-            <div
-              className="flex items-start"
-              aria-labelledby="about-description"
-            >
+            <div className="flex items-start">
               <div className="w-px bg-gray-600 mr-6 lg:mr-8 flex-shrink-0 self-stretch"></div>
-              <p
-                id="about-description"
-                className="text-sm md:text-base xl:text-lg text-gray"
-              >
+              <p className="text-sm md:text-base xl:text-lg text-gray">
                 {t("about.description")}
               </p>
             </div>
           </div>
-        </section>
+        </header>
 
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 md:gap-8 xl:gap-4 2xl:gap-8 mb-8 sm:mb-12 lg:mb-16">
+        <section className="mb-8 sm:mb-12 lg:mb-16">
+          <h2 className="sr-only">Services</h2>
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 md:gap-8 xl:gap-4 2xl:gap-8">
           <ProjectVideoCard
             video={{
               src: "/videos/about/card1.mp4",
@@ -79,18 +74,18 @@ export const About = () => {
             title={t("about.services.editingCompositing.title")}
             description={t("about.services.editingCompositing.description")}
           />
-        </div>
+          </div>
+        </section>
 
-        <div className="relative">
+        <section className="relative">
           <div className="grid grid-cols-1 xl:grid-cols-3">
             <div className="flex flex-col">
               <div className="mb-4 xl:my-20">
-                <LineSweepText
-                  className="text-muted font-nord text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold tracking-wide"
-                  duration={6}
-                >
-                  {t("about.toolsMastered")}
-                </LineSweepText>
+                <h2 className="text-muted font-nord text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold tracking-wide">
+                  <LineSweepText duration={6}>
+                    {t("about.toolsMastered")}
+                  </LineSweepText>
+                </h2>
               </div>
 
               <div className="space-y-2 sm:space-y-3 md:space-y-4 lg:space-y-6 xl:space-y-8 2xl:space-y-16">
@@ -138,18 +133,15 @@ export const About = () => {
               />
             </div>
           </div>
-          <div className="w-full my-32 lg:my-48">
+          
+          <section className="w-full my-32 lg:my-48">
             <div className="max-w-2xl mx-auto text-center">
-              <LineSweepText
-                className="text-muted font-nord text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold tracking-wide mb-8"
-                duration={4}
-              >
-                {t("about.commitment")}
-              </LineSweepText>
-              <p
-                id="commitment-desc"
-                className="text-white text-sm md:text-base xl:text-lg leading-relaxed mb-16"
-              >
+              <h2 className="text-muted font-nord text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold tracking-wide mb-8">
+                <LineSweepText duration={4}>
+                  {t("about.commitment")}
+                </LineSweepText>
+              </h2>
+              <p className="text-white text-sm md:text-base xl:text-lg leading-relaxed mb-16">
                 {t("about.commitmentDesc")}
               </p>
               <div className="flex justify-center">
@@ -164,8 +156,8 @@ export const About = () => {
                 </Button>
               </div>
             </div>
-          </div>
-        </div>
+          </section>
+        </section>
       </div>
     </Container>
   );

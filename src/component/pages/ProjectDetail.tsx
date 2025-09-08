@@ -29,18 +29,20 @@ export const ProjectDetail = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <article className="min-h-screen flex flex-col">
       <div className="flex-1 mb-4 lg:mb-16">
-        <div className="mb-4 md:mb-16">
+        <header className="mb-4 md:mb-16">
           <ProjectHeroSection project={displayProject} />
-        </div>
+        </header>
         {displayProject.showcases && displayProject.showcases.length > 0 && (
-          <ShowcaseList
-            showcases={displayProject.showcases}
-            project={displayProject}
-          />
+          <main>
+            <ShowcaseList
+              showcases={displayProject.showcases}
+              project={displayProject}
+            />
+          </main>
         )}
       </div>
-    </div>
+    </article>
   );
 };

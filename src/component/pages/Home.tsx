@@ -64,20 +64,17 @@ export const Home = ({ onVideoMuteToggle }: HomeProps) => {
               Paris, France
             </p>
           </address>
-          <section aria-labelledby="title-heading">
-            <LineSweepText
-              className="font-nord text-2xl sm:text-3xl md:text-4xl italic text-muted tracking-tight leading-tight mb-2"
-              duration={6}
-            >
-              {titleContent}
-            </LineSweepText>
-          </section>
+          <header>
+            <h1 id="title-heading" className="font-nord text-2xl sm:text-3xl md:text-4xl italic text-muted tracking-tight leading-tight mb-2">
+              <LineSweepText duration={6}>
+                {titleContent}
+              </LineSweepText>
+            </h1>
+          </header>
 
-          <section aria-labelledby="intro-heading">
-            <p
-              id="intro-heading"
-              className="text-sm sm:text-base text-gray mb-4"
-            >
+          <section aria-labelledby="description-heading">
+            <h2 id="description-heading" className="sr-only">Description</h2>
+            <p className="text-sm sm:text-base text-gray mb-4">
               {t("home.description")}
             </p>
           </section>
@@ -130,19 +127,16 @@ export const Home = ({ onVideoMuteToggle }: HomeProps) => {
               </p>
             </div>
           </address>
-          <LineSweepText
-            className="font-nord text-5xl italic text-muted tracking-tight "
-            duration={8}
-          >
-            {titleContent}
-          </LineSweepText>
+          <h1 className="font-nord text-5xl italic text-muted tracking-tight">
+            <LineSweepText duration={8}>
+              {titleContent}
+            </LineSweepText>
+          </h1>
         </section>
 
         <section className="w-120 2xl:w-140" aria-labelledby="intro-heading">
-          <p
-            id="intro-heading"
-            className="text-base 2xl:text-lg text-gray mb-8"
-          >
+          <h2 id="intro-heading" className="sr-only">Introduction</h2>
+          <p className="text-base 2xl:text-lg text-gray mb-8">
             {t("home.description")}
           </p>
           <nav className="flex gap-8" aria-label="Actions principales">

@@ -20,7 +20,7 @@ export const GridImagesShowcase = ({
     <div className={cn("w-full", className)}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-8">
         {images.map((image, index) => (
-          <div key={index} className="w-full">
+          <figure key={index} className="w-full">
             <ShowcaseImage
               src={image.src}
               alt={image.alt}
@@ -31,11 +31,11 @@ export const GridImagesShowcase = ({
               )}
             />
             {image.caption && (
-              <p className="text-sm text-gray-600 mt-2 text-center">
+              <figcaption className="text-sm text-gray-600 mt-2 text-center">
                 {image.caption}
-              </p>
+              </figcaption>
             )}
-          </div>
+          </figure>
         ))}
       </div>
     </div>

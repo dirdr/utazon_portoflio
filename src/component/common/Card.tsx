@@ -94,7 +94,7 @@ export const Card = ({
   };
 
   return (
-    <div
+    <article
       ref={animationRef}
       className={cn(
         "group glint-card-wrapper cursor-pointer w-full card-item",
@@ -112,7 +112,7 @@ export const Card = ({
           background: `url(${randomBackground}) center/cover`,
         }}
       >
-        <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden group">
+        <figure className="relative aspect-[16/9] w-full rounded-xl overflow-hidden group">
           <img
             src={image.src}
             alt={image.alt}
@@ -169,7 +169,7 @@ export const Card = ({
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent" />
 
-          <div className="absolute bottom-0 left-0 p-6">
+          <figcaption className="absolute bottom-0 left-0 p-6">
             <div className="flex items-start gap-4">
               <div className="w-px bg-white self-stretch min-h-[40px]" />
               <div className="flex-1">
@@ -191,12 +191,12 @@ export const Card = ({
                 </p>
               </div>
             </div>
-          </div>
+          </figcaption>
 
           <div className="absolute top-[5%] left-[90%]">
-            <div className="text-muted font-nord font-light text-xs sm:text-base md:text-lg lg:text:xl xl:text:lg">
+            <time className="text-muted font-nord font-light text-xs sm:text-base md:text-lg lg:text:xl xl:text:lg">
               {project.date}
-            </div>
+            </time>
           </div>
 
           <div className="absolute bottom-8 right-8 transform translate-x-full opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 ease-out will-change-transform">
@@ -212,8 +212,8 @@ export const Card = ({
               {t("common.seeProject")}
             </Button>
           </div>
-        </div>
+        </figure>
       </div>
-    </div>
+    </article>
   );
 };

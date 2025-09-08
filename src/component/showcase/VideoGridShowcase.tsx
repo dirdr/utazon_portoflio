@@ -22,7 +22,7 @@ export const VideoGridShowcase = ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-8">
         {videos.map((video, index) => {
           return (
-            <div key={index} className="w-full">
+            <figure key={index} className="w-full">
               <div
                 className={cn(
                   "w-full aspect-video overflow-hidden",
@@ -39,7 +39,10 @@ export const VideoGridShowcase = ({
                   playsInline
                 />
               </div>
-            </div>
+              {video.title && (
+                <figcaption className="sr-only">{video.title}</figcaption>
+              )}
+            </figure>
           );
         })}
       </div>

@@ -58,14 +58,14 @@ export const Footer = () => {
               <a href="/" className="flex-shrink-0">
                 <img src={logo} alt="Utazon Logo" className="h-10 w-auto" />
               </a>
-              <div className="flex flex-col">
+              <address className="not-italic flex flex-col">
                 <a href="/" className="text-base  mb-1">
                   {t("common.utazon")}
                 </a>
                 <a href="/" className="text-muted text-xs">
                   {t("common.antoine_vernez")}
                 </a>
-              </div>
+              </address>
             </div>
             <nav className="flex flex-col items-start md:items-start">
               <h4 className="text-muted text-sm mb-3">Menu</h4>
