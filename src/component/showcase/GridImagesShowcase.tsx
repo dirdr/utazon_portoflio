@@ -18,7 +18,7 @@ export const GridImagesShowcase = ({
 
   return (
     <div className={cn("w-full", className)}>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-8">
         {images.map((image, index) => (
           <div key={index} className="w-full">
             <ShowcaseImage

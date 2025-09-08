@@ -77,9 +77,7 @@ export const CarouselVideoCard = ({
         src={src}
         className="w-full h-full object-cover"
         muted
-        loop
         playsInline
-        autoPlay
       />
     </div>
   );

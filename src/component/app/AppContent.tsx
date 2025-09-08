@@ -8,9 +8,9 @@ export const AppContent = () => {
       <LenisProvider
         options={{
           lerp: 0.1,
-          duration: 1.2,
+          duration: 1,
           smoothWheel: true,
-          wheelMultiplier: 0.8,
+          wheelMultiplier: 0.9,
           touchMultiplier: 1,
         }}
       >

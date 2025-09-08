@@ -24,6 +24,17 @@ export const Modal: React.FC<ModalProps> = ({
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const previousActiveElement = useRef<HTMLElement | null>(null);
+  const [isLargeScreen, setIsLargeScreen] = React.useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsLargeScreen(window.innerHeight > 700);
+    };
+    
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     if (!closeOnEscape) return;
@@ -43,14 +54,22 @@ export const Modal: React.FC<ModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       previousActiveElement.current = document.activeElement as HTMLElement;
+      document.body.style.overflow = 'hidden';
 
       if (modalRef.current) {
         modalRef.current.focus();
       }
-    } else if (previousActiveElement.current) {
-      previousActiveElement.current.focus();
-      previousActiveElement.current = null;
+    } else {
+      document.body.style.overflow = '';
+      if (previousActiveElement.current) {
+        previousActiveElement.current.focus();
+        previousActiveElement.current = null;
+      }
     }
+
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [isOpen]);
 
   const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -90,28 +109,32 @@ export const Modal: React.FC<ModalProps> = ({
 
   const modalContent = (
     <div
-      className="fixed inset-0 flex items-center justify-center p-4"
-      style={{ zIndex: OVERLAY_Z_INDEX.CONTACT_MODAL }}
+      className={cn(
+        "fixed inset-0",
+        isClosing ? "animate-modal-backdrop-out" : "animate-modal-backdrop-in"
+      )}
+      style={{ 
+        zIndex: OVERLAY_Z_INDEX.CONTACT_MODAL,
+      }}
       onClick={handleBackdropClick}
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
     >
-      <div className={cn(
-        "absolute inset-0 bg-black/50",
-        isClosing ? "animate-modal-backdrop-out" : "animate-modal-backdrop-in"
-      )} />
-
       <div
         ref={modalRef}
         className={cn(
-          "relative z-10 w-full max-w-3xl max-h-[80vh]",
+          "fixed left-1/2 top-1/2 w-full max-w-3xl max-h-[90vh]",
           "bg-background rounded-2xl shadow-2xl",
           "flex flex-col overflow-hidden",
-          isClosing ? "animate-modal-slide-up-out" : "animate-modal-slide-up-in",
+          "mx-4",
+          isClosing ? "animate-modal-content-out" : "animate-modal-content-in",
           className,
         )}
-        style={{ border: '1px solid #565656' }}
+        style={{ 
+          border: '1px solid #565656',
+          transform: 'translate(-50%, -50%)'
+        }}
         tabIndex={-1}
         onKeyDown={handleKeyDown}
       >

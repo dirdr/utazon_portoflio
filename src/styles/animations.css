@@ -90,71 +90,69 @@
     will-change: auto;
   }
 
-  /* Modal animations */
-  @keyframes modal-fade-in {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
+  /* Modal animations - smooth full-screen opacity overlay */
   @keyframes modal-backdrop-in {
     from {
-      opacity: 0;
+      backdrop-filter: blur(0px);
+      background-color: rgba(0, 0, 0, 0);
     }
     to {
-      opacity: 1;
+      backdrop-filter: blur(4px);
+      background-color: rgba(0, 0, 0, 0.6);
     }
-  }
-
-  @keyframes modal-slide-up-in {
-    from {
-      transform: translateY(100%);
-    }
-    to {
-      transform: translateY(0);
-    }
-  }
-
-  .animate-modal-backdrop-in {
-    animation: modal-backdrop-in 0.5s ease-out;
-  }
-
-  .animate-modal-slide-up-in {
-    animation: modal-slide-up-in 0.5s ease-out;
-    transform: translateZ(0);
   }
 
   @keyframes modal-backdrop-out {
     from {
+      backdrop-filter: blur(4px);
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+    to {
+      backdrop-filter: blur(0px);
+      background-color: rgba(0, 0, 0, 0);
+    }
+  }
+
+  @keyframes modal-content-in {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.9) translateZ(0);
+    }
+    to {
       opacity: 1;
+      transform: translate(-50%, -50%) scale(1) translateZ(0);
+    }
+  }
+
+  @keyframes modal-content-out {
+    from {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1) translateZ(0);
     }
     to {
       opacity: 0;
+      transform: translate(-50%, -50%) scale(0.9) translateZ(0);
     }
   }
 
-  @keyframes modal-slide-up-out {
-    from {
-      transform: translateY(0);
-    }
-    to {
-      transform: translateY(100vh);
-    }
+  .animate-modal-backdrop-in {
+    animation: modal-backdrop-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    animation-fill-mode: both;
   }
 
   .animate-modal-backdrop-out {
-    animation: modal-backdrop-out 0.5s ease-out;
+    animation: modal-backdrop-out 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     animation-fill-mode: forwards;
   }
 
-  .animate-modal-slide-up-out {
-    animation: modal-slide-up-out 0.5s ease-out;
+  .animate-modal-content-in {
+    animation: modal-content-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    animation-fill-mode: both;
+  }
+
+  .animate-modal-content-out {
+    animation: modal-content-out 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     animation-fill-mode: forwards;
-    transform: translateZ(0);
-    will-change: transform;
   }
 
   @keyframes sound-wave {

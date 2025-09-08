@@ -138,14 +138,12 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
 
   return (
     <div
-      className="px-6 sm:px-8 lg:px-16 pt-8 sm:pt-16 pb-8 sm:pb-16 min-h-full max-h-[100vh] overflow-y-auto bg-cover bg-center bg-no-repeat relative rounded-2xl border border-gray-500"
-      role="dialog"
-      aria-modal="true"
+      className="px-4 sm:px-6 lg:px-8 xl:px-16 pt-4 sm:pt-8 lg:pt-12 pb-4 sm:pb-8 lg:pb-12 h-full overflow-y-auto bg-cover bg-center bg-no-repeat relative"
       style={{
         backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${backgroundImage})`,
       }}
     >
-      <div className="flex justify-between items-center mb-8 sm:mb-16">
+      <div className="flex justify-between items-center mb-4 sm:mb-8 lg:mb-12">
         <p className="text-xs sm:text-base text-white font-nord">
           {t(
             "contact.description",
@@ -175,7 +173,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
       </div>
 
       {isSubmitted && (
-        <div className="mb-8 sm:mb-12 lg:mb-18 p-4 bg-green-500/10 border border-green-500/20 rounded-lg text-center">
+        <div className="mb-4 sm:mb-6 lg:mb-8 p-4 bg-green-500/10 border border-green-500/20 rounded-lg text-center">
           <div className="text-green-400 mb-2">
             <svg
               className="w-8 h-8 mx-auto"
@@ -201,7 +199,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
       )}
 
       {errors.general && (
-        <div className="mb-8 sm:mb-12 lg:mb-18 p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-center">
+        <div className="mb-4 sm:mb-6 lg:mb-8 p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-center">
           <p className="text-red-400 text-xs font-nord font-thin">
             {errors.general}
           </p>
@@ -209,8 +207,8 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
       )}
 
       {!isSubmitted && (
-        <form onSubmit={handleSubmit} className="space-y-3">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 lg:gap-10 mb-3 sm:mb-8 lg:mb-12">
+        <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 lg:gap-6 xl:gap-10 mb-3 sm:mb-6 lg:mb-8">
             <div>
               <label
                 htmlFor="firstName"
@@ -276,7 +274,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 lg:gap-10 mb-3 sm:mb-8 lg:mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 lg:gap-6 xl:gap-10 mb-3 sm:mb-6 lg:mb-8">
             <div>
               <label
                 htmlFor="email"
@@ -374,7 +372,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
             )}
           </div>
 
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4 sm:mt-12">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4 sm:pt-6 lg:pt-8">
             <div className="flex items-center gap-3 sm:gap-4 lg:gap-6 order-2 sm:order-1">
               <a
                 href="https://instagram.com/utazon"

@@ -51,25 +51,29 @@ export const VideoCarouselShowcase = ({
 
   useEffect(() => {
     if (isVideoEnded) {
-      const timer = setTimeout(() => {
-        const nextIndex = (currentIndex + 1) % data.videos.length;
-        setCurrentIndex(nextIndex);
-        setIsVideoEnded(false);
-        setIsProgressRunning(false);
-        setAnimationKey((prev) => prev + 1);
-      }, 500);
-      return () => clearTimeout(timer);
+      const nextIndex = (currentIndex + 1) % data.videos.length;
+      setCurrentIndex(nextIndex);
+      setIsVideoEnded(false);
+      setIsProgressRunning(false);
+      setAnimationKey((prev) => prev + 1);
     }
   }, [isVideoEnded, currentIndex, data.videos.length]);
 
   useEffect(() => {
     setIsProgressRunning(false);
     setAnimationKey((prev) => prev + 1);
+    
+    // Auto-start the new video's progress after a brief delay
+    const timer = setTimeout(() => {
+      setIsProgressRunning(true);
+    }, 100);
+    
+    return () => clearTimeout(timer);
   }, [currentIndex]);
 
   return (
     <div className={cn("w-full  mx-auto ", className)}>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-4 items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8 items-center">
         <div className="flex items-start">
           <div className="w-px bg-gray-600 mr-6 lg:mr-8 flex-shrink-0 self-stretch"></div>
           <div className="space-y-6 max-w-lg xl:max-w-xl 2xl:max-w:3xl">
