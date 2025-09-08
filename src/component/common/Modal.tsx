@@ -24,16 +24,13 @@ export const Modal: React.FC<ModalProps> = ({
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const previousActiveElement = useRef<HTMLElement | null>(null);
-  const [isLargeScreen, setIsLargeScreen] = React.useState(false);
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsLargeScreen(window.innerHeight > 700);
-    };
-    
+    const handleResize = () => {};
+
     handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
@@ -54,13 +51,13 @@ export const Modal: React.FC<ModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       previousActiveElement.current = document.activeElement as HTMLElement;
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
 
       if (modalRef.current) {
         modalRef.current.focus();
       }
     } else {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
       if (previousActiveElement.current) {
         previousActiveElement.current.focus();
         previousActiveElement.current = null;
@@ -68,12 +65,16 @@ export const Modal: React.FC<ModalProps> = ({
     }
 
     return () => {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     };
   }, [isOpen]);
 
   const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (closeOnBackdropClick && modalRef.current && !modalRef.current.contains(event.target as Node)) {
+    if (
+      closeOnBackdropClick &&
+      modalRef.current &&
+      !modalRef.current.contains(event.target as Node)
+    ) {
       onClose();
     }
   };
@@ -111,9 +112,9 @@ export const Modal: React.FC<ModalProps> = ({
     <div
       className={cn(
         "fixed inset-0",
-        isClosing ? "animate-modal-backdrop-out" : "animate-modal-backdrop-in"
+        isClosing ? "animate-modal-backdrop-out" : "animate-modal-backdrop-in",
       )}
-      style={{ 
+      style={{
         zIndex: OVERLAY_Z_INDEX.CONTACT_MODAL,
       }}
       onClick={handleBackdropClick}
@@ -131,9 +132,9 @@ export const Modal: React.FC<ModalProps> = ({
           isClosing ? "animate-modal-content-out" : "animate-modal-content-in",
           className,
         )}
-        style={{ 
-          border: '1px solid #565656',
-          transform: 'translate(-50%, -50%)'
+        style={{
+          border: "1px solid #565656",
+          transform: "translate(-50%, -50%)",
         }}
         tabIndex={-1}
         onKeyDown={handleKeyDown}
@@ -145,4 +146,3 @@ export const Modal: React.FC<ModalProps> = ({
 
   return createPortal(modalContent, document.body);
 };
-
