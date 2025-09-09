@@ -59,7 +59,7 @@ export const Footer = () => {
                 <img src={logo} alt="Utazon Logo" className="h-10 w-auto" />
               </a>
               <address className="not-italic flex flex-col">
-                <a href="/" className="text-base  mb-1">
+                <a href="/" className="text-sm 2xl:text-base mb-1">
                   {t("common.utazon")}
                 </a>
                 <a href="/" className="text-muted text-xs">
@@ -68,24 +68,24 @@ export const Footer = () => {
               </address>
             </div>
             <nav className="flex flex-col items-start md:items-start">
-              <h4 className="text-muted text-sm mb-3">Menu</h4>
+              <h4 className="text-muted text-xs 2xl:text-sm mb-3">Menu</h4>
               <Link
                 href={ROUTES.PROJECTS}
                 onClick={handleProjectsClick}
-                className="text-white hover:text-white transition-colors duration-200 mb-2 text-sm"
+                className="text-white hover:text-white transition-colors duration-200 mb-2 text-xs 2xl:text-sm"
               >
                 {t("nav.projects")}
               </Link>
               <Link
                 href={ROUTES.ABOUT}
                 onClick={handleAboutClick}
-                className="text-white hover:text-white transition-colors duration-200 mb-2 text-sm"
+                className="text-white hover:text-white transition-colors duration-200 mb-2 text-xs 2xl:text-sm"
               >
                 {t("nav.about")}
               </Link>
               <button
                 onClick={handleContactClick}
-                className="text-white hover:text-white transition-colors duration-200 text-sm text-left"
+                className="text-white hover:text-white transition-colors duration-200 text-xs 2xl:text-sm text-left"
               >
                 {t("nav.contact")}
               </button>
@@ -101,7 +101,7 @@ export const Footer = () => {
                 aria-label="Instagram"
               >
                 <InstagramIcon width={20} height={20} />
-                <span className="text-sm">Instagram</span>
+                <span className="text-xs 2xl:text-sm">Instagram</span>
               </a>
 
               <a
@@ -112,7 +112,7 @@ export const Footer = () => {
                 aria-label="LinkedIn"
               >
                 <LinkedInIcon width={19} height={19} />
-                <span className="text-sm">LinkedIn</span>
+                <span className="text-xs 2xl:text-sm">LinkedIn</span>
               </a>
 
               <a
@@ -123,7 +123,7 @@ export const Footer = () => {
                 aria-label="Behance"
               >
                 <BehanceIcon width={19} height={19} />
-                <span className="text-sm">Behance</span>
+                <span className="text-xs 2xl:text-sm">Behance</span>
               </a>
             </div>
           </div>

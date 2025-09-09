@@ -86,7 +86,7 @@ export const Navbar = () => {
 
         <button
           onClick={toggleMenu}
-          className="xl:hidden text-foreground hover:text-muted focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary transition-colors"
+          className="xl:hidden text-foreground hover:text-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary transition-colors"
           aria-expanded={isMenuOpen}
           aria-controls="mobile-menu"
           aria-label="Toggle navigation menu"

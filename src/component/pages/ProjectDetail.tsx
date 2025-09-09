@@ -30,7 +30,7 @@ export const ProjectDetail = () => {
 
   return (
     <article className="min-h-screen flex flex-col">
-      <div className="flex-1 mb-4 lg:mb-16">
+      <div className="flex-1 mb-8 lg:mb-32">
         <header className="mb-4 md:mb-16">
           <ProjectHeroSection project={displayProject} />
         </header>

@@ -8,7 +8,8 @@
   "common": {
     "utazon": "UTAZON",
     "antoine_vernez": "ANTOINE VERNEZ",
-    "seeProject": "Voir le projet"
+    "seeProject": "Voir le projet",
+    "roleHeader": "Rôle"
   },
   "home": {
     "description": "Artiste 3D et Motion Designer à Paris, je conçois avec grande précision des univers aux visuels soignés et percutants au service des marques, agences et artistes.",

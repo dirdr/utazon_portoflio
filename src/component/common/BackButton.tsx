@@ -24,7 +24,7 @@ export const BackButton = ({
         "flex items-center justify-center",
         "transition-all duration-200 ease-out",
         "hover:scale-110 hover:shadow-lg",
-        "focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2",
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2",
         "active:scale-95",
         className,
       )}

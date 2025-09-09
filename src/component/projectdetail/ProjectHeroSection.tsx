@@ -101,10 +101,10 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
         <div className="absolute top-0 right-0 h-full flex items-center mr-4 lg:mr-32">
           <div className="w-full max-w-md xl:max-w-lg 2xl:max-w-xl">
             <div className="pl-8 pr-4">
-              <h1 className="font-nord text-3xl 2xl:text-4xl font-bold italic mb-1 text-white">
+              <h1 className="font-nord text-2xl 2xl:text-3xl font-bold italic mb-1 text-white">
                 {t(project.title)}
               </h1>
-              <h2 className="font-nord text-lg 2xl:text-xl mb-8 font-thin text-dark-gray">
+              <h2 className="font-nord text-sm 2xl:text-base mb-8 font-thin text-dark-gray">
                 {t(project.header)}
               </h2>
               <p className="font-neue text-sm 2xl:text-base leading-5 text-dark-gray mb-12 xl:mb-16">
@@ -113,20 +113,26 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
               <div className="space-y-6">
                 <div className="grid grid-cols-1 gap-4 text-lg">
                   <div>
-                    <h3 className="font-nord text-white uppercase">Date</h3>
-                    <p className="font-neue text-dark-gray text-xs sm:text-base">
+                    <h3 className="font-nord text-sm text-white uppercase">
+                      Date
+                    </h3>
+                    <p className="font-neue text-dark-gray text-xs 2xl:text-base">
                       {t(project.date)}
                     </p>
                   </div>
                   <div>
-                    <h3 className="font-nord text-white uppercase">Client</h3>
-                    <p className="font-neue text-dark-gray text-xs sm:text-base">
+                    <h3 className="font-nord text-sm text-white uppercase">
+                      Client
+                    </h3>
+                    <p className="font-neue text-dark-gray text-xs 2xl:text-base">
                       {t(project.client)}
                     </p>
                   </div>
                   <div>
-                    <h3 className="font-nord text-white uppercase">Role</h3>
-                    <p className="font-neue text-dark-gray text-xs sm:text-base">
+                    <h3 className="font-nord text-sm text-white uppercase">
+                      {t("common.roleHeader")}
+                    </h3>
+                    <p className="font-neue text-dark-gray text-xs 2xl:text-base">
                       {t(project.role)}
                     </p>
                   </div>

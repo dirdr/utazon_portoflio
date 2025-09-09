@@ -7,17 +7,15 @@ import { useTranslation } from "react-i18next";
 import { useHomeMobileBreakpoint } from "../../hooks/useHomeMobileBreakpoint";
 import { FullscreenVideoModal } from "../common/FullscreenVideoModal";
 import { useTransitionContext } from "../../hooks/useTransitionContext";
+import { useSoundStore } from "../../stores/soundStore";
 
-interface HomeProps {
-  onVideoMuteToggle?: (muted: boolean) => void;
-}
-
-export const Home = ({ onVideoMuteToggle }: HomeProps) => {
+export const Home = () => {
+  const { isSoundPlaying, toggleSound } = useSoundStore();
   const { t } = useTranslation();
   const isMobile = useHomeMobileBreakpoint();
   const { navigateWithTransition } = useTransitionContext();
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
-  const [, setIsSoundPlaying] = useState(true);
+  
 
   const titleContent = useMemo(() => {
     const title = t("home.title");
@@ -38,14 +36,6 @@ export const Home = ({ onVideoMuteToggle }: HomeProps) => {
     setIsVideoModalOpen(true);
   }, []);
 
-  const handleSoundToggle = useCallback(
-    (isPlaying: boolean) => {
-      setIsSoundPlaying(isPlaying);
-      onVideoMuteToggle?.(!isPlaying);
-    },
-    [onVideoMuteToggle],
-  );
-
   const handleProjectsClick = useCallback(() => {
     navigateWithTransition(ROUTES.PROJECTS);
   }, [navigateWithTransition]);
@@ -56,8 +46,8 @@ export const Home = ({ onVideoMuteToggle }: HomeProps) => {
         <div className="flex flex-col ">
           <address className="not-italic relative">
             <SoundPlayer
-              onToggle={handleSoundToggle}
-              initialPlaying={!isMobile}
+              onToggle={toggleSound}
+              isPlaying={isSoundPlaying}
               className="self-start mb-2"
             />
             <p className="text-base sm:text-lg md:text-xl text-muted mb-2">
@@ -65,15 +55,18 @@ export const Home = ({ onVideoMuteToggle }: HomeProps) => {
             </p>
           </address>
           <header>
-            <h1 id="title-heading" className="font-nord text-2xl sm:text-3xl md:text-4xl italic text-muted tracking-tight leading-tight mb-2">
-              <LineSweepText duration={6}>
-                {titleContent}
-              </LineSweepText>
+            <h1
+              id="title-heading"
+              className="font-nord text-2xl sm:text-3xl md:text-4xl italic text-muted tracking-tight leading-tight mb-2"
+            >
+              <LineSweepText duration={6}>{titleContent}</LineSweepText>
             </h1>
           </header>
 
           <section aria-labelledby="description-heading">
-            <h2 id="description-heading" className="sr-only">Description</h2>
+            <h2 id="description-heading" className="sr-only">
+              Description
+            </h2>
             <p className="text-sm sm:text-base text-gray mb-4">
               {t("home.description")}
             </p>
@@ -113,11 +106,11 @@ export const Home = ({ onVideoMuteToggle }: HomeProps) => {
       <div className="flex justify-between items-end">
         <section className="w-165" aria-labelledby="location-heading">
           <address className="not-italic relative">
-            <div className="flex flex-col gap-3 mb-6">
+            <div className="flex flex-col gap-6 mb-6">
               <SoundPlayer
-                onToggle={handleSoundToggle}
-                initialPlaying={!isMobile}
-                className="self-start mb-6"
+                onToggle={toggleSound}
+                isPlaying={isSoundPlaying}
+                className="self-start"
               />
               <p
                 id="location-heading"
@@ -127,15 +120,15 @@ export const Home = ({ onVideoMuteToggle }: HomeProps) => {
               </p>
             </div>
           </address>
-          <h1 className="font-nord text-5xl italic text-muted tracking-tight">
-            <LineSweepText duration={8}>
-              {titleContent}
-            </LineSweepText>
+          <h1 className="font-nord text-4xl 2xl:text-5xl italic text-muted tracking-tight">
+            <LineSweepText duration={8}>{titleContent}</LineSweepText>
           </h1>
         </section>
 
         <section className="w-120 2xl:w-140" aria-labelledby="intro-heading">
-          <h2 id="intro-heading" className="sr-only">Introduction</h2>
+          <h2 id="intro-heading" className="sr-only">
+            Introduction
+          </h2>
           <p className="text-base 2xl:text-lg text-gray mb-8">
             {t("home.description")}
           </p>
@@ -145,6 +138,7 @@ export const Home = ({ onVideoMuteToggle }: HomeProps) => {
               glintOnHover={true}
               onClick={handleProjectsClick}
               className="text-sm 2xl:text-base"
+              speed={3}
             >
               {t("home.projects")}
             </Button>
@@ -153,6 +147,7 @@ export const Home = ({ onVideoMuteToggle }: HomeProps) => {
               glintOnHover={true}
               onClick={handleShowreelClick}
               className="text-sm 2xl:text-base"
+              speed={3}
             >
               {t("nav.showreel")}
             </Button>

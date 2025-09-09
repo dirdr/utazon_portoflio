@@ -144,7 +144,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
       }}
     >
       <div className="flex justify-between items-center mb-4 sm:mb-8 lg:mb-12">
-        <p className="text-xs sm:text-base text-white font-nord flex-1 pr-2">
+        <p className="text-xs sm:text-sm text-white italic font-nord flex-1 pr-2">
           {t(
             "contact.description",
             "Share your vision, I'll help you bring it to life",

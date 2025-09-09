@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useTransitionContext } from './useTransitionContext';
 import { isDiveInCompleted, markDiveInCompleted } from '../utils/diveInStorage';
+import { getVideoTransitionConfig, debugVideoTransition } from '../config/videoTransitionConfig';
 
 export type VideoWorkflowState = 
   | 'loading'           // Video is loading
@@ -37,9 +38,18 @@ export interface VideoWorkflowResult {
   onDiveInClick: () => void;
 }
 
-const LOOP_START_DESKTOP = 3; // Desktop loops from 3s
-const LOOP_START_MOBILE = 0;  // Mobile loops from 0s
-const INTRO_DURATION = 3;     // Intro plays for 3s before content shows
+// Get configuration values
+const getVideoConfig = () => {
+  const config = getVideoTransitionConfig();
+  return {
+    LOOP_START_DESKTOP: config.fresh.loopStartTime,        // Desktop loops from config
+    LOOP_START_MOBILE: config.fresh.mobileLoopStartTime,   // Mobile loops from config
+    INTRO_DURATION: config.fresh.introDuration,            // Intro plays for config duration
+    SPA_JUMP_TIME: config.spa.jumpToTime,                  // SPA navigation jump time
+    SPA_WITH_SOUND: config.spa.withSound,                  // SPA navigation sound setting
+    MOBILE_MUTED: config.mobile.muted,                     // Mobile video muted setting
+  };
+};
 
 /**
  * Simple, correct video workflow state machine
@@ -49,6 +59,8 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
   const { isFreshLoad, isMobile, isHomePage, videoSrc, getVideoElement } = config;
   const { isTransitioning } = useTransitionContext();
   
+  // Get video configuration
+  const videoConfig = getVideoConfig();
   
   // Core state
   const [workflowState, setWorkflowState] = useState<VideoWorkflowState>('loading');
@@ -57,7 +69,7 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
   
   // Video control
   const videoRef = useRef<HTMLVideoElement>(null);
-  const loopStartTime = isMobile ? LOOP_START_MOBILE : LOOP_START_DESKTOP;
+  const loopStartTime = isMobile ? videoConfig.LOOP_START_MOBILE : videoConfig.LOOP_START_DESKTOP;
   
   
   
@@ -93,10 +105,13 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
     
     
     if (isMobile) {
-      // Mobile: Start playing immediately from 0s, show content
       video.currentTime = 0;
+      
       video.play().then(() => {
-      }).catch(() => {});
+        debugVideoTransition('Mobile video playback started');
+      }).catch(() => {
+        debugVideoTransition('Mobile video playback failed');
+      });
       setWorkflowState('content-showing');
     } else if (isFreshLoad) {
       // Desktop fresh load: Show dive-in button, pause at 0s
@@ -105,18 +120,27 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
     } else {
       // Desktop SPA: Seek first, then play to avoid playback interruption
       
+      debugVideoTransition('SPA navigation detected, configuring video:', {
+        jumpToTime: videoConfig.SPA_JUMP_TIME,
+        withSound: videoConfig.SPA_WITH_SOUND,
+        currentMuted: video.muted
+      });
+      
       // Pause video first to ensure clean seek
       video.pause();
-      video.currentTime = LOOP_START_DESKTOP;
+      video.currentTime = videoConfig.SPA_JUMP_TIME;
+      
       
       // Wait for seek to complete before playing
       const handleSeeked = () => {
         video.removeEventListener('seeked', handleSeeked);
         
+        debugVideoTransition(`Starting SPA video playback from ${videoConfig.SPA_JUMP_TIME}s`);
         
         video.play().then(() => {
-        }).catch(() => {
-          // Ignore video play errors
+          debugVideoTransition('SPA video playback started successfully');
+        }).catch((error) => {
+          debugVideoTransition('SPA video playback failed:', error);
         });
       };
       
@@ -146,11 +170,12 @@ export const useVideoWorkflow = (config: VideoWorkflowConfig): VideoWorkflowResu
   const onVideoTimeUpdate = useCallback((currentTime: number) => {
     
     // Only care about intro completion on fresh load
-    if (workflowState === 'playing-intro' && currentTime >= INTRO_DURATION && !hasCompletedIntro) {
+    if (workflowState === 'playing-intro' && currentTime >= videoConfig.INTRO_DURATION && !hasCompletedIntro) {
+      debugVideoTransition(`Intro completed at ${currentTime}s, showing content`);
       setHasCompletedIntro(true);
       setWorkflowState('content-showing');
     }
-  }, [workflowState, hasCompletedIntro]);
+  }, [workflowState, hasCompletedIntro, videoConfig.INTRO_DURATION]);
   
   // 4. Handle video ending (for looping)
   const onVideoEnded = useCallback(() => {

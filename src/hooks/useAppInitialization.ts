@@ -45,7 +45,6 @@ export const useAppInitialization = () => {
   // Video behavior logic - memoized for performance
   const videoBehavior = useMemo(() => ({
     shouldPlayFromStart: isFreshLoad && isHomePage && !isDiveInActive,
-    shouldJumpTo8s: !isFreshLoad && isHomePage && !isDiveInCompleting,
     isDiveInFlow: isFreshLoad && isHomePage && isDiveInActive
   }), [isFreshLoad, isHomePage]);
   

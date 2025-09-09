@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { createPortal } from "react-dom";
 import { ReactPlayerWrapper } from "./ReactPlayerWrapper";
 import { apiClient } from "../../services/api";
@@ -13,28 +13,60 @@ export const FullscreenVideoModal = ({
   onClose,
 }: FullscreenVideoModalProps) => {
   const videoUrl = apiClient.getVideoUrl("showreel.mp4");
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
+
+  const handleClose = useCallback(() => {
+    setIsClosing(true);
+    setIsPlaying(false);
+    
+    // Small delay to ensure video stops before closing
+    setTimeout(() => {
+      setIsClosing(false);
+      onClose();
+    }, 100);
+  }, [onClose]);
 
   const handleEscape = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        onClose();
+        e.preventDefault();
+        e.stopPropagation();
+        handleClose();
       }
     },
-    [onClose]
+    [handleClose]
   );
 
   const handleBackdropClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (e.target === e.currentTarget) {
-      onClose();
+      handleClose();
     }
+  };
+
+  const handleCloseButtonClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    handleClose();
   };
 
   useEffect(() => {
     if (isOpen) {
+      setIsPlaying(true);
       document.addEventListener("keydown", handleEscape);
+      // Prevent scrolling when modal is open
+      document.body.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none';
+      
       return () => {
         document.removeEventListener("keydown", handleEscape);
+        document.body.style.overflow = '';
+        document.body.style.touchAction = '';
       };
+    } else {
+      setIsPlaying(false);
     }
   }, [isOpen, handleEscape]);
 
@@ -44,12 +76,14 @@ export const FullscreenVideoModal = ({
     <div
       className="fixed inset-0 z-50 bg-black"
       onClick={handleBackdropClick}
+      style={{ touchAction: 'none' }}
     >
       <button
-        onClick={onClose}
+        onClick={handleCloseButtonClick}
         className="absolute top-6 right-6 z-20 text-white hover:text-gray-300 transition-colors p-3 rounded-full bg-black/50 hover:bg-black/70"
         aria-label="Close video (ESC)"
         title="Close video (ESC)"
+        type="button"
       >
         <svg
           width="20"
@@ -66,14 +100,14 @@ export const FullscreenVideoModal = ({
         </svg>
       </button>
       
-      <div className="w-full h-full">
+      <div className="w-full h-full" style={{ touchAction: 'manipulation' }}>
         <ReactPlayerWrapper
           src={videoUrl}
           width="100%"
           height="100%"
           controls
           pip={false}
-          playing
+          playing={isPlaying && !isClosing}
           volume={1}
         />
       </div>

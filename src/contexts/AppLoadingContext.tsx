@@ -22,7 +22,6 @@ interface AppLoadingState {
   // Video behavior (for integration with HomeContext)
   videoBehavior: {
     shouldPlayFromStart: boolean;
-    shouldJumpTo8s: boolean;
     isDiveInFlow: boolean;
   };
 }

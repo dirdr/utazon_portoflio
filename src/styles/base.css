@@ -16,4 +16,9 @@
   h6 {
     @apply font-nord font-bold;
   }
+
+  /* Remove focus outline for mouse users, keep for keyboard users */
+  *:focus:not(:focus-visible) {
+    outline: none;
+  }
 }

@@ -12,43 +12,32 @@ import { useTranslation } from "react-i18next";
 export interface SoundPlayerProps {
   className?: string;
   onToggle?: (isPlaying: boolean) => void;
-  initialPlaying?: boolean;
+  isPlaying: boolean;
 }
 
 export const SoundPlayer: React.FC<SoundPlayerProps> = ({
   className,
   onToggle,
-  initialPlaying = false,
+  isPlaying,
 }) => {
   const { t } = useTranslation();
-  const [isPlaying, setIsPlaying] = useState(initialPlaying);
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(isPlaying);
   const [isHovered, setIsHovered] = useState(false);
   const barsRef = useRef<(HTMLDivElement | null)[]>([]);
   const tooltipRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (initialPlaying) {
-      setTimeout(() => {
-        setIsAnimating(true);
-      }, 10);
-    }
-  }, [initialPlaying]);
-
-  const handleToggle = useCallback(() => {
-    const newPlayingState = !isPlaying;
-    setIsPlaying(newPlayingState);
-
-    if (newPlayingState) {
-      setIsAnimating(false);
+    if (isPlaying) {
       setTimeout(() => {
         setIsAnimating(true);
       }, 10);
     } else {
       setIsAnimating(false);
     }
+  }, [isPlaying]);
 
-    onToggle?.(newPlayingState);
+  const handleToggle = useCallback(() => {
+    onToggle?.(!isPlaying);
   }, [isPlaying, onToggle]);
 
   const handleKeyDown = useCallback(
@@ -95,7 +84,7 @@ export const SoundPlayer: React.FC<SoundPlayerProps> = ({
         className={cn(
           "group relative",
           "bg-transparent border border-white/20",
-          "rounded-full px-4 py-2 sm:px-6 sm:py-3",
+          "rounded-full px-3 py-1.5 sm:px-4 sm:py-2",
           "transition-all duration-300 ease-out",
           "focus:outline-none",
           className,
@@ -110,7 +99,7 @@ export const SoundPlayer: React.FC<SoundPlayerProps> = ({
         <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-white/5 via-white/10 to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
         <div
-          className="relative flex items-center justify-center gap-0.5 w-8 h-3 sm:gap-1 sm:w-10 sm:h-4"
+          className="relative flex items-center justify-center gap-0.5 w-6 h-2 sm:gap-0.5 sm:w-7 sm:h-2.5"
           aria-hidden="true"
         >
           {barsConfig.map((bar, index) => (
@@ -118,7 +107,7 @@ export const SoundPlayer: React.FC<SoundPlayerProps> = ({
               key={index}
               ref={(el) => (barsRef.current[index] = el)}
               className={cn(
-                "h-2 md:h-4 bg-white rounded-full transform-gpu",
+                "h-1.5 md:h-2.5 bg-white rounded-full transform-gpu",
                 !isPlaying && "scale-y-[0.2]",
                 isPlaying && isAnimating && "animate-sound-wave",
               )}

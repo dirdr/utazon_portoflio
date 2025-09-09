@@ -65,13 +65,9 @@ export const Card = ({
     setIsHovered(true);
     if (thumbnail && videoReady && videoRef.current) {
       videoRef.current.currentTime = 0;
-      // Safari-friendly autoplay attempt
       const playPromise = videoRef.current.play();
       if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          // Autoplay failed, likely due to Safari restrictions
-          // Video will show first frame and can be played on user interaction
-        });
+        playPromise.catch(() => {});
       }
     }
   };
@@ -149,13 +145,11 @@ export const Card = ({
                 setVideoReady(true);
               }}
               onLoadedMetadata={() => {
-                // Additional Safari compatibility
                 if (videoRef.current) {
                   setVideoReady(true);
                 }
               }}
               onCanPlay={() => {
-                // Safari needs this event too
                 if (videoRef.current) {
                   setVideoReady(true);
                 }
@@ -168,7 +162,6 @@ export const Card = ({
           )}
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent" />
-
           <figcaption className="absolute bottom-0 left-0 p-6">
             <div className="flex items-start gap-4">
               <div className="w-px bg-white self-stretch min-h-[40px]" />
@@ -181,12 +174,12 @@ export const Card = ({
                 >
                   <LineSweepText
                     animate={isHovered}
-                    className="text-sm sm:text-base md:text-xl lg:text-2xl xl:text-lg 2xl:text-xl"
+                    className="text-sm 2xl:text-base"
                   >
                     {project.name}
                   </LineSweepText>
                 </h3>
-                <p className="font-nord text-white font-light text-xs sm:text-xs md:text-base lg:text:lg">
+                <p className="font-nord text-white font-light text-xs 2xl:text-sm">
                   {project.header}
                 </p>
               </div>
@@ -194,7 +187,7 @@ export const Card = ({
           </figcaption>
 
           <div className="absolute top-[5%] left-[90%]">
-            <time className="text-muted font-nord font-light text-xs sm:text-base md:text-lg lg:text:xl xl:text:lg">
+            <time className="text-muted font-nord font-light text-xs sm:text-lg lg:text-xs 2xl:text-lg">
               {project.date}
             </time>
           </div>
