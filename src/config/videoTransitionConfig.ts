@@ -50,7 +50,7 @@ export const getVideoTransitionConfig = (): VideoTransitionConfig => {
   return DEFAULT_VIDEO_TRANSITION_CONFIG;
 };
 
-export const debugVideoTransition = (message: string, data?: any) => {
+export const debugVideoTransition = (message: string, data?: unknown) => {
   const config = getVideoTransitionConfig();
   if (config.general.debug) {
     const timestamp = new Date().toISOString().slice(11, 23);

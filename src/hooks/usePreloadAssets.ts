@@ -7,21 +7,21 @@ import p3 from "../assets/images/card_backgrounds/3.webp";
 
 // Debug utility for preloader
 const DEBUG_PRELOADER = true; // Set to false in production
-const debugLog = (message: string, data?: any) => {
+const debugLog = (message: string, data?: unknown) => {
   if (DEBUG_PRELOADER) {
     const timestamp = new Date().toISOString().slice(11, 23);
     console.log(`🔄 [PRELOADER ${timestamp}] ${message}`, data || '');
   }
 };
 
-const debugError = (message: string, error?: any) => {
+const debugError = (message: string, error?: unknown) => {
   if (DEBUG_PRELOADER) {
     const timestamp = new Date().toISOString().slice(11, 23);
     console.error(`❌ [PRELOADER ${timestamp}] ${message}`, error || '');
   }
 };
 
-const debugSuccess = (message: string, data?: any) => {
+const debugSuccess = (message: string, data?: unknown) => {
   if (DEBUG_PRELOADER) {
     const timestamp = new Date().toISOString().slice(11, 23);
     console.log(`✅ [PRELOADER ${timestamp}] ${message}`, data || '');
@@ -62,7 +62,15 @@ export const usePreloadAssets = () => {
     
     // Environment detection for debugging
     const userAgent = navigator.userAgent;
-    const isPrivateBrowsing = window.navigator?.webkitTemporaryStorage?.queryUsageAndQuota === undefined;
+    const isPrivateBrowsing = (() => {
+      try {
+        return 'webkitTemporaryStorage' in navigator && 
+          !(navigator as Navigator & { webkitTemporaryStorage?: { queryUsageAndQuota?: unknown } })
+            .webkitTemporaryStorage?.queryUsageAndQuota;
+      } catch {
+        return false;
+      }
+    })();
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
     const isSafari = /^((?!chrome|android).)*safari/i.test(userAgent);
     const isFirefox = userAgent.toLowerCase().includes("firefox");

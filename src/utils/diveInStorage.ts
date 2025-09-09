@@ -33,6 +33,8 @@ export const markDiveInCompleted = (): void => {
   try {
     const currentPageLoadId = getCurrentPageLoadId();
     diveInPageLoadId = currentPageLoadId;
-  } catch {}
+  } catch {
+    // Failed to store dive-in completion state - continue without error
+  }
 };
 

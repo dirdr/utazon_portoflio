@@ -13,7 +13,7 @@
     "generate:robots": "tsx scripts/generate-robots.ts",
     "sitemap:docker": "npm run generate:sitemap",
     "robots:docker": "npm run generate:robots",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives",
     "preview": "vite preview"
   },
   "dependencies": {

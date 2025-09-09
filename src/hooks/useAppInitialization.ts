@@ -6,7 +6,6 @@ import { initializeNavigationDetection } from "../utils/navigationDetection";
 
 // Track dive-in activation separately from fresh load state
 let isDiveInActive = false;
-let isDiveInCompleting = false; // Track when dive-in is completing to prevent video jumps
 
 const MIN_LOADING_TIME = 1500; // Minimum loader display time
 
@@ -57,7 +56,6 @@ export const useAppInitialization = () => {
       setIsAppInitialized(true);
       // Reset dive-in state for clean SPA navigation
       isDiveInActive = false;
-      isDiveInCompleting = false;
     }
   }, [isFreshLoad, navigation.isSPANavigation]);
 
@@ -71,16 +69,9 @@ export const useAppInitialization = () => {
   // Handle dive-in workflow completion - reset navigation state after video completes
   useEffect(() => {
     if (videoBehavior.isDiveInFlow) {
-      // Mark as completing to prevent unwanted video jumps
-      isDiveInCompleting = true;
-      
       const timer = setTimeout(() => {
         navigation.resetNavigation();
         isDiveInActive = false;
-        // Clear the completing flag after navigation reset settles
-        setTimeout(() => {
-          isDiveInCompleting = false;
-        }, 100);
       }, 5000); // Give time for video workflow to complete
 
       return () => clearTimeout(timer);
@@ -104,7 +95,6 @@ export const useAppInitialization = () => {
           if (!isHomePage && isFreshLoad) {
             navigation.resetNavigation();
             isDiveInActive = false;
-            isDiveInCompleting = false;
           }
         }, isFreshLoad ? 500 : 0); // Small delay only for fresh load
       }, remainingTime);
