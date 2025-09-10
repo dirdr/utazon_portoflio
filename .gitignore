@@ -29,3 +29,6 @@ dist-ssr
 .DS_Store
 compress.sh
 *.mov
+
+# Refactoring TODO files
+PRELOADER_REFACTOR_TODO.md

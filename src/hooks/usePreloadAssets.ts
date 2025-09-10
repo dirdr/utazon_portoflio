@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { allProjectsSortedByPriority } from "../data/projects";
+import { isMobile } from "../utils/mobileDetection";
 import backgroundImage from "../assets/images/background.webp";
 import p1 from "../assets/images/card_backgrounds/1.webp";
 import p2 from "../assets/images/card_backgrounds/2.webp";
@@ -13,9 +13,6 @@ const debugLog = (message: string, data?: unknown) => {
     console.log(`🔄 [PRELOADER ${timestamp}] ${message}`, data || '');
   }
 };
-
-// Mobile detection utility
-const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
 const debugError = (message: string, error?: unknown) => {
   if (DEBUG_PRELOADER) {
@@ -61,55 +58,23 @@ export const usePreloadAssets = () => {
   });
 
   const generateAssetsList = useCallback((): AssetLoadState[] => {
-    debugLog('🚀 Starting asset list generation');
+    debugLog('🚀 Starting CRITICAL asset list generation (Phase 1 refactor)');
     
-    // Environment detection for debugging
-    const userAgent = navigator.userAgent;
-    const isPrivateBrowsing = (() => {
-      try {
-        return 'webkitTemporaryStorage' in navigator && 
-          !(navigator as Navigator & { webkitTemporaryStorage?: { queryUsageAndQuota?: unknown } })
-            .webkitTemporaryStorage?.queryUsageAndQuota;
-      } catch {
-        return false;
-      }
-    })();
     const isMobileDevice = isMobile();
-    const isSafari = /^((?!chrome|android).)*safari/i.test(userAgent);
-    const isFirefox = userAgent.toLowerCase().includes("firefox");
-    const isChrome = userAgent.toLowerCase().includes("chrome");
-    
-    // Check network conditions for mobile optimization
-    const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
-    const isSlowNetwork = connection?.effectiveType === '2g' || connection?.effectiveType === 'slow-2g' || 
-                         (connection?.downlink && connection.downlink < 1.5);
-    const isMobileOrSlow = isMobileDevice || isSlowNetwork || isPrivateBrowsing;
     
     debugLog('Environment info:', {
-      userAgent,
-      isPrivateBrowsing,
+      userAgent: navigator.userAgent,
       isMobile: isMobileDevice,
-      isSafari,
-      isFirefox,
-      isChrome,
-      isSlowNetwork,
-      isMobileOrSlow,
-      effectiveType: connection?.effectiveType,
-      downlink: connection?.downlink,
       cookiesEnabled: navigator.cookieEnabled,
       onLine: navigator.onLine,
-      storage: {
-        localStorage: typeof(Storage) !== "undefined" && localStorage,
-        sessionStorage: typeof(Storage) !== "undefined" && sessionStorage,
-      }
     });
 
     const assets: AssetLoadState[] = [];
 
-    // Mobile-optimized video loading - only load appropriate intro video
+    // CRITICAL ASSETS ONLY - Device-specific intro video
     debugLog(`Adding ${isMobileDevice ? 'mobile' : 'desktop'} intro video`);
     if (isMobileDevice) {
-      // Mobile: Only load the lighter mobile intro video (12MB vs 25MB)
+      // Mobile: Only load the lighter mobile intro video (12MB)
       assets.push({
         url: `/videos/intro_mobile.mp4`,
         loaded: false,
@@ -126,6 +91,7 @@ export const usePreloadAssets = () => {
       });
     }
 
+    // CRITICAL ASSETS ONLY - Essential background images
     assets.push({
       url: backgroundImage,
       loaded: false,
@@ -154,85 +120,9 @@ export const usePreloadAssets = () => {
       type: "image",
     });
 
-    // Mobile vs Desktop asset loading strategy
-    if (isMobileOrSlow) {
-      debugLog('📱 Mobile/Slow network detected - loading only critical project assets');
-      
-      // Only load top 6 priority projects for mobile/slow networks
-      const criticalProjects = allProjectsSortedByPriority.slice(0, 6);
-      
-      criticalProjects.forEach((project) => {
-        // Only cover images for mobile - skip backgrounds and videos initially
-        assets.push({
-          url: `/images/projects/${project.id}/cover.webp`,
-          loaded: false,
-          error: false,
-          type: "image",
-        });
-        
-        // Skip video thumbnails for mobile to reduce initial load
-        // Skip DALS carousel videos completely for mobile
-      });
-      
-      debugLog(`Mobile: Loading only ${criticalProjects.length} critical projects (covers only)`);
-      
-    } else {
-      debugLog('🖥️ Desktop detected - loading all project assets');
-      
-      // Full loading for desktop
-      allProjectsSortedByPriority.forEach((project) => {
-        assets.push({
-          url: `/images/projects/${project.id}/cover.webp`,
-          loaded: false,
-          error: false,
-          type: "image",
-        });
+    // NO PROJECT ASSETS - These will be loaded progressively later
 
-        assets.push({
-          url: `/images/projects/${project.id}/background.webp`,
-          loaded: false,
-          error: false,
-          type: "image",
-        });
-
-        if (project.hasVideo !== false) {
-          assets.push({
-            url: `/videos/projects/${project.id}/thumbnail.webm`,
-            loaded: false,
-            error: false,
-            type: "video",
-          });
-        }
-
-        // Add DALS project carousel videos to preloading (desktop only)
-        if (project.id === "dals" && project.showcases) {
-          project.showcases.forEach((showcase) => {
-            if (showcase.type === "video-carousel" && showcase.videos) {
-              showcase.videos.forEach((video) => {
-                assets.push({
-                  url: video.src,
-                  loaded: false,
-                  error: false,
-                  type: "video",
-                });
-              });
-            }
-            if (showcase.type === "video-grid" && showcase.videos) {
-              showcase.videos.forEach((video) => {
-                assets.push({
-                  url: video.src,
-                  loaded: false,
-                  error: false,
-                  type: "video",
-                });
-              });
-            }
-          });
-        }
-      });
-    }
-
-    debugLog(`Generated ${assets.length} assets for preloading:`, {
+    debugLog(`Generated ${assets.length} CRITICAL assets for preloading:`, {
       videos: assets.filter(a => a.type === 'video').length,
       images: assets.filter(a => a.type === 'image').length,
       assetsList: assets.map(a => ({ url: a.url, type: a.type }))
@@ -593,52 +483,10 @@ export const usePreloadAssets = () => {
     });
   }, []);
 
-  // Lazy loading function for non-critical mobile assets
-  const startLazyLoading = useCallback(async () => {
-    if (!isMobile()) return;
-
-    debugLog('🔄 Starting lazy loading of non-critical mobile assets');
-    
-    // Load remaining project assets after initial load
-    const additionalAssets: AssetLoadState[] = [];
-    const remainingProjects = allProjectsSortedByPriority.slice(6); // Projects 7+
-    
-    remainingProjects.forEach((project) => {
-      additionalAssets.push({
-        url: `/images/projects/${project.id}/cover.webp`,
-        loaded: false,
-        error: false,
-        type: "image",
-      });
-    });
-    
-    // Load backgrounds for first 6 projects
-    const topProjects = allProjectsSortedByPriority.slice(0, 6);
-    topProjects.forEach((project) => {
-      additionalAssets.push({
-        url: `/images/projects/${project.id}/background.webp`,
-        loaded: false,
-        error: false,
-        type: "image",
-      });
-    });
-
-    debugLog(`Lazy loading ${additionalAssets.length} additional mobile assets`);
-    
-    // Load in small batches to avoid overwhelming mobile networks
-    const batchSize = 2;
-    for (let i = 0; i < additionalAssets.length; i += batchSize) {
-      const batch = additionalAssets.slice(i, i + batchSize);
-      await Promise.allSettled(batch.map(asset => preloadAsset(asset)));
-      
-      // Small delay between batches for mobile
-      await new Promise(resolve => setTimeout(resolve, 500));
-    }
-  }, [preloadAsset]);
 
   const startPreloading = useCallback(async () => {
     const preloadStartTime = Date.now();
-    debugLog('🚀🚀🚀 STARTING PRELOADING PROCESS 🚀🚀🚀');
+    debugLog('🚀🚀🚀 STARTING CRITICAL PRELOADING PROCESS (Phase 1 refactor) 🚀🚀🚀');
     
     const assetsList = generateAssetsList();
 
@@ -655,73 +503,22 @@ export const usePreloadAssets = () => {
       progress: 0,
     });
 
-    const criticalAssets = assetsList.filter(
-      (asset) =>
-        asset.url.includes("intro.mp4") || asset.url.includes("intro_mobile.mp4") || asset.url === backgroundImage,
-    );
-    const nonCriticalAssets = assetsList.filter(
-      (asset) => !criticalAssets.includes(asset),
-    );
-
-    debugLog(`🔥 Starting critical assets (${criticalAssets.length}):`, criticalAssets.map(a => a.url));
-    const criticalStartTime = Date.now();
-    const criticalPromises = criticalAssets.map((asset) => preloadAsset(asset));
-    const criticalResults = await Promise.allSettled(criticalPromises);
-    const criticalDuration = Date.now() - criticalStartTime;
+    debugLog(`🔥 Starting ALL critical assets (${assetsList.length}):`, assetsList.map(a => a.url));
     
-    debugSuccess(`Critical assets completed (${criticalDuration}ms):`, {
-      results: criticalResults.map((result, index) => ({
-        url: criticalAssets[index].url,
+    // Load all critical assets in parallel - no need for batching with only 5 assets
+    const allPromises = assetsList.map((asset) => preloadAsset(asset));
+    const results = await Promise.allSettled(allPromises);
+    
+    const totalDuration = Date.now() - preloadStartTime;
+    debugSuccess(`🏁 CRITICAL PRELOADING COMPLETED (${totalDuration}ms total):`, {
+      results: results.map((result, index) => ({
+        url: assetsList[index].url,
         status: result.status,
         ...(result.status === 'rejected' && { reason: result.reason })
       }))
     });
-
-    // Optimize batch size based on environment
-    const isPrivateBrowsing = (() => {
-      try {
-        return 'webkitTemporaryStorage' in navigator && 
-          !(navigator as Navigator & { webkitTemporaryStorage?: { queryUsageAndQuota?: unknown } })
-            .webkitTemporaryStorage?.queryUsageAndQuota;
-      } catch {
-        return false;
-      }
-    })();
     
-    const batchSize = isPrivateBrowsing || isMobile() ? 4 : 8; // Smaller batches for constrained environments
-    debugLog(`📦 Starting batched preloading of ${nonCriticalAssets.length} non-critical assets (batch size: ${batchSize}, private: ${isPrivateBrowsing}, mobile: ${isMobile()})`);
-    
-    for (let i = 0; i < nonCriticalAssets.length; i += batchSize) {
-      const batch = nonCriticalAssets.slice(i, i + batchSize);
-      const batchStartTime = Date.now();
-      
-      debugLog(`Processing batch ${Math.floor(i/batchSize) + 1}/${Math.ceil(nonCriticalAssets.length/batchSize)}:`, 
-        batch.map(a => a.url));
-      
-      const batchPromises = batch.map((asset) => preloadAsset(asset));
-      const batchResults = await Promise.allSettled(batchPromises);
-      const batchDuration = Date.now() - batchStartTime;
-      
-      debugLog(`Batch ${Math.floor(i/batchSize) + 1} completed (${batchDuration}ms):`, {
-        results: batchResults.map((result, index) => ({
-          url: batch[index].url,
-          status: result.status,
-          ...(result.status === 'rejected' && { reason: result.reason })
-        }))
-      });
-    }
-    
-    const totalDuration = Date.now() - preloadStartTime;
-    debugSuccess(`🏁 PRELOADING PROCESS COMPLETED (${totalDuration}ms total)`);
-    
-    // Start lazy loading of additional assets for mobile after a delay
-    if (isMobile()) {
-      setTimeout(() => {
-        startLazyLoading();
-      }, 2000); // 2 second delay after main loading
-    }
-    
-  }, [generateAssetsList, preloadAsset, addResourceHints, startLazyLoading]);
+  }, [generateAssetsList, preloadAsset, addResourceHints]);
 
   useEffect(() => {
     if (DEBUG_PRELOADER) {

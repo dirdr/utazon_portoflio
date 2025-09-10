@@ -7,7 +7,7 @@ import { DiveInButton } from "../common/DiveInButton";
 import { HomeFadeInContainer } from "../common/HomeFadeInContainer";
 import { Navbar } from "../layout/Navbar";
 import { Home } from "./Home";
-import { useHomeMobileBreakpoint } from "../../hooks/useHomeMobileBreakpoint";
+import { isMobile } from "../../utils/mobileDetection";
 import { useCursorTrail } from "../../hooks/useCursorTrail";
 import { useVideoWorkflow } from "../../hooks/useVideoWorkflow";
 import { useSoundStore } from "../../stores/soundStore";
@@ -15,7 +15,7 @@ import { useSoundStore } from "../../stores/soundStore";
 export const HomeContainer = () => {
   const [location] = useLocation();
   const isHomePage = location === "/";
-  const isMobile = useHomeMobileBreakpoint();
+  const isMobileDetected = isMobile();
 
   const { isFreshLoad } = useAppLoading();
   const { setTrailEnabled } = useCursorTrail();
@@ -25,8 +25,8 @@ export const HomeContainer = () => {
 
 
   const videoSrc = useMemo(
-    () => (isMobile ? "/videos/intro_mobile.mp4" : "/videos/intro.mp4"),
-    [isMobile],
+    () => (isMobileDetected ? "/videos/intro_mobile.mp4" : "/videos/intro.mp4"),
+    [isMobileDetected],
   );
 
   const getVideoElement = useCallback(() => {
@@ -35,7 +35,6 @@ export const HomeContainer = () => {
 
   const videoWorkflow = useVideoWorkflow({
     isFreshLoad,
-    isMobile,
     isHomePage,
     videoSrc,
     getVideoElement,
@@ -50,19 +49,19 @@ export const HomeContainer = () => {
 
   useEffect(() => {
     if (isHomePage) {
-      updateForNavigation(isMobile, isFreshLoad);
+      updateForNavigation(isMobileDetected, isFreshLoad);
     }
-  }, [isHomePage, isMobile, isFreshLoad, updateForNavigation]);
+  }, [isHomePage, isMobileDetected, isFreshLoad, updateForNavigation]);
 
   useEffect(() => {
     const shouldEnable =
       (videoWorkflow.shouldShowDiveIn || videoWorkflow.shouldShowContent) &&
-      !isMobile;
+      !isMobileDetected;
     setTrailEnabled(shouldEnable);
   }, [
     videoWorkflow.shouldShowDiveIn,
     videoWorkflow.shouldShowContent,
-    isMobile,
+    isMobileDetected,
     setTrailEnabled,
   ]);
 
@@ -98,7 +97,7 @@ export const HomeContainer = () => {
         )}
       </AnimatePresence>
 
-      {isMobile ? (
+      {isMobileDetected ? (
         <div className="h-screen relative z-10">
           <Navbar />
           <main className="absolute inset-0 top-auto overflow-hidden">
