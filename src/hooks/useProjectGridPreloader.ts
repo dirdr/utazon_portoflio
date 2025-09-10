@@ -118,7 +118,7 @@ export const useProjectGridPreloader = (
 
     await Promise.allSettled(promises);
     loadingRef.current = false;
-  }, [getProjectAssets, preloadImage, preloadVideo, projectId]);
+  }, [getProjectAssets, preloadImage, preloadVideo]);
 
   const handleIntersection = useCallback(() => {
     loadProjectAssets();

@@ -18,11 +18,11 @@ export const CarouselVideoCard = ({
   onPlay,
   isActive,
 }: CarouselVideoCardProps) => {
-  const playerRef = useRef<any>(null);
+  const playerRef = useRef<HTMLVideoElement | null>(null);
   const videoUrl = getVideoUrl(src);
 
-  const handleDuration = (event: any) => {
-    const video = event.target;
+  const handleDuration = (event: React.SyntheticEvent<HTMLVideoElement>) => {
+    const video = event.target as HTMLVideoElement;
     if (onDurationChange && video.duration) {
       onDurationChange(video.duration);
     }
@@ -40,12 +40,6 @@ export const CarouselVideoCard = ({
     }
   };
 
-  const handleReady = () => {
-    if (isActive && playerRef.current) {
-      playerRef.current.seekTo(0);
-    }
-  };
-
   return (
     <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden">
       <ReactPlayer
@@ -59,17 +53,16 @@ export const CarouselVideoCard = ({
         onLoadedMetadata={handleDuration}
         onEnded={handleEnded}
         onStart={handlePlay}
-        onReady={handleReady}
         playsInline={true}
         style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          minWidth: '100%',
-          minHeight: '100%',
-          width: 'auto',
-          height: 'auto'
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          minWidth: "100%",
+          minHeight: "100%",
+          width: "auto",
+          height: "auto",
         }}
       />
     </div>
