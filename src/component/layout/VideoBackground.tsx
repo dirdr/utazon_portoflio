@@ -158,7 +158,7 @@ export const VideoBackground = forwardRef<
           }}
         />
 
-        {!isMobile && (
+        {!isMobile() && (
           <div
             className={`fixed inset-0 pointer-events-none ${
               ANIMATION_CLASSES.TRANSITION

@@ -1,10 +1,11 @@
 import { cn } from "../../utils/cn";
 import { useTranslation } from "react-i18next";
 import { Button } from "./Button";
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState, useCallback } from "react";
 import { LineSweepText } from "./LineSweepText";
 import { useTransitionContext } from "../../hooks/useTransitionContext";
 import { useAnimationControl } from "../../hooks/useAnimationControl";
+import { useProjectGridPreloader } from "../../hooks/useProjectGridPreloader";
 
 // Import card backgrounds directly (same as preload system)
 import p1 from "../../assets/images/card_backgrounds/1.webp";
@@ -53,6 +54,13 @@ export const Card = ({
     rootMargin: "100px",
   });
 
+  const preloader = useProjectGridPreloader({
+    projectId: project.id,
+    hasVideo: !!thumbnail,
+    rootMargin: "200px",
+    threshold: 0.1,
+  });
+
   const randomBackground = useMemo(() => {
     const hash = project.name.split("").reduce((acc, char) => {
       return char.charCodeAt(0) + ((acc << 5) - acc);
@@ -60,6 +68,19 @@ export const Card = ({
     const index = Math.abs(hash) % cardBackgrounds.length;
     return cardBackgrounds[index];
   }, [project.name]);
+
+  const elementRef = useRef<HTMLElement | null>(null);
+
+  const combinedRef = useCallback((node: HTMLElement | null) => {
+    if (elementRef.current) {
+      preloader.observeElement(null);
+    }
+    elementRef.current = node;
+    animationRef(node);
+    if (node) {
+      preloader.observeElement(node);
+    }
+  }, [animationRef, preloader]);
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -91,7 +112,7 @@ export const Card = ({
 
   return (
     <article
-      ref={animationRef}
+      ref={combinedRef}
       className={cn(
         "group glint-card-wrapper cursor-pointer w-full card-item",
         className,

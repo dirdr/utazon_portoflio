@@ -1,7 +1,7 @@
 import { useEffect, useCallback, useState } from "react";
 import { createPortal } from "react-dom";
-import { ReactPlayerWrapper } from "./ReactPlayerWrapper";
-import { apiClient } from "../../services/api";
+import { InteractiveVideoPlayer } from "./InteractiveVideoPlayer";
+import { getVideoUrl } from "../../utils/videoUrl";
 
 interface FullscreenVideoModalProps {
   isOpen: boolean;
@@ -12,7 +12,7 @@ export const FullscreenVideoModal = ({
   isOpen,
   onClose,
 }: FullscreenVideoModalProps) => {
-  const videoUrl = apiClient.getVideoUrl("showreel.mp4");
+  const videoUrl = getVideoUrl("showreel.mp4");
   const [isPlaying, setIsPlaying] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
 
@@ -101,7 +101,7 @@ export const FullscreenVideoModal = ({
       </button>
       
       <div className="w-full h-full" style={{ touchAction: 'manipulation' }}>
-        <ReactPlayerWrapper
+        <InteractiveVideoPlayer
           src={videoUrl}
           width="100%"
           height="100%"

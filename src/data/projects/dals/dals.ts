@@ -17,27 +17,27 @@ export const Dals: Project = {
       order: 2,
       videos: [
         {
-          src: "/videos/projects/dals/pirate_compressed.mp4",
+          src: "dals/carousel/pirate_compressed.mp4",
           title: "Pirate",
         },
         {
-          src: "/videos/projects/dals/jungeli_compressed.mp4",
+          src: "dals/carousel/jungeli_compressed.mp4",
           title: "Jungeli",
         },
         {
-          src: "/videos/projects/dals/bus_compressed.mp4",
+          src: "dals/carousel/bus_compressed.mp4",
           title: "Bus",
         },
         {
-          src: "/videos/projects/dals/miami_compressed.mp4",
+          src: "dals/carousel/miami_compressed.mp4",
           title: "Miami",
         },
         {
-          src: "/videos/projects/dals/lenie_compressed.mp4",
+          src: "dals/carousel/lenie_compressed.mp4",
           title: "Lenie",
         },
         {
-          src: "/videos/projects/dals/boat_compressed.mp4",
+          src: "dals/carousel/boat_compressed.mp4",
           title: "Boat",
         },
       ],
@@ -48,19 +48,19 @@ export const Dals: Project = {
       order: 3,
       videos: [
         {
-          src: "/videos/projects/dals/boat_live_compressed.mp4",
+          src: "dals/live/boat_live_compressed.mp4",
           title: "Boat Live",
         },
         {
-          src: "/videos/projects/dals/jungeli_live_compressed.mp4",
+          src: "dals/live/jungeli_live_compressed.mp4",
           title: "Jungeli Live",
         },
         {
-          src: "/videos/projects/dals/lenie_live_compressed.mp4",
+          src: "dals/live/lenie_live_compressed.mp4",
           title: "Lenie Live",
         },
         {
-          src: "/videos/projects/dals/pirate_live.mp4",
+          src: "dals/live/pirate_live.mp4",
           title: "Pirate Live",
         },
       ],

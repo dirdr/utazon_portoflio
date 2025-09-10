@@ -1,8 +1,8 @@
 import { VideoShowcaseData } from "../../types/showcase";
-import { ReactPlayerWrapper } from "../common/ReactPlayerWrapper";
-import { apiClient } from "../../services/api";
+import { InteractiveVideoPlayer } from "../common/InteractiveVideoPlayer";
 import { SHOWCASE_STYLES } from "../../constants/showcaseStyles";
 import { cn } from "../../utils/cn";
+import { getVideoUrl } from "../../utils/videoUrl";
 
 interface VideoShowcaseProps {
   data: VideoShowcaseData;
@@ -16,7 +16,7 @@ export const VideoShowcase = ({
   border = false,
 }: VideoShowcaseProps) => {
   const { video } = data;
-  const videoUrl = apiClient.getVideoUrl(video.src);
+  const videoUrl = getVideoUrl(video.src);
 
   return (
     <div className={cn("w-full", className)}>
@@ -27,7 +27,7 @@ export const VideoShowcase = ({
           border && SHOWCASE_STYLES.border,
         )}
       >
-        <ReactPlayerWrapper
+        <InteractiveVideoPlayer
           src={videoUrl}
           width="100%"
           height="100%"

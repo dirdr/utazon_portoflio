@@ -2,6 +2,8 @@ import { VideoGridShowcaseData } from "../../types/showcase";
 import { SHOWCASE_STYLES } from "../../constants/showcaseStyles";
 import { cn } from "../../utils/cn";
 import { useTranslation } from "react-i18next";
+import ReactPlayer from "react-player";
+import { getVideoUrl } from "../../utils/videoUrl";
 
 interface VideoGridShowcaseProps {
   data: VideoGridShowcaseData;
@@ -25,18 +27,30 @@ export const VideoGridShowcase = ({
             <figure key={index} className="w-full">
               <div
                 className={cn(
-                  "w-full aspect-video overflow-hidden",
+                  "w-full aspect-video overflow-hidden relative",
                   border && SHOWCASE_STYLES.borderRadius,
                   border && SHOWCASE_STYLES.border,
                 )}
               >
-                <video
-                  src={video.src}
-                  className="w-full h-full object-cover"
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
+                <ReactPlayer
+                  src={getVideoUrl(video.src)}
+                  width="100%"
+                  height="100%"
+                  playing={true}
+                  muted={true}
+                  loop={true}
+                  controls={false}
+                  playsInline={true}
+                  style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    minWidth: '100%',
+                    minHeight: '100%',
+                    width: 'auto',
+                    height: 'auto'
+                  }}
                 />
               </div>
               {video.title && (

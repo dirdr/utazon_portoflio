@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
+import ReactPlayer from "react-player";
+import { getVideoUrl } from "../../utils/videoUrl";
 
 interface CarouselVideoCardProps {
   src: string;
@@ -16,68 +18,59 @@ export const CarouselVideoCard = ({
   onPlay,
   isActive,
 }: CarouselVideoCardProps) => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const playerRef = useRef<any>(null);
+  const videoUrl = getVideoUrl(src);
 
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    const handleLoadedMetadata = () => {
-      if (onDurationChange && video.duration) {
-        onDurationChange(video.duration);
-      }
-    };
-
-    const handleEnded = () => {
-      setIsPlaying(false);
-      if (onEnded) {
-        onEnded();
-      }
-      video.currentTime = 0;
-    };
-
-    const handlePlay = () => {
-      if (onPlay) {
-        onPlay();
-      }
-    };
-
-    video.addEventListener("loadedmetadata", handleLoadedMetadata);
-    video.addEventListener("ended", handleEnded);
-    video.addEventListener("play", handlePlay);
-
-    return () => {
-      video.removeEventListener("loadedmetadata", handleLoadedMetadata);
-      video.removeEventListener("ended", handleEnded);
-      video.removeEventListener("play", handlePlay);
-    };
-  }, [onDurationChange, onEnded, onPlay]);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    if (isActive && !isPlaying) {
-      video.currentTime = 0;
-      video
-        .play()
-        .then(() => setIsPlaying(true))
-        .catch(() => {});
-    } else if (!isActive && isPlaying) {
-      video.pause();
-      setIsPlaying(false);
+  const handleDuration = (event: any) => {
+    const video = event.target;
+    if (onDurationChange && video.duration) {
+      onDurationChange(video.duration);
     }
-  }, [isActive, isPlaying, src]);
+  };
+
+  const handleEnded = () => {
+    if (onEnded) {
+      onEnded();
+    }
+  };
+
+  const handlePlay = () => {
+    if (onPlay) {
+      onPlay();
+    }
+  };
+
+  const handleReady = () => {
+    if (isActive && playerRef.current) {
+      playerRef.current.seekTo(0);
+    }
+  };
 
   return (
     <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden">
-      <video
-        ref={videoRef}
-        src={src}
-        className="w-full h-full object-cover"
-        muted
-        playsInline
+      <ReactPlayer
+        ref={playerRef}
+        src={videoUrl}
+        width="100%"
+        height="100%"
+        playing={isActive}
+        muted={true}
+        controls={false}
+        onLoadedMetadata={handleDuration}
+        onEnded={handleEnded}
+        onStart={handlePlay}
+        onReady={handleReady}
+        playsInline={true}
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          minWidth: '100%',
+          minHeight: '100%',
+          width: 'auto',
+          height: 'auto'
+        }}
       />
     </div>
   );
