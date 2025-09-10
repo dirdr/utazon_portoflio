@@ -2,24 +2,19 @@ import React, { createContext, useContext } from "react";
 import { useAppInitialization } from "../hooks/useAppInitialization";
 
 interface AppLoadingState {
-  // Loading state
   showLoader: boolean;
   isInitialized: boolean;
 
-  // Asset preloading
   progress: number;
   loadedAssets: number;
   totalAssets: number;
   failedAssets: number;
 
-  // Navigation state
   isFreshLoad: boolean;
 
-  // Home-specific dive-in state (for integration with HomeContext)
   showDiveInButton: boolean;
   hideDiveInButton: () => void;
 
-  // Video behavior (for integration with HomeContext)
   videoBehavior: {
     shouldPlayFromStart: boolean;
     isDiveInFlow: boolean;
@@ -65,4 +60,3 @@ export const AppLoadingProvider: React.FC<AppLoadingProviderProps> = ({
     </AppLoadingContext.Provider>
   );
 };
-

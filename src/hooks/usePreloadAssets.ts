@@ -5,26 +5,25 @@ import p1 from "../assets/images/card_backgrounds/1.webp";
 import p2 from "../assets/images/card_backgrounds/2.webp";
 import p3 from "../assets/images/card_backgrounds/3.webp";
 
-// Debug utility for preloader
-const DEBUG_PRELOADER = true; // Set to false in production
+const DEBUG_PRELOADER = true;
 const debugLog = (message: string, data?: unknown) => {
   if (DEBUG_PRELOADER) {
     const timestamp = new Date().toISOString().slice(11, 23);
-    console.log(`🔄 [PRELOADER ${timestamp}] ${message}`, data || '');
+    console.log(`🔄 [PRELOADER ${timestamp}] ${message}`, data || "");
   }
 };
 
 const debugError = (message: string, error?: unknown) => {
   if (DEBUG_PRELOADER) {
     const timestamp = new Date().toISOString().slice(11, 23);
-    console.error(`❌ [PRELOADER ${timestamp}] ${message}`, error || '');
+    console.error(`❌ [PRELOADER ${timestamp}] ${message}`, error || "");
   }
 };
 
 const debugSuccess = (message: string, data?: unknown) => {
   if (DEBUG_PRELOADER) {
     const timestamp = new Date().toISOString().slice(11, 23);
-    console.log(`✅ [PRELOADER ${timestamp}] ${message}`, data || '');
+    console.log(`✅ [PRELOADER ${timestamp}] ${message}`, data || "");
   }
 };
 
@@ -58,11 +57,11 @@ export const usePreloadAssets = () => {
   });
 
   const generateAssetsList = useCallback((): AssetLoadState[] => {
-    debugLog('🚀 Starting CRITICAL asset list generation (Phase 1 refactor)');
-    
+    debugLog("🚀 Starting CRITICAL asset list generation (Phase 1 refactor)");
+
     const isMobileDevice = isMobile();
-    
-    debugLog('Environment info:', {
+
+    debugLog("Environment info:", {
       userAgent: navigator.userAgent,
       isMobile: isMobileDevice,
       cookiesEnabled: navigator.cookieEnabled,
@@ -71,10 +70,9 @@ export const usePreloadAssets = () => {
 
     const assets: AssetLoadState[] = [];
 
-    // CRITICAL ASSETS ONLY - Device-specific intro video
-    debugLog(`Adding ${isMobileDevice ? 'mobile' : 'desktop'} intro video`);
+    debugLog(`Adding ${isMobileDevice ? "mobile" : "desktop"} intro video`);
+
     if (isMobileDevice) {
-      // Mobile: Only load the lighter mobile intro video (12MB)
       assets.push({
         url: `/videos/intro_mobile.mp4`,
         loaded: false,
@@ -82,7 +80,6 @@ export const usePreloadAssets = () => {
         type: "video",
       });
     } else {
-      // Desktop: Only load the desktop intro video (25MB)
       assets.push({
         url: `/videos/intro.mp4`,
         loaded: false,
@@ -91,7 +88,6 @@ export const usePreloadAssets = () => {
       });
     }
 
-    // CRITICAL ASSETS ONLY - Essential background images
     assets.push({
       url: backgroundImage,
       loaded: false,
@@ -120,12 +116,10 @@ export const usePreloadAssets = () => {
       type: "image",
     });
 
-    // NO PROJECT ASSETS - These will be loaded progressively later
-
     debugLog(`Generated ${assets.length} CRITICAL assets for preloading:`, {
-      videos: assets.filter(a => a.type === 'video').length,
-      images: assets.filter(a => a.type === 'image').length,
-      assetsList: assets.map(a => ({ url: a.url, type: a.type }))
+      videos: assets.filter((a) => a.type === "video").length,
+      images: assets.filter((a) => a.type === "image").length,
+      assetsList: assets.map((a) => ({ url: a.url, type: a.type })),
     });
 
     return assets;
@@ -134,11 +128,10 @@ export const usePreloadAssets = () => {
   const preloadImage = useCallback((url: string): Promise<void> => {
     const startTime = Date.now();
     debugLog(`🖼️ Starting image preload: ${url}`);
-    
+
     return new Promise((resolve, reject) => {
       const img = new Image();
 
-      // Safari/Firefox specific optimizations
       const isSafari = /^((?!chrome|android).)*safari/i.test(
         navigator.userAgent,
       );
@@ -148,14 +141,13 @@ export const usePreloadAssets = () => {
         isSafari,
         isFirefox,
         decoding: "async",
-        loading: "eager"
+        loading: "eager",
       });
 
       img.decoding = "async";
       img.loading = "eager";
 
-      // Help Safari/Firefox with WebP loading - only if served with CORS headers
-      if ((isSafari || isFirefox) && !url.includes('/videos/')) {
+      if ((isSafari || isFirefox) && !url.includes("/videos/")) {
         img.crossOrigin = "anonymous";
         debugLog(`Set crossOrigin=anonymous for ${url} (Safari/Firefox)`);
       }
@@ -165,7 +157,7 @@ export const usePreloadAssets = () => {
         debugSuccess(`Image loaded successfully: ${url} (${duration}ms)`, {
           naturalWidth: img.naturalWidth,
           naturalHeight: img.naturalHeight,
-          complete: img.complete
+          complete: img.complete,
         });
         cleanup();
         resolve();
@@ -177,7 +169,7 @@ export const usePreloadAssets = () => {
           event,
           complete: img.complete,
           naturalWidth: img.naturalWidth,
-          naturalHeight: img.naturalHeight
+          naturalHeight: img.naturalHeight,
         });
         cleanup();
         reject(new Error(`Failed to load image: ${url}`));
@@ -194,29 +186,31 @@ export const usePreloadAssets = () => {
       debugLog(`Setting image src: ${url}`);
       img.src = url;
 
-      // Timeout fallback
       setTimeout(() => {
         if (!img.complete) {
           const duration = Date.now() - startTime;
-          debugError(`Image preload timeout (10s) for: ${url} (${duration}ms)`, {
-            complete: img.complete,
-            naturalWidth: img.naturalWidth,
-            naturalHeight: img.naturalHeight
-          });
+          debugError(
+            `Image preload timeout (10s) for: ${url} (${duration}ms)`,
+            {
+              complete: img.complete,
+              naturalWidth: img.naturalWidth,
+              naturalHeight: img.naturalHeight,
+            },
+          );
           cleanup();
-          resolve(); // Don't fail on timeout, just continue
+          resolve();
         }
-      }, 10000);
+      }, 3000);
     });
   }, []);
 
   const preloadVideo = useCallback((url: string): Promise<void> => {
     const startTime = Date.now();
     debugLog(`🎥 Starting video preload: ${url}`);
-    
+
     return new Promise((resolve) => {
       debugLog(`Fetching video HEAD request: ${url}`);
-      
+
       // For Firefox, try direct video element creation first to avoid CORS issues
       const isFirefox = navigator.userAgent.toLowerCase().includes("firefox");
       if (isFirefox) {
@@ -224,34 +218,40 @@ export const usePreloadAssets = () => {
         const video = document.createElement("video");
         video.preload = "metadata";
         video.muted = true;
-        
+
         const handleVideoReady = () => {
           const duration = Date.now() - startTime;
-          debugSuccess(`Firefox direct video preload success: ${url} (${duration}ms)`);
+          debugSuccess(
+            `Firefox direct video preload success: ${url} (${duration}ms)`,
+          );
           resolve();
         };
-        
+
         const handleVideoError = () => {
-          debugError(`Firefox direct video preload failed: ${url}, fallback to fetch`);
+          debugError(
+            `Firefox direct video preload failed: ${url}, fallback to fetch`,
+          );
           // Fallback to original fetch method
           performFetch();
         };
-        
-        video.addEventListener("loadedmetadata", handleVideoReady, { once: true });
+
+        video.addEventListener("loadedmetadata", handleVideoReady, {
+          once: true,
+        });
         video.addEventListener("error", handleVideoError, { once: true });
         video.src = url;
-        
+
         // Timeout fallback
         setTimeout(() => {
           handleVideoReady();
         }, 5000);
-        
+
         return;
       }
-      
+
       // Standard fetch for other browsers
       performFetch();
-      
+
       function performFetch() {
         fetch(url, {
           method: "HEAD",
@@ -261,13 +261,13 @@ export const usePreloadAssets = () => {
           .then((response) => {
             const headDuration = Date.now() - startTime;
             const contentType = response.headers.get("content-type");
-            
+
             debugLog(`Video HEAD response for ${url} (${headDuration}ms):`, {
               ok: response.ok,
               status: response.status,
               statusText: response.statusText,
               contentType,
-              headers: Object.fromEntries(response.headers.entries())
+              headers: Object.fromEntries(response.headers.entries()),
             });
 
             if (!response.ok || !contentType?.includes("video")) {
@@ -275,14 +275,18 @@ export const usePreloadAssets = () => {
                 ok: response.ok,
                 status: response.status,
                 contentType,
-                reason: !response.ok ? 'Response not ok' : 'Content-type not video'
+                reason: !response.ok
+                  ? "Response not ok"
+                  : "Content-type not video",
               });
               resolve();
               return;
             }
 
-            debugSuccess(`Video HEAD check passed for ${url}, starting video element preload`);
-            
+            debugSuccess(
+              `Video HEAD check passed for ${url}, starting video element preload`,
+            );
+
             const videoStartTime = Date.now();
 
             const video = document.createElement("video");
@@ -305,7 +309,7 @@ export const usePreloadAssets = () => {
               isSafari,
               timeoutDuration,
               preloadType: isCriticalVideo ? "auto" : "metadata",
-              eventType: isCriticalVideo ? "canplaythrough" : "loadedmetadata"
+              eventType: isCriticalVideo ? "canplaythrough" : "loadedmetadata",
             });
 
             const timeoutId = setTimeout(() => {
@@ -316,7 +320,7 @@ export const usePreloadAssets = () => {
                   timeoutDuration,
                   readyState: video.readyState,
                   networkState: video.networkState,
-                  duration: video.duration
+                  duration: video.duration,
                 });
                 cleanup();
                 resolve();
@@ -332,7 +336,7 @@ export const usePreloadAssets = () => {
                   readyState: video.readyState,
                   videoWidth: video.videoWidth,
                   videoHeight: video.videoHeight,
-                  networkState: video.networkState
+                  networkState: video.networkState,
                 });
                 cleanup();
                 resolve();
@@ -347,7 +351,7 @@ export const usePreloadAssets = () => {
                   event,
                   error: video.error,
                   readyState: video.readyState,
-                  networkState: video.networkState
+                  networkState: video.networkState,
                 });
                 cleanup();
                 resolve();
@@ -375,12 +379,12 @@ export const usePreloadAssets = () => {
 
             video.preload = isCriticalVideo ? "auto" : "metadata";
             video.muted = true;
-            
+
             debugLog(`Setting video src: ${url}`, {
               preload: video.preload,
-              muted: video.muted
+              muted: video.muted,
             });
-            
+
             video.src = url;
           })
           .catch((error) => {
@@ -389,7 +393,7 @@ export const usePreloadAssets = () => {
               error,
               name: error.name,
               message: error.message,
-              stack: error.stack
+              stack: error.stack,
             });
             resolve();
           });
@@ -400,7 +404,7 @@ export const usePreloadAssets = () => {
   const updateAssetState = useCallback(
     (url: string, loaded: boolean, error: boolean) => {
       debugLog(`📊 Asset state update: ${url}`, { loaded, error });
-      
+
       setState((prevState) => {
         const updatedAssets = prevState.assets.map((asset) =>
           asset.url === url ? { ...asset, loaded, error } : asset,
@@ -417,7 +421,7 @@ export const usePreloadAssets = () => {
           loaded: loadedCount,
           failed: failedCount,
           total: updatedAssets.length,
-          isComplete
+          isComplete,
         });
 
         if (isComplete) {
@@ -425,7 +429,9 @@ export const usePreloadAssets = () => {
             totalAssets: updatedAssets.length,
             successful: loadedCount,
             failed: failedCount,
-            failedAssets: updatedAssets.filter(a => a.error).map(a => a.url)
+            failedAssets: updatedAssets
+              .filter((a) => a.error)
+              .map((a) => a.url),
           });
         }
 
@@ -446,7 +452,7 @@ export const usePreloadAssets = () => {
     async (asset: AssetLoadState) => {
       const assetStartTime = Date.now();
       debugLog(`⚡ Starting asset preload: ${asset.type} - ${asset.url}`);
-      
+
       try {
         if (asset.type === "image") {
           await preloadImage(asset.url);
@@ -454,7 +460,9 @@ export const usePreloadAssets = () => {
           await preloadVideo(asset.url);
         }
         const duration = Date.now() - assetStartTime;
-        debugSuccess(`Asset preloaded successfully: ${asset.url} (${duration}ms)`);
+        debugSuccess(
+          `Asset preloaded successfully: ${asset.url} (${duration}ms)`,
+        );
         updateAssetState(asset.url, true, false);
       } catch (error) {
         const duration = Date.now() - assetStartTime;
@@ -483,17 +491,18 @@ export const usePreloadAssets = () => {
     });
   }, []);
 
-
   const startPreloading = useCallback(async () => {
     const preloadStartTime = Date.now();
-    debugLog('🚀🚀🚀 STARTING CRITICAL PRELOADING PROCESS (Phase 1 refactor) 🚀🚀🚀');
-    
+    debugLog(
+      "🚀🚀🚀 STARTING CRITICAL PRELOADING PROCESS (Phase 1 refactor) 🚀🚀🚀",
+    );
+
     const assetsList = generateAssetsList();
 
-    debugLog('Adding resource hints');
+    debugLog("Adding resource hints");
     addResourceHints();
 
-    debugLog('Setting initial state');
+    debugLog("Setting initial state");
     setState({
       assets: assetsList,
       totalAssets: assetsList.length,
@@ -503,21 +512,26 @@ export const usePreloadAssets = () => {
       progress: 0,
     });
 
-    debugLog(`🔥 Starting ALL critical assets (${assetsList.length}):`, assetsList.map(a => a.url));
-    
+    debugLog(
+      `🔥 Starting ALL critical assets (${assetsList.length}):`,
+      assetsList.map((a) => a.url),
+    );
+
     // Load all critical assets in parallel - no need for batching with only 5 assets
     const allPromises = assetsList.map((asset) => preloadAsset(asset));
     const results = await Promise.allSettled(allPromises);
-    
+
     const totalDuration = Date.now() - preloadStartTime;
-    debugSuccess(`🏁 CRITICAL PRELOADING COMPLETED (${totalDuration}ms total):`, {
-      results: results.map((result, index) => ({
-        url: assetsList[index].url,
-        status: result.status,
-        ...(result.status === 'rejected' && { reason: result.reason })
-      }))
-    });
-    
+    debugSuccess(
+      `🏁 CRITICAL PRELOADING COMPLETED (${totalDuration}ms total):`,
+      {
+        results: results.map((result, index) => ({
+          url: assetsList[index].url,
+          status: result.status,
+          ...(result.status === "rejected" && { reason: result.reason }),
+        })),
+      },
+    );
   }, [generateAssetsList, preloadAsset, addResourceHints]);
 
   useEffect(() => {
