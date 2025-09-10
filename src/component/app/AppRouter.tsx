@@ -10,13 +10,12 @@ import { TransitionProvider } from "../../contexts/TransitionProvider";
 import { ModalRoot } from "../common/ModalRoot";
 import { CursorTrail } from "../common/CursorTrail";
 import { useCursorTrail } from "../../hooks/useCursorTrail";
-import { useHomeMobileBreakpoint } from "../../hooks/useHomeMobileBreakpoint";
 import { PageTransitionOverlay } from "../layout/PageTransitionOverlay";
 import { useTransitionRouter } from "../../hooks/useTransitionRouter";
+import { isMobile } from "../../utils/mobileDetection";
 
 export const AppRouter = () => {
   const { isEnabled } = useCursorTrail();
-  const isMobile = useHomeMobileBreakpoint();
 
   const {
     isTransitioning,
@@ -71,3 +70,4 @@ export const AppRouter = () => {
     </TransitionProvider>
   );
 };
+

@@ -7,10 +7,10 @@ import {
   useMemo,
 } from "react";
 import { useLocation } from "wouter";
-import { useHomeMobileBreakpoint } from "../../hooks/useHomeMobileBreakpoint";
 import { RadialGradient } from "../common/RadialGradient";
 import { ANIMATION_CLASSES } from "../../constants/animations";
 import { OVERLAY_Z_INDEX } from "../../constants/overlayZIndex";
+import { isMobile } from "../../utils/mobileDetection";
 
 export interface VideoBackgroundRef {
   startVideo: () => void;
@@ -44,19 +44,19 @@ export const VideoBackground = forwardRef<
   ) => {
     const [location] = useLocation();
     const isHomePage = location === "/";
-    const isMobile = useHomeMobileBreakpoint();
+    const isMobileDetected = isMobile();
 
     const videoRef = useRef<HTMLVideoElement>(null);
-    
-    // Track loaded state per video source to prevent duplicate load callbacks
+
     const loadedSources = useRef(new Set<string>());
 
     const videoSource = useMemo(() => {
       if (src) return src;
-      return isMobile ? "/videos/intro_mobile.mp4" : "/videos/intro.mp4";
-    }, [src, isMobile]);
+      return isMobileDetected
+        ? "/videos/intro_mobile.mp4"
+        : "/videos/intro.mp4";
+    }, [src, isMobileDetected]);
 
-    // Clean up loaded sources when video source changes
     useEffect(() => {
       loadedSources.current.clear();
     }, [videoSource]);
@@ -69,7 +69,6 @@ export const VideoBackground = forwardRef<
       const hasAlreadyNotifiedLoad = loadedSources.current.has(currentSource);
 
       const handleLoadedData = () => {
-        // Only call onLoadedData once per video source
         if (!loadedSources.current.has(currentSource)) {
           loadedSources.current.add(currentSource);
           onLoadedData?.();
@@ -84,11 +83,9 @@ export const VideoBackground = forwardRef<
         onEnded?.();
       };
 
-      const handlePlay = () => {
-      };
+      const handlePlay = () => {};
 
-      const handlePause = () => {
-      };
+      const handlePause = () => {};
 
       video.addEventListener("loadeddata", handleLoadedData);
       video.addEventListener("timeupdate", handleTimeUpdate);
@@ -96,7 +93,6 @@ export const VideoBackground = forwardRef<
       video.addEventListener("play", handlePlay);
       video.addEventListener("pause", handlePause);
 
-      // If video is already loaded and we haven't notified yet, trigger callback
       if (video.readyState >= 2 && !hasAlreadyNotifiedLoad) {
         loadedSources.current.add(currentSource);
         setTimeout(() => onLoadedData?.(), 0);
@@ -122,7 +118,7 @@ export const VideoBackground = forwardRef<
     const setMuted = useCallback((muted: boolean) => {
       const video = videoRef.current;
       if (!video) return;
-      
+
       video.muted = muted;
     }, []);
 
@@ -148,8 +144,8 @@ export const VideoBackground = forwardRef<
         <video
           ref={videoRef}
           className="w-full h-full object-cover gpu-accelerated"
-          muted={isMobile}
-          autoPlay={isMobile}
+          muted={isMobileDetected}
+          autoPlay={isMobileDetected}
           playsInline
           disablePictureInPicture
           disableRemotePlayback
@@ -157,8 +153,8 @@ export const VideoBackground = forwardRef<
           crossOrigin="anonymous"
           src={videoSource}
           style={{
-            contentVisibility: 'auto',
-            willChange: 'auto',
+            contentVisibility: "auto",
+            willChange: "auto",
           }}
         />
 

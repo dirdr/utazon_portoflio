@@ -4,18 +4,16 @@ import { LineSweepText } from "../common/LineSweepText";
 import { SoundPlayer } from "../common/SoundPlayer";
 import { ROUTES } from "../../constants/routes";
 import { useTranslation } from "react-i18next";
-import { useHomeMobileBreakpoint } from "../../hooks/useHomeMobileBreakpoint";
 import { FullscreenVideoModal } from "../common/FullscreenVideoModal";
 import { useTransitionContext } from "../../hooks/useTransitionContext";
 import { useSoundStore } from "../../stores/soundStore";
+import { isMobile } from "../../utils/mobileDetection";
 
 export const Home = () => {
   const { isSoundPlaying, toggleSound } = useSoundStore();
   const { t } = useTranslation();
-  const isMobile = useHomeMobileBreakpoint();
   const { navigateWithTransition } = useTransitionContext();
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
-  
 
   const titleContent = useMemo(() => {
     const title = t("home.title");
@@ -40,7 +38,7 @@ export const Home = () => {
     navigateWithTransition(ROUTES.PROJECTS);
   }, [navigateWithTransition]);
 
-  if (isMobile) {
+  if (isMobile()) {
     return (
       <div className="h-full w-full flex flex-col justify-end px-4 lg:px-12 pb-8">
         <div className="flex flex-col ">

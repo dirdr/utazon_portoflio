@@ -215,7 +215,13 @@ export const useVideoWorkflow = (
     } else {
       setWorkflowState("loading");
     }
-  }, [isHomePage, isFreshLoad, isMobileDetected, isVideoLoaded, isTransitioning]);
+  }, [
+    isHomePage,
+    isFreshLoad,
+    isMobileDetected,
+    isVideoLoaded,
+    isTransitioning,
+  ]);
 
   useEffect(() => {
     if (!isHomePage || !videoSrc) return;
@@ -247,4 +253,3 @@ export const useVideoWorkflow = (
     onDiveInClick,
   };
 };
-
