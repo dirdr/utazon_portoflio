@@ -13,6 +13,12 @@ export interface VideoTransitionConfig {
   mobile: {
     /** Whether mobile videos should be muted by default */
     muted: boolean;
+    /** Duration of the mobile animation video in seconds */
+    animationDuration: number;
+    /** Start time for looping intro_mobile.mp4 */
+    introLoopStart: number;
+    /** Whether to enable the mobile animation sequence */
+    enableAnimation: boolean;
   };
 
   general: {
@@ -39,6 +45,9 @@ export const DEFAULT_VIDEO_TRANSITION_CONFIG: VideoTransitionConfig = {
 
   mobile: {
     muted: true, // ← Mobile videos are muted by default
+    animationDuration: 2.5, // ← Duration of mobil_anim.mp4 (will be auto-detected from video)
+    introLoopStart: 0, // ← Start time for looping intro_mobile.mp4
+    enableAnimation: true, // ← Enable mobile animation sequence on fresh loads
   },
 
   general: {

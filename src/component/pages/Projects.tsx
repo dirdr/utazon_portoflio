@@ -18,10 +18,12 @@ export const Projects = () => {
   }, [setBackgroundImage]);
 
   return (
-    <Container className="pt-4 sm:pt-8 pb-8 mb-10">
+    <Container className="pt-4 sm:pt-8 mb-8 lg:mb-32">
       <main>
         <section aria-labelledby="projects-heading">
-          <h1 id="projects-heading" className="sr-only">Projects</h1>
+          <h1 id="projects-heading" className="sr-only">
+            Projects
+          </h1>
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6 lg:gap-8 card-container">
             {allProjectsSortedByPriority.map((project, index) => (
               <Card

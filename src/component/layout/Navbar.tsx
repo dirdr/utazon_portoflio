@@ -40,13 +40,13 @@ export const Navbar = () => {
         <div className="flex flex-col items-start">
           <button
             onClick={handleHomeClick}
-            className="text-sm lg:text-base 2xl:text-lg font-nord hover:text-white transition-colors cursor-pointer text-left"
+            className="text-sm 2xl:text-base font-nord hover:text-white transition-colors cursor-pointer text-left"
           >
             UTAZON
           </button>
           <button
             onClick={handleHomeClick}
-            className="font-nord text-muted text-xs lg:text-small 2xl:text-base hover:text-white transition-colors cursor-pointer text-left"
+            className="font-nord text-muted text-xs 2xl:text-sm hover:text-white transition-colors cursor-pointer text-left"
           >
             ANTOINE VERNEZ
           </button>
@@ -58,7 +58,7 @@ export const Navbar = () => {
               <img
                 src={logo}
                 alt="Utazon Logo"
-                className="h-10 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+                className="h-6 xl:h-8 w-auto cursor-pointer hover:opacity-80 transition-opacity"
               />
             </button>
           </div>

@@ -27,29 +27,23 @@ export const VideoGridShowcase = ({
             <figure key={index} className="w-full">
               <div
                 className={cn(
-                  "w-full aspect-video overflow-hidden relative",
+                  "w-full aspect-video overflow-hidden",
                   border && SHOWCASE_STYLES.borderRadius,
                   border && SHOWCASE_STYLES.border,
                 )}
               >
                 <ReactPlayer
                   src={getVideoUrl(video.src)}
-                  width="100%"
-                  height="100%"
                   playing={true}
                   muted={true}
                   loop={true}
                   controls={false}
                   playsInline={true}
+                  width="100%"
+                  height="100%"
+                  className="react-player"
                   style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    minWidth: '100%',
-                    minHeight: '100%',
-                    width: 'auto',
-                    height: 'auto'
+                    objectFit: 'cover' as const,
                   }}
                 />
               </div>
@@ -60,11 +54,10 @@ export const VideoGridShowcase = ({
           );
         })}
       </div>
-      
-      {/* Copyright Text */}
+
       {data.copyright && (
         <div className="text-center mt-4">
-          <p className="text-xs text-gray-500 text-muted">
+          <p className="text-sm text-gray-500 text-muted">
             {t(data.copyright.key)}
           </p>
         </div>
@@ -72,4 +65,3 @@ export const VideoGridShowcase = ({
     </div>
   );
 };
-

@@ -34,7 +34,6 @@ export const useAppInitialization = () => {
 
   const preloadState = usePreloadAssets();
   const shouldPreload = showLoader;
-  const isAssetsLoaded = preloadState.isComplete;
 
   const videoBehavior = useMemo(
     () => ({
@@ -44,6 +43,14 @@ export const useAppInitialization = () => {
     [isFreshLoad, isHomePage],
   );
 
+  // Start preloading immediately on fresh load
+  useEffect(() => {
+    if (isFreshLoad) {
+      preloadState.startPreloading();
+    }
+  }, [isFreshLoad, preloadState.startPreloading]); // Now safe with ref guard
+
+  // Handle SPA navigation - immediate initialization
   useEffect(() => {
     if (!isFreshLoad && navigation.isSPANavigation) {
       setShowDiveInButton(false);
@@ -54,11 +61,35 @@ export const useAppInitialization = () => {
     }
   }, [isFreshLoad, navigation.isSPANavigation]);
 
+  // Handle fresh load completion with minimum loading time
   useEffect(() => {
-    if (isFreshLoad && isHomePage && isAssetsLoaded) {
-      setShowDiveInButton(true);
+    if (isFreshLoad) {
+      const elapsedTime = Date.now() - startTime;
+      const remainingTime = Math.max(0, MIN_LOADING_TIME - elapsedTime);
+
+      const timer = setTimeout(() => {
+        setIsAppInitialized(true);
+        
+        // Show dive-in button for home page
+        if (isHomePage) {
+          setShowDiveInButton(true);
+        }
+
+        // Hide loader after small delay
+        setTimeout(() => {
+          setShowLoader(false);
+          
+          // Reset navigation state for non-home pages
+          if (!isHomePage) {
+            navigation.resetNavigation();
+            isDiveInActive = false;
+          }
+        }, 500);
+      }, remainingTime);
+
+      return () => clearTimeout(timer);
     }
-  }, [isFreshLoad, isHomePage, isAssetsLoaded]);
+  }, [isFreshLoad, startTime, isHomePage, navigation]);
 
   useEffect(() => {
     if (videoBehavior.isDiveInFlow) {
@@ -69,40 +100,6 @@ export const useAppInitialization = () => {
       return () => clearTimeout(timer);
     }
   }, [videoBehavior.isDiveInFlow, navigation]);
-
-  useEffect(() => {
-    if (shouldPreload && isAssetsLoaded) {
-      const elapsedTime = Date.now() - startTime;
-      const remainingTime = isFreshLoad
-        ? Math.max(0, MIN_LOADING_TIME - elapsedTime)
-        : 0;
-
-      setTimeout(() => {
-        setIsAppInitialized(true);
-
-        setTimeout(
-          () => {
-            setShowLoader(false);
-
-            // Reset navigation state for non-home pages after loading completes
-            if (!isHomePage && isFreshLoad) {
-              navigation.resetNavigation();
-              isDiveInActive = false;
-            }
-          },
-          isFreshLoad ? 500 : 0,
-        ); // Small delay only for fresh load
-      }, remainingTime);
-    }
-  }, [
-    shouldPreload,
-    isAssetsLoaded,
-    startTime,
-    isHomePage,
-    isFreshLoad,
-    location,
-    navigation,
-  ]);
 
   const hideDiveInButton = useCallback(() => {
     setShowDiveInButton(false);

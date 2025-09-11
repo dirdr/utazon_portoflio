@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState, useRef } from "react";
 import { isMobile } from "../utils/mobileDetection";
 import backgroundImage from "../assets/images/background.webp";
 import p1 from "../assets/images/card_backgrounds/1.webp";
@@ -55,6 +55,7 @@ export const usePreloadAssets = () => {
     isComplete: false,
     progress: 0,
   });
+  const hasStarted = useRef(false);
 
   const generateAssetsList = useCallback((): AssetLoadState[] => {
     debugLog("🚀 Starting CRITICAL asset list generation (Phase 1 refactor)");
@@ -70,18 +71,30 @@ export const usePreloadAssets = () => {
 
     const assets: AssetLoadState[] = [];
 
-    debugLog(`Adding ${isMobileDevice ? "mobile" : "desktop"} intro video`);
+    debugLog(`Adding ${isMobileDevice ? "mobile" : "desktop"} entry and loop videos`);
 
     if (isMobileDevice) {
       assets.push({
-        url: `/videos/intro_mobile.mp4`,
+        url: `/videos/intro/mobile/entry_mobile.mp4`,
+        loaded: false,
+        error: false,
+        type: "video",
+      });
+      assets.push({
+        url: `/videos/intro/mobile/loop_mobile.mp4`,
         loaded: false,
         error: false,
         type: "video",
       });
     } else {
       assets.push({
-        url: `/videos/intro.mp4`,
+        url: `/videos/intro/desktop/entry_desktop.mp4`,
+        loaded: false,
+        error: false,
+        type: "video",
+      });
+      assets.push({
+        url: `/videos/intro/desktop/loop_desktop.mp4`,
         loaded: false,
         error: false,
         type: "video",
@@ -200,7 +213,7 @@ export const usePreloadAssets = () => {
           cleanup();
           resolve();
         }
-      }, 3000);
+      }, 10000);
     });
   }, []);
 
@@ -211,7 +224,6 @@ export const usePreloadAssets = () => {
     return new Promise((resolve) => {
       debugLog(`Fetching video HEAD request: ${url}`);
 
-      // For Firefox, try direct video element creation first to avoid CORS issues
       const isFirefox = navigator.userAgent.toLowerCase().includes("firefox");
       if (isFirefox) {
         debugLog(`Firefox detected - using direct video preload for: ${url}`);
@@ -231,7 +243,6 @@ export const usePreloadAssets = () => {
           debugError(
             `Firefox direct video preload failed: ${url}, fallback to fetch`,
           );
-          // Fallback to original fetch method
           performFetch();
         };
 
@@ -241,15 +252,13 @@ export const usePreloadAssets = () => {
         video.addEventListener("error", handleVideoError, { once: true });
         video.src = url;
 
-        // Timeout fallback
         setTimeout(() => {
           handleVideoReady();
-        }, 5000);
+        }, 15000);
 
         return;
       }
 
-      // Standard fetch for other browsers
       performFetch();
 
       function performFetch() {
@@ -292,41 +301,6 @@ export const usePreloadAssets = () => {
             const video = document.createElement("video");
             let resolved = false;
 
-            // Longer timeout for critical videos that need full preload
-            const isCriticalVideo =
-              url.includes("intro.mp4") || url.includes("intro_mobile.mp4");
-            const isSafari = /^((?!chrome|android).)*safari/i.test(
-              navigator.userAgent,
-            );
-            const timeoutDuration = isCriticalVideo
-              ? 10000
-              : isSafari
-                ? 8000
-                : 3000; // Safari needs more time for .webm
-
-            debugLog(`Video preload setup for ${url}:`, {
-              isCriticalVideo,
-              isSafari,
-              timeoutDuration,
-              preloadType: isCriticalVideo ? "auto" : "metadata",
-              eventType: isCriticalVideo ? "canplaythrough" : "loadedmetadata",
-            });
-
-            const timeoutId = setTimeout(() => {
-              if (!resolved) {
-                resolved = true;
-                const duration = Date.now() - videoStartTime;
-                debugError(`Video preload timeout: ${url} (${duration}ms)`, {
-                  timeoutDuration,
-                  readyState: video.readyState,
-                  networkState: video.networkState,
-                  duration: video.duration,
-                });
-                cleanup();
-                resolve();
-              }
-            }, timeoutDuration);
-
             const handleSuccess = () => {
               if (!resolved) {
                 resolved = true;
@@ -359,25 +333,31 @@ export const usePreloadAssets = () => {
             };
 
             const cleanup = () => {
-              if (isCriticalVideo) {
-                video.removeEventListener("canplaythrough", handleSuccess);
-              } else {
-                video.removeEventListener("loadedmetadata", handleSuccess);
-              }
+              video.removeEventListener("loadedmetadata", handleSuccess);
               video.removeEventListener("error", handleError);
+              if (timeoutId) clearTimeout(timeoutId);
               video.src = "";
               video.remove?.();
-              clearTimeout(timeoutId);
             };
 
-            if (isCriticalVideo) {
-              video.addEventListener("canplaythrough", handleSuccess);
-            } else {
-              video.addEventListener("loadedmetadata", handleSuccess);
-            }
+            // Add timeout for video preloading
+            const timeoutId = setTimeout(() => {
+              if (!resolved) {
+                resolved = true;
+                const duration = Date.now() - videoStartTime;
+                debugError(`Video preload timeout (15s): ${url} (${duration}ms)`, {
+                  readyState: video.readyState,
+                  networkState: video.networkState,
+                  duration: video.duration,
+                });
+                cleanup();
+                resolve(); // Don't fail on timeout, just continue
+              }
+            }, 15000);
+
+            video.addEventListener("loadedmetadata", handleSuccess);
             video.addEventListener("error", handleError);
 
-            video.preload = isCriticalVideo ? "auto" : "metadata";
             video.muted = true;
 
             debugLog(`Setting video src: ${url}`, {
@@ -492,6 +472,13 @@ export const usePreloadAssets = () => {
   }, []);
 
   const startPreloading = useCallback(async () => {
+    // Prevent multiple starts using ref
+    if (hasStarted.current) {
+      debugLog("Preloading already started, skipping");
+      return;
+    }
+    hasStarted.current = true;
+
     const preloadStartTime = Date.now();
     debugLog(
       "🚀🚀🚀 STARTING CRITICAL PRELOADING PROCESS (Phase 1 refactor) 🚀🚀🚀",
@@ -533,25 +520,6 @@ export const usePreloadAssets = () => {
       },
     );
   }, [generateAssetsList, preloadAsset, addResourceHints]);
-
-  useEffect(() => {
-    if (DEBUG_PRELOADER) {
-      console.log(`
-🔧 PRELOADER DEBUG MODE ENABLED 🔧
-====================================
-Watch the console for detailed preloading information:
-- 🚀 Process start/completion
-- 🖼️ Image loading details  
-- 🎥 Video loading details
-- 📊 Progress updates
-- ✅ Success messages
-- ❌ Error details
-- 🏁 Final summary
-====================================
-      `);
-    }
-    startPreloading();
-  }, [startPreloading]);
 
   return {
     ...state,

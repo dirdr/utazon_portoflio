@@ -41,30 +41,22 @@ export const CarouselVideoCard = ({
   };
 
   return (
-    <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden">
-      <ReactPlayer
-        ref={playerRef}
-        src={videoUrl}
-        width="100%"
-        height="100%"
-        playing={isActive}
-        muted={true}
-        controls={false}
-        onLoadedMetadata={handleDuration}
-        onEnded={handleEnded}
-        onStart={handlePlay}
-        playsInline={true}
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          minWidth: "100%",
-          minHeight: "100%",
-          width: "auto",
-          height: "auto",
-        }}
-      />
-    </div>
+    <ReactPlayer
+      ref={playerRef}
+      src={videoUrl}
+      playing={isActive}
+      muted={true}
+      controls={false}
+      onLoadedMetadata={handleDuration}
+      onEnded={handleEnded}
+      onStart={handlePlay}
+      playsInline={true}
+      width="100%"
+      height="100%"
+      className="react-player"
+      style={{
+        objectFit: 'cover' as const,
+      }}
+    />
   );
 };

@@ -46,7 +46,7 @@ export const VideoCarouselShowcase = ({
 
   const handleVideoPlay = () => {
     setIsProgressRunning(true);
-    setAnimationKey((prev) => prev + 1); // Reset animation when video starts playing
+    setAnimationKey((prev) => prev + 1);
   };
 
   useEffect(() => {
@@ -62,12 +62,11 @@ export const VideoCarouselShowcase = ({
   useEffect(() => {
     setIsProgressRunning(false);
     setAnimationKey((prev) => prev + 1);
-    
-    // Auto-start the new video's progress after a brief delay
+
     const timer = setTimeout(() => {
       setIsProgressRunning(true);
     }, 100);
-    
+
     return () => clearTimeout(timer);
   }, [currentIndex]);
 
@@ -76,7 +75,7 @@ export const VideoCarouselShowcase = ({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8 items-center">
         <div className="flex items-start">
           <div className="w-px bg-gray-600 mr-6 lg:mr-8 flex-shrink-0 self-stretch"></div>
-          <div className="space-y-6 max-w-lg xl:max-w-xl 2xl:max-w:3xl">
+          <div className="space-y-6 lg:max-w-sm xl:max-w-md 2xl:max-w-xl">
             {projectId &&
               t(`projects.${projectId}.carouselDescription`, {
                 returnObjects: true,
@@ -88,7 +87,7 @@ export const VideoCarouselShowcase = ({
               ).map((paragraph, index) => (
                 <p
                   key={index}
-                  className="text-gray-300 text-base md:text-lg xl:text-sm 2xl:text-base leading-relaxed"
+                  className="text-gray-300 text-base lg:text-sm 2xl:text-base leading-relaxed"
                 >
                   {paragraph}
                 </p>
@@ -96,7 +95,6 @@ export const VideoCarouselShowcase = ({
           </div>
         </div>
 
-        {/* Right Column - Video Content */}
         <div className="space-y-4">
           <div
             className={cn(
@@ -112,7 +110,7 @@ export const VideoCarouselShowcase = ({
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="h-full"
+                className="w-full h-full"
               >
                 <CarouselVideoCard
                   src={data.videos[currentIndex].src}
@@ -126,7 +124,6 @@ export const VideoCarouselShowcase = ({
             </AnimatePresence>
           </div>
 
-          {/* Navigation Dots - Under Video */}
           <div className="flex justify-center items-center gap-1.5">
             {data.videos.map((_, index) => (
               <motion.button

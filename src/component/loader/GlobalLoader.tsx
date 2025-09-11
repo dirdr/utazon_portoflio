@@ -27,7 +27,7 @@ export const GlobalLoader = () => {
             <img
               src={logo}
               alt="Utazon Logo"
-              className="h-8 xl:h-10 2xl:h-12 w-auto"
+              className="h-8 xl:h-10 2xl:h-10 w-auto"
             />
           </motion.a>
 
@@ -35,7 +35,7 @@ export const GlobalLoader = () => {
             <div className="overflow-hidden">
               <motion.a
                 href="/"
-                className="text-base lg:text-lg 2xl:text-2xl text-white block"
+                className="text-sm 2xl:text-base text-white block"
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 transition={{
@@ -49,7 +49,7 @@ export const GlobalLoader = () => {
             </div>
             <div className="overflow-hidden">
               <motion.span
-                className="text-muted text-xs lg:text-sm 2xl:text-base block"
+                className="text-muted text-xs 2xl:text-sm block"
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 transition={{

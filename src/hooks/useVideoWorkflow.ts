@@ -1,23 +1,21 @@
-import { useState, useEffect, useCallback, useRef } from "react";
-import { useTransitionContext } from "./useTransitionContext";
-import { isDiveInCompleted, markDiveInCompleted } from "../utils/diveInStorage";
-import {
-  getVideoTransitionConfig,
-  debugVideoTransition,
-} from "../config/videoTransitionConfig";
 import { isMobile } from "../utils/mobileDetection";
+import { useDesktopVideoWorkflow, DesktopVideoWorkflowResult } from "./useDesktopVideoWorkflow";
+import { useMobileVideoSequence, MobileVideoSequenceResult } from "./useMobileVideoSequence";
 
 export type VideoWorkflowState =
   | "loading"
   | "ready"
   | "playing-intro"
   | "content-showing"
-  | "spa-playing";
+  | "spa-playing"
+  | "playing-mobile-anim"
+  | "transitioning"
+  | "looping";
 
 export interface VideoWorkflowConfig {
   isFreshLoad: boolean;
   isHomePage: boolean;
-  videoSrc: string;
+  videoSrc?: string; // Optional for mobile (uses sequence)
   getVideoElement?: () => HTMLVideoElement | null;
 }
 
@@ -35,221 +33,63 @@ export interface VideoWorkflowResult {
   onVideoEnded: () => void;
   onVideoTimeUpdate: (currentTime: number) => void;
   onDiveInClick: () => void;
-}
 
-const getVideoConfig = () => {
-  const config = getVideoTransitionConfig();
-  return {
-    LOOP_START_DESKTOP: config.fresh.loopStartTime,
-    LOOP_START_MOBILE: config.fresh.mobileLoopStartTime,
-    INTRO_DURATION: config.fresh.introDuration,
-    SPA_JUMP_TIME: config.spa.jumpToTime,
-    SPA_WITH_SOUND: config.spa.withSound,
-    MOBILE_MUTED: config.mobile.muted,
-  };
-};
+  // Mobile-specific properties
+  currentVideoSrc?: string;
+  currentVideoType?: string;
+}
 
 export const useVideoWorkflow = (
   config: VideoWorkflowConfig,
 ): VideoWorkflowResult => {
   const { isFreshLoad, isHomePage, videoSrc, getVideoElement } = config;
-  const { isTransitioning } = useTransitionContext();
   const isMobileDetected = isMobile();
 
-  const videoConfig = getVideoConfig();
-
-  const [workflowState, setWorkflowState] =
-    useState<VideoWorkflowState>("loading");
-  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
-  const [hasCompletedIntro, setHasCompletedIntro] = useState(false);
-
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const loopStartTime = isMobileDetected
-    ? videoConfig.LOOP_START_MOBILE
-    : videoConfig.LOOP_START_DESKTOP;
-
-  const shouldShowContent =
-    isMobileDetected ||
-    workflowState === "content-showing" ||
-    workflowState === "spa-playing";
-  const shouldShowDiveIn =
-    workflowState === "ready" && !isMobileDetected && !isDiveInCompleted();
-
-  const onVideoLoaded = useCallback(() => {
-    const video = getVideoElement ? getVideoElement() : videoRef.current;
-
-    setIsVideoLoaded(true);
-
-    if (!video || !isHomePage) return;
-
-    const shouldAllowDuringTransition = !isFreshLoad;
-    if (isTransitioning && !shouldAllowDuringTransition) {
-      return;
-    }
-
-    if (
-      workflowState === "playing-intro" ||
-      workflowState === "content-showing"
-    ) {
-      return;
-    }
-
-    if (isMobileDetected) {
-      video.currentTime = 0;
-
-      video
-        .play()
-        .then(() => {
-          debugVideoTransition("Mobile video playback started");
-        })
-        .catch(() => {
-          debugVideoTransition("Mobile video playback failed");
-        });
-      setWorkflowState("content-showing");
-    } else if (isFreshLoad) {
-      video.currentTime = 0;
-      setWorkflowState("ready");
-    } else {
-      debugVideoTransition("SPA navigation detected, configuring video:", {
-        jumpToTime: videoConfig.SPA_JUMP_TIME,
-        withSound: videoConfig.SPA_WITH_SOUND,
-        currentMuted: video.muted,
-      });
-
-      video.pause();
-      video.currentTime = videoConfig.SPA_JUMP_TIME;
-
-      const handleSeeked = () => {
-        video.removeEventListener("seeked", handleSeeked);
-
-        debugVideoTransition(
-          `Starting SPA video playback from ${videoConfig.SPA_JUMP_TIME}s`,
-        );
-
-        video
-          .play()
-          .then(() => {
-            debugVideoTransition("SPA video playback started successfully");
-          })
-          .catch((error) => {
-            debugVideoTransition("SPA video playback failed:", error);
-          });
-      };
-
-      video.addEventListener("seeked", handleSeeked);
-      setWorkflowState("spa-playing");
-    }
-  }, [
-    isHomePage,
+  // Always call both hooks (rules of hooks requirement)
+  const mobileResult: MobileVideoSequenceResult = useMobileVideoSequence({
     isFreshLoad,
-    isMobileDetected,
+    isHomePage,
     getVideoElement,
-    workflowState,
-    isTransitioning,
-    videoConfig.SPA_JUMP_TIME,
-    videoConfig.SPA_WITH_SOUND,
-  ]);
+  });
 
-  const onDiveInClick = useCallback(() => {
-    const video = getVideoElement ? getVideoElement() : videoRef.current;
-    if (!video || workflowState !== "ready") {
-      return;
-    }
-
-    markDiveInCompleted();
-
-    video.currentTime = 0;
-    video
-      .play()
-      .then(() => {
-        setWorkflowState("playing-intro");
-      })
-      .catch(() => {});
-  }, [workflowState, getVideoElement]);
-
-  const onVideoTimeUpdate = useCallback(
-    (currentTime: number) => {
-      if (
-        workflowState === "playing-intro" &&
-        currentTime >= videoConfig.INTRO_DURATION &&
-        !hasCompletedIntro
-      ) {
-        debugVideoTransition(
-          `Intro completed at ${currentTime}s, showing content`,
-        );
-        setHasCompletedIntro(true);
-        setWorkflowState("content-showing");
-      }
-    },
-    [workflowState, hasCompletedIntro, videoConfig.INTRO_DURATION],
-  );
-
-  const onVideoEnded = useCallback(() => {
-    const video = getVideoElement ? getVideoElement() : videoRef.current;
-    if (!video) return;
-
-    video.currentTime = loopStartTime;
-    video.play().catch(() => {});
-  }, [loopStartTime, getVideoElement]);
-
-  useEffect(() => {
-    if (!isHomePage) {
-      if (isTransitioning) {
-        return;
-      } else {
-        setWorkflowState("content-showing");
-        return;
-      }
-    }
-
-    setHasCompletedIntro(false);
-
-    if (isVideoLoaded) {
-      if (isMobileDetected) {
-        setWorkflowState("content-showing");
-      } else if (isFreshLoad) {
-        setWorkflowState("ready");
-      } else {
-        setWorkflowState("spa-playing");
-      }
-    } else {
-      setWorkflowState("loading");
-    }
-  }, [
-    isHomePage,
+  const desktopResult: DesktopVideoWorkflowResult = useDesktopVideoWorkflow({
     isFreshLoad,
-    isMobileDetected,
-    isVideoLoaded,
-    isTransitioning,
-  ]);
+    isHomePage,
+    videoSrc: videoSrc || "/videos/intro.mp4", // Fallback for desktop
+    getVideoElement,
+  });
 
-  useEffect(() => {
-    if (!isHomePage || !videoSrc) return;
-
-    const video = getVideoElement ? getVideoElement() : videoRef.current;
-    if (!video) return;
-
-    if (video.src.endsWith(videoSrc) && isVideoLoaded) {
-      return;
-    }
-
-    setIsVideoLoaded(false);
-    video.load();
-  }, [isHomePage, videoSrc, getVideoElement, isVideoLoaded]);
-
-  return {
-    workflowState,
-    isVideoLoaded,
-
-    shouldShowContent,
-    shouldShowDiveIn,
-
-    videoRef,
-    loopStartTime,
-
-    onVideoLoaded,
-    onVideoEnded,
-    onVideoTimeUpdate,
-    onDiveInClick,
-  };
+  // Return appropriate result based on device type
+  if (isMobileDetected) {
+    // Map mobile result to unified interface
+    return {
+      workflowState: mobileResult.sequenceState as VideoWorkflowState,
+      isVideoLoaded: mobileResult.isVideoLoaded,
+      shouldShowContent: mobileResult.shouldShowContent,
+      shouldShowDiveIn: mobileResult.shouldShowDiveIn,
+      videoRef: mobileResult.videoRef,
+      loopStartTime: mobileResult.loopStartTime,
+      onVideoLoaded: mobileResult.onVideoLoaded,
+      onVideoEnded: mobileResult.onVideoEnded,
+      onVideoTimeUpdate: mobileResult.onVideoTimeUpdate,
+      onDiveInClick: mobileResult.onDiveInClick,
+      currentVideoSrc: mobileResult.currentVideoSrc,
+      currentVideoType: mobileResult.currentVideoType,
+    };
+  } else {
+    // Map desktop result to unified interface
+    return {
+      workflowState: desktopResult.workflowState as VideoWorkflowState,
+      isVideoLoaded: desktopResult.isVideoLoaded,
+      shouldShowContent: desktopResult.shouldShowContent,
+      shouldShowDiveIn: desktopResult.shouldShowDiveIn,
+      videoRef: desktopResult.videoRef,
+      loopStartTime: desktopResult.loopStartTime,
+      onVideoLoaded: desktopResult.onVideoLoaded,
+      onVideoEnded: desktopResult.onVideoEnded,
+      onVideoTimeUpdate: desktopResult.onVideoTimeUpdate,
+      onDiveInClick: desktopResult.onDiveInClick,
+      currentVideoSrc: videoSrc,
+    };
+  }
 };

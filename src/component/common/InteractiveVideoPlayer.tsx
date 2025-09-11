@@ -47,7 +47,7 @@ export const InteractiveVideoPlayer = ({
   }, [hasUserClicked, startTime]);
 
   const handleReady = useCallback(() => {
-    console.log('🎥 ReactPlayer: Video ready');
+    console.log("🎥 ReactPlayer: Video ready");
   }, []);
 
   const handleVideoClick = useCallback(() => {
@@ -68,11 +68,14 @@ export const InteractiveVideoPlayer = ({
       <ReactPlayer
         ref={setPlayerRef}
         src={src}
-        width={width}
-        height={height}
         controls={controls}
-        className={className}
-        style={style}
+        className={`react-player ${className || ""}`}
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "cover" as const,
+          ...style,
+        }}
         pip={pip}
         playing={playing}
         volume={volume}

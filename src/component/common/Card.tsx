@@ -71,16 +71,19 @@ export const Card = ({
 
   const elementRef = useRef<HTMLElement | null>(null);
 
-  const combinedRef = useCallback((node: HTMLElement | null) => {
-    if (elementRef.current) {
-      preloader.observeElement(null);
-    }
-    elementRef.current = node;
-    animationRef(node);
-    if (node) {
-      preloader.observeElement(node);
-    }
-  }, [animationRef, preloader]);
+  const combinedRef = useCallback(
+    (node: HTMLElement | null) => {
+      if (elementRef.current) {
+        preloader.observeElement(null);
+      }
+      elementRef.current = node;
+      animationRef(node);
+      if (node) {
+        preloader.observeElement(node);
+      }
+    },
+    [animationRef, preloader],
+  );
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -124,12 +127,34 @@ export const Card = ({
       onClick={handleClick}
     >
       <div
-        className="glint-card-content p-2 sm:p-3 md:p-6"
+        className="glint-card-content p-3 sm:p-4 md:p-5 lg:p-6 xl:p-4 2xl:p-5"
         style={{
           background: `url(${randomBackground}) center/cover`,
         }}
       >
         <figure className="relative aspect-[16/9] w-full rounded-xl overflow-hidden group">
+          <svg className="absolute w-0 h-0">
+            <defs>
+              <clipPath
+                id={`rounded-diagonal-cut-${project.id}`}
+                clipPathUnits="objectBoundingBox"
+              >
+                <path
+                  d="
+          M0,0
+          L0.73,0
+          Q0.75,0 0.76,0.01
+          L0.99,0.24
+          Q1,0.25 1,0.27
+          L1,1
+          L0,1
+          Z
+        "
+                />
+              </clipPath>
+            </defs>
+          </svg>
+
           <img
             src={image.src}
             alt={image.alt}
@@ -137,10 +162,7 @@ export const Card = ({
               "h-full w-full object-cover transition-all duration-300",
               thumbnail && videoReady && "group-hover:opacity-0",
             )}
-            style={{
-              clipPath:
-                "polygon(0% 0%, 73% 0%, 76% 1%, 99% 24%, 100% 27%, 100% 100%, 0% 100%)",
-            }}
+            style={{ clipPath: `url(#rounded-diagonal-cut-${project.id})` }}
             loading="eager"
           />
 
@@ -151,10 +173,7 @@ export const Card = ({
                 "absolute inset-0 h-full w-full object-cover transition-all duration-300",
                 videoReady ? "opacity-0 group-hover:opacity-100" : "hidden",
               )}
-              style={{
-                clipPath:
-                  "polygon(0% 0%, 73% 0%, 76% 1%, 99% 24%, 100% 27%, 100% 100%, 0% 100%)",
-              }}
+              style={{ clipPath: `url(#rounded-diagonal-cut-${project.id})` }}
               src={thumbnail.src}
               muted
               loop
@@ -184,8 +203,8 @@ export const Card = ({
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent" />
           <figcaption className="absolute bottom-0 left-0 p-6">
-            <div className="flex items-start gap-4">
-              <div className="w-px bg-white self-stretch min-h-[40px]" />
+            <div className="flex items-center gap-4">
+              <div className="w-px bg-gray-600 self-stretch min-h-[40px]" />
               <div className="flex-1">
                 <h3
                   className={cn(
@@ -208,7 +227,7 @@ export const Card = ({
           </figcaption>
 
           <div className="absolute top-[5%] left-[90%]">
-            <time className="text-muted font-nord font-light text-xs sm:text-lg lg:text-xs 2xl:text-lg">
+            <time className="text-muted font-nord font-light text-xs md:text-lg xl:text-sm 2xl:text-base">
               {project.date}
             </time>
           </div>

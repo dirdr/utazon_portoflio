@@ -48,25 +48,31 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
               <h1 className="font-nord text-xl lg:text-2xl font-bold mb-2 text-white">
                 {t(project.title)}
               </h1>
-              <h2 className="font-nord text-lg md:text-xl mb-8 font-thin text-white">
+              <h2 className="font-nord text-lg lg:text-xl mb-8 font-thin text-white">
                 {t(project.header)}
               </h2>
-              <p className="font-neue text-base md:text-lg leading-relaxed text-gray mb-8 md:mb-16">
+              <p className="font-neue text-sm lg:text-base leading-relaxed text-gray mb-8 md:mb-16">
                 {t(project.description)}
               </p>
               <div className="space-y-6">
                 <div className="grid grid-cols-1 gap-4 text-base">
                   <div>
                     <h3 className="font-nord text-white uppercase">Date</h3>
-                    <p className="font-neue text-gray">{t(project.date)}</p>
+                    <p className="font-neue text-gray text-base">
+                      {t(project.date)}
+                    </p>
                   </div>
                   <div>
                     <h3 className="font-nord text-white uppercase">Client</h3>
-                    <p className="font-neue text-gray">{t(project.client)}</p>
+                    <p className="font-neue text-gray text-base">
+                      {t(project.client)}
+                    </p>
                   </div>
                   <div>
                     <h3 className="font-nord text-white uppercase">Role</h3>
-                    <p className="font-neue text-gray">{t(project.role)}</p>
+                    <p className="font-neue text-gray text-base">
+                      {t(project.role)}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -104,10 +110,10 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
               <h1 className="font-nord text-2xl 2xl:text-3xl font-bold italic mb-1 text-white">
                 {t(project.title)}
               </h1>
-              <h2 className="font-nord text-sm 2xl:text-base mb-8 font-thin text-dark-gray">
+              <h2 className="font-nord text-base 2xl:text-lg mb-8 font-thin text-dark-gray">
                 {t(project.header)}
               </h2>
-              <p className="font-neue text-sm 2xl:text-base leading-5 text-dark-gray mb-12 xl:mb-16">
+              <p className="font-neue text-base 2xl:text-lg leading-5 text-dark-gray mb-12 xl:mb-16">
                 {t(project.description)}
               </p>
               <div className="space-y-6">
@@ -116,7 +122,7 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
                     <h3 className="font-nord text-sm text-white uppercase">
                       Date
                     </h3>
-                    <p className="font-neue text-dark-gray text-xs 2xl:text-base">
+                    <p className="font-neue text-dark-gray text-base 2xl:text-lg">
                       {t(project.date)}
                     </p>
                   </div>
@@ -124,7 +130,7 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
                     <h3 className="font-nord text-sm text-white uppercase">
                       Client
                     </h3>
-                    <p className="font-neue text-dark-gray text-xs 2xl:text-base">
+                    <p className="font-neue text-dark-gray text-base 2xl:text-lg">
                       {t(project.client)}
                     </p>
                   </div>
@@ -132,7 +138,7 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
                     <h3 className="font-nord text-sm text-white uppercase">
                       {t("common.roleHeader")}
                     </h3>
-                    <p className="font-neue text-dark-gray text-xs 2xl:text-base">
+                    <p className="font-neue text-dark-gray text-base 2xl:text-lg">
                       {t(project.role)}
                     </p>
                   </div>

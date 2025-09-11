@@ -381,11 +381,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                 className="flex items-center gap-2 text-white hover:text-gray-300 transition-colors"
                 aria-label={t("contact.social.instagram", "Instagram")}
               >
-                <InstagramIcon
-                  width={16}
-                  height={16}
-                  className="sm:w-6 sm:h-6"
-                />
+                <InstagramIcon width={16} height={16} />
                 <span className="text-xs font-nord font-thin">Instagram</span>
               </a>
 
@@ -396,11 +392,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                 className="flex items-center gap-2 text-white hover:text-gray-300 transition-colors"
                 aria-label={t("contact.social.linkedin", "LinkedIn")}
               >
-                <LinkedInIcon
-                  width={16}
-                  height={16}
-                  className="sm:w-6 sm:h-6"
-                />
+                <LinkedInIcon width={16} height={16} />
                 <span className="text-xs font-nord font-thin">LinkedIn</span>
               </a>
 
@@ -411,7 +403,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                 className="flex items-center gap-2 text-white hover:text-gray-300 transition-colors"
                 aria-label={t("contact.social.behance", "Behance")}
               >
-                <BehanceIcon width={16} height={16} className="sm:w-6 sm:h-6" />
+                <BehanceIcon width={16} height={16} />
                 <span className="text-xs font-nord font-thin">Behance</span>
               </a>
             </div>
@@ -422,7 +414,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                 type="submit"
                 disabled={isSubmitting}
                 glint={!isSubmitting}
-                className="text-sm font-normal"
+                className="text-sm"
                 proximityIntensity={true}
               >
                 {isSubmitting

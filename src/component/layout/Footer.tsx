@@ -52,83 +52,85 @@ export const Footer = () => {
   return (
     <footer className="text-white">
       <Container>
-        <div className="py-12 md:py-16 border-t border-[#737373] font-nord">
-          <div className="flex flex-col md:flex-row justify-between items-start gap-8 mb-8">
-            <div className="flex items-center gap-4">
-              <a href="/" className="flex-shrink-0">
-                <img src={logo} alt="Utazon Logo" className="h-10 w-auto" />
-              </a>
-              <address className="not-italic flex flex-col">
-                <a href="/" className="text-sm 2xl:text-base mb-1">
-                  {t("common.utazon")}
+        <div className="pt-8 border-t border-gray-600 font-nord">
+          <div className="py-8">
+            <div className="flex flex-col md:flex-row justify-between items-start gap-8">
+              <div className="flex items-center gap-4">
+                <a href="/" className="flex-shrink-0">
+                  <img src={logo} alt="Utazon Logo" className="h-10 w-auto" />
                 </a>
-                <a href="/" className="text-muted text-xs">
-                  {t("common.antoine_vernez")}
+                <address className="not-italic flex flex-col">
+                  <a href="/" className="text-sm 2xl:text-base mb-1">
+                    {t("common.utazon")}
+                  </a>
+                  <a href="/" className="text-muted text-xs">
+                    {t("common.antoine_vernez")}
+                  </a>
+                </address>
+              </div>
+              <nav className="flex flex-col items-start md:items-start">
+                <h4 className="text-muted text-xs 2xl:text-sm mb-3">Menu</h4>
+                <Link
+                  href={ROUTES.PROJECTS}
+                  onClick={handleProjectsClick}
+                  className="text-white hover:text-white transition-colors duration-200 mb-2 text-xs 2xl:text-sm"
+                >
+                  {t("nav.projects")}
+                </Link>
+                <Link
+                  href={ROUTES.ABOUT}
+                  onClick={handleAboutClick}
+                  className="text-white hover:text-white transition-colors duration-200 mb-2 text-xs 2xl:text-sm"
+                >
+                  {t("nav.about")}
+                </Link>
+                <button
+                  onClick={handleContactClick}
+                  className="text-white hover:text-white transition-colors duration-200 text-xs 2xl:text-sm text-left"
+                >
+                  {t("nav.contact")}
+                </button>
+              </nav>
+
+              <div className="flex flex-col items-start gap-3">
+                <h4 className="text-muted text-xs 2xl:text-sm mb-0">Socials</h4>
+                <a
+                  href="https://instagram.com/utazon"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-white"
+                  aria-label="Instagram"
+                >
+                  <InstagramIcon width={16} height={16} />
+                  <span className="text-xs 2xl:text-sm">Instagram</span>
                 </a>
-              </address>
-            </div>
-            <nav className="flex flex-col items-start md:items-start">
-              <h4 className="text-muted text-xs 2xl:text-sm mb-3">Menu</h4>
-              <Link
-                href={ROUTES.PROJECTS}
-                onClick={handleProjectsClick}
-                className="text-white hover:text-white transition-colors duration-200 mb-2 text-xs 2xl:text-sm"
-              >
-                {t("nav.projects")}
-              </Link>
-              <Link
-                href={ROUTES.ABOUT}
-                onClick={handleAboutClick}
-                className="text-white hover:text-white transition-colors duration-200 mb-2 text-xs 2xl:text-sm"
-              >
-                {t("nav.about")}
-              </Link>
-              <button
-                onClick={handleContactClick}
-                className="text-white hover:text-white transition-colors duration-200 text-xs 2xl:text-sm text-left"
-              >
-                {t("nav.contact")}
-              </button>
-            </nav>
 
-            <div className="flex flex-col items-start gap-3">
-              <h4 className="text-muted text-sm mb-0">Socials</h4>
-              <a
-                href="https://instagram.com/utazon"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-white"
-                aria-label="Instagram"
-              >
-                <InstagramIcon width={20} height={20} />
-                <span className="text-xs 2xl:text-sm">Instagram</span>
-              </a>
+                <a
+                  href="https://www.linkedin.com/in/antoine-vernez-b542b8290/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-white"
+                  aria-label="LinkedIn"
+                >
+                  <LinkedInIcon width={16} height={16} />
+                  <span className="text-xs 2xl:text-sm">LinkedIn</span>
+                </a>
 
-              <a
-                href="https://www.linkedin.com/in/antoine-vernez-b542b8290/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-white"
-                aria-label="LinkedIn"
-              >
-                <LinkedInIcon width={19} height={19} />
-                <span className="text-xs 2xl:text-sm">LinkedIn</span>
-              </a>
-
-              <a
-                href="https://behance.net/utazon"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-white"
-                aria-label="Behance"
-              >
-                <BehanceIcon width={19} height={19} />
-                <span className="text-xs 2xl:text-sm">Behance</span>
-              </a>
+                <a
+                  href="https://behance.net/utazon"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-white"
+                  aria-label="Behance"
+                >
+                  <BehanceIcon width={16} height={16} />
+                  <span className="text-xs 2xl:text-sm">Behance</span>
+                </a>
+              </div>
             </div>
           </div>
 
-          <div className="pt-8 border-t border-[#737373]">
+          <div className="py-8 border-t border-gray-600">
             <div className="flex flex-col md:flex-row justify-between items-start gap-4">
               <div className="flex flex-col md:flex-row items-start gap-2 md:gap-4">
                 <p className="text-muted text-xs">
@@ -157,7 +159,7 @@ export const Footer = () => {
                 </p>
               </div>
 
-              <div className="flex items-start gap-6">
+              <div className="flex items-start">
                 <Link
                   href="/legal"
                   onClick={handleLegalClick}

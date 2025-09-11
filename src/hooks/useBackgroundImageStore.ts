@@ -10,74 +10,73 @@ interface BackgroundImageStore {
 const activeBackgroundUsers = new Set<string>();
 const clearTimeouts = new Map<string, number>();
 
-export const useBackgroundImageStore = create<BackgroundImageStore>((set, get) => ({
-  currentBackground: null,
-  nextBackground: null,
-  isTransitioning: false,
+export const useBackgroundImageStore = create<BackgroundImageStore>(
+  (set, get) => ({
+    currentBackground: null,
+    nextBackground: null,
+    isTransitioning: false,
 
-  setBackgroundImage: (image: string | null, componentId = "anonymous") => {
-    const state = get();
+    setBackgroundImage: (image: string | null, componentId = "anonymous") => {
+      const state = get();
 
-    if (image !== null) {
-      // Component is setting a background - add to active users
-      activeBackgroundUsers.add(componentId);
+      if (image !== null) {
+        // Component is setting a background - add to active users
+        activeBackgroundUsers.add(componentId);
 
-      // Clear any pending clear for this component
-      const existingTimeout = clearTimeouts.get(componentId);
-      if (existingTimeout) {
-        clearTimeout(existingTimeout);
-        clearTimeouts.delete(componentId);
-      }
+        // Clear any pending clear for this component
+        const existingTimeout = clearTimeouts.get(componentId);
+        if (existingTimeout) {
+          clearTimeout(existingTimeout);
+          clearTimeouts.delete(componentId);
+        }
 
-      if (image === state.currentBackground) {
-        return;
-      }
+        if (image === state.currentBackground) {
+          return;
+        }
 
-      // Setting new background - use dual background technique
-      if (state.currentBackground !== null) {
-        // Transition from current to new
-        set({
-          nextBackground: image,
-          isTransitioning: true,
-        });
+        if (state.currentBackground !== null) {
+          set({
+            nextBackground: image,
+            isTransitioning: true,
+          });
 
-        // Complete transition after CSS transition duration
-        setTimeout(() => {
+          // Complete transition after CSS transition duration
+          setTimeout(() => {
+            set({
+              currentBackground: image,
+              nextBackground: null,
+              isTransitioning: false,
+            });
+          }, 300);
+        } else {
+          // First background - set immediately
           set({
             currentBackground: image,
             nextBackground: null,
             isTransitioning: false,
           });
-        }, 300);
+        }
       } else {
-        // First background - set immediately
-        set({
-          currentBackground: image,
-          nextBackground: null,
-          isTransitioning: false,
-        });
+        // Component is clearing background - remove from active users
+        activeBackgroundUsers.delete(componentId);
+
+        // Only clear if no other components are using backgrounds
+        if (activeBackgroundUsers.size === 0) {
+          const timeoutId = setTimeout(() => {
+            // Double-check no new users were added
+            if (activeBackgroundUsers.size === 0) {
+              set({
+                currentBackground: null,
+                nextBackground: null,
+                isTransitioning: false,
+              });
+            }
+            clearTimeouts.delete(componentId);
+          }, 100);
+
+          clearTimeouts.set(componentId, timeoutId as unknown as number);
+        }
       }
-    } else {
-      // Component is clearing background - remove from active users
-      activeBackgroundUsers.delete(componentId);
-
-      // Only clear if no other components are using backgrounds
-      if (activeBackgroundUsers.size === 0) {
-        const timeoutId = setTimeout(() => {
-          // Double-check no new users were added
-          if (activeBackgroundUsers.size === 0) {
-            set({
-              currentBackground: null,
-              nextBackground: null,
-              isTransitioning: false,
-            });
-          }
-          clearTimeouts.delete(componentId);
-        }, 100);
-
-        clearTimeouts.set(componentId, timeoutId as unknown as number);
-      }
-    }
-  },
-}));
-
+    },
+  }),
+);

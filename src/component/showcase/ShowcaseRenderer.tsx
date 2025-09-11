@@ -33,9 +33,5 @@ export const ShowcaseRenderer = ({ showcase }: ShowcaseRendererProps) => {
     }
   };
 
-  return (
-    <div className="mx-4 lg:mx-32">
-      {renderShowcase()}
-    </div>
-  );
+  return <div className="mx-4 lg:mx-32">{renderShowcase()}</div>;
 };
