@@ -1,0 +1,16 @@
+{
+  "name": "Utazon Portfolio",
+  "short_name": "Utazon",
+  "description": "Portfolio website for Utazon",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/assets/images/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

@@ -30,9 +30,7 @@ export const About = () => {
           <div className="lg:grid lg:grid-cols-3 lg:gap-8 xl:gap-16">
             <div className="mb-8 lg:mb-0">
               <h1 className="font-nord text-3xl md:text-4xl lg:text-5xl italic text-muted tracking-tight">
-                <LineSweepText duration={6}>
-                  {titleContent}
-                </LineSweepText>
+                <LineSweepText duration={6}>{titleContent}</LineSweepText>
               </h1>
             </div>
 
@@ -50,30 +48,30 @@ export const About = () => {
         <section className="mb-8 sm:mb-12 lg:mb-16">
           <h2 className="sr-only">Services</h2>
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 md:gap-8 xl:gap-4 2xl:gap-8">
-          <ProjectVideoCard
-            video={{
-              src: "/videos/about/card1.mp4",
-              alt: "Motion Design video",
-            }}
-            title={t("about.services.motionDesign.title")}
-            description={t("about.services.motionDesign.description")}
-          />
-          <ProjectVideoCard
-            video={{
-              src: "/videos/about/card2.webm",
-              alt: "Art Direction video",
-            }}
-            title={t("about.services.artDirection.title")}
-            description={t("about.services.artDirection.description")}
-          />
-          <ProjectVideoCard
-            video={{
-              src: "/videos/about/card3.mp4",
-              alt: "Editing & Compositing video",
-            }}
-            title={t("about.services.editingCompositing.title")}
-            description={t("about.services.editingCompositing.description")}
-          />
+            <ProjectVideoCard
+              video={{
+                src: "/videos/about/card1.mp4",
+                alt: "Motion Design video",
+              }}
+              title={t("about.services.motionDesign.title")}
+              description={t("about.services.motionDesign.description")}
+            />
+            <ProjectVideoCard
+              video={{
+                src: "/videos/about/card2.webm",
+                alt: "Art Direction video",
+              }}
+              title={t("about.services.artDirection.title")}
+              description={t("about.services.artDirection.description")}
+            />
+            <ProjectVideoCard
+              video={{
+                src: "/videos/about/card3.mp4",
+                alt: "Editing & Compositing video",
+              }}
+              title={t("about.services.editingCompositing.title")}
+              description={t("about.services.editingCompositing.description")}
+            />
           </div>
         </section>
 
@@ -133,7 +131,6 @@ export const About = () => {
               />
             </div>
           </div>
-          
           <section className="w-full my-32 lg:my-48">
             <div className="max-w-2xl mx-auto text-center">
               <h2 className="text-muted font-nord text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold tracking-wide mb-8">
