@@ -5,6 +5,7 @@ import {
   forwardRef,
   useImperativeHandle,
   useMemo,
+  useState,
 } from "react";
 import { useLocation } from "wouter";
 import { RadialGradient } from "../common/RadialGradient";
@@ -16,6 +17,7 @@ export interface VideoBackgroundRef {
   startVideo: () => void;
   setMuted: (muted: boolean) => void;
   video: HTMLVideoElement | null;
+  transitionToVideo: (newSrc: string) => Promise<void>;
 }
 
 interface VideoBackgroundProps {
@@ -47,28 +49,30 @@ export const VideoBackground = forwardRef<
     const isMobileDetected = isMobile();
 
     const videoRef = useRef<HTMLVideoElement>(null);
+    const videoRef2 = useRef<HTMLVideoElement>(null);
+    
+    // Track which video is currently active
+    const [activeVideoIndex, setActiveVideoIndex] = useState<0 | 1>(0);
+    const [isTransitioning, setIsTransitioning] = useState(false);
 
     const loadedSources = useRef(new Set<string>());
 
     const videoSource = useMemo(() => {
-      if (src) return src;
-      return isMobileDetected
-        ? "/videos/intro_mobile.mp4"
-        : "/videos/intro.mp4";
-    }, [src, isMobileDetected]);
+      // Return null for empty/undefined src to avoid browser warning
+      return src || null;
+    }, [src]);
 
     useEffect(() => {
       loadedSources.current.clear();
     }, [videoSource]);
 
     useEffect(() => {
-      const video = videoRef.current;
-      if (!video || !isHomePage) return;
+      const video1 = videoRef.current;
+      const video2 = videoRef2.current;
+      if (!isHomePage) return;
 
-      const currentSource = video.src;
-      const hasAlreadyNotifiedLoad = loadedSources.current.has(currentSource);
-
-      const handleLoadedData = () => {
+      const handleLoadedData = (video: HTMLVideoElement) => () => {
+        const currentSource = video.src;
         if (!loadedSources.current.has(currentSource)) {
           loadedSources.current.add(currentSource);
           onLoadedData?.();
@@ -76,36 +80,61 @@ export const VideoBackground = forwardRef<
       };
 
       const handleTimeUpdate = (e: Event) => {
-        onTimeUpdate?.(e as unknown as React.SyntheticEvent<HTMLVideoElement>);
+        // Only handle time updates from active video
+        const target = e.target as HTMLVideoElement;
+        const isActiveVideo = (activeVideoIndex === 0 && target === video1) || 
+                             (activeVideoIndex === 1 && target === video2);
+        if (isActiveVideo) {
+          onTimeUpdate?.(e as unknown as React.SyntheticEvent<HTMLVideoElement>);
+        }
       };
 
-      const handleEnded = () => {
-        onEnded?.();
+      const handleEnded = (video: HTMLVideoElement) => () => {
+        // Only handle ended events from active video
+        const isActiveVideo = (activeVideoIndex === 0 && video === video1) || 
+                             (activeVideoIndex === 1 && video === video2);
+        if (isActiveVideo) {
+          onEnded?.();
+        }
       };
 
       const handlePlay = () => {};
-
       const handlePause = () => {};
 
-      video.addEventListener("loadeddata", handleLoadedData);
-      video.addEventListener("timeupdate", handleTimeUpdate);
-      video.addEventListener("ended", handleEnded);
-      video.addEventListener("play", handlePlay);
-      video.addEventListener("pause", handlePause);
+      // Add event listeners to both videos
+      [video1, video2].forEach(video => {
+        if (video) {
+          const loadedHandler = handleLoadedData(video);
+          const endedHandler = handleEnded(video);
+          
+          video.addEventListener("loadeddata", loadedHandler);
+          video.addEventListener("timeupdate", handleTimeUpdate);
+          video.addEventListener("ended", endedHandler);
+          video.addEventListener("play", handlePlay);
+          video.addEventListener("pause", handlePause);
 
-      if (video.readyState >= 2 && !hasAlreadyNotifiedLoad) {
-        loadedSources.current.add(currentSource);
-        setTimeout(() => onLoadedData?.(), 0);
-      }
+          if (video.readyState >= 2 && !loadedSources.current.has(video.src)) {
+            loadedSources.current.add(video.src);
+            setTimeout(() => onLoadedData?.(), 0);
+          }
+        }
+      });
 
       return () => {
-        video.removeEventListener("loadeddata", handleLoadedData);
-        video.removeEventListener("timeupdate", handleTimeUpdate);
-        video.removeEventListener("ended", handleEnded);
-        video.removeEventListener("play", handlePlay);
-        video.removeEventListener("pause", handlePause);
+        [video1, video2].forEach(video => {
+          if (video) {
+            const loadedHandler = handleLoadedData(video);
+            const endedHandler = handleEnded(video);
+            
+            video.removeEventListener("loadeddata", loadedHandler);
+            video.removeEventListener("timeupdate", handleTimeUpdate);
+            video.removeEventListener("ended", endedHandler);
+            video.removeEventListener("play", handlePlay);
+            video.removeEventListener("pause", handlePause);
+          }
+        });
       };
-    }, [isHomePage, onLoadedData, onTimeUpdate, onEnded]);
+    }, [isHomePage, activeVideoIndex, onLoadedData, onTimeUpdate, onEnded]);
 
     const startVideo = useCallback(() => {
       const video = videoRef.current;
@@ -117,19 +146,81 @@ export const VideoBackground = forwardRef<
 
     const setMuted = useCallback((muted: boolean) => {
       const video = videoRef.current;
-      if (!video) return;
-
-      video.muted = muted;
+      const video2 = videoRef2.current;
+      if (video) video.muted = muted;
+      if (video2) video2.muted = muted;
     }, []);
+
+    const transitionToVideo = useCallback(async (newSrc: string) => {
+      if (isTransitioning) return;
+      
+      setIsTransitioning(true);
+      
+      const currentVideo = activeVideoIndex === 0 ? videoRef.current : videoRef2.current;
+      const nextVideo = activeVideoIndex === 0 ? videoRef2.current : videoRef.current;
+      
+      if (!currentVideo || !nextVideo) {
+        setIsTransitioning(false);
+        return;
+      }
+
+      try {
+        const currentVolume = currentVideo.volume;
+        const currentMuted = currentVideo.muted;
+        
+        nextVideo.src = newSrc;
+        nextVideo.currentTime = 0;
+        nextVideo.volume = currentVolume;
+        nextVideo.muted = currentMuted;
+        nextVideo.style.opacity = '0';
+        nextVideo.style.zIndex = '1';
+        
+        await new Promise((resolve, reject) => {
+          const handleCanPlay = () => {
+            nextVideo.removeEventListener('canplaythrough', handleCanPlay);
+            nextVideo.removeEventListener('error', handleError);
+            resolve(undefined);
+          };
+          const handleError = () => {
+            nextVideo.removeEventListener('canplaythrough', handleCanPlay);
+            nextVideo.removeEventListener('error', handleError);
+            reject(new Error('Video load failed'));
+          };
+          
+          nextVideo.addEventListener('canplaythrough', handleCanPlay, { once: true });
+          nextVideo.addEventListener('error', handleError, { once: true });
+          nextVideo.load();
+        });
+
+        await nextVideo.play();
+        
+        requestAnimationFrame(() => {
+          nextVideo.style.opacity = '1';
+          nextVideo.style.zIndex = '2';
+          currentVideo.style.opacity = '0';
+          currentVideo.style.zIndex = '0';
+          
+          requestAnimationFrame(() => {
+            currentVideo.pause();
+            setActiveVideoIndex(activeVideoIndex === 0 ? 1 : 0);
+            setIsTransitioning(false);
+          });
+        });
+        
+      } catch (error) {
+        setIsTransitioning(false);
+      }
+    }, [activeVideoIndex, isTransitioning]);
 
     useImperativeHandle(
       ref,
       () => ({
         startVideo,
         setMuted,
-        video: videoRef.current,
+        video: activeVideoIndex === 0 ? videoRef.current : videoRef2.current,
+        transitionToVideo,
       }),
-      [startVideo, setMuted],
+      [startVideo, setMuted, activeVideoIndex, transitionToVideo],
     );
 
     if (!isHomePage) {
@@ -141,9 +232,10 @@ export const VideoBackground = forwardRef<
         className="fixed inset-0 video-container"
         style={{ zIndex: OVERLAY_Z_INDEX.VIDEO_BACKGROUND }}
       >
+        {/* Primary video element */}
         <video
           ref={videoRef}
-          className="w-full h-full object-cover gpu-accelerated"
+          className="w-full h-full object-cover gpu-accelerated absolute inset-0"
           muted={isMobileDetected}
           autoPlay={isMobileDetected}
           playsInline
@@ -151,10 +243,31 @@ export const VideoBackground = forwardRef<
           disableRemotePlayback
           preload="auto"
           crossOrigin="anonymous"
-          src={videoSource}
+          src={videoSource || undefined}
           style={{
             contentVisibility: "auto",
             willChange: "auto",
+            opacity: activeVideoIndex === 0 ? 1 : 0,
+            zIndex: activeVideoIndex === 0 ? 1 : 0,
+            transition: 'none'
+          }}
+        />
+        
+        <video
+          ref={videoRef2}
+          className="w-full h-full object-cover gpu-accelerated absolute inset-0"
+          muted={isMobileDetected}
+          playsInline
+          disablePictureInPicture
+          disableRemotePlayback
+          preload="auto"
+          crossOrigin="anonymous"
+          style={{
+            contentVisibility: "auto",
+            willChange: "auto",
+            opacity: activeVideoIndex === 1 ? 1 : 0,
+            zIndex: activeVideoIndex === 1 ? 1 : 0,
+            transition: 'none'
           }}
         />
 

@@ -10,9 +10,7 @@ import { Home } from "./Home";
 import { isMobile } from "../../utils/mobileDetection";
 import { useCursorTrail } from "../../hooks/useCursorTrail";
 import { useVideoWorkflow } from "../../hooks/useVideoWorkflow";
-import { useVideoStateMachine } from "../../hooks/useVideoStateMachine";
 import { useSoundStore } from "../../stores/soundStore";
-import { debugVideo } from "../../utils/videoDebug";
 
 export const HomeContainer = () => {
   const [location] = useLocation();
@@ -21,72 +19,23 @@ export const HomeContainer = () => {
 
   const { isFreshLoad } = useAppLoading();
 
-  // FEATURE FLAG: Set to true to use new state machine, false for old system
-  const USE_NEW_STATE_MACHINE = true;
   const { setTrailEnabled } = useCursorTrail();
   const videoBackgroundRef = useRef<VideoBackgroundRef>(null);
-
   const { setVideoElement, updateForNavigation } = useSoundStore();
-
-
-  const videoSrc = useMemo(
-    () => (isMobileDetected ? undefined : "/videos/intro.mp4"), // Mobile uses sequence, desktop uses single video
-    [isMobileDetected],
-  );
 
   const getVideoElement = useCallback(() => {
     return videoBackgroundRef.current?.video || null;
   }, []);
 
-  // OLD SYSTEM - for comparison
-  const videoWorkflow = useVideoWorkflow({
-    isFreshLoad,
-    isHomePage,
-    videoSrc,
-    getVideoElement,
-  });
-
-  // NEW STATE MACHINE - testing alongside old system
-  const videoStateMachine = useVideoStateMachine({
-    isFreshLoad,
-    isHomePage,
-    isMobile: isMobileDetected,
-    getVideoElement, // For compatibility with VideoBackground
-  });
-
-  // Debug comparison between old and new systems
-  useEffect(() => {
-    debugVideo('System Comparison', {
-      old: {
-        workflowState: videoWorkflow.workflowState,
-        shouldShowContent: videoWorkflow.shouldShowContent,
-        shouldShowDiveIn: videoWorkflow.shouldShowDiveIn,
-        currentVideoSrc: videoWorkflow.currentVideoSrc,
-        isVideoLoaded: videoWorkflow.isVideoLoaded,
-      },
-      new: {
-        phase: videoStateMachine.phase,
-        shouldShowContent: videoStateMachine.shouldShowContent,
-        shouldShowDiveIn: videoStateMachine.shouldShowDiveIn,
-        videoSrc: videoStateMachine.videoSrc,
-        shouldShowLoader: videoStateMachine.shouldShowLoader,
-      }
-    });
-  }, [
-    videoWorkflow.workflowState,
-    videoWorkflow.shouldShowContent,
-    videoWorkflow.shouldShowDiveIn,
-    videoStateMachine.phase,
-    videoStateMachine.shouldShowContent,
-    videoStateMachine.shouldShowDiveIn,
-  ]);
+  
+  const videoWorkflow = useVideoWorkflow(getVideoElement, videoBackgroundRef);
 
   useEffect(() => {
-    if (videoWorkflow.isVideoLoaded) {
-      const video = getVideoElement();
+    const video = videoBackgroundRef.current?.video;
+    if (video && !videoWorkflow.isLoading) {
       setVideoElement(video);
     }
-  }, [videoWorkflow.isVideoLoaded, getVideoElement, setVideoElement]);
+  }, [videoWorkflow.isLoading, setVideoElement]);
 
   useEffect(() => {
     if (isHomePage) {
@@ -94,28 +43,21 @@ export const HomeContainer = () => {
     }
   }, [isHomePage, isMobileDetected, isFreshLoad, updateForNavigation]);
 
-  // Choose which system to use for cursor trail
-  const currentSystem = USE_NEW_STATE_MACHINE ? videoStateMachine : videoWorkflow;
-  
   useEffect(() => {
     const shouldEnable =
-      (currentSystem.shouldShowDiveIn || currentSystem.shouldShowContent) &&
+      (videoWorkflow.shouldShowDiveIn || videoWorkflow.shouldShowContent) &&
       !isMobileDetected;
     setTrailEnabled(shouldEnable);
   }, [
-    currentSystem.shouldShowDiveIn,
-    currentSystem.shouldShowContent,
+    videoWorkflow.shouldShowDiveIn,
+    videoWorkflow.shouldShowContent,
     isMobileDetected,
     setTrailEnabled,
   ]);
 
   const handleDiveIn = useCallback(() => {
-    if (USE_NEW_STATE_MACHINE) {
-      videoStateMachine.onDiveInClick();
-    } else {
-      videoWorkflow.onDiveInClick();
-    }
-  }, [USE_NEW_STATE_MACHINE, videoStateMachine, videoWorkflow]);
+    videoWorkflow.onDiveInClick();
+  }, [videoWorkflow]);
 
 
   if (!isHomePage) {
@@ -126,45 +68,25 @@ export const HomeContainer = () => {
     <div className="relative min-h-screen">
       <VideoBackground
         ref={videoBackgroundRef}
-        src={USE_NEW_STATE_MACHINE 
-          ? videoStateMachine.videoSrc 
-          : (videoWorkflow.currentVideoSrc || videoSrc)
-        }
-        showGradient={USE_NEW_STATE_MACHINE 
-          ? videoStateMachine.shouldShowContent 
-          : videoWorkflow.shouldShowContent
-        }
+        src={videoWorkflow.videoSrc}
+        showGradient={videoWorkflow.shouldShowContent}
         gradientDelay={isFreshLoad ? 300 : 0}
-        onLoadedData={USE_NEW_STATE_MACHINE 
-          ? videoStateMachine.onVideoLoaded 
-          : videoWorkflow.onVideoLoaded
-        }
-        onTimeUpdate={(e) =>
-          USE_NEW_STATE_MACHINE
-            ? videoStateMachine.onVideoTimeUpdate(e.currentTarget.currentTime)
-            : videoWorkflow.onVideoTimeUpdate(e.currentTarget.currentTime)
-        }
-        onEnded={USE_NEW_STATE_MACHINE 
-          ? videoStateMachine.onVideoEnded 
-          : videoWorkflow.onVideoEnded
-        }
+        onLoadedData={videoWorkflow.onVideoLoaded}
+        onEnded={videoWorkflow.onVideoEnded}
       />
 
       <AnimatePresence>
-        {currentSystem.shouldShowDiveIn && (
+        {videoWorkflow.shouldShowDiveIn && !isMobileDetected && (
           <DiveInButton
             onDiveIn={handleDiveIn}
-            isReady={USE_NEW_STATE_MACHINE 
-              ? !videoStateMachine.shouldShowLoader 
-              : videoWorkflow.isVideoLoaded
-            }
+            isReady={!videoWorkflow.isLoading}
           />
         )}
       </AnimatePresence>
 
       {isMobileDetected ? (
         <HomeFadeInContainer
-          isVisible={currentSystem.shouldShowContent}
+          isVisible={videoWorkflow.shouldShowContent}
           className="h-screen relative z-10"
           delay={isFreshLoad ? 50 : 0}
           instantForSPA={!isFreshLoad}
@@ -177,7 +99,7 @@ export const HomeContainer = () => {
         </HomeFadeInContainer>
       ) : (
         <HomeFadeInContainer
-          isVisible={currentSystem.shouldShowContent}
+          isVisible={videoWorkflow.shouldShowContent}
           className="h-screen relative z-10"
           delay={isFreshLoad ? 300 : 0}
           instantForSPA={!isFreshLoad}

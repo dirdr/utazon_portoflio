@@ -1,226 +1,219 @@
-import { useState, useEffect, useCallback, useRef } from "react";
-import { useTransitionContext } from "./useTransitionContext";
-import { isDiveInCompleted, markDiveInCompleted } from "../utils/diveInStorage";
-import {
-  getVideoTransitionConfig,
-  debugVideoTransition,
-} from "../config/videoTransitionConfig";
+import { useReducer, useEffect, useRef, useCallback } from "react";
+import { useAppLoading } from "../contexts/AppLoadingContext";
 
-export type DesktopVideoWorkflowState =
-  | "loading"
-  | "ready"
-  | "playing-intro"
-  | "content-showing"
-  | "spa-playing";
+type DesktopPhase =
+  | "LOADING"
+  | "READY_FOR_DIVE_IN"
+  | "PLAYING_ENTRY"
+  | "PLAYING_LOOP";
 
-export interface DesktopVideoWorkflowConfig {
-  isFreshLoad: boolean;
-  isHomePage: boolean;
+interface DesktopVideoState {
+  phase: DesktopPhase;
   videoSrc: string;
-  getVideoElement?: () => HTMLVideoElement | null;
+  showContent: boolean;
+  showDiveIn: boolean;
 }
 
-export interface DesktopVideoWorkflowResult {
-  workflowState: DesktopVideoWorkflowState;
-  isVideoLoaded: boolean;
+type DesktopAction =
+  | { type: "ASSETS_READY" }
+  | { type: "DIVE_IN_CLICKED" }
+  | { type: "ENTRY_ENDED" }
+  | { type: "SHOW_CONTENT" };
 
+export interface DesktopVideoResult {
+  phase: DesktopPhase;
+  videoSrc: string;
   shouldShowContent: boolean;
   shouldShowDiveIn: boolean;
-
-  videoRef: React.RefObject<HTMLVideoElement>;
-  loopStartTime: number;
-
+  isLoading: boolean;
   onVideoLoaded: () => void;
   onVideoEnded: () => void;
-  onVideoTimeUpdate: (currentTime: number) => void;
   onDiveInClick: () => void;
 }
 
-const getVideoConfig = () => {
-  const config = getVideoTransitionConfig();
-  return {
-    LOOP_START_DESKTOP: config.fresh.loopStartTime,
-    INTRO_DURATION: config.fresh.introDuration,
-    SPA_JUMP_TIME: config.spa.jumpToTime,
-    SPA_WITH_SOUND: config.spa.withSound,
-  };
+const DESKTOP_VIDEOS = {
+  ENTRY: "/videos/intro/desktop/entry_desktop.mp4",
+  LOOP: "/videos/intro/desktop/loop_desktop.mp4",
 };
 
-export const useDesktopVideoWorkflow = (
-  config: DesktopVideoWorkflowConfig,
-): DesktopVideoWorkflowResult => {
-  const { isFreshLoad, isHomePage, videoSrc, getVideoElement } = config;
-  const { isTransitioning } = useTransitionContext();
+function desktopReducer(
+  state: DesktopVideoState,
+  action: DesktopAction,
+  isFreshLoad: boolean,
+): DesktopVideoState {
 
-  const videoConfig = getVideoConfig();
+  switch (action.type) {
+    case "ASSETS_READY":
+      if (isFreshLoad) {
+        return {
+          ...state,
+          phase: "READY_FOR_DIVE_IN",
+          videoSrc: DESKTOP_VIDEOS.ENTRY,
+          showDiveIn: true,
+          showContent: false,
+        };
+      } else {
+        return {
+          ...state,
+          phase: "PLAYING_LOOP",
+          videoSrc: DESKTOP_VIDEOS.LOOP,
+          showDiveIn: false,
+          showContent: true,
+        };
+      }
 
-  const [workflowState, setWorkflowState] =
-    useState<DesktopVideoWorkflowState>("loading");
-  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
-  const [hasCompletedIntro, setHasCompletedIntro] = useState(false);
-
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const loopStartTime = videoConfig.LOOP_START_DESKTOP;
-
-  const shouldShowContent =
-    workflowState === "content-showing" || workflowState === "spa-playing";
-  const shouldShowDiveIn = workflowState === "ready" && !isDiveInCompleted();
-
-  const onVideoLoaded = useCallback(() => {
-    const video = getVideoElement ? getVideoElement() : videoRef.current;
-
-    setIsVideoLoaded(true);
-
-    if (!video || !isHomePage) return;
-
-    const shouldAllowDuringTransition = !isFreshLoad;
-    if (isTransitioning && !shouldAllowDuringTransition) {
-      return;
-    }
-
-    if (
-      workflowState === "playing-intro" ||
-      workflowState === "content-showing"
-    ) {
-      return;
-    }
-
-    if (isFreshLoad) {
-      video.currentTime = 0;
-      setWorkflowState("ready");
-    } else {
-      debugVideoTransition("SPA navigation detected, configuring video:", {
-        jumpToTime: videoConfig.SPA_JUMP_TIME,
-        withSound: videoConfig.SPA_WITH_SOUND,
-        currentMuted: video.muted,
-      });
-
-      video.pause();
-      video.currentTime = videoConfig.SPA_JUMP_TIME;
-
-      const handleSeeked = () => {
-        video.removeEventListener("seeked", handleSeeked);
-
-        debugVideoTransition(
-          `Starting SPA video playback from ${videoConfig.SPA_JUMP_TIME}s`,
-        );
-
-        video
-          .play()
-          .then(() => {
-            debugVideoTransition("SPA video playback started successfully");
-          })
-          .catch((error) => {
-            debugVideoTransition("SPA video playback failed:", error);
-          });
+    case "DIVE_IN_CLICKED":
+      return {
+        ...state,
+        phase: "PLAYING_ENTRY",
+        videoSrc: DESKTOP_VIDEOS.ENTRY,
+        showDiveIn: false,
+        showContent: false,
       };
 
-      video.addEventListener("seeked", handleSeeked);
-      setWorkflowState("spa-playing");
-    }
-  }, [
-    isHomePage,
-    isFreshLoad,
-    getVideoElement,
-    workflowState,
-    isTransitioning,
-    videoConfig.SPA_JUMP_TIME,
-    videoConfig.SPA_WITH_SOUND,
-  ]);
+    case "SHOW_CONTENT":
+      return {
+        ...state,
+        showContent: true,
+      };
 
-  const onDiveInClick = useCallback(() => {
-    const video = getVideoElement ? getVideoElement() : videoRef.current;
-    if (!video || workflowState !== "ready") {
-      return;
-    }
+    case "ENTRY_ENDED":
+      return {
+        ...state,
+        phase: "PLAYING_LOOP",
+        videoSrc: DESKTOP_VIDEOS.LOOP,
+        showContent: true,
+      };
 
-    markDiveInCompleted();
+    default:
+      return state;
+  }
+}
 
-    video.currentTime = 0;
-    video
-      .play()
-      .then(() => {
-        setWorkflowState("playing-intro");
-      })
-      .catch(() => {});
-  }, [workflowState, getVideoElement]);
+export const useDesktopVideoWorkflow = (
+  getVideoElement: () => HTMLVideoElement | null,
+  videoBackgroundRef?: React.RefObject<any>,
+): DesktopVideoResult => {
+  const { isFreshLoad } = useAppLoading();
 
-  const onVideoTimeUpdate = useCallback(
-    (currentTime: number) => {
-      if (
-        workflowState === "playing-intro" &&
-        currentTime >= videoConfig.INTRO_DURATION &&
-        !hasCompletedIntro
-      ) {
-        debugVideoTransition(
-          `Intro completed at ${currentTime}s, showing content`,
-        );
-        setHasCompletedIntro(true);
-        setWorkflowState("content-showing");
-      }
+  const [state, dispatch] = useReducer(
+    (state: DesktopVideoState, action: DesktopAction) =>
+      desktopReducer(state, action, isFreshLoad),
+    {
+      phase: "LOADING",
+      videoSrc: "",
+      showContent: false,
+      showDiveIn: false,
     },
-    [workflowState, hasCompletedIntro, videoConfig.INTRO_DURATION],
   );
 
+  const contentTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (state.phase === "LOADING") {
+      dispatch({ type: "ASSETS_READY" });
+    }
+  }, []);
+
+  useEffect(() => {
+    const videoElement = getVideoElement();
+    if (!videoElement || !state.videoSrc) return;
+
+    const currentSrc = videoElement.src
+      ? new URL(videoElement.src).pathname
+      : "";
+
+    if (currentSrc !== state.videoSrc) {
+      if (state.phase !== "PLAYING_LOOP" || currentSrc === "") {
+        videoElement.src = state.videoSrc;
+        videoElement.preload = "auto";
+        videoElement.load();
+      }
+
+      if (state.phase === "PLAYING_ENTRY") {
+        const loopVideo = document.createElement("video");
+        loopVideo.src = DESKTOP_VIDEOS.LOOP;
+        loopVideo.preload = "auto";
+        loopVideo.load();
+      }
+    }
+  }, [state.videoSrc, state.phase, getVideoElement]);
+
+  useEffect(() => {
+    const videoElement = getVideoElement();
+    if (!videoElement) return;
+
+    if (state.phase === "PLAYING_ENTRY" || state.phase === "PLAYING_LOOP") {
+      const playVideo = () => {
+        videoElement.currentTime = 0;
+        videoElement.play().catch(console.error);
+      };
+
+      if (videoElement.readyState >= 4) {
+        playVideo();
+      } else {
+        videoElement.addEventListener("canplaythrough", playVideo, {
+          once: true,
+        });
+        return () =>
+          videoElement.removeEventListener("canplaythrough", playVideo);
+      }
+    }
+  }, [state.phase, getVideoElement]);
+
+  useEffect(() => {
+    if (state.phase === "PLAYING_ENTRY" && !state.showContent) {
+      contentTimerRef.current = setTimeout(() => {
+        dispatch({ type: "SHOW_CONTENT" });
+      }, 3000);
+
+      return () => {
+        if (contentTimerRef.current) {
+          clearTimeout(contentTimerRef.current);
+          contentTimerRef.current = null;
+        }
+      };
+    }
+  }, [state.phase, state.showContent]);
+
+  const onVideoLoaded = useCallback(() => {}, [state.phase]);
+
   const onVideoEnded = useCallback(() => {
-    const video = getVideoElement ? getVideoElement() : videoRef.current;
-    if (!video) return;
+    if (state.phase === "PLAYING_ENTRY") {
+      const transitionMethod = videoBackgroundRef?.current?.transitionToVideo;
 
-    video.currentTime = loopStartTime;
-    video.play().catch(() => {});
-  }, [loopStartTime, getVideoElement]);
-
-  useEffect(() => {
-    if (!isHomePage) {
-      if (isTransitioning) {
-        return;
+      if (transitionMethod) {
+        transitionMethod(DESKTOP_VIDEOS.LOOP)
+          .then(() => {
+            dispatch({ type: "ENTRY_ENDED" });
+          })
+          .catch(() => {
+            dispatch({ type: "ENTRY_ENDED" });
+          });
       } else {
-        setWorkflowState("content-showing");
-        return;
+        dispatch({ type: "ENTRY_ENDED" });
+      }
+    } else if (state.phase === "PLAYING_LOOP") {
+      const videoElement = getVideoElement();
+      if (videoElement) {
+        videoElement.currentTime = 0;
+        videoElement.play().catch(console.error);
       }
     }
+  }, [state.phase, getVideoElement, videoBackgroundRef]);
 
-    setHasCompletedIntro(false);
-
-    if (isVideoLoaded) {
-      if (isFreshLoad) {
-        setWorkflowState("ready");
-      } else {
-        setWorkflowState("spa-playing");
-      }
-    } else {
-      setWorkflowState("loading");
-    }
-  }, [isHomePage, isFreshLoad, isVideoLoaded, isTransitioning]);
-
-  useEffect(() => {
-    if (!isHomePage || !videoSrc) return;
-
-    const video = getVideoElement ? getVideoElement() : videoRef.current;
-    if (!video) return;
-
-    if (video.src.endsWith(videoSrc) && isVideoLoaded) {
-      return;
-    }
-
-    setIsVideoLoaded(false);
-    video.load();
-  }, [isHomePage, videoSrc, getVideoElement, isVideoLoaded]);
+  const onDiveInClick = useCallback(() => {
+    dispatch({ type: "DIVE_IN_CLICKED" });
+  }, []);
 
   return {
-    workflowState,
-    isVideoLoaded,
-
-    shouldShowContent,
-    shouldShowDiveIn,
-
-    videoRef,
-    loopStartTime,
-
+    phase: state.phase,
+    videoSrc: state.videoSrc,
+    shouldShowContent: state.showContent,
+    shouldShowDiveIn: state.showDiveIn,
+    isLoading: state.phase === "LOADING",
     onVideoLoaded,
     onVideoEnded,
-    onVideoTimeUpdate,
     onDiveInClick,
   };
 };
-

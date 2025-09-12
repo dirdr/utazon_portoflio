@@ -1,7 +1,7 @@
 import { useRoute } from "wouter";
 import { getProjectById } from "../../data/projects";
 import { Container } from "../layout/Container";
-import { ProjectHeroSection } from "../projectdetail/ProjectHeroSection";
+import { ProjectHeroSection } from "./project-details/ProjectHeroSection";
 import { useRef, useEffect } from "react";
 import { ShowcaseList } from "../showcase/ShowcaseList";
 

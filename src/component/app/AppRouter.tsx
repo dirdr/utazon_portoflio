@@ -1,5 +1,5 @@
 import { Layout } from "../layout/Layout";
-import { About } from "../pages/About";
+import { NewAbout } from "../pages/NewAbout";
 import { HomeContainer } from "../pages/HomeContainer";
 import { Projects } from "../pages/Projects";
 import { ProjectDetail } from "../pages/ProjectDetail";
@@ -41,7 +41,7 @@ export const AppRouter = () => {
       <Layout>
         <Switch location={currentLocation}>
           <Route path={ROUTES.HOME} component={HomeContainer} />
-          <Route path={ROUTES.ABOUT} component={About} />
+          <Route path={ROUTES.ABOUT} component={NewAbout} />
           <Route path={ROUTES.PROJECTS} component={Projects} />
           <Route path="/projects/:id" component={ProjectDetail} />
           <Route path={ROUTES.LEGAL} component={Legal} />
@@ -70,4 +70,3 @@ export const AppRouter = () => {
     </TransitionProvider>
   );
 };
-

@@ -1,8 +1,7 @@
 import { useTranslation } from "react-i18next";
-import { Project } from "../../types/project";
-import { Container } from "../layout/Container";
-import { BackButton } from "../common/BackButton";
-
+import { Project } from "../../../types/project";
+import { BackButton } from "../../common/BackButton";
+import { Container } from "../../layout/Container";
 interface GradientConfig {
   top?: { size: string; enabled: boolean };
   bottom?: { size: string; enabled: boolean };
