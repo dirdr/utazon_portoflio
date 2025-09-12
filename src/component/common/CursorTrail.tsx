@@ -19,26 +19,18 @@ interface CursorTrailProps {
 
 export const CursorTrail = ({
   enabled = false,
-  maxPoints = 300,
+  maxPoints = 3000,
   fadeTime = 2500,
-  rippleSize = 150,
+  rippleSize = 100,
   intensity = 0.5,
 }: CursorTrailProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number | undefined>(0);
   const pointsRef = useRef<TrailPoint[]>([]);
   const lastTrailPointRef = useRef({ x: 0, y: 0, timestamp: 0 });
   const currentMouseRef = useRef({ x: 0, y: 0 });
   const lastCleanupRef = useRef(0);
   const canvasSizeRef = useRef({ width: 0, height: 0 });
-  const [responsiveScale, setResponsiveScale] = useState(1);
-
-  const updateResponsiveScale = useCallback(() => {
-    const baseWidth = 1920;
-    const currentWidth = window.innerWidth;
-    const scale = Math.min(Math.max(currentWidth / baseWidth, 0.6), 1.2);
-    setResponsiveScale(scale);
-  }, []);
 
   const addPoint = useCallback(
     (x: number, y: number, speed: number) => {
@@ -140,7 +132,6 @@ export const CursorTrail = ({
     [enabled, addPoint, fadeTime],
   );
 
-  // Memoize drawing functions to prevent recreation
   const drawTrailPoints = useMemo(() => {
     return (ctx: CanvasRenderingContext2D, now: number) => {
       const points = pointsRef.current;
@@ -151,39 +142,32 @@ export const CursorTrail = ({
         const age = now - point.timestamp;
         const ageRatio = age / fadeTime;
 
-        if (ageRatio >= 1) continue; // Skip expired points
+        if (ageRatio >= 1) continue;
 
         const trailFade = Math.pow(1 - ageRatio, 2);
         const currentOpacity = intensity * trailFade * 0.065;
         if (currentOpacity <= 0.002) continue;
 
-        const baseSize = rippleSize * 0.4 * responsiveScale;
+        const baseSize = rippleSize * 0.4;
 
-        // Expanding ripple effect: each ring grows outward over time
-        const rippleProgress = ageRatio; // 0 to 1 as point ages
-        const maxRippleSize = baseSize * 4; // Maximum expansion size
+        const rippleProgress = ageRatio;
+        const maxRippleSize = baseSize * 4;
 
-        // Create expanding ripple rings that grow outward over time
         const drawExpandingRing = (ringDelay: number, ringOpacity: number) => {
-          // Each ring starts expanding after a delay
           const ringProgress = Math.max(0, rippleProgress - ringDelay);
           if (ringProgress <= 0) return;
 
-          // Ring expands from baseSize to maxRippleSize
           const currentSize =
             baseSize + (maxRippleSize - baseSize) * ringProgress;
 
-          // Ring fades as it expands
-          const ringFade = Math.pow(1 - ringProgress, 1.5);
+          const ringFade = Math.pow(1 - ringProgress, 2);
           const finalOpacity = currentOpacity * ringOpacity * ringFade;
 
           if (finalOpacity <= 0.001) return;
 
-          // Create expanding wave ring effect - thick ring that's filled
-          const ringThickness = baseSize * 0.5; // Thicker rings
+          const ringThickness = baseSize * 0.5;
           const innerRadius = Math.max(0, currentSize - ringThickness);
 
-          // First draw the filled ring
           const gradient = ctx.createRadialGradient(
             point.x,
             point.y,
@@ -195,15 +179,15 @@ export const CursorTrail = ({
 
           gradient.addColorStop(
             0,
-            `rgba(255, 255, 255, ${finalOpacity * 0.3})`,
+            `rgba(255, 255, 255, ${finalOpacity * 0.15})`,
           );
           gradient.addColorStop(
-            0.3,
-            `rgba(255, 255, 255, ${finalOpacity * 0.4})`,
+            0.4,
+            `rgba(255, 255, 255, ${finalOpacity * 0.2})`,
           );
           gradient.addColorStop(
-            0.7,
-            `rgba(255, 255, 255, ${finalOpacity * 0.25})`,
+            0.8,
+            `rgba(255, 255, 255, ${finalOpacity * 0.1})`,
           );
           gradient.addColorStop(1, `rgba(255, 255, 255, 0)`);
 
@@ -211,7 +195,6 @@ export const CursorTrail = ({
           ctx.beginPath();
           ctx.arc(point.x, point.y, currentSize, 0, Math.PI * 2);
 
-          // Create inner hole for ring effect (if inner radius > 0)
           if (innerRadius > 0) {
             ctx.arc(point.x, point.y, innerRadius, 0, Math.PI * 2, true);
           }
@@ -220,105 +203,38 @@ export const CursorTrail = ({
         };
 
         // Draw multiple expanding rings with staggered timing
-        drawExpandingRing(0, 0.7); // First ring starts immediately
-        drawExpandingRing(0.2, 0.5); // Second ring starts at 20% progress
-        drawExpandingRing(0.4, 0.35); // Third ring starts at 40% progress
+        drawExpandingRing(0, 0.4); // First ring starts immediately
+        drawExpandingRing(0.25, 0.3); // Second ring starts at 25% progress
+        drawExpandingRing(0.5, 0.2); // Third ring starts at 50% progress
       }
     };
-  }, [fadeTime, intensity, rippleSize, responsiveScale]);
+  }, [fadeTime, intensity, rippleSize]);
 
-  // Memoize static glow drawing function
   const drawStaticGlow = useMemo(() => {
     return (ctx: CanvasRenderingContext2D) => {
       const { x: currentX, y: currentY } = currentMouseRef.current;
       if (currentX <= 0 || currentY <= 0) return;
 
-      const mainSize = rippleSize * 1.2 * responsiveScale;
-
-      // Inner glow
-      const innerSize = mainSize * 0.08;
-      const innerGradient = ctx.createRadialGradient(
+      const glowSize = rippleSize * 1.4;
+      const gradient = ctx.createRadialGradient(
         currentX,
         currentY,
         0,
         currentX,
         currentY,
-        innerSize * 3,
+        glowSize,
       );
 
-      innerGradient.addColorStop(0, `rgba(255, 255, 255, ${intensity * 0.15})`);
-      innerGradient.addColorStop(
-        0.3,
-        `rgba(255, 255, 255, ${intensity * 0.08})`,
-      );
-      innerGradient.addColorStop(
-        0.7,
-        `rgba(255, 255, 255, ${intensity * 0.02})`,
-      );
-      innerGradient.addColorStop(1, `rgba(255, 255, 255, 0)`);
+      gradient.addColorStop(0, `rgba(255, 255, 255, ${intensity * 0.12})`);
+      gradient.addColorStop(0.5, `rgba(255, 255, 255, ${intensity * 0.05})`);
+      gradient.addColorStop(1, `rgba(255, 255, 255, 0)`);
 
-      ctx.fillStyle = innerGradient;
+      ctx.fillStyle = gradient;
       ctx.beginPath();
-      ctx.arc(currentX, currentY, innerSize * 3, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Main glow
-      const mainGradient = ctx.createRadialGradient(
-        currentX,
-        currentY,
-        mainSize * 0.3,
-        currentX,
-        currentY,
-        mainSize,
-      );
-
-      mainGradient.addColorStop(0, `rgba(255, 255, 255, ${intensity * 0.06})`);
-      mainGradient.addColorStop(
-        0.4,
-        `rgba(255, 255, 255, ${intensity * 0.03})`,
-      );
-      mainGradient.addColorStop(
-        0.8,
-        `rgba(255, 255, 255, ${intensity * 0.01})`,
-      );
-      mainGradient.addColorStop(1, `rgba(255, 255, 255, 0)`);
-
-      ctx.fillStyle = mainGradient;
-      ctx.beginPath();
-      ctx.arc(currentX, currentY, mainSize, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Outer glow
-      const outerSize = mainSize * 1.8;
-      const outerGlow = ctx.createRadialGradient(
-        currentX,
-        currentY,
-        mainSize * 0.6,
-        currentX,
-        currentY,
-        outerSize,
-      );
-
-      outerGlow.addColorStop(0, `rgba(255, 255, 255, 0)`);
-      outerGlow.addColorStop(0.2, `rgba(255, 255, 255, ${intensity * 0.01})`);
-      outerGlow.addColorStop(0.7, `rgba(255, 255, 255, ${intensity * 0.005})`);
-      outerGlow.addColorStop(1, `rgba(255, 255, 255, 0)`);
-
-      ctx.fillStyle = outerGlow;
-      ctx.beginPath();
-      ctx.arc(currentX, currentY, outerSize, 0, Math.PI * 2);
+      ctx.arc(currentX, currentY, glowSize, 0, Math.PI * 2);
       ctx.fill();
     };
-  }, [rippleSize, responsiveScale, intensity]);
-
-  const handleResize = useCallback(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    updateResponsiveScale();
-  }, [updateResponsiveScale]);
+  }, [rippleSize, intensity]);
 
   useEffect(() => {
     if (!enabled) {
@@ -338,18 +254,14 @@ export const CursorTrail = ({
     }
 
     document.addEventListener("mousemove", handleMouseMove, { passive: true });
-    window.addEventListener("resize", handleResize, { passive: true });
-
-    handleResize();
 
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("resize", handleResize);
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [enabled, handleMouseMove, handleResize]);
+  }, [enabled, handleMouseMove]);
 
   if (!enabled) return null;
 
@@ -362,7 +274,7 @@ export const CursorTrail = ({
           zIndex: OVERLAY_Z_INDEX.CURSOR_TRAIL,
           mixBlendMode: "normal",
           willChange: "auto",
-          contentVisibility: 'auto',
+          contentVisibility: "auto",
         }}
       />
     </OverlayManager>

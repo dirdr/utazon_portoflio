@@ -56,7 +56,7 @@ export const AppRouter = () => {
         </Switch>
       </Layout>
       <CursorTrail
-        enabled={isEnabled && !isMobile() && isHomePage}
+        enabled={isEnabled && !isMobile() && isHomePage && !isTransitioning}
         maxPoints={1000}
         fadeTime={2500}
       />
