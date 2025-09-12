@@ -1,6 +1,7 @@
 import { isMobile } from "../utils/mobileDetection";
-import { useDesktopVideoWorkflow, DesktopVideoResult } from "./useDesktopVideoWorkflow";
-import { useMobileVideoSequence, MobileVideoResult } from "./useMobileVideoSequence";
+import { useDesktopVideoWorkflow } from "./useDesktopVideoWorkflow";
+import { useMobileVideoSequence } from "./useMobileVideoSequence";
+import { VideoBackgroundRef } from "../component/layout/VideoBackground";
 
 export interface VideoWorkflowResult {
   videoSrc: string;
@@ -12,7 +13,7 @@ export interface VideoWorkflowResult {
   onDiveInClick: () => void;
 }
 
-export const useVideoWorkflow = (getVideoElement: () => HTMLVideoElement | null, videoBackgroundRef?: React.RefObject<any>): VideoWorkflowResult => {
+export const useVideoWorkflow = (getVideoElement: () => HTMLVideoElement | null, videoBackgroundRef?: React.RefObject<VideoBackgroundRef | null>): VideoWorkflowResult => {
   const isMobileDetected = isMobile();
   
   const desktopResult = useDesktopVideoWorkflow(isMobileDetected ? () => null : getVideoElement, videoBackgroundRef);

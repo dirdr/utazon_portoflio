@@ -37,7 +37,7 @@ export const HomeFadeInContainer = ({
     return { ...delayStyle, ...durationStyle, ...style };
   }, [delay, instantForSPA, transitionDuration, style]);
 
-  const startTimeRef = useRef<number>();
+  const startTimeRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     if (isVisible) {

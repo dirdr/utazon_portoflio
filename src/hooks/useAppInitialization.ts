@@ -48,7 +48,7 @@ export const useAppInitialization = () => {
     if (isFreshLoad) {
       preloadState.startPreloading();
     }
-  }, [isFreshLoad, preloadState.startPreloading]); // Now safe with ref guard
+  }, [isFreshLoad, preloadState]);
 
   // Handle SPA navigation - immediate initialization
   useEffect(() => {

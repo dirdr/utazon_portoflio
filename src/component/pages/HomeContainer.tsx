@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useLocation } from "wouter";
 import { useAppLoading } from "../../contexts/AppLoadingContext";

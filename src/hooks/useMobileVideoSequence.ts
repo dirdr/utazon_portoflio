@@ -1,5 +1,6 @@
 import { useReducer, useEffect, useRef, useCallback } from "react";
 import { useAppLoading } from "../contexts/AppLoadingContext";
+import { VideoBackgroundRef } from "../component/layout/VideoBackground";
 
 type MobilePhase = "LOADING" | "PLAYING_ANIM" | "PLAYING_INTRO" | "LOOPING";
 
@@ -86,7 +87,7 @@ function mobileReducer(
 
 export const useMobileVideoSequence = (
   getVideoElement: () => HTMLVideoElement | null,
-  videoBackgroundRef?: React.RefObject<any>,
+  videoBackgroundRef?: React.RefObject<VideoBackgroundRef | null>,
 ): MobileVideoResult => {
   const { isFreshLoad } = useAppLoading();
 
@@ -107,7 +108,7 @@ export const useMobileVideoSequence = (
     if (state.phase === "LOADING") {
       dispatch({ type: "ASSETS_READY" });
     }
-  }, []);
+  }, [state.phase]);
 
   useEffect(() => {
     const videoElement = getVideoElement();
@@ -174,7 +175,7 @@ export const useMobileVideoSequence = (
     }
   }, [state.phase, state.showContent]);
 
-  const onVideoLoaded = useCallback(() => {}, [state.phase]);
+  const onVideoLoaded = useCallback(() => {}, []);
 
   const onVideoEnded = useCallback(() => {
     if (state.phase === "PLAYING_ANIM") {

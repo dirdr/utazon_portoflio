@@ -1,5 +1,5 @@
 import { Suspense, useEffect, useState, useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas } from "@react-three/fiber";
 import { useGLTF, OrbitControls } from "@react-three/drei";
 import { EffectComposer, Bloom, Noise } from "@react-three/postprocessing";
 import { Container } from "../layout/Container";
@@ -14,7 +14,7 @@ const LIGHT_CONFIG = {
   SENSITIVITY: 0.5,
 
   DISTANCE_FROM_CENTER: 1.5,
-  BASE_Z: -6, // Between camera (-3) and logo (-7.4)
+  BASE_Z: -6,
 
   KEY_LIGHT: {
     INTENSITY: 1.5,
@@ -46,7 +46,7 @@ const CAMERA_CONFIG = {
 } as const;
 
 const SHADOW_CONFIG = {
-  MAP_SIZE: 4096, // High-resolution shadow maps
+  MAP_SIZE: 4096,
   CAMERA_BOUNDS: {
     LEFT: -2,
     RIGHT: 2,
@@ -55,20 +55,10 @@ const SHADOW_CONFIG = {
     NEAR: 0.1,
     FAR: 15,
   },
-  BIAS: -0.0008, // Fine-tuned to eliminate artifacts
+  BIAS: -0.0008,
   RADIUS: 2, // Soft shadow edges
 } as const;
 
-// Debug visualization configuration
-const DEBUG_CONFIG = {
-  SPHERES: {
-    PRIMARY_LIGHT: { size: 0.12, color: "red", label: "Primary Grazing Light" },
-    FILL_LIGHT: { size: 0.08, color: "blue", label: "Fill Light" },
-    RIM_LIGHTS: { size: 0.06, color: "green", label: "Rim Light" },
-    EDGE_LIGHTS: { size: 0.06, color: "yellow", label: "Edge Light" },
-    LOGO_CENTER: { size: 0.05, color: "white", label: "Logo Center" },
-  },
-} as const;
 
 type ModelProps = {
   url: string;
@@ -90,7 +80,6 @@ function Model({ url, planeOpaque = false }: ModelProps) {
       if (planeMesh) {
         planeMesh.traverse((child) => {
           if (child instanceof THREE.Mesh) {
-            // Store original material if not already stored
             if (!originalMaterialsRef.current.has(child)) {
               originalMaterialsRef.current.set(child, child.material);
             }
@@ -113,7 +102,7 @@ function Model({ url, planeOpaque = false }: ModelProps) {
             }
           }
         });
-        
+
         if (logoRef.current) {
           logoRef.current.position.copy(logoMesh.position);
         }
@@ -173,11 +162,9 @@ const useCarvedLighting = () => {
 
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
-      // Normalize mouse position to -1 to 1 range
       const normalizedX = (event.clientX / window.innerWidth) * 2 - 1;
       const normalizedY = (event.clientY / window.innerHeight) * 2 - 1;
 
-      // Apply bounds and sensitivity
       const boundedX = Math.max(
         LIGHT_CONFIG.BOUNDS.X[0],
         Math.min(
@@ -195,14 +182,12 @@ const useCarvedLighting = () => {
 
       const distance = LIGHT_CONFIG.DISTANCE_FROM_CENTER;
 
-      // Fill light follows cursor (illuminates where you look)
       setFillLightPos([
         boundedX * distance,
         boundedY * distance,
         LIGHT_CONFIG.BASE_Z,
       ]);
 
-      // Key light opposes cursor (creates shadows from opposite side)
       setKeyLightPos([
         -boundedX * distance,
         -boundedY * distance,
@@ -217,7 +202,6 @@ const useCarvedLighting = () => {
   return { keyLightPos, fillLightPos };
 };
 
-// Debug sphere component for light visualization
 type DebugSphereProps = {
   position: [number, number, number];
   size: number;
@@ -232,7 +216,6 @@ const DebugSphere = ({ position, size, color }: DebugSphereProps) => (
   </mesh>
 );
 
-// Clean debug visualization for minimal lighting setup
 type LightDebugProps = {
   keyLightPos: [number, number, number];
   fillLightPos: [number, number, number];
@@ -246,7 +229,6 @@ const LightDebugVisualization = ({
 }: LightDebugProps) => {
   if (!visible) return null;
 
-  // Console log light positions for debugging
   console.log("=== MINIMAL LIGHTING DEBUG ===");
   console.log("🔴 Key Light (opposes cursor):", keyLightPos);
   console.log("🔵 Fill Light (follows cursor):", fillLightPos);
@@ -264,7 +246,6 @@ const LightDebugVisualization = ({
         label="Key Light"
       />
 
-      {/* Fill Light - BLUE (follows cursor) */}
       <DebugSphere
         position={fillLightPos}
         size={0.08}
@@ -272,7 +253,6 @@ const LightDebugVisualization = ({
         label="Fill Light"
       />
 
-      {/* Logo Center - WHITE */}
       <DebugSphere
         position={CAMERA_CONFIG.TARGET}
         size={0.05}
@@ -316,7 +296,6 @@ export const NewAbout = () => {
           camera={{ position: CAMERA_CONFIG.POSITION, fov: CAMERA_CONFIG.FOV }}
           gl={{
             antialias: true,
-            shadowMap: { enabled: true, type: THREE.PCFSoftShadowMap },
           }}
         >
           <OrbitControls
@@ -326,12 +305,8 @@ export const NewAbout = () => {
             enableRotate={false}
           />
 
-          {/* Minimal 2-light setup for optimal carved surface visibility */}
-
-          {/* Ambient light - minimal base illumination */}
           <ambientLight intensity={LIGHT_CONFIG.AMBIENT.INTENSITY} />
 
-          {/* Key light - creates shadows (opposes cursor) */}
           <directionalLight
             position={keyLightPos}
             intensity={LIGHT_CONFIG.KEY_LIGHT.INTENSITY}
@@ -348,13 +323,11 @@ export const NewAbout = () => {
             shadow-radius={SHADOW_CONFIG.RADIUS}
           />
 
-          {/* Fill light - illuminates where you look (follows cursor) */}
           <directionalLight
             position={fillLightPos}
             intensity={LIGHT_CONFIG.FILL_LIGHT.INTENSITY}
           />
 
-          {/* Simple light debug visualization */}
           <LightDebugVisualization
             keyLightPos={keyLightPos}
             fillLightPos={fillLightPos}
@@ -365,7 +338,6 @@ export const NewAbout = () => {
             <Model url="/models/logo.glb" planeOpaque={planeOpaque} />
           </Suspense>
 
-          {/* Post-processing effects - Bloom & Noise */}
           {bloomEnabled && (
             <EffectComposer>
               <Bloom

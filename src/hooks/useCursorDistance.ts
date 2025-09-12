@@ -6,13 +6,13 @@ interface UseCursorDistanceOptions {
 }
 
 export const useCursorDistance = (
-  targetRef: React.RefObject<HTMLElement>,
+  targetRef: React.RefObject<HTMLElement | null>,
   options: UseCursorDistanceOptions = {},
 ) => {
   const { maxDistance = 200, throttleMs = 16 } = options;
   const [distance, setDistance] = useState(maxDistance);
   const [normalizedDistance, setNormalizedDistance] = useState(1);
-  const frameRef = useRef<number>();
+  const frameRef = useRef<number | undefined>(undefined);
   const lastUpdateRef = useRef(0);
 
   const calculateDistance = useCallback(

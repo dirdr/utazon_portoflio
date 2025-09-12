@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, useState, useMemo } from "react";
+import { useEffect, useRef, useCallback, useMemo } from "react";
 import { OverlayManager } from "./OverlayManager";
 import { OVERLAY_Z_INDEX } from "../../constants/overlayZIndex";
 
@@ -215,7 +215,7 @@ export const CursorTrail = ({
       const { x: currentX, y: currentY } = currentMouseRef.current;
       if (currentX <= 0 || currentY <= 0) return;
 
-      const glowSize = rippleSize * 1.4;
+      const glowSize = rippleSize * 0.8;
       const gradient = ctx.createRadialGradient(
         currentX,
         currentY,

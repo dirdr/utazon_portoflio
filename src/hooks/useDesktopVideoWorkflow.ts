@@ -1,5 +1,6 @@
 import { useReducer, useEffect, useRef, useCallback } from "react";
 import { useAppLoading } from "../contexts/AppLoadingContext";
+import { VideoBackgroundRef } from "../component/layout/VideoBackground";
 
 type DesktopPhase =
   | "LOADING"
@@ -92,7 +93,7 @@ function desktopReducer(
 
 export const useDesktopVideoWorkflow = (
   getVideoElement: () => HTMLVideoElement | null,
-  videoBackgroundRef?: React.RefObject<any>,
+  videoBackgroundRef?: React.RefObject<VideoBackgroundRef | null>,
 ): DesktopVideoResult => {
   const { isFreshLoad } = useAppLoading();
 
@@ -113,7 +114,7 @@ export const useDesktopVideoWorkflow = (
     if (state.phase === "LOADING") {
       dispatch({ type: "ASSETS_READY" });
     }
-  }, []);
+  }, [state.phase]);
 
   useEffect(() => {
     const videoElement = getVideoElement();
@@ -176,7 +177,7 @@ export const useDesktopVideoWorkflow = (
     }
   }, [state.phase, state.showContent]);
 
-  const onVideoLoaded = useCallback(() => {}, [state.phase]);
+  const onVideoLoaded = useCallback(() => {}, []);
 
   const onVideoEnded = useCallback(() => {
     if (state.phase === "PLAYING_ENTRY") {
