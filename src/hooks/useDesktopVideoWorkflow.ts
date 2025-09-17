@@ -147,7 +147,7 @@ export const useDesktopVideoWorkflow = (
     if (state.phase === "PLAYING_ENTRY" || state.phase === "PLAYING_LOOP") {
       const playVideo = () => {
         videoElement.currentTime = 0;
-        videoElement.play().catch(console.error);
+        videoElement.play().catch(() => {});
       };
 
       if (videoElement.readyState >= 4) {
@@ -198,7 +198,7 @@ export const useDesktopVideoWorkflow = (
       const videoElement = getVideoElement();
       if (videoElement) {
         videoElement.currentTime = 0;
-        videoElement.play().catch(console.error);
+        videoElement.play().catch(() => {});
       }
     }
   }, [state.phase, getVideoElement, videoBackgroundRef]);

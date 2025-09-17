@@ -145,7 +145,7 @@ export const useMobileVideoSequence = (
     ) {
       const playVideo = () => {
         videoElement.currentTime = 0;
-        videoElement.play().catch(console.error);
+        videoElement.play().catch(() => {});
       };
 
       if (videoElement.readyState >= 4) {
@@ -194,7 +194,7 @@ export const useMobileVideoSequence = (
       const videoElement = getVideoElement();
       if (videoElement) {
         videoElement.currentTime = 0;
-        videoElement.play().catch(console.error);
+        videoElement.play().catch(() => {});
       }
       dispatch({ type: "INTRO_LOOP" });
     }

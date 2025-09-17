@@ -122,7 +122,7 @@ export const Navbar = () => {
         id="mobile-menu"
         className={`xl:hidden overflow-hidden transition-all duration-300 ease-in-out ${
           isMenuOpen
-            ? "transform translate-y-0 opacity-100 pb-2"
+            ? "transform translate-y-0 opacity-100 pb-2 max-h-96"
             : "transform -translate-y-4 opacity-0 max-h-0"
         }`}
       >
@@ -164,9 +164,18 @@ export const Navbar = () => {
     </>
   );
 
+  const navbarPositioning = "relative";
+
+  const navbarSpacing = "py-8";
+
+  const navbarContainer = "w-full px-4 lg:px-12";
+
   return (
-    <nav className="w-full z-50 bg-transparent relative" ref={menuRef}>
-      <div className={cn("w-full pt-8 lg:pt-4", "px-4 lg:px-12")}>
+    <nav
+      className={cn("w-full z-50 bg-transparent", navbarPositioning)}
+      ref={menuRef}
+    >
+      <div className={cn(navbarContainer, navbarSpacing)}>
         <WrapperContent />
       </div>
     </nav>

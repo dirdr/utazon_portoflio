@@ -59,10 +59,7 @@ export const getVideoTransitionConfig = (): VideoTransitionConfig => {
   return DEFAULT_VIDEO_TRANSITION_CONFIG;
 };
 
-export const debugVideoTransition = (message: string, data?: unknown) => {
-  const config = getVideoTransitionConfig();
-  if (config.general.debug) {
-    const timestamp = new Date().toISOString().slice(11, 23);
-    console.log(`🎥 [VIDEO-TRANSITION ${timestamp}] ${message}`, data || "");
-  }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const debugVideoTransition = (_message?: string, _data?: unknown) => {
+  return;
 };

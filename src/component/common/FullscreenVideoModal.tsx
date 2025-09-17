@@ -3,6 +3,11 @@ import { createPortal } from "react-dom";
 import { InteractiveVideoPlayer } from "./InteractiveVideoPlayer";
 import { getVideoUrl } from "../../utils/videoUrl";
 
+// Audio configuration constants following React best practices
+const AUDIO_CONFIG = {
+  HOME_VIDEO_VOLUME: 0.5, // 50% of original volume as requested
+} as const;
+
 interface FullscreenVideoModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -108,7 +113,7 @@ export const FullscreenVideoModal = ({
           controls
           pip={false}
           playing={isPlaying && !isClosing}
-          volume={1}
+          volume={AUDIO_CONFIG.HOME_VIDEO_VOLUME}
         />
       </div>
     </div>,

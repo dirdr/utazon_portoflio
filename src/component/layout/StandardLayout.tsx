@@ -41,6 +41,7 @@ export const StandardLayout = ({
     return null;
   };
 
+
   return (
     <div className="relative min-h-screen">
       {renderBackground()}
@@ -48,7 +49,9 @@ export const StandardLayout = ({
         className={`min-h-screen flex flex-col ${className}`}
       >
         <Navbar />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1">
+          {children}
+        </main>
         {pageConfig.showFooter && <Footer />}
       </div>
     </div>

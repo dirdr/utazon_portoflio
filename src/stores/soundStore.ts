@@ -44,10 +44,8 @@ export const useSoundStore = create<SoundState & SoundActions>((set, get) => ({
 
   updateForNavigation: (isMobile, isFreshLoad) => {
     const { videoElement, muteSource } = get();
-    console.log('🏪 Store updateForNavigation:', { isMobile, isFreshLoad, muteSource, hasVideo: !!videoElement });
     
     if (muteSource === 'user') {
-      console.log('🏪 Skipping navigation update - user override active');
       return;
     }
 
@@ -62,7 +60,6 @@ export const useSoundStore = create<SoundState & SoundActions>((set, get) => ({
       navigationSoundState = true;
     }
 
-    console.log('🏪 Setting navigation sound state:', { navigationSoundState, config: config.spa.withSound });
 
     set({ 
       isSoundPlaying: navigationSoundState,
@@ -70,9 +67,7 @@ export const useSoundStore = create<SoundState & SoundActions>((set, get) => ({
     });
 
     if (videoElement) {
-      console.log('🏪 Applying mute to video:', { willMute: !navigationSoundState, currentMuted: videoElement.muted });
       videoElement.muted = !navigationSoundState;
-      console.log('🏪 Video muted state after update:', videoElement.muted);
     }
   }
 }));

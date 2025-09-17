@@ -34,42 +34,76 @@ const LIGHT_CONFIG = {
   },
   POINT_LIGHTS: {
     LIGHT_1: {
-      POSITION: [3, -0.5, -6.3] as [number, number, number],
-      INTENSITY: 7,
+      POSITION: [3, -1.2, -6] as [number, number, number],
+      INTENSITY: 5,
       COLOR: 0xffffff,
     },
     LIGHT_2: {
-      POSITION: [-3, 0.5, -6.3] as [number, number, number],
-      INTENSITY: 7,
+      POSITION: [-3, 0.5, -6] as [number, number, number],
+      INTENSITY: 5,
       COLOR: 0xffffff,
     },
   },
+  INTENSITY: 0.1,
   AMBIENT: {
     INTENSITY: 0.1,
   },
   BLOOM: {
-    INTENSITY: 1,
+    INTENSITY: 2,
     LUMINANCE_THRESHOLD: 0.1,
     LUMINANCE_SMOOTHING: 0.9,
   },
   NOISE: {
-    OPACITY: 0.02,
+    OPACITY: 0.008,
   },
 } as const;
 
 const CAMERA_CONFIG = {
-  POSITION: {
-    DESKTOP: [0, 0, -4] as [number, number, number],
-    MOBILE: [0, -1.2, -2] as [number, number, number],
+  BREAKPOINTS: {
+    DEFAULT: {
+      POSITION: [0, -1.6, -2] as [number, number, number],
+      FOV: 75,
+      TARGET: [0, -1.8, -7.4] as [number, number, number],
+    },
+    // sm: 640px+
+    SM: {
+      POSITION: [0, -1.6, -2] as [number, number, number],
+      FOV: 70,
+      TARGET: [0, -1.6, -7.4] as [number, number, number],
+    },
+    // md: 768px+
+    MD: {
+      POSITION: [0, -1.6, -2] as [number, number, number],
+      FOV: 67,
+      TARGET: [0, -1.6, -7.4] as [number, number, number],
+    },
+    // lg: 1024px+
+    LG: {
+      POSITION: [0, -2, -2] as [number, number, number],
+      FOV: 62,
+      TARGET: [0, -1.6, -7.4] as [number, number, number],
+    },
+    // xl: 1280px+
+    XL: {
+      POSITION: [0, 0, -4] as [number, number, number],
+      FOV: 60,
+      TARGET: [0, 0, -7.4] as [number, number, number],
+    },
+    // 2xl: 1536px+
+    XXL: {
+      POSITION: [0, 0.2, -4.5] as [number, number, number],
+      FOV: 55,
+      TARGET: [0, 0.1, -7.4] as [number, number, number],
+    },
   },
-  FOV: {
-    DESKTOP: 50,
-    MOBILE: 70,
-  },
-  TARGET: {
-    DESKTOP: [0, 0, -7.4] as [number, number, number],
-    MOBILE: [0, -0.8, -7.4] as [number, number, number],
-  },
+} as const;
+
+const BREAKPOINT_THRESHOLDS = {
+  SM: 640,
+  MD: 768,
+  LG: 1024,
+  XL: 1280,
+  XXL: 1536,
 } as const;
 
 const SHADOW_CONFIG = {
@@ -86,8 +120,10 @@ const SHADOW_CONFIG = {
   RADIUS: 2,
 } as const;
 
-// Throttle utility for performance
-const throttle = <T extends unknown[]>(func: (...args: T) => void, delay: number) => {
+const throttle = <T extends unknown[]>(
+  func: (...args: T) => void,
+  delay: number,
+) => {
   let timeoutId: number | null = null;
   let lastExecTime = 0;
 
@@ -110,7 +146,6 @@ const throttle = <T extends unknown[]>(func: (...args: T) => void, delay: number
   };
 };
 
-// Error Boundary for 3D Model loading
 class ErrorBoundary extends React.Component<
   { children: React.ReactNode },
   { hasError: boolean }
@@ -120,19 +155,17 @@ class ErrorBoundary extends React.Component<
     this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError(error: Error) {
-    console.error("🚨 3D Model Error Boundary caught error:", error);
+  static getDerivedStateFromError() {
     return { hasError: true };
   }
 
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error("🚨 3D Model Error Details:", error, errorInfo);
+  componentDidCatch() {
+    return;
   }
 
   render() {
     if (this.state.hasError) {
-      console.log("🔄 Error boundary activated - rendering fallback");
-      return null; // Render nothing instead of crashing
+      return null;
     }
 
     return this.props.children;
@@ -157,24 +190,14 @@ function Model({ url, planeOpaque = false }: ModelProps) {
   );
   const meshCacheRef = useRef<Map<string, THREE.Mesh>>(new Map());
 
-  const isUsingPreloaded = isModelPreloaded(url);
 
   const scrollY = useScrollOffset();
 
-  useEffect(() => {
-    if (isUsingPreloaded) {
-      console.log("✅ Using preloaded 3D model for About page!");
-    } else {
-      console.log(
-        "⚠️ Loading 3D model on-demand (preload may not be complete)",
-      );
-    }
-  }, [isUsingPreloaded]);
 
   const logoYOffset = useMemo(() => {
-    const isMobile = window.innerWidth < 1280; // xl breakpoint
-    const scrollDivisor = isMobile ? 1.5 : 5; // Much higher scroll sensitivity on mobile
-    const maxOffset = isMobile ? 8 : 3.8; // Much higher max offset on mobile
+    const isMobile = window.innerWidth < BREAKPOINT_THRESHOLDS.XL;
+    const scrollDivisor = isMobile ? 1.5 : 5;
+    const maxOffset = isMobile ? 8 : 4.5;
 
     const scrollFactor = scrollY / (window.innerHeight * scrollDivisor);
     return Math.min(scrollFactor * maxOffset, maxOffset);
@@ -339,7 +362,8 @@ const useMouseBasedLighting = () => {
 
   useEffect(() => {
     window.addEventListener("mousemove", throttledHandleMouseMove);
-    return () => window.removeEventListener("mousemove", throttledHandleMouseMove);
+    return () =>
+      window.removeEventListener("mousemove", throttledHandleMouseMove);
   }, [throttledHandleMouseMove]);
 
   return { keyLightPos, fillLightPos };
@@ -358,18 +382,15 @@ const useScrollBasedLighting = (scrollY: number) => {
   ]);
 
   useEffect(() => {
-    // Base offset to center the circular motion
     const baseOffsetX = 0.8;
     const baseOffsetY = -0.6;
 
-    // Circular motion parameters
     const circleRadius = 1.0; // Radius of the circular motion
     const rotationSpeed = 3; // Number of full rotations per viewport height
 
-    // Convert scroll to angle (0 to 2π * rotationSpeed)
-    const scrollAngle = (scrollY / window.innerHeight) * Math.PI * 2 * rotationSpeed;
+    const scrollAngle =
+      (scrollY / window.innerHeight) * Math.PI * 2 * rotationSpeed;
 
-    // Calculate circular positions
     const keyLightAngle = scrollAngle;
     const fillLightAngle = scrollAngle + Math.PI; // Opposite side of circle
 
@@ -379,7 +400,6 @@ const useScrollBasedLighting = (scrollY: number) => {
     const fillLightX = baseOffsetX + Math.cos(fillLightAngle) * circleRadius;
     const fillLightY = baseOffsetY + Math.sin(fillLightAngle) * circleRadius;
 
-    // Apply bounds to keep lights within acceptable range
     const boundedKeyX = Math.max(
       LIGHT_CONFIG.BOUNDS.X[0],
       Math.min(LIGHT_CONFIG.BOUNDS.X[1], keyLightX),
@@ -406,13 +426,15 @@ const useScrollBasedLighting = (scrollY: number) => {
 };
 
 const useCarvedLighting = () => {
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 1280);
+  const [isMobile, setIsMobile] = useState(
+    window.innerWidth < BREAKPOINT_THRESHOLDS.XL,
+  );
   const scrollY = useScrollOffset();
 
-  // Update mobile state on resize
+  // Update mobile state on resize using Tailwind XL breakpoint
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 1280);
+      setIsMobile(window.innerWidth < BREAKPOINT_THRESHOLDS.XL);
     };
 
     window.addEventListener("resize", handleResize);
@@ -422,7 +444,6 @@ const useCarvedLighting = () => {
   const mouseLighting = useMouseBasedLighting();
   const scrollLighting = useScrollBasedLighting(scrollY);
 
-  // Return appropriate lighting based on device type
   return isMobile ? scrollLighting : mouseLighting;
 };
 
@@ -441,7 +462,6 @@ const useScrollOffset = () => {
       lenis.on("scroll", handleLenisScroll);
       return () => lenis.off("scroll", handleLenisScroll);
     } else {
-      // Fallback to native scroll if Lenis not available
       const handleScroll = () => setScrollY(window.scrollY);
       window.addEventListener("scroll", handleScroll, { passive: true });
       return () => window.removeEventListener("scroll", handleScroll);
@@ -451,46 +471,45 @@ const useScrollOffset = () => {
   return scrollY;
 };
 
-const useResponsiveFOV = () => {
-  const [fov, setFOV] = useState<50 | 70>(CAMERA_CONFIG.FOV.DESKTOP);
-
-  useEffect(() => {
-    const updateFOV = () => {
-      const isMobile = window.innerWidth < 1280; // xl breakpoint
-      setFOV(isMobile ? CAMERA_CONFIG.FOV.MOBILE : CAMERA_CONFIG.FOV.DESKTOP);
-    };
-
-    updateFOV();
-    window.addEventListener("resize", updateFOV);
-    return () => window.removeEventListener("resize", updateFOV);
-  }, []);
-
-  return fov;
+const getCurrentBreakpoint = (width: number) => {
+  if (width >= BREAKPOINT_THRESHOLDS.XXL) return "XXL";
+  if (width >= BREAKPOINT_THRESHOLDS.XL) return "XL";
+  if (width >= BREAKPOINT_THRESHOLDS.LG) return "LG";
+  if (width >= BREAKPOINT_THRESHOLDS.MD) return "MD";
+  if (width >= BREAKPOINT_THRESHOLDS.SM) return "SM";
+  return "DEFAULT";
 };
 
-const useResponsiveCameraPosition = () => {
-  const [position, setPosition] = useState(CAMERA_CONFIG.POSITION.DESKTOP);
-  const [target, setTarget] = useState(CAMERA_CONFIG.TARGET.DESKTOP);
+const getCameraConfigForBreakpoint = (
+  breakpoint: keyof typeof CAMERA_CONFIG.BREAKPOINTS,
+) => {
+  return CAMERA_CONFIG.BREAKPOINTS[breakpoint];
+};
+
+// Unified responsive camera hook that handles all camera properties
+const useResponsiveCamera = () => {
+  const [cameraConfig, setCameraConfig] = useState(() => {
+    const breakpoint = getCurrentBreakpoint(window.innerWidth);
+    return getCameraConfigForBreakpoint(breakpoint);
+  });
 
   useEffect(() => {
-    const updateCameraPosition = () => {
-      const isMobile = window.innerWidth < 1280; // xl breakpoint
-      setPosition(
-        isMobile
-          ? CAMERA_CONFIG.POSITION.MOBILE
-          : CAMERA_CONFIG.POSITION.DESKTOP,
-      );
-      setTarget(
-        isMobile ? CAMERA_CONFIG.TARGET.MOBILE : CAMERA_CONFIG.TARGET.DESKTOP,
-      );
+    const updateCameraConfig = () => {
+      const breakpoint = getCurrentBreakpoint(window.innerWidth);
+      const newConfig = getCameraConfigForBreakpoint(breakpoint);
+      setCameraConfig(newConfig);
     };
 
-    updateCameraPosition();
-    window.addEventListener("resize", updateCameraPosition);
-    return () => window.removeEventListener("resize", updateCameraPosition);
+    updateCameraConfig();
+    window.addEventListener("resize", updateCameraConfig);
+    return () => window.removeEventListener("resize", updateCameraConfig);
   }, []);
 
-  return { position, target };
+  return {
+    position: cameraConfig.POSITION,
+    target: cameraConfig.TARGET,
+    fov: cameraConfig.FOV,
+  };
 };
 
 interface ThreeBackgroundDisplayProps {
@@ -504,34 +523,24 @@ export const ThreeBackgroundDisplay: React.FC<ThreeBackgroundDisplayProps> = ({
 }) => {
   const { keyLightPos, fillLightPos } = useCarvedLighting();
   const [isModelReady, setIsModelReady] = useState(false);
-  const fov = useResponsiveFOV();
-  const { position, target } = useResponsiveCameraPosition();
+  const { position, target, fov } = useResponsiveCamera();
 
   useEffect(() => {
     const checkModelReady = () => {
-      if (isModelPreloaded("/models/logo3.glb")) {
-        console.log("✅ logo3.glb is preloaded and ready!");
+      if (isModelPreloaded("/models/logo4.glb")) {
         setIsModelReady(true);
       } else {
-        console.log("⚠️ logo3.glb not preloaded yet, waiting...");
-        // Check periodically if model becomes available
         const checkInterval = setInterval(() => {
-          if (isModelPreloaded("/models/logo3.glb")) {
-            console.log("✅ logo3.glb became available during check!");
+          if (isModelPreloaded("/models/logo4.glb")) {
             setIsModelReady(true);
             clearInterval(checkInterval);
           }
         }, 100);
 
-        // Fallback timeout - show background even without model
         const fallbackTimer = setTimeout(() => {
-          console.log(
-            "⏰ Fallback timeout - showing background without waiting for model",
-          );
           setIsModelReady(true);
           clearInterval(checkInterval);
-        }, 3000); // Increased from 1s to 3s for better loading
-
+        }, 3000);
         return () => {
           clearInterval(checkInterval);
           clearTimeout(fallbackTimer);
@@ -610,7 +619,7 @@ export const ThreeBackgroundDisplay: React.FC<ThreeBackgroundDisplayProps> = ({
 
           <Suspense fallback={null}>
             <ErrorBoundary>
-              <Model url="/models/logo3.glb" planeOpaque={planeOpaque} />
+              <Model url="/models/logo4.glb" planeOpaque={planeOpaque} />
             </ErrorBoundary>
           </Suspense>
 

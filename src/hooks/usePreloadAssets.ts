@@ -6,29 +6,22 @@ import p1 from "../assets/images/card_backgrounds/1.webp";
 import p2 from "../assets/images/card_backgrounds/2.webp";
 import p3 from "../assets/images/card_backgrounds/3.webp";
 
-const DEBUG_PRELOADER = true;
-const debugLog = (message: string, data?: unknown) => {
-  if (DEBUG_PRELOADER) {
-    const timestamp = new Date().toISOString().slice(11, 23);
-    console.log(`🔄 [PRELOADER ${timestamp}] ${message}`, data || "");
-  }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const debugLog = (_message?: string, _data?: unknown) => {
+  return;
 };
 
 // Global cache for preloaded models
 const modelCache = new Map<string, unknown>();
 
-const debugError = (message: string, error?: unknown) => {
-  if (DEBUG_PRELOADER) {
-    const timestamp = new Date().toISOString().slice(11, 23);
-    console.error(`❌ [PRELOADER ${timestamp}] ${message}`, error || "");
-  }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const debugError = (_message?: string, _error?: unknown) => {
+  return;
 };
 
-const debugSuccess = (message: string, data?: unknown) => {
-  if (DEBUG_PRELOADER) {
-    const timestamp = new Date().toISOString().slice(11, 23);
-    console.log(`✅ [PRELOADER ${timestamp}] ${message}`, data || "");
-  }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const debugSuccess = (_message?: string, _data?: unknown) => {
+  return;
 };
 
 export interface AssetLoadState {
@@ -75,7 +68,9 @@ export const usePreloadAssets = () => {
 
     const assets: AssetLoadState[] = [];
 
-    debugLog(`Adding ${isMobileDevice ? "mobile" : "desktop"} entry and loop videos`);
+    debugLog(
+      `Adding ${isMobileDevice ? "mobile" : "desktop"} entry and loop videos`,
+    );
 
     if (isMobileDevice) {
       assets.push({
@@ -135,7 +130,7 @@ export const usePreloadAssets = () => {
 
     // Add 3D model for About page
     assets.push({
-      url: "/models/logo3.glb",
+      url: "/models/logo4.glb",
       loaded: false,
       error: false,
       type: "model",
@@ -358,11 +353,14 @@ export const usePreloadAssets = () => {
               if (!resolved) {
                 resolved = true;
                 const duration = Date.now() - videoStartTime;
-                debugError(`Video preload timeout (15s): ${url} (${duration}ms)`, {
-                  readyState: video.readyState,
-                  networkState: video.networkState,
-                  duration: video.duration,
-                });
+                debugError(
+                  `Video preload timeout (15s): ${url} (${duration}ms)`,
+                  {
+                    readyState: video.readyState,
+                    networkState: video.networkState,
+                    duration: video.duration,
+                  },
+                );
                 cleanup();
                 resolve(); // Don't fail on timeout, just continue
               }
@@ -418,13 +416,17 @@ export const usePreloadAssets = () => {
           debugSuccess(`3D model loaded successfully: ${url} (${duration}ms)`, {
             scene: gltf.scene,
             animations: gltf.animations?.length || 0,
-            materials: (gltf as unknown as { materials?: unknown[] }).materials?.length || 0,
+            materials:
+              (gltf as unknown as { materials?: unknown[] }).materials
+                ?.length || 0,
           });
           resolve();
         },
         (progress) => {
           if (progress.lengthComputable) {
-            const percent = Math.round((progress.loaded / progress.total) * 100);
+            const percent = Math.round(
+              (progress.loaded / progress.total) * 100,
+            );
             debugLog(`3D model loading progress: ${url} - ${percent}%`);
           }
         },
@@ -432,7 +434,7 @@ export const usePreloadAssets = () => {
           const duration = Date.now() - startTime;
           debugError(`3D model failed to load: ${url} (${duration}ms)`, error);
           reject(new Error(`Failed to load 3D model: ${url}`));
-        }
+        },
       );
 
       // Timeout after 30 seconds for 3D models

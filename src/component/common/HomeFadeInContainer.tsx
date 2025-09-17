@@ -43,21 +43,9 @@ export const HomeFadeInContainer = ({
     if (isVisible) {
       if (!startTimeRef.current) {
         startTimeRef.current = Date.now();
-        console.log('🎭 HomeFadeInContainer: Starting fade-in', {
-          delay,
-          transitionDuration,
-          instantForSPA,
-          baseClasses,
-          visibilityClasses,
-          combinedStyle,
-          timestamp: new Date().toLocaleTimeString()
-        });
       }
     } else {
       startTimeRef.current = undefined;
-      console.log('🎭 HomeFadeInContainer: Hidden', {
-        timestamp: new Date().toLocaleTimeString()
-      });
     }
   }, [isVisible, delay, transitionDuration, instantForSPA, baseClasses, visibilityClasses, combinedStyle]);
 
@@ -67,10 +55,6 @@ export const HomeFadeInContainer = ({
       style={combinedStyle}
       onTransitionEnd={(e) => {
         if (e.target === e.currentTarget) { // Only log for this element, not children
-          console.log('🎭 HomeFadeInContainer: Transition ENDED', {
-            totalTime: startTimeRef.current ? Date.now() - startTimeRef.current : 'unknown',
-            timestamp: new Date().toLocaleTimeString()
-          });
         }
       }}
     >

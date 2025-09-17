@@ -47,7 +47,7 @@ export const NewAbout = () => {
       <div className="mb-32 hidden xl:block">
         <div className="relative w-full h-screen">
           <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-32 left-12 pointer-events-auto max-w-md">
+            <div className="absolute top-64 left-12 2xl:left-48 pointer-events-auto max-w-md">
               <header className="mb-8">
                 <h1 className="font-nord text-3xl xl:text-4xl italic text-muted tracking-tight">
                   <LineSweepText duration={6}>{titleContent}</LineSweepText>
@@ -70,7 +70,7 @@ export const NewAbout = () => {
                 </Button>
               </div>
             </div>
-            <div className="absolute bottom-58 right-12 pointer-events-auto max-w-md">
+            <div className="absolute bottom-32 right-12 2xl:right-48 pointer-events-auto max-w-md">
               <h2 className="text-white text-sm 2xl-test-base font-nord mb-2">
                 {t("about.services.motionDesign.title")}
               </h2>
@@ -102,8 +102,8 @@ export const NewAbout = () => {
       {/* Mobile version - xl and below */}
       <div className="mb-32 xl:hidden">
         <div className="relative w-full min-h-screen">
-          {/* Logo area with spacer for Three.js background */}
-          <div className="h-[50vh] min-h-[320px] w-full"></div>
+          {/* Logo area with spacer for Three.js background - adjusted for fixed navbar */}
+          <div className="h-[calc(35vh-2rem)] min-h-[128px] w-full mt-16"></div>
 
           {/* Main content - positioned below the logo with proper spacing */}
           <div className="px-6 sm:px-8 md:px-12 mt-20 sm:mt-24">

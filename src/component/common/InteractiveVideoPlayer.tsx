@@ -48,7 +48,7 @@ export const InteractiveVideoPlayer = ({
   }, [hasUserClicked, startTime]);
 
   const handleReady = useCallback(() => {
-    console.log("🎥 ReactPlayer: Video ready");
+    return;
   }, []);
 
   const handlePlay = useCallback(() => {
