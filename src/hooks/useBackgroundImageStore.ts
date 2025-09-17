@@ -1,10 +1,22 @@
 import { create } from "zustand";
 
+export type BackgroundType = 'image' | 'three';
+
+export interface BackgroundConfig {
+  type: BackgroundType;
+  value: string | null; // image URL for 'image' type, identifier for 'three' type
+  options?: {
+    planeOpaque?: boolean;
+    bloomEnabled?: boolean;
+  };
+}
+
 interface BackgroundImageStore {
-  currentBackground: string | null;
-  nextBackground: string | null;
+  currentBackground: BackgroundConfig | null;
+  nextBackground: BackgroundConfig | null;
   isTransitioning: boolean;
   setBackgroundImage: (image: string | null, componentId?: string) => void;
+  setBackground: (config: BackgroundConfig | null, componentId?: string) => void;
 }
 
 const activeBackgroundUsers = new Set<string>();
@@ -17,9 +29,17 @@ export const useBackgroundImageStore = create<BackgroundImageStore>(
     isTransitioning: false,
 
     setBackgroundImage: (image: string | null, componentId = "anonymous") => {
+      const config: BackgroundConfig | null = image
+        ? { type: 'image', value: image }
+        : null;
+
+      get().setBackground(config, componentId);
+    },
+
+    setBackground: (config: BackgroundConfig | null, componentId = "anonymous") => {
       const state = get();
 
-      if (image !== null) {
+      if (config !== null) {
         // Component is setting a background - add to active users
         activeBackgroundUsers.add(componentId);
 
@@ -30,20 +50,25 @@ export const useBackgroundImageStore = create<BackgroundImageStore>(
           clearTimeouts.delete(componentId);
         }
 
-        if (image === state.currentBackground) {
+        // Check if the new config is the same as current
+        const isSameBackground = state.currentBackground &&
+          state.currentBackground.type === config.type &&
+          state.currentBackground.value === config.value;
+
+        if (isSameBackground) {
           return;
         }
 
         if (state.currentBackground !== null) {
           set({
-            nextBackground: image,
+            nextBackground: config,
             isTransitioning: true,
           });
 
           // Complete transition after CSS transition duration
           setTimeout(() => {
             set({
-              currentBackground: image,
+              currentBackground: config,
               nextBackground: null,
               isTransitioning: false,
             });
@@ -51,7 +76,7 @@ export const useBackgroundImageStore = create<BackgroundImageStore>(
         } else {
           // First background - set immediately
           set({
-            currentBackground: image,
+            currentBackground: config,
             nextBackground: null,
             isTransitioning: false,
           });

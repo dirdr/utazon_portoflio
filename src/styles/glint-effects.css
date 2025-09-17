@@ -33,7 +33,7 @@
   }
 
   .glint-card-wrapper {
-    @apply relative overflow-hidden rounded-3xl;
+    @apply relative overflow-hidden rounded-2xl md:rounded-3xl;
     padding: 1px;
     --glint-card-speed: 3s;
   }
@@ -46,8 +46,17 @@
     width: 200%;
     height: 200%;
     background: radial-gradient(circle, #565656 0%, #565656 100%);
-    border-radius: 24px;
+    border-radius: 1rem; /* Mobile: rounded-2xl */
     z-index: 1;
+  }
+
+  @media (min-width: 768px) {
+    .glint-card-wrapper::before {
+      border-radius: 1.5rem; /* Desktop: rounded-3xl */
+    }
+    .glint-card-wrapper::after {
+      border-radius: 1.5rem; /* Desktop: rounded-3xl */
+    }
   }
 
   .glint-card-wrapper::after {
@@ -70,7 +79,7 @@
       rgba(255, 255, 255, 0.4) 290deg,
       transparent 310deg
     );
-    border-radius: 24px;
+    border-radius: 1rem; /* Mobile: rounded-2xl */
     opacity: 0;
     transition: opacity 0.3s ease;
     z-index: 2;
@@ -161,7 +170,7 @@
   }
 
   .glint-card-content {
-    @apply relative w-full h-full rounded-3xl bg-background z-10;
+    @apply relative w-full h-full rounded-2xl md:rounded-3xl bg-background z-10;
     contain: layout style paint;
   }
 

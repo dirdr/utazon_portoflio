@@ -126,7 +126,7 @@ export const Navbar = () => {
             : "transform -translate-y-4 opacity-0 max-h-0"
         }`}
       >
-        <div className="mt-4 rounded-2xl border border-gray-500 bg-black/60 backdrop-blur-sm p-6">
+        <div className="mt-4 rounded-2xl border border-button-border bg-black/60 backdrop-blur-sm p-6">
           <nav
             className="flex flex-col space-y-4"
             role="navigation"
@@ -144,7 +144,7 @@ export const Navbar = () => {
 
             <div className="flex justify-center pt-2">
               <Button
-                className="text-sm sm:text-base md:text-lg lg:text-base"
+                className="text-sm 2xl:text-base"
                 as="button"
                 onClick={() => {
                   openContactModal();

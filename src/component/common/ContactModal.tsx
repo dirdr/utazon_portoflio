@@ -138,13 +138,13 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
 
   return (
     <div
-      className="px-3 sm:px-6 lg:px-8 xl:px-16 pt-4 sm:pt-8 lg:pt-12 pb-4 sm:pb-8 lg:pb-12 h-full overflow-y-auto bg-cover bg-center bg-no-repeat relative"
+      className="px-6 sm:px-6 lg:px-8 xl:px-16 pt-4 sm:pt-8 lg:pt-12 pb-4 sm:pb-8 lg:pb-12 h-full overflow-y-auto bg-cover bg-center bg-no-repeat relative"
       style={{
         backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${backgroundImage})`,
       }}
     >
       <div className="flex justify-between items-center mb-4 sm:mb-8 lg:mb-12">
-        <p className="text-xs sm:text-sm text-white italic font-nord flex-1 pr-2">
+        <p className="text-sm md:text-base text-white italic font-nord flex-1 pr-2">
           {t(
             "contact.description",
             "Share your vision, I'll help you bring it to life",
@@ -381,7 +381,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                 className="flex items-center gap-2 text-white hover:text-gray-300 transition-colors"
                 aria-label={t("contact.social.instagram", "Instagram")}
               >
-                <InstagramIcon width={16} height={16} />
+                <InstagramIcon className="w-3 h-3 lg:w-4 lg:h-4" />
                 <span className="text-xs font-nord font-thin">Instagram</span>
               </a>
 
@@ -392,7 +392,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                 className="flex items-center gap-2 text-white hover:text-gray-300 transition-colors"
                 aria-label={t("contact.social.linkedin", "LinkedIn")}
               >
-                <LinkedInIcon width={16} height={16} />
+                <LinkedInIcon className="w-3 h-3 lg:w-4 lg:h-4" />
                 <span className="text-xs font-nord font-thin">LinkedIn</span>
               </a>
 
@@ -403,7 +403,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                 className="flex items-center gap-2 text-white hover:text-gray-300 transition-colors"
                 aria-label={t("contact.social.behance", "Behance")}
               >
-                <BehanceIcon width={16} height={16} />
+                <BehanceIcon className="w-3 h-3 lg:w-4 lg:h-4" />
                 <span className="text-xs font-nord font-thin">Behance</span>
               </a>
             </div>

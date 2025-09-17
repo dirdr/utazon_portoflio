@@ -32,7 +32,7 @@ export const ImageBackgroundDisplay: React.FC = () => {
             ${isTransitioning ? "opacity-0" : (isCurrentReady ? "opacity-100" : "opacity-0")}
           `}
           style={{
-            backgroundImage: `url(${currentBackground})`,
+            backgroundImage: `url(${currentBackground.value})`,
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center',
@@ -49,7 +49,7 @@ export const ImageBackgroundDisplay: React.FC = () => {
             ${isTransitioning && isNextReady ? "opacity-100" : "opacity-0"}
           `}
           style={{
-            backgroundImage: `url(${nextBackground})`,
+            backgroundImage: `url(${nextBackground.value})`,
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center',

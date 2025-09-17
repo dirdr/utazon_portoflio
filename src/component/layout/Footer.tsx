@@ -50,9 +50,9 @@ export const Footer = () => {
   );
 
   return (
-    <footer className="text-white">
+    <footer className="text-white border-t border-gray-400/30">
       <Container>
-        <div className="pt-8 border-t border-gray-600 font-nord">
+        <div className="pt-8 font-nord">
           <div className="py-8">
             <div className="flex flex-col md:flex-row justify-between items-start gap-8">
               <div className="flex items-center gap-4">
@@ -130,7 +130,7 @@ export const Footer = () => {
             </div>
           </div>
 
-          <div className="py-8 border-t border-gray-600">
+          <div className="py-8">
             <div className="flex flex-col md:flex-row justify-between items-start gap-4">
               <div className="flex flex-col md:flex-row items-start gap-2 md:gap-4">
                 <p className="text-muted text-xs">

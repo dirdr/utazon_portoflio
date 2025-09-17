@@ -7,12 +7,10 @@ import { useTransitionContext } from "../../hooks/useTransitionContext";
 import { useAnimationControl } from "../../hooks/useAnimationControl";
 import { useProjectGridPreloader } from "../../hooks/useProjectGridPreloader";
 
-// Import card backgrounds directly (same as preload system)
 import p1 from "../../assets/images/card_backgrounds/1.webp";
 import p2 from "../../assets/images/card_backgrounds/2.webp";
 import p3 from "../../assets/images/card_backgrounds/3.webp";
 
-// Use static imports to match preload system
 const cardBackgrounds = [p1, p2, p3];
 
 export interface CardProps {
@@ -127,7 +125,7 @@ export const Card = ({
       onClick={handleClick}
     >
       <div
-        className="glint-card-content p-3 sm:p-4 md:p-5 lg:p-6 xl:p-4 2xl:p-5"
+        className="glint-card-content p-3 sm:p-4 md:p-5 lg:p-6 xl:p-5 2xl:p-6"
         style={{
           background: `url(${randomBackground}) center/cover`,
         }}
@@ -142,10 +140,10 @@ export const Card = ({
                 <path
                   d="
           M0,0
-          L0.73,0
-          Q0.75,0 0.76,0.01
-          L0.99,0.24
-          Q1,0.25 1,0.27
+          L0.69,0
+          Q0.72,0 0.73,0.015
+          L0.985,0.27
+          Q1,0.285 1,0.31
           L1,1
           L0,1
           Z
@@ -227,7 +225,7 @@ export const Card = ({
           </figcaption>
 
           <div className="absolute top-[5%] left-[90%]">
-            <time className="text-muted font-nord font-light text-xs md:text-lg xl:text-sm 2xl:text-base">
+            <time className="text-muted font-nord font-light text-xs sm:text-sm md:text-lg xl:text-sm 2xl:text-lg">
               {project.date}
             </time>
           </div>

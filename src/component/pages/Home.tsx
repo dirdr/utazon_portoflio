@@ -43,11 +43,6 @@ export const Home = () => {
       <div className="h-full w-full flex flex-col justify-end px-4 lg:px-12 pb-8">
         <div className="flex flex-col ">
           <address className="not-italic relative">
-            <SoundPlayer
-              onToggle={toggleSound}
-              isPlaying={isSoundPlaying}
-              className="self-start mb-2"
-            />
             <p className="text-base sm:text-lg md:text-xl text-muted mb-2">
               Paris, France
             </p>

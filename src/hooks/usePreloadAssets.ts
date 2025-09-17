@@ -1,5 +1,6 @@
 import { useCallback, useState, useRef } from "react";
 import { isMobile } from "../utils/mobileDetection";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import backgroundImage from "../assets/images/background.webp";
 import p1 from "../assets/images/card_backgrounds/1.webp";
 import p2 from "../assets/images/card_backgrounds/2.webp";
@@ -12,6 +13,9 @@ const debugLog = (message: string, data?: unknown) => {
     console.log(`🔄 [PRELOADER ${timestamp}] ${message}`, data || "");
   }
 };
+
+// Global cache for preloaded models
+const modelCache = new Map<string, any>();
 
 const debugError = (message: string, error?: unknown) => {
   if (DEBUG_PRELOADER) {
@@ -31,7 +35,7 @@ export interface AssetLoadState {
   url: string;
   loaded: boolean;
   error: boolean;
-  type: "image" | "video";
+  type: "image" | "video" | "model";
 }
 
 export interface PreloadState {
@@ -129,9 +133,18 @@ export const usePreloadAssets = () => {
       type: "image",
     });
 
+    // Add 3D model for About page
+    assets.push({
+      url: "/models/logo3.glb",
+      loaded: false,
+      error: false,
+      type: "model",
+    });
+
     debugLog(`Generated ${assets.length} CRITICAL assets for preloading:`, {
       videos: assets.filter((a) => a.type === "video").length,
       images: assets.filter((a) => a.type === "image").length,
+      models: assets.filter((a) => a.type === "model").length,
       assetsList: assets.map((a) => ({ url: a.url, type: a.type })),
     });
 
@@ -381,6 +394,56 @@ export const usePreloadAssets = () => {
     });
   }, []);
 
+  const preloadModel = useCallback((url: string): Promise<void> => {
+    const startTime = Date.now();
+    debugLog(`🎭 Starting 3D model preload: ${url}`);
+
+    return new Promise((resolve, reject) => {
+      // Check if model is already cached
+      if (modelCache.has(url)) {
+        const duration = Date.now() - startTime;
+        debugSuccess(`3D model loaded from cache: ${url} (${duration}ms)`);
+        resolve();
+        return;
+      }
+
+      const loader = new GLTFLoader();
+
+      loader.load(
+        url,
+        (gltf) => {
+          const duration = Date.now() - startTime;
+          // Cache the loaded model
+          modelCache.set(url, gltf);
+          debugSuccess(`3D model loaded successfully: ${url} (${duration}ms)`, {
+            scene: gltf.scene,
+            animations: gltf.animations?.length || 0,
+            materials: gltf.materials?.length || 0,
+          });
+          resolve();
+        },
+        (progress) => {
+          if (progress.lengthComputable) {
+            const percent = Math.round((progress.loaded / progress.total) * 100);
+            debugLog(`3D model loading progress: ${url} - ${percent}%`);
+          }
+        },
+        (error) => {
+          const duration = Date.now() - startTime;
+          debugError(`3D model failed to load: ${url} (${duration}ms)`, error);
+          reject(new Error(`Failed to load 3D model: ${url}`));
+        }
+      );
+
+      // Timeout after 30 seconds for 3D models
+      setTimeout(() => {
+        const duration = Date.now() - startTime;
+        debugError(`3D model preload timeout (30s): ${url} (${duration}ms)`);
+        resolve(); // Don't fail on timeout, just continue
+      }, 30000);
+    });
+  }, []);
+
   const updateAssetState = useCallback(
     (url: string, loaded: boolean, error: boolean) => {
       debugLog(`📊 Asset state update: ${url}`, { loaded, error });
@@ -436,8 +499,10 @@ export const usePreloadAssets = () => {
       try {
         if (asset.type === "image") {
           await preloadImage(asset.url);
-        } else {
+        } else if (asset.type === "video") {
           await preloadVideo(asset.url);
+        } else if (asset.type === "model") {
+          await preloadModel(asset.url);
         }
         const duration = Date.now() - assetStartTime;
         debugSuccess(
@@ -450,7 +515,7 @@ export const usePreloadAssets = () => {
         updateAssetState(asset.url, false, true);
       }
     },
-    [preloadImage, preloadVideo, updateAssetState],
+    [preloadImage, preloadVideo, preloadModel, updateAssetState],
   );
 
   const addResourceHints = useCallback(() => {
@@ -525,4 +590,13 @@ export const usePreloadAssets = () => {
     ...state,
     startPreloading,
   };
+};
+
+// Export model cache for use in components
+export const getPreloadedModel = (url: string) => {
+  return modelCache.get(url);
+};
+
+export const isModelPreloaded = (url: string) => {
+  return modelCache.has(url);
 };
