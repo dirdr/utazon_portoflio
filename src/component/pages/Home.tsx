@@ -40,8 +40,8 @@ export const Home = () => {
 
   if (isMobile()) {
     return (
-      <div className="h-full w-full flex flex-col justify-end px-4 lg:px-12 pb-8">
-        <div className="flex flex-col ">
+      <div className="h-screen w-full flex flex-col justify-end overflow-hidden px-4 pb-8">
+        <div className="flex flex-col">
           <address className="not-italic relative">
             <p className="text-base sm:text-lg md:text-xl text-muted mb-2">
               Paris, France
@@ -50,7 +50,7 @@ export const Home = () => {
           <header>
             <h1
               id="title-heading"
-              className="font-nord text-2xl sm:text-3xl md:text-4xl italic text-muted tracking-tight leading-tight mb-2"
+              className="font-nord text-3xl sm:text-4xl md:text-5xl italic text-muted tracking-tight leading-tight mb-2"
             >
               <LineSweepText duration={6}>{titleContent}</LineSweepText>
             </h1>

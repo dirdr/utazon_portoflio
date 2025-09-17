@@ -87,21 +87,21 @@ const SHADOW_CONFIG = {
 } as const;
 
 // Throttle utility for performance
-const throttle = (func: Function, delay: number) => {
+const throttle = <T extends unknown[]>(func: (...args: T) => void, delay: number) => {
   let timeoutId: number | null = null;
   let lastExecTime = 0;
 
-  return (...args: any[]) => {
+  return (...args: T) => {
     const currentTime = Date.now();
 
     if (currentTime - lastExecTime > delay) {
-      func.apply(null, args);
+      func(...args);
       lastExecTime = currentTime;
     } else {
       if (timeoutId) clearTimeout(timeoutId);
       timeoutId = setTimeout(
         () => {
-          func.apply(null, args);
+          func(...args);
           lastExecTime = Date.now();
         },
         delay - (currentTime - lastExecTime),
@@ -145,8 +145,9 @@ type ModelProps = {
 };
 
 function Model({ url, planeOpaque = false }: ModelProps) {
+  const gltfFromHook = useGLTF(url);
   const preloadedGltf = getPreloadedModel(url);
-  const gltf = (preloadedGltf || useGLTF(url)) as GLTF;
+  const gltf = (preloadedGltf || gltfFromHook) as GLTF;
   const logoRef = useRef<THREE.Object3D>(null);
   const originalMaterialsRef = useRef<Map<THREE.Mesh, THREE.Material>>(
     new Map(),
@@ -185,7 +186,7 @@ function Model({ url, planeOpaque = false }: ModelProps) {
 
       if (planeMesh && !meshCacheRef.current.has("PLANE")) {
         meshCacheRef.current.set("PLANE", planeMesh as THREE.Mesh);
-        planeMesh.traverse((child) => {
+        planeMesh.traverse((child: THREE.Object3D) => {
           if (child instanceof THREE.Mesh) {
             if (!originalMaterialsRef.current.has(child)) {
               originalMaterialsRef.current.set(child, child.material);
@@ -200,7 +201,7 @@ function Model({ url, planeOpaque = false }: ModelProps) {
           originalPositionsRef.current.set(logoMesh, logoMesh.position.clone());
         }
 
-        logoMesh.traverse((child) => {
+        logoMesh.traverse((child: THREE.Object3D) => {
           if (child instanceof THREE.Mesh) {
             child.receiveShadow = true;
             child.castShadow = true;
@@ -282,7 +283,7 @@ function Model({ url, planeOpaque = false }: ModelProps) {
   );
 }
 
-const useCarvedLighting = () => {
+const useMouseBasedLighting = () => {
   const [keyLightPos, setKeyLightPos] = useState<[number, number, number]>([
     -0.8,
     0.6,
@@ -294,7 +295,8 @@ const useCarvedLighting = () => {
     LIGHT_CONFIG.BASE_Z,
   ]);
 
-  const handleMouseMove = useCallback(
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const throttledHandleMouseMove = useCallback(
     throttle((event: MouseEvent) => {
       const normalizedX = (event.clientX / window.innerWidth) * 2 - 1;
       const normalizedY = (event.clientY / window.innerHeight) * 2 - 1;
@@ -332,15 +334,96 @@ const useCarvedLighting = () => {
         LIGHT_CONFIG.BASE_Z,
       ]);
     }, 16), // ~60fps
-    [],
+    [setFillLightPos, setKeyLightPos],
   );
 
   useEffect(() => {
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [handleMouseMove]);
+    window.addEventListener("mousemove", throttledHandleMouseMove);
+    return () => window.removeEventListener("mousemove", throttledHandleMouseMove);
+  }, [throttledHandleMouseMove]);
 
   return { keyLightPos, fillLightPos };
+};
+
+const useScrollBasedLighting = (scrollY: number) => {
+  const [keyLightPos, setKeyLightPos] = useState<[number, number, number]>([
+    -0.8,
+    0.6,
+    LIGHT_CONFIG.BASE_Z,
+  ]);
+  const [fillLightPos, setFillLightPos] = useState<[number, number, number]>([
+    0.8,
+    -0.6,
+    LIGHT_CONFIG.BASE_Z,
+  ]);
+
+  useEffect(() => {
+    // Base offset to center the circular motion
+    const baseOffsetX = 0.8;
+    const baseOffsetY = -0.6;
+
+    // Circular motion parameters
+    const circleRadius = 1.0; // Radius of the circular motion
+    const rotationSpeed = 3; // Number of full rotations per viewport height
+
+    // Convert scroll to angle (0 to 2π * rotationSpeed)
+    const scrollAngle = (scrollY / window.innerHeight) * Math.PI * 2 * rotationSpeed;
+
+    // Calculate circular positions
+    const keyLightAngle = scrollAngle;
+    const fillLightAngle = scrollAngle + Math.PI; // Opposite side of circle
+
+    const keyLightX = baseOffsetX + Math.cos(keyLightAngle) * circleRadius;
+    const keyLightY = baseOffsetY + Math.sin(keyLightAngle) * circleRadius;
+
+    const fillLightX = baseOffsetX + Math.cos(fillLightAngle) * circleRadius;
+    const fillLightY = baseOffsetY + Math.sin(fillLightAngle) * circleRadius;
+
+    // Apply bounds to keep lights within acceptable range
+    const boundedKeyX = Math.max(
+      LIGHT_CONFIG.BOUNDS.X[0],
+      Math.min(LIGHT_CONFIG.BOUNDS.X[1], keyLightX),
+    );
+    const boundedKeyY = Math.max(
+      LIGHT_CONFIG.BOUNDS.Y[0],
+      Math.min(LIGHT_CONFIG.BOUNDS.Y[1], keyLightY),
+    );
+
+    const boundedFillX = Math.max(
+      LIGHT_CONFIG.BOUNDS.X[0],
+      Math.min(LIGHT_CONFIG.BOUNDS.X[1], fillLightX),
+    );
+    const boundedFillY = Math.max(
+      LIGHT_CONFIG.BOUNDS.Y[0],
+      Math.min(LIGHT_CONFIG.BOUNDS.Y[1], fillLightY),
+    );
+
+    setKeyLightPos([boundedKeyX, boundedKeyY, LIGHT_CONFIG.BASE_Z]);
+    setFillLightPos([boundedFillX, boundedFillY, LIGHT_CONFIG.BASE_Z]);
+  }, [scrollY]);
+
+  return { keyLightPos, fillLightPos };
+};
+
+const useCarvedLighting = () => {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1280);
+  const scrollY = useScrollOffset();
+
+  // Update mobile state on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1280);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const mouseLighting = useMouseBasedLighting();
+  const scrollLighting = useScrollBasedLighting(scrollY);
+
+  // Return appropriate lighting based on device type
+  return isMobile ? scrollLighting : mouseLighting;
 };
 
 const useScrollOffset = () => {
@@ -351,7 +434,7 @@ const useScrollOffset = () => {
     const lenis = lenisContext?.lenis;
 
     if (lenis) {
-      const handleLenisScroll = (e: any) => {
+      const handleLenisScroll = (e: { scroll: number }) => {
         setScrollY(e.scroll);
       };
 
@@ -369,7 +452,7 @@ const useScrollOffset = () => {
 };
 
 const useResponsiveFOV = () => {
-  const [fov, setFOV] = useState(CAMERA_CONFIG.FOV.DESKTOP);
+  const [fov, setFOV] = useState<50 | 70>(CAMERA_CONFIG.FOV.DESKTOP);
 
   useEffect(() => {
     const updateFOV = () => {

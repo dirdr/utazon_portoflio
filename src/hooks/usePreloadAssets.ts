@@ -15,7 +15,7 @@ const debugLog = (message: string, data?: unknown) => {
 };
 
 // Global cache for preloaded models
-const modelCache = new Map<string, any>();
+const modelCache = new Map<string, unknown>();
 
 const debugError = (message: string, error?: unknown) => {
   if (DEBUG_PRELOADER) {
@@ -418,7 +418,7 @@ export const usePreloadAssets = () => {
           debugSuccess(`3D model loaded successfully: ${url} (${duration}ms)`, {
             scene: gltf.scene,
             animations: gltf.animations?.length || 0,
-            materials: gltf.materials?.length || 0,
+            materials: (gltf as unknown as { materials?: unknown[] }).materials?.length || 0,
           });
           resolve();
         },

@@ -36,7 +36,7 @@ export const Navbar = () => {
 
   const WrapperContent = () => (
     <>
-      <div className="flex items-center justify-between h-16">
+      <div className="flex items-start justify-between h-16">
         <div className="flex flex-col items-start">
           <button
             onClick={handleHomeClick}
@@ -166,7 +166,7 @@ export const Navbar = () => {
 
   return (
     <nav className="w-full z-50 bg-transparent relative" ref={menuRef}>
-      <div className={cn("w-full py-2 lg:py-4 pt-8 lg:pt-8", "px-4 lg:px-12")}>
+      <div className={cn("w-full pt-8 lg:pt-4", "px-4 lg:px-12")}>
         <WrapperContent />
       </div>
     </nav>

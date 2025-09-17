@@ -7,8 +7,8 @@ import { VideoShowcase } from "../showcase/VideoShowcase";
 import { useBackgroundImageStore } from "../../hooks/useBackgroundImageStore";
 
 export const NewAbout = () => {
-  const [planeOpaque, setPlaneOpaque] = useState(false);
-  const [bloomEnabled, setBloomEnabled] = useState(true);
+  const [planeOpaque] = useState(false);
+  const [bloomEnabled] = useState(true);
   const { t } = useTranslation();
   const { setBackground } = useBackgroundImageStore();
 

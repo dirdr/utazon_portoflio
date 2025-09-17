@@ -1,5 +1,5 @@
 import ReactPlayer from "react-player";
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 
 interface InteractiveVideoPlayerProps {
   src: string;
@@ -28,9 +28,10 @@ export const InteractiveVideoPlayer = ({
 }: InteractiveVideoPlayerProps) => {
   const [internalPlaying, setInternalPlaying] = useState(false);
   const [hasUserClicked, setHasUserClicked] = useState(false);
+  const [userHasPaused, setUserHasPaused] = useState(false);
   const playerRef = useRef<HTMLVideoElement | null>(null);
 
-  const playing = externalPlaying ?? internalPlaying;
+  const playing = userHasPaused ? false : (externalPlaying ?? internalPlaying);
 
   const setPlayerRef = useCallback((player: HTMLVideoElement) => {
     if (!player) return;
@@ -50,6 +51,22 @@ export const InteractiveVideoPlayer = ({
     console.log("🎥 ReactPlayer: Video ready");
   }, []);
 
+  const handlePlay = useCallback(() => {
+    setUserHasPaused(false);
+  }, []);
+
+  const handlePause = useCallback(() => {
+    if (hasUserClicked) {
+      setUserHasPaused(true);
+    }
+  }, [hasUserClicked]);
+
+  useEffect(() => {
+    if (externalPlaying === true) {
+      setUserHasPaused(false);
+    }
+  }, [externalPlaying]);
+
   const handleVideoClick = useCallback(() => {
     if (hasUserClicked) {
       return;
@@ -60,6 +77,7 @@ export const InteractiveVideoPlayer = ({
       player.currentTime = 0;
       setInternalPlaying(true);
       setHasUserClicked(true);
+      setUserHasPaused(false);
     }
   }, [hasUserClicked]);
 
@@ -81,6 +99,8 @@ export const InteractiveVideoPlayer = ({
         volume={volume}
         onDurationChange={handleDuration}
         onReady={handleReady}
+        onPlay={handlePlay}
+        onPause={handlePause}
       />
       {!hasUserClicked && (
         <div
