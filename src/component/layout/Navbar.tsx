@@ -36,7 +36,7 @@ export const Navbar = () => {
 
   const WrapperContent = () => (
     <>
-      <div className="flex items-start justify-between h-16">
+      <div className="flex items-center justify-between h-16">
         <div className="flex flex-col items-start">
           <button
             onClick={handleHomeClick}
@@ -118,15 +118,23 @@ export const Navbar = () => {
         </button>
       </div>
 
+      {isMenuOpen && (
+        <div
+          className="xl:hidden fixed inset-0 bg-black/60 z-40 pointer-events-none"
+          aria-hidden="true"
+        />
+      )}
+
       <div
         id="mobile-menu"
-        className={`xl:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+        className={cn(
+          "xl:hidden transition-all duration-300 ease-in-out absolute top-16 left-0 right-0 z-50",
           isMenuOpen
-            ? "transform translate-y-0 opacity-100 pb-2 max-h-96"
-            : "transform -translate-y-4 opacity-0 max-h-0"
-        }`}
+            ? "transform translate-y-0 opacity-100 pointer-events-auto"
+            : "transform -translate-y-4 opacity-0 pointer-events-none",
+        )}
       >
-        <div className="mt-4 rounded-2xl border border-button-border bg-black/60 backdrop-blur-sm p-6">
+        <div className="mt-4 mx-4 lg:mx-12 rounded-2xl border border-button-border bg-black/75 backdrop-blur-md p-6 shadow-2xl">
           <nav
             className="flex flex-col space-y-4"
             role="navigation"
@@ -164,18 +172,12 @@ export const Navbar = () => {
     </>
   );
 
-  const navbarPositioning = "relative";
-
-  const navbarSpacing = "py-8";
-
-  const navbarContainer = "w-full px-4 lg:px-12";
-
   return (
-    <nav
-      className={cn("w-full z-50 bg-transparent", navbarPositioning)}
-      ref={menuRef}
-    >
-      <div className={cn(navbarContainer, navbarSpacing)}>
+    <nav className="w-full z-50 bg-transparent relative" ref={menuRef}>
+      <div className={cn(
+        "w-full px-4 lg:px-12 pt-4 pb-0 xl:py-8 relative",
+        isMenuOpen ? "z-60" : ""
+      )}>
         <WrapperContent />
       </div>
     </nav>

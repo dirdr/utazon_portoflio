@@ -18,7 +18,7 @@ export const Projects = () => {
   }, [setBackgroundImage]);
 
   return (
-    <Container className="pt-4 sm:pt-8 mb-8 lg:mb-32">
+    <Container className="pt-16 pb-32">
       <main>
         <section aria-labelledby="projects-heading">
           <h1 id="projects-heading" className="sr-only">

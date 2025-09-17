@@ -63,7 +63,7 @@ const CAMERA_CONFIG = {
     DEFAULT: {
       POSITION: [0, -1.6, -2] as [number, number, number],
       FOV: 75,
-      TARGET: [0, -1.8, -7.4] as [number, number, number],
+      TARGET: [0, -1.6, -7.4] as [number, number, number],
     },
     // sm: 640px+
     SM: {
@@ -190,9 +190,7 @@ function Model({ url, planeOpaque = false }: ModelProps) {
   );
   const meshCacheRef = useRef<Map<string, THREE.Mesh>>(new Map());
 
-
   const scrollY = useScrollOffset();
-
 
   const logoYOffset = useMemo(() => {
     const isMobile = window.innerWidth < BREAKPOINT_THRESHOLDS.XL;
@@ -552,11 +550,7 @@ export const ThreeBackgroundDisplay: React.FC<ThreeBackgroundDisplayProps> = ({
   }, []);
 
   if (!isModelReady) {
-    return (
-      <div className="fixed inset-0" style={{ zIndex: -20 }}>
-        <div className="w-full h-full bg-black" />
-      </div>
-    );
+    return null;
   }
 
   return (

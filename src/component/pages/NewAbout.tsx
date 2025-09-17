@@ -107,13 +107,13 @@ export const NewAbout = () => {
 
           {/* Main content - positioned below the logo with proper spacing */}
           <div className="px-6 sm:px-8 md:px-12 mt-20 sm:mt-24">
-            <header className="mb-8">
+            <header className="mb-6">
               <h1 className="font-nord text-2xl sm:text-3xl italic text-muted tracking-tight">
                 <LineSweepText duration={6}>{titleContent}</LineSweepText>
               </h1>
             </header>
 
-            <p className="text-base text-gray mb-10">{t("home.description")}</p>
+            <p className="text-base text-gray mb-6">{t("home.description")}</p>
 
             <div className="flex justify-start mb-16">
               <Button
