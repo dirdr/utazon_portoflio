@@ -1,9 +1,10 @@
 import { ShowcaseData } from "../../types/showcase";
+import { Project } from "../../types/project";
 import { ShowcaseRenderer } from "./ShowcaseRenderer";
 
 interface ShowcaseListProps {
   showcases: ShowcaseData[];
-  project?: unknown;
+  project?: Project;
 }
 
 export const ShowcaseList = ({ showcases, project }: ShowcaseListProps) => {

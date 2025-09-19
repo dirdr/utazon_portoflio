@@ -142,10 +142,7 @@ export const Button = (props: ButtonProps) => {
   }
 
   const wrapperClasses = cn(shouldShowGlint && "glint-button-wrapper");
-  const contentClasses = cn(
-    shouldShowGlint && "glint-button-content",
-    "flex items-center justify-center transition-colors duration-200 hover:bg-button-hover",
-  );
+  const contentClasses = cn(shouldShowGlint && "glint-button-content");
 
   return (
     <div

@@ -43,7 +43,7 @@ export const NavLink = ({
     <a
       href={href}
       onClick={handleClick}
-      className={`hover:text-muted font-nord transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm xl:text-sm 2xl:text-base cursor-pointer ${className}`}
+      className={`cursor-pointer rounded-sm ButtonText font-nord transition-colors hover:text-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background ${className}`}
     >
       {getNavLabel(href, t) || label}
     </a>

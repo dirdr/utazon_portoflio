@@ -1,13 +1,15 @@
 import { ShowcaseData } from "../../types/showcase";
+import { Project } from "../../types/project";
 import { GridImagesShowcase } from "./GridImagesShowcase";
 import { SingleImageShowcase } from "./SingleImageShowcase";
 import { VideoShowcase } from "./VideoShowcase";
 import { VideoCarouselShowcase } from "./VideoCarouselShowcase";
 import { VideoGridShowcase } from "./VideoGridShowcase";
+import { Container } from "../layout/Container";
 
 interface ShowcaseRendererProps {
   showcase: ShowcaseData;
-  project?: unknown;
+  project?: Project;
 }
 
 export const ShowcaseRenderer = ({ showcase }: ShowcaseRendererProps) => {
@@ -33,5 +35,9 @@ export const ShowcaseRenderer = ({ showcase }: ShowcaseRendererProps) => {
     }
   };
 
-  return <div className="mx-4 lg:mx-32">{renderShowcase()}</div>;
+  return (
+    <Container variant="constrained" className="px-4 lg:px-32">
+      {renderShowcase()}
+    </Container>
+  );
 };

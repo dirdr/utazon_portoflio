@@ -1,3 +1,33 @@
+@layer components {
+  /* Hero Header - LineSweepText default styling */
+  .HeroHeader {
+    @apply font-nord italic text-muted tracking-tight leading-tight;
+    @apply text-3xl sm:text-4xl md:text-5xl xl:text-4xl 2xl:text-5xl;
+  }
+
+  /* Page Title - Main page titles */
+  .PageTitle {
+    @apply font-nord font-bold italic text-white;
+    @apply text-xl md:text-2xl 2xl:text-3xl;
+  }
+
+  /* Paragraph - Description default styling */
+  .paragraph {
+    @apply text-gray leading-relaxed;
+    @apply text-sm sm:text-base xl:text-base 2xl:text-lg;
+  }
+
+  /* Section Title - Uppercase section headers */
+  .SectionTitle {
+    @apply font-nord text-white uppercase text-sm;
+  }
+
+  /* Button Text - Consistent button text sizing */
+  .ButtonText {
+    @apply text-sm 2xl:text-base;
+  }
+}
+
 @layer utilities {
   .card-item:hover ~ .card-item,
   .card-container:has(.card-item:hover) .card-item:not(:hover) {

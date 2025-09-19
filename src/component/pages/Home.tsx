@@ -8,6 +8,7 @@ import { FullscreenVideoModal } from "../common/FullscreenVideoModal";
 import { useTransitionContext } from "../../hooks/useTransitionContext";
 import { useSoundStore } from "../../stores/soundStore";
 import { isMobile } from "../../utils/mobileDetection";
+import { Container } from "../layout/Container";
 
 export const Home = () => {
   const { isSoundPlaying, toggleSound } = useSoundStore();
@@ -40,7 +41,7 @@ export const Home = () => {
 
   if (isMobile()) {
     return (
-      <div className="h-screen w-full flex flex-col justify-end overflow-hidden px-4 pb-8">
+      <Container variant="fluid" className="h-screen flex flex-col justify-end overflow-hidden pb-8">
         <div className="flex flex-col">
           <address className="not-italic relative">
             <p className="text-base sm:text-lg md:text-xl text-muted mb-2">
@@ -50,7 +51,7 @@ export const Home = () => {
           <header>
             <h1
               id="title-heading"
-              className="font-nord text-3xl sm:text-4xl md:text-5xl italic text-muted tracking-tight leading-tight mb-2"
+              className="HeroHeader mb-2"
             >
               <LineSweepText duration={6}>{titleContent}</LineSweepText>
             </h1>
@@ -60,7 +61,7 @@ export const Home = () => {
             <h2 id="description-heading" className="sr-only">
               Description
             </h2>
-            <p className="text-sm sm:text-base text-gray mb-4">
+            <p className="paragraph mb-4">
               {t("home.description")}
             </p>
           </section>
@@ -70,7 +71,7 @@ export const Home = () => {
               as="button"
               glintOnHover={true}
               onClick={handleProjectsClick}
-              className="text-xs sm:text-base"
+              className="ButtonText"
               speed={3}
             >
               {t("home.projects")}
@@ -79,7 +80,7 @@ export const Home = () => {
               as="button"
               glintOnHover={true}
               onClick={handleShowreelClick}
-              className="text-xs sm:text-base"
+              className="ButtonText"
               speed={3}
             >
               {t("nav.showreel")}
@@ -90,12 +91,12 @@ export const Home = () => {
           isOpen={isVideoModalOpen}
           onClose={handleVideoModalClose}
         />
-      </div>
+      </Container>
     );
   }
 
   return (
-    <div className="h-full w-full flex flex-col justify-end px-4 lg:px-12 pb-8 xl:pb-16">
+    <Container variant="fluid" className="h-full flex flex-col justify-end pb-8 xl:pb-16">
       <div className="flex justify-between items-end">
         <section className="w-165" aria-labelledby="location-heading">
           <address className="not-italic relative">
@@ -107,13 +108,13 @@ export const Home = () => {
               />
               <p
                 id="location-heading"
-                className="text-sm sm:text-base text-muted"
+                className="paragraph text-muted"
               >
                 Paris, France
               </p>
             </div>
           </address>
-          <h1 className="font-nord text-4xl 2xl:text-5xl italic text-muted tracking-tight">
+          <h1 className="HeroHeader">
             <LineSweepText duration={8}>{titleContent}</LineSweepText>
           </h1>
         </section>
@@ -122,7 +123,7 @@ export const Home = () => {
           <h2 id="intro-heading" className="sr-only">
             Introduction
           </h2>
-          <p className="text-base 2xl:text-lg text-gray mb-8">
+          <p className="paragraph mb-8">
             {t("home.description")}
           </p>
           <nav className="flex gap-8" aria-label="Actions principales">
@@ -130,7 +131,7 @@ export const Home = () => {
               as="button"
               glintOnHover={true}
               onClick={handleProjectsClick}
-              className="text-sm 2xl:text-base"
+              className="ButtonText"
               speed={3}
             >
               {t("home.projects")}
@@ -139,7 +140,7 @@ export const Home = () => {
               as="button"
               glintOnHover={true}
               onClick={handleShowreelClick}
-              className="text-sm 2xl:text-base"
+              className="ButtonText"
               speed={3}
             >
               {t("nav.showreel")}
@@ -151,6 +152,6 @@ export const Home = () => {
         isOpen={isVideoModalOpen}
         onClose={handleVideoModalClose}
       />
-    </div>
+    </Container>
   );
 };

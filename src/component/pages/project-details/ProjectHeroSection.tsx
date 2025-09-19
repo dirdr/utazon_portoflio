@@ -44,19 +44,19 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
         <div className="bg-black">
           <Container>
             <div className="pb-12">
-              <h1 className="font-nord text-xl font-bold mb-1 text-white">
+              <h1 className="PageTitle mb-1">
                 {t(project.title)}
               </h1>
               <h2 className="font-nord text-base mb-8 font-thin text-white">
                 {t(project.header)}
               </h2>
-              <p className="font-neue text-sm sm:text-base leading-relaxed text-gray mb-8 md:mb-16">
+              <p className="paragraph mb-8 md:mb-16">
                 {t(project.description)}
               </p>
               <div className="space-y-6">
                 <div className="grid grid-cols-1 gap-4 text-base">
                   <div>
-                    <h3 className="font-nord text-white uppercase text-sm">
+                    <h3 className="SectionTitle">
                       Date
                     </h3>
                     <p className="font-neue text-gray text-base">
@@ -64,7 +64,7 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
                     </p>
                   </div>
                   <div>
-                    <h3 className="font-nord text-white uppercase text-sm">
+                    <h3 className="SectionTitle">
                       Client
                     </h3>
                     <p className="font-neue text-gray text-base">
@@ -72,7 +72,7 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
                     </p>
                   </div>
                   <div>
-                    <h3 className="font-nord text-white uppercase text-sm">
+                    <h3 className="SectionTitle">
                       {t("common.roleHeader")}
                     </h3>
                     <p className="font-neue text-gray text-base">
@@ -112,19 +112,19 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
         <div className="absolute top-0 right-0 h-full flex items-center mr-4 lg:mr-32">
           <div className="w-full max-w-md xl:max-w-lg 2xl:max-w-xl">
             <div className="pl-8 pr-4">
-              <h1 className="font-nord text-2xl 2xl:text-3xl font-bold italic mb-1 text-white">
+              <h1 className="PageTitle mb-1">
                 {t(project.title)}
               </h1>
               <h2 className="font-nord text-base 2xl:text-lg mb-8 font-thin text-dark-gray">
                 {t(project.header)}
               </h2>
-              <p className="font-neue text-base 2xl:text-lg leading-5 text-gray mb-12 xl:mb-16">
+              <p className="paragraph mb-12 xl:mb-16">
                 {t(project.description)}
               </p>
               <div className="space-y-6">
                 <div className="grid grid-cols-1 gap-4 text-lg">
                   <div>
-                    <h3 className="font-nord text-sm text-white uppercase">
+                    <h3 className="SectionTitle">
                       Date
                     </h3>
                     <p className="font-neue text-dark-gray text-base">
@@ -132,7 +132,7 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
                     </p>
                   </div>
                   <div>
-                    <h3 className="font-nord text-sm text-white uppercase">
+                    <h3 className="SectionTitle">
                       Client
                     </h3>
                     <p className="font-neue text-dark-gray text-base">
@@ -140,7 +140,7 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
                     </p>
                   </div>
                   <div>
-                    <h3 className="font-nord text-sm text-white uppercase">
+                    <h3 className="SectionTitle">
                       {t("common.roleHeader")}
                     </h3>
                     <p className="font-neue text-dark-gray text-base">

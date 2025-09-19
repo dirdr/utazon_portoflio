@@ -207,8 +207,8 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
       )}
 
       {!isSubmitted && (
-        <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 lg:gap-6 xl:gap-10 mb-3 sm:mb-6 lg:mb-8">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
             <div>
               <label
                 htmlFor="firstName"
@@ -223,7 +223,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                 value={formData.firstName}
                 onChange={handleInputChange}
                 className={cn(
-                  "w-full px-3 py-1.5 sm:px-4 sm:py-2 border rounded-lg text-white placeholder-gray-300 text-sm",
+                  "w-full px-4 py-2 border rounded-lg text-white placeholder-gray-300 text-sm",
                   "focus:outline-none focus:ring-1 focus:ring-white focus:border-white transition-colors",
                   errors.firstName ? "border-red-500" : "border-gray-500",
                 )}
@@ -255,7 +255,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                 value={formData.lastName}
                 onChange={handleInputChange}
                 className={cn(
-                  "w-full px-3 py-1.5 sm:px-4 sm:py-2 border rounded-lg text-white placeholder-gray-300 text-sm",
+                  "w-full px-4 py-2 border rounded-lg text-white placeholder-gray-300 text-sm",
                   "focus:outline-none focus:ring-1 focus:ring-white focus:border-white transition-colors",
                   errors.lastName ? "border-red-500" : "border-gray-500",
                 )}
@@ -274,7 +274,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 lg:gap-6 xl:gap-10 mb-3 sm:mb-6 lg:mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
             <div>
               <label
                 htmlFor="email"
@@ -289,7 +289,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                 value={formData.email}
                 onChange={handleInputChange}
                 className={cn(
-                  "w-full px-3 py-1.5 sm:px-4 sm:py-2 border rounded-lg text-white placeholder-gray-300 text-sm",
+                  "w-full px-4 py-2 border rounded-lg text-white placeholder-gray-300 text-sm",
                   "focus:outline-none focus:ring-1 focus:ring-white focus:border-white transition-colors",
                   errors.email ? "border-red-500" : "border-gray-500",
                 )}
@@ -321,7 +321,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                 value={formData.telephone}
                 onChange={handleInputChange}
                 className={cn(
-                  "w-full px-3 py-1.5 sm:px-4 sm:py-2 border rounded-lg text-white placeholder-gray-300 text-sm",
+                  "w-full px-4 py-2 border rounded-lg text-white placeholder-gray-300 text-sm",
                   "focus:outline-none focus:ring-1 focus:ring-white focus:border-white transition-colors",
                   errors.telephone ? "border-red-500" : "border-gray-500",
                 )}
@@ -354,7 +354,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
               onChange={handleInputChange}
               rows={4}
               className={cn(
-                "w-full px-3 py-1.5 sm:px-4 sm:py-2 border rounded-lg text-white placeholder-gray-300 resize-none text-sm",
+                "w-full px-4 py-2 border rounded-lg text-white placeholder-gray-300 resize-none text-sm",
                 "focus:outline-none focus:ring-1 focus:ring-white focus:border-white transition-colors",
                 errors.message ? "border-red-500" : "border-gray-500",
               )}

@@ -75,7 +75,7 @@ export const Navbar = () => {
           <Button
             glint={true}
             as="button"
-            className="text-sm 2xl:text-base"
+            className="ButtonText"
             onClick={openContactModal}
             speed={3}
           >
@@ -136,7 +136,7 @@ export const Navbar = () => {
       >
         <div className="mt-4 mx-4 lg:mx-12 rounded-2xl border border-button-border bg-black/75 backdrop-blur-md p-6 shadow-2xl">
           <nav
-            className="flex flex-col space-y-4"
+            className="flex flex-col space-y-2"
             role="navigation"
             aria-label="Mobile navigation"
           >
@@ -146,13 +146,13 @@ export const Navbar = () => {
                 href={href}
                 label={label}
                 onClick={closeMenu}
-                className="text-center py-1"
+                className="text-center py-2"
               />
             ))}
 
-            <div className="flex justify-center pt-2">
+            <div className="flex justify-center py-2">
               <Button
-                className="text-sm 2xl:text-base"
+                className="ButtonText"
                 as="button"
                 onClick={() => {
                   openContactModal();
@@ -163,7 +163,7 @@ export const Navbar = () => {
               </Button>
             </div>
 
-            <div className="flex justify-center pt-2">
+            <div className="flex justify-center py-2">
               <LanguageSwitcher />
             </div>
           </nav>
@@ -176,7 +176,7 @@ export const Navbar = () => {
     <nav className="w-full z-50 bg-transparent relative" ref={menuRef}>
       <div className={cn(
         "w-full px-4 lg:px-12 pt-4 pb-0 xl:py-8 relative",
-        isMenuOpen ? "z-60" : ""
+        isMenuOpen ? "z-50" : ""
       )}>
         <WrapperContent />
       </div>

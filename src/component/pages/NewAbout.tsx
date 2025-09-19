@@ -5,6 +5,7 @@ import { LineSweepText } from "../common/LineSweepText";
 import { useContactModal } from "../../hooks/useContactModal";
 import { VideoShowcase } from "../showcase/VideoShowcase";
 import { useBackgroundImageStore } from "../../hooks/useBackgroundImageStore";
+import { Container } from "../layout/Container";
 
 export const NewAbout = () => {
   const [planeOpaque] = useState(false);
@@ -161,7 +162,7 @@ export const NewAbout = () => {
           </div>
         </div>
       </div>
-      <div className="mx-4 lg:mx-32">
+      <Container variant="constrained" className="px-4 lg:px-32">
         <VideoShowcase
           data={{
             type: "video",
@@ -203,7 +204,7 @@ export const NewAbout = () => {
             </div>
           </div>
         </section>
-      </div>
+      </Container>
     </>
   );
 };
