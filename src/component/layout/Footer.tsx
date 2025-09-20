@@ -57,7 +57,7 @@ export const Footer = () => {
             <div className="flex flex-col md:flex-row justify-between items-start gap-8">
               <div className="flex items-center gap-4">
                 <a href="/" className="flex-shrink-0">
-                  <img src={logo} alt="Utazon Logo" className="h-10 w-auto" />
+                  <img src={logo} alt="Utazon Logo" className="h-6 md:h-10 w-auto" />
                 </a>
                 <address className="not-italic flex flex-col">
                   <a href="/" className="text-sm 2xl:text-base mb-1">

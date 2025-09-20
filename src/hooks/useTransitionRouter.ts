@@ -1,7 +1,8 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { useLocation } from "wouter";
 import { getRouteAssets, shouldPreloadRoute } from "../config/routeAssets";
 import { useLenis } from "./useLenis";
+import { useCanvasReadiness } from "./useCanvasReadiness";
 
 const preloadHomeVideo = (): Promise<void> => {
   return Promise.resolve();
@@ -28,6 +29,8 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
   const { duration = 600 } = config;
   const [location, setLocation] = useLocation();
   const { scrollToTop } = useLenis();
+  const { areAllCanvasesReady, onCanvasReadyChange, resetAllCanvases } = useCanvasReadiness();
+  const canvasReadyUnsubscribeRef = useRef<(() => void) | null>(null);
 
   const [state, setState] = useState<TransitionState>({
     isTransitioning: false,
@@ -49,7 +52,7 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
         const progress = (completedCount / totalCount) * 100;
         setState((prev) => ({
           ...prev,
-          progress: 50 + progress * 0.4,
+          progress: 50 + progress * 0.3, // Reduced to make room for canvas check
         }));
 
         if (completedCount === totalCount) {
@@ -81,6 +84,46 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
     });
   }, []);
 
+  // Wait for all Canvas components to be ready
+  const waitForCanvasReadiness = useCallback((): Promise<void> => {
+    return new Promise((resolve) => {
+      console.log('⏳ Waiting for canvas readiness...');
+
+      // Check if already ready
+      if (areAllCanvasesReady()) {
+        console.log('✅ Canvas already ready, proceeding');
+        setState((prev) => ({ ...prev, progress: 90 }));
+        resolve();
+        return;
+      }
+
+      // Set up listener for canvas readiness
+      console.log('👂 Setting up canvas readiness listener');
+      setState((prev) => ({ ...prev, progress: 80 }));
+
+      const unsubscribe = onCanvasReadyChange((allReady) => {
+        console.log('📡 Canvas readiness changed:', allReady);
+        if (allReady) {
+          console.log('🎉 All canvases ready! Continuing transition');
+          setState((prev) => ({ ...prev, progress: 90 }));
+          unsubscribe();
+          resolve();
+        }
+      });
+
+      // Cleanup on unmount
+      canvasReadyUnsubscribeRef.current = unsubscribe;
+
+      // Fallback timeout - don't wait forever for canvas
+      setTimeout(() => {
+        console.log('⏰ Canvas readiness timeout, proceeding anyway');
+        setState((prev) => ({ ...prev, progress: 90 }));
+        unsubscribe();
+        resolve();
+      }, 2000); // 2 second max wait for canvas
+    });
+  }, [areAllCanvasesReady, onCanvasReadyChange]);
+
   // Callback for when fade-in completes
   const handleFadeInComplete = useCallback(async () => {
     if (!state.pendingLocation) {
@@ -106,11 +149,18 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
 
     scrollToTop();
 
+    // Reset Canvas states for new route - ensures fresh Canvas registration
+    console.log('🔄 Resetting Canvas states for route change to:', newLocation);
+    resetAllCanvases();
+
     // Phase 4: Cache verification (only if needed)
     if (cacheUrls.length > 0) {
       await verifyCacheUrls(cacheUrls);
     }
-    setState((prev) => ({ ...prev, progress: 90 }));
+    setState((prev) => ({ ...prev, progress: 80 }));
+
+    // Phase 5: Wait for Canvas readiness (critical for 3D pages)
+    await waitForCanvasReadiness();
 
     if (newLocation === "/") {
       await preloadHomeVideo();
@@ -133,7 +183,16 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
       pendingLocation: null,
       fadeInComplete: false,
     }));
-  }, [state.pendingLocation, setLocation, verifyCacheUrls, duration, scrollToTop]);
+  }, [state.pendingLocation, setLocation, verifyCacheUrls, waitForCanvasReadiness, duration, scrollToTop, resetAllCanvases]);
+
+  // Cleanup canvas subscription on unmount
+  useEffect(() => {
+    return () => {
+      if (canvasReadyUnsubscribeRef.current) {
+        canvasReadyUnsubscribeRef.current();
+      }
+    };
+  }, []);
 
   // Navigate with transition (automatically determines assets to preload)
   const navigateWithTransition = useCallback(

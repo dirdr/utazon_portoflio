@@ -168,10 +168,9 @@ export const usePreloadAssets = () => {
       img.decoding = "async";
       img.loading = "eager";
 
-      if ((isSafari || isFirefox) && !url.includes("/videos/")) {
-        img.crossOrigin = "anonymous";
-        debugLog(`Set crossOrigin=anonymous for ${url} (Safari/Firefox)`);
-      }
+      // Set crossOrigin for all images to match preload link behavior
+      img.crossOrigin = "anonymous";
+      debugLog(`Set crossOrigin=anonymous for ${url}`);
 
       const handleLoad = () => {
         const duration = Date.now() - startTime;
@@ -533,6 +532,7 @@ export const usePreloadAssets = () => {
       link.href = url;
       link.as = as;
       link.type = type;
+      link.crossOrigin = "anonymous"; // Match image crossOrigin setting
 
       document.head.appendChild(link);
     });

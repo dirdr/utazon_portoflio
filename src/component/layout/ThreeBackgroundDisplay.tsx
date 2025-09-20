@@ -7,7 +7,7 @@ import React, {
   useMemo,
   useCallback,
 } from "react";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useThree } from "@react-three/fiber";
 import { useGLTF, OrbitControls } from "@react-three/drei";
 import { EffectComposer, Bloom, Noise } from "@react-three/postprocessing";
 import { GLTF } from "three-stdlib";
@@ -17,6 +17,48 @@ import {
   isModelPreloaded,
 } from "../../hooks/usePreloadAssets";
 import { LenisContext } from "../../contexts/LenisContext";
+import { useCanvasComponent } from "../../hooks/useCanvasReadiness";
+
+// TypeScript interfaces for camera configuration
+interface CameraConfig {
+  position: [number, number, number];
+  target: [number, number, number];
+  fov: number;
+}
+
+interface CameraControllerProps {
+  config: CameraConfig;
+}
+
+// Modular camera controller component
+function CameraController({ config }: CameraControllerProps) {
+  const { camera, controls } = useThree();
+
+  useEffect(() => {
+    if (camera) {
+      // Update camera position
+      camera.position.set(...config.position);
+
+      // Update FOV for perspective cameras
+      if (camera instanceof THREE.PerspectiveCamera) {
+        camera.fov = config.fov;
+        camera.updateProjectionMatrix();
+      }
+    }
+
+    // Update OrbitControls target if available
+    if (controls && "target" in controls && "update" in controls) {
+      const orbitControls = controls as {
+        target: THREE.Vector3;
+        update: () => void;
+      };
+      orbitControls.target.set(...config.target);
+      orbitControls.update();
+    }
+  }, [camera, controls, config]);
+
+  return null;
+}
 
 const LIGHT_CONFIG = {
   BOUNDS: {
@@ -193,12 +235,16 @@ function Model({ url, planeOpaque = false }: ModelProps) {
   const scrollY = useScrollOffset();
 
   const logoYOffset = useMemo(() => {
-    const isMobile = window.innerWidth < BREAKPOINT_THRESHOLDS.XL;
-    const scrollDivisor = isMobile ? 1.5 : 5;
-    const maxOffset = isMobile ? 8 : 4.5;
+    const isMobileDevice = window.innerWidth < BREAKPOINT_THRESHOLDS.XL;
 
-    const scrollFactor = scrollY / (window.innerHeight * scrollDivisor);
-    return Math.min(scrollFactor * maxOffset, maxOffset);
+    if (isMobileDevice) {
+      return 0;
+    } else {
+      const scrollDivisor = 5;
+      const maxOffset = 4.5;
+      const scrollFactor = scrollY / (window.innerHeight * scrollDivisor);
+      return Math.min(scrollFactor * maxOffset, maxOffset);
+    }
   }, [scrollY]);
   useEffect(() => {
     if (gltf.scene) {
@@ -248,6 +294,8 @@ function Model({ url, planeOpaque = false }: ModelProps) {
   }, [gltf]);
 
   useEffect(() => {
+    // No need to skip position updates - both mobile and desktop can have movement
+
     const logoMesh = meshCacheRef.current.get("LOGO");
     const planeMesh = meshCacheRef.current.get("PLANE");
 
@@ -367,67 +415,113 @@ const useMouseBasedLighting = () => {
   return { keyLightPos, fillLightPos };
 };
 
-const useScrollBasedLighting = (scrollY: number) => {
-  const [keyLightPos, setKeyLightPos] = useState<[number, number, number]>([
-    -0.8,
-    0.6,
-    LIGHT_CONFIG.BASE_Z,
-  ]);
-  const [fillLightPos, setFillLightPos] = useState<[number, number, number]>([
-    0.8,
-    -0.6,
-    LIGHT_CONFIG.BASE_Z,
-  ]);
+// const useScrollBasedLighting = (scrollY: number) => {
+//   const [keyLightPos, setKeyLightPos] = useState<[number, number, number]>([
+//     -0.8,
+//     0.6,
+//     LIGHT_CONFIG.BASE_Z,
+//   ]);
+//   const [fillLightPos, setFillLightPos] = useState<[number, number, number]>([
+//     0.8,
+//     -0.6,
+//     LIGHT_CONFIG.BASE_Z,
+//   ]);
 
-  useEffect(() => {
-    const baseOffsetX = 0.8;
-    const baseOffsetY = -0.6;
+//   useEffect(() => {
+//     const baseOffsetX = 0.8;
+//     const baseOffsetY = -0.6;
 
-    const circleRadius = 1.0; // Radius of the circular motion
-    const rotationSpeed = 3; // Number of full rotations per viewport height
+//     const circleRadius = 1.0; // Radius of the circular motion
+//     const rotationSpeed = 3; // Number of full rotations per viewport height
 
-    const scrollAngle =
-      (scrollY / window.innerHeight) * Math.PI * 2 * rotationSpeed;
+//     const scrollAngle =
+//       (scrollY / window.innerHeight) * Math.PI * 2 * rotationSpeed;
 
-    const keyLightAngle = scrollAngle;
-    const fillLightAngle = scrollAngle + Math.PI; // Opposite side of circle
+//     const keyLightAngle = scrollAngle;
+//     const fillLightAngle = scrollAngle + Math.PI; // Opposite side of circle
 
-    const keyLightX = baseOffsetX + Math.cos(keyLightAngle) * circleRadius;
-    const keyLightY = baseOffsetY + Math.sin(keyLightAngle) * circleRadius;
+//     const keyLightX = baseOffsetX + Math.cos(keyLightAngle) * circleRadius;
+//     const keyLightY = baseOffsetY + Math.sin(keyLightAngle) * circleRadius;
 
-    const fillLightX = baseOffsetX + Math.cos(fillLightAngle) * circleRadius;
-    const fillLightY = baseOffsetY + Math.sin(fillLightAngle) * circleRadius;
+//     const fillLightX = baseOffsetX + Math.cos(fillLightAngle) * circleRadius;
+//     const fillLightY = baseOffsetY + Math.sin(fillLightAngle) * circleRadius;
 
-    const boundedKeyX = Math.max(
-      LIGHT_CONFIG.BOUNDS.X[0],
-      Math.min(LIGHT_CONFIG.BOUNDS.X[1], keyLightX),
-    );
-    const boundedKeyY = Math.max(
-      LIGHT_CONFIG.BOUNDS.Y[0],
-      Math.min(LIGHT_CONFIG.BOUNDS.Y[1], keyLightY),
-    );
+//     const boundedKeyX = Math.max(
+//       LIGHT_CONFIG.BOUNDS.X[0],
+//       Math.min(LIGHT_CONFIG.BOUNDS.X[1], keyLightX),
+//     );
+//     const boundedKeyY = Math.max(
+//       LIGHT_CONFIG.BOUNDS.Y[0],
+//       Math.min(LIGHT_CONFIG.BOUNDS.Y[1], keyLightY),
+//     );
 
-    const boundedFillX = Math.max(
-      LIGHT_CONFIG.BOUNDS.X[0],
-      Math.min(LIGHT_CONFIG.BOUNDS.X[1], fillLightX),
-    );
-    const boundedFillY = Math.max(
-      LIGHT_CONFIG.BOUNDS.Y[0],
-      Math.min(LIGHT_CONFIG.BOUNDS.Y[1], fillLightY),
-    );
+//     const boundedFillX = Math.max(
+//       LIGHT_CONFIG.BOUNDS.X[0],
+//       Math.min(LIGHT_CONFIG.BOUNDS.X[1], fillLightX),
+//     );
+//     const boundedFillY = Math.max(
+//       LIGHT_CONFIG.BOUNDS.Y[0],
+//       Math.min(LIGHT_CONFIG.BOUNDS.Y[1], fillLightY),
+//     );
 
-    setKeyLightPos([boundedKeyX, boundedKeyY, LIGHT_CONFIG.BASE_Z]);
-    setFillLightPos([boundedFillX, boundedFillY, LIGHT_CONFIG.BASE_Z]);
-  }, [scrollY]);
+//     setKeyLightPos([boundedKeyX, boundedKeyY, LIGHT_CONFIG.BASE_Z]);
+//     setFillLightPos([boundedFillX, boundedFillY, LIGHT_CONFIG.BASE_Z]);
+//   }, [scrollY]);
 
-  return { keyLightPos, fillLightPos };
+//   return { keyLightPos, fillLightPos };
+// };
+
+// Mobile-optimized lighting configuration
+const MOBILE_LIGHTING_CONFIG = {
+  // Optimized for mobile camera position: [0, -1.6, -2] and target: [0, -1.6, -7.4]
+  KEY_LIGHT: {
+    POSITION: [-1.2, -0.8, -3] as [number, number, number], // Top-left, closer to camera
+    INTENSITY: 2.0, // Brighter for better logo visibility
+  },
+  FILL_LIGHT: {
+    POSITION: [1.0, -2.2, -4] as [number, number, number], // Bottom-right, lighting from below
+    INTENSITY: 0.8, // Stronger fill light for mobile
+  },
+  RIM_LIGHT: {
+    POSITION: [0, -1.0, -8] as [number, number, number], // Behind logo, creates edge lighting
+    INTENSITY: 1.2,
+  },
+  AMBIENT: {
+    INTENSITY: 0.2, // Slightly brighter ambient for mobile
+  },
+} as const;
+
+const useMobileLighting = () => {
+  return {
+    keyLightPos: MOBILE_LIGHTING_CONFIG.KEY_LIGHT.POSITION,
+    fillLightPos: MOBILE_LIGHTING_CONFIG.FILL_LIGHT.POSITION,
+    rimLightPos: MOBILE_LIGHTING_CONFIG.RIM_LIGHT.POSITION,
+    keyIntensity: MOBILE_LIGHTING_CONFIG.KEY_LIGHT.INTENSITY,
+    fillIntensity: MOBILE_LIGHTING_CONFIG.FILL_LIGHT.INTENSITY,
+    rimIntensity: MOBILE_LIGHTING_CONFIG.RIM_LIGHT.INTENSITY,
+    ambientIntensity: MOBILE_LIGHTING_CONFIG.AMBIENT.INTENSITY,
+  };
+};
+
+const useDesktopLighting = () => {
+  // Desktop uses existing mouse-based lighting
+  const mouseLighting = useMouseBasedLighting();
+
+  return {
+    keyLightPos: mouseLighting.keyLightPos,
+    fillLightPos: mouseLighting.fillLightPos,
+    rimLightPos: [0, 0, -8] as [number, number, number], // Standard rim light
+    keyIntensity: LIGHT_CONFIG.KEY_LIGHT.INTENSITY,
+    fillIntensity: LIGHT_CONFIG.FILL_LIGHT.INTENSITY,
+    rimIntensity: 0.8,
+    ambientIntensity: LIGHT_CONFIG.AMBIENT.INTENSITY,
+  };
 };
 
 const useCarvedLighting = () => {
   const [isMobile, setIsMobile] = useState(
     window.innerWidth < BREAKPOINT_THRESHOLDS.XL,
   );
-  const scrollY = useScrollOffset();
 
   // Update mobile state on resize using Tailwind XL breakpoint
   useEffect(() => {
@@ -439,10 +533,10 @@ const useCarvedLighting = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const mouseLighting = useMouseBasedLighting();
-  const scrollLighting = useScrollBasedLighting(scrollY);
+  const mobileLighting = useMobileLighting();
+  const desktopLighting = useDesktopLighting();
 
-  return isMobile ? scrollLighting : mouseLighting;
+  return isMobile ? mobileLighting : desktopLighting;
 };
 
 const useScrollOffset = () => {
@@ -484,8 +578,7 @@ const getCameraConfigForBreakpoint = (
   return CAMERA_CONFIG.BREAKPOINTS[breakpoint];
 };
 
-// Unified responsive camera hook that handles all camera properties
-const useResponsiveCamera = () => {
+const useResponsiveCameraBase = () => {
   const [cameraConfig, setCameraConfig] = useState(() => {
     const breakpoint = getCurrentBreakpoint(window.innerWidth);
     return getCameraConfigForBreakpoint(breakpoint);
@@ -503,11 +596,56 @@ const useResponsiveCamera = () => {
     return () => window.removeEventListener("resize", updateCameraConfig);
   }, []);
 
-  return {
-    position: cameraConfig.POSITION,
-    target: cameraConfig.TARGET,
-    fov: cameraConfig.FOV,
-  };
+  return cameraConfig;
+};
+
+const useMobileZoomEffect = (scrollY: number, baseFov: number) => {
+  return useMemo(() => {
+    const scrollDivisor = 1;
+    const zoomThresholdScreens = 1.5;
+    const maxZoomFactor = 2.5;
+    const maxPositionOffset = 4;
+
+    const scrollFactor = scrollY / (window.innerHeight * scrollDivisor);
+    const zoomProgress = Math.min(scrollFactor / zoomThresholdScreens, 1);
+
+    const targetFovMultiplier = 1 - zoomProgress * maxZoomFactor;
+    const minFovRatio = 10 / baseFov;
+    const safeFovMultiplier = Math.max(targetFovMultiplier, minFovRatio);
+
+    return {
+      fovMultiplier: safeFovMultiplier,
+      positionOffset: zoomProgress * maxPositionOffset,
+      isZoomComplete: zoomProgress >= 1,
+    };
+  }, [scrollY, baseFov]);
+};
+
+const useResponsiveCamera = (scrollY: number): CameraConfig => {
+  const baseCameraConfig = useResponsiveCameraBase();
+  const isMobileDevice = window.innerWidth < BREAKPOINT_THRESHOLDS.XL;
+  const mobileZoom = useMobileZoomEffect(scrollY, baseCameraConfig.FOV);
+
+  return useMemo(() => {
+    if (isMobileDevice) {
+      return {
+        position: [
+          baseCameraConfig.POSITION[0],
+          baseCameraConfig.POSITION[1],
+          baseCameraConfig.POSITION[2] - mobileZoom.positionOffset,
+        ],
+        target: baseCameraConfig.TARGET,
+        fov: baseCameraConfig.FOV * mobileZoom.fovMultiplier,
+      };
+    }
+
+    // Desktop: return base config without modifications
+    return {
+      position: baseCameraConfig.POSITION,
+      target: baseCameraConfig.TARGET,
+      fov: baseCameraConfig.FOV,
+    };
+  }, [baseCameraConfig, isMobileDevice, mobileZoom]);
 };
 
 interface ThreeBackgroundDisplayProps {
@@ -519,9 +657,22 @@ export const ThreeBackgroundDisplay: React.FC<ThreeBackgroundDisplayProps> = ({
   planeOpaque = false,
   bloomEnabled = true,
 }) => {
-  const { keyLightPos, fillLightPos } = useCarvedLighting();
+  const {
+    keyLightPos,
+    fillLightPos,
+    rimLightPos,
+    keyIntensity,
+    fillIntensity,
+    rimIntensity,
+    ambientIntensity,
+  } = useCarvedLighting();
   const [isModelReady, setIsModelReady] = useState(false);
-  const { position, target, fov } = useResponsiveCamera();
+  const scrollY = useScrollOffset();
+  const cameraConfig = useResponsiveCamera(scrollY);
+
+  // Canvas readiness coordination
+  const { setReady, setNotReady } = useCanvasComponent("three-background");
+  const canvasReadinessReported = useRef(false);
 
   useEffect(() => {
     const checkModelReady = () => {
@@ -549,6 +700,22 @@ export const ThreeBackgroundDisplay: React.FC<ThreeBackgroundDisplayProps> = ({
     checkModelReady();
   }, []);
 
+  // Report canvas readiness when model is ready and rendered
+  useEffect(() => {
+    if (isModelReady && !canvasReadinessReported.current) {
+      // Small delay to ensure Canvas is actually rendered
+      const timer = setTimeout(() => {
+        setReady();
+        canvasReadinessReported.current = true;
+      }, 100);
+
+      return () => clearTimeout(timer);
+    } else if (!isModelReady && canvasReadinessReported.current) {
+      setNotReady();
+      canvasReadinessReported.current = false;
+    }
+  }, [isModelReady, setReady, setNotReady]);
+
   if (!isModelReady) {
     return null;
   }
@@ -559,8 +726,8 @@ export const ThreeBackgroundDisplay: React.FC<ThreeBackgroundDisplayProps> = ({
         <Canvas
           shadows
           camera={{
-            position: position,
-            fov: fov,
+            position: cameraConfig.position,
+            fov: cameraConfig.fov,
           }}
           gl={{
             antialias: window.devicePixelRatio <= 1,
@@ -569,18 +736,20 @@ export const ThreeBackgroundDisplay: React.FC<ThreeBackgroundDisplayProps> = ({
             stencil: false,
           }}
         >
+          <CameraController config={cameraConfig} />
           <OrbitControls
-            target={target}
+            target={cameraConfig.target}
             enablePan={false}
             enableZoom={false}
             enableRotate={false}
           />
 
-          <ambientLight intensity={LIGHT_CONFIG.AMBIENT.INTENSITY} />
+          <ambientLight intensity={ambientIntensity} />
 
+          {/* Key Light - Main illumination */}
           <directionalLight
             position={keyLightPos}
-            intensity={LIGHT_CONFIG.KEY_LIGHT.INTENSITY}
+            intensity={keyIntensity}
             castShadow
             shadow-mapSize-width={SHADOW_CONFIG.MAP_SIZE}
             shadow-mapSize-height={SHADOW_CONFIG.MAP_SIZE}
@@ -594,9 +763,14 @@ export const ThreeBackgroundDisplay: React.FC<ThreeBackgroundDisplayProps> = ({
             shadow-radius={SHADOW_CONFIG.RADIUS}
           />
 
+          {/* Fill Light - Softens shadows */}
+          <directionalLight position={fillLightPos} intensity={fillIntensity} />
+
+          {/* Rim Light - Creates edge definition */}
           <directionalLight
-            position={fillLightPos}
-            intensity={LIGHT_CONFIG.FILL_LIGHT.INTENSITY}
+            position={rimLightPos}
+            intensity={rimIntensity}
+            color="#ffffff"
           />
 
           <pointLight

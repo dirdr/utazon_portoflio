@@ -41,7 +41,7 @@ export const Home = () => {
 
   if (isMobile()) {
     return (
-      <Container variant="fluid" className="h-screen flex flex-col justify-end overflow-hidden pb-8">
+      <Container variant="fluid" className="h-dvh h-screen flex flex-col justify-end overflow-hidden pb-8">
         <div className="flex flex-col">
           <address className="not-italic relative">
             <p className="text-base sm:text-lg md:text-xl text-muted mb-2">

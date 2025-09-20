@@ -71,6 +71,10 @@ export const VideoBackground = forwardRef<
       const video2 = videoRef2.current;
       if (!isHomePage) return;
 
+      // Set volume programmatically for both videos
+      if (video1) video1.volume = 0.3;
+      if (video2) video2.volume = 0.3;
+
       const handleLoadedData = (video: HTMLVideoElement) => () => {
         const currentSource = video.src;
         if (!loadedSources.current.has(currentSource)) {
@@ -165,12 +169,11 @@ export const VideoBackground = forwardRef<
       }
 
       try {
-        const currentVolume = currentVideo.volume;
         const currentMuted = currentVideo.muted;
-        
+
         nextVideo.src = newSrc;
         nextVideo.currentTime = 0;
-        nextVideo.volume = currentVolume;
+        nextVideo.volume = 0.3; // Maintain reduced volume
         nextVideo.muted = currentMuted;
         nextVideo.style.opacity = '0';
         nextVideo.style.zIndex = '1';

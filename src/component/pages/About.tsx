@@ -7,7 +7,7 @@ import { VideoShowcase } from "../showcase/VideoShowcase";
 import { useBackgroundImageStore } from "../../hooks/useBackgroundImageStore";
 import { Container } from "../layout/Container";
 
-export const NewAbout = () => {
+export const About = () => {
   const [planeOpaque] = useState(false);
   const [bloomEnabled] = useState(true);
   const { t } = useTranslation();
@@ -36,10 +36,10 @@ export const NewAbout = () => {
           bloomEnabled,
         },
       },
-      "NewAbout",
+      "About",
     );
 
-    return () => setBackground(null, "NewAbout");
+    return () => setBackground(null, "About");
   }, [setBackground, planeOpaque, bloomEnabled]);
 
   return (
@@ -47,56 +47,60 @@ export const NewAbout = () => {
       {/* Desktop version - xl and above */}
       <div className="mb-32 hidden xl:block">
         <div className="relative w-full h-screen">
-          <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-64 left-12 2xl:left-48 pointer-events-auto max-w-md">
-              <header className="mb-8">
-                <h1 className="font-nord text-3xl xl:text-4xl italic text-muted tracking-tight">
-                  <LineSweepText duration={6}>{titleContent}</LineSweepText>
-                </h1>
-              </header>
+          <Container
+            variant="constrained"
+            maxWidth="screen-4xl"
+            className="h-full"
+          >
+            <div className="relative h-full">
+              <div className="absolute top-64 left-0 pointer-events-auto max-w-md">
+                <header className="mb-8">
+                  <h1 className="HeroHeader">
+                    <LineSweepText duration={6}>{titleContent}</LineSweepText>
+                  </h1>
+                </header>
 
-              <p className="text-base text-gray mb-10">
-                {t("home.description")}
-              </p>
+                <p className="paragraph mb-10">{t("home.description")}</p>
 
-              <div className="flex justify-start">
-                <Button
-                  glint={true}
-                  as="button"
-                  className="text-xs sm:text-base px-8 py-3 inline-block w-auto"
-                  onClick={openContactModal}
-                  proximityIntensity={true}
-                >
-                  {t("nav.contact")}
-                </Button>
+                <div className="flex justify-start">
+                  <Button
+                    glint={true}
+                    as="button"
+                    className="ButtonText px-8 py-3 inline-block w-auto"
+                    onClick={openContactModal}
+                    proximityIntensity={true}
+                  >
+                    {t("nav.contact")}
+                  </Button>
+                </div>
+              </div>
+              <div className="absolute bottom-32 right-0 pointer-events-auto max-w-md">
+                <h2 className="SectionTitle mb-2">
+                  {t("about.services.motionDesign.title")}
+                </h2>
+                <p className="paragraph">
+                  {t("about.services.motionDesign.description")}
+                </p>
+                <div className="h-px bg-gray-400/30 my-10"></div>
+
+                <h2 className="SectionTitle mb-2">
+                  {t("about.services.artDirection.title")}
+                </h2>
+                <p className="paragraph">
+                  {t("about.services.artDirection.description")}
+                </p>
+                <div className="h-px bg-gray-400/30 my-10"></div>
+
+                <h2 className="SectionTitle mb-2">
+                  {t("about.services.editingCompositing.title")}
+                </h2>
+                <p className="paragraph">
+                  {t("about.services.editingCompositing.description")}
+                </p>
+                <div className="h-px bg-gray-400/30 my-10"></div>
               </div>
             </div>
-            <div className="absolute bottom-32 right-12 2xl:right-48 pointer-events-auto max-w-md">
-              <h2 className="text-white text-sm 2xl-test-base font-nord mb-2">
-                {t("about.services.motionDesign.title")}
-              </h2>
-              <p className="text-muted text-base 2xl-test-lg font-neue">
-                {t("about.services.motionDesign.description")}
-              </p>
-              <div className="h-px bg-gray-400/30 my-10"></div>
-
-              <h2 className="text-white text-sm 2xl-test-base font-nord mb-2">
-                {t("about.services.artDirection.title")}
-              </h2>
-              <p className="text-muted text-base 2xl-test-lg font-neue">
-                {t("about.services.artDirection.description")}
-              </p>
-              <div className="h-px bg-gray-400/30 my-10"></div>
-
-              <h2 className="text-white text-sm 2xl-test-base font-nord mb-2">
-                {t("about.services.editingCompositing.title")}
-              </h2>
-              <p className="text-muted text-base 2xl-test-lg font-neue">
-                {t("about.services.editingCompositing.description")}
-              </p>
-              <div className="h-px bg-gray-400/30 my-10"></div>
-            </div>
-          </div>
+          </Container>
         </div>
       </div>
 
@@ -107,20 +111,23 @@ export const NewAbout = () => {
           <div className="h-[calc(35vh-2rem)] min-h-[128px] w-full mt-16"></div>
 
           {/* Main content - positioned below the logo with proper spacing */}
-          <div className="px-6 sm:px-8 md:px-12 mt-20 sm:mt-24">
+          <Container
+            variant="fluid"
+            className="mt-20 sm:mt-24"
+          >
             <header className="mb-6">
-              <h1 className="font-nord text-2xl sm:text-3xl italic text-muted tracking-tight">
+              <h1 className="HeroHeader">
                 <LineSweepText duration={6}>{titleContent}</LineSweepText>
               </h1>
             </header>
 
-            <p className="text-base text-gray mb-6">{t("home.description")}</p>
+            <p className="paragraph mb-6">{t("home.description")}</p>
 
             <div className="flex justify-start mb-16">
               <Button
                 glint={true}
                 as="button"
-                className="text-sm px-8 py-3 inline-block w-auto"
+                className="ButtonText px-8 py-3 inline-block w-auto"
                 onClick={openContactModal}
                 proximityIntensity={true}
               >
@@ -131,35 +138,35 @@ export const NewAbout = () => {
             {/* Services section */}
             <div className="space-y-8">
               <div>
-                <h2 className="text-white text-sm font-nord mb-2">
+                <h2 className="SectionTitle mb-2">
                   {t("about.services.motionDesign.title")}
                 </h2>
-                <p className="text-muted text-base font-neue">
+                <p className="paragraph">
                   {t("about.services.motionDesign.description")}
                 </p>
                 <div className="h-px bg-gray-400/30 my-8"></div>
               </div>
 
               <div>
-                <h2 className="text-white text-sm font-nord mb-2">
+                <h2 className="SectionTitle mb-2">
                   {t("about.services.artDirection.title")}
                 </h2>
-                <p className="text-muted text-base font-neue">
+                <p className="paragraph">
                   {t("about.services.artDirection.description")}
                 </p>
                 <div className="h-px bg-gray-400/30 my-8"></div>
               </div>
 
               <div>
-                <h2 className="text-white text-sm font-nord mb-2">
+                <h2 className="SectionTitle mb-2">
                   {t("about.services.editingCompositing.title")}
                 </h2>
-                <p className="text-muted text-base font-neue">
+                <p className="paragraph">
                   {t("about.services.editingCompositing.description")}
                 </p>
               </div>
             </div>
-          </div>
+          </Container>
         </div>
       </div>
       <Container variant="constrained" className="px-4 lg:px-32">
@@ -177,25 +184,25 @@ export const NewAbout = () => {
           border={true}
         />
         <div className="flex-1 flex items-center justify-center mt-10">
-          <p className="text-muted text-base 2xl:text-lg font-neue">
+          <p className="paragraph text-muted font-neue">
             Cinema 4D, Blender, Unreal Engine 5, After Effects, DaVinci Resolve
           </p>
         </div>
         <section className="my-48 lg:my-64">
           <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-muted font-nord text-xl 2xl:text:2xl italic font-bold tracking-wide">
+            <h2 className="PageTitle">
               <LineSweepText duration={6}>
                 {t("about.commitment")}
               </LineSweepText>
             </h2>
-            <p className="text-white text-base 2xl:text-lg leading-relaxed my-16">
+            <p className="paragraph text-white my-16">
               {t("about.commitmentDesc")}
             </p>
             <div className="flex justify-center">
               <Button
                 glint={true}
                 as="button"
-                className="text-sm 2xl:text-base px-8 py-3 inline-block w-auto"
+                className="ButtonText px-8 py-3 inline-block w-auto"
                 onClick={openContactModal}
                 proximityIntensity={true}
               >

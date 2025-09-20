@@ -1,5 +1,5 @@
 import { Layout } from "../layout/Layout";
-import { NewAbout } from "../pages/NewAbout";
+import { About } from "../pages/About";
 import { HomeContainer } from "../pages/HomeContainer";
 import { Projects } from "../pages/Projects";
 import { ProjectDetail } from "../pages/ProjectDetail";
@@ -41,7 +41,7 @@ export const AppRouter = () => {
       <Layout>
         <Switch location={currentLocation}>
           <Route path={ROUTES.HOME} component={HomeContainer} />
-          <Route path={ROUTES.ABOUT} component={NewAbout} />
+          <Route path={ROUTES.ABOUT} component={About} />
           <Route path={ROUTES.PROJECTS} component={Projects} />
           <Route path="/projects/:id" component={ProjectDetail} />
           <Route path={ROUTES.LEGAL} component={Legal} />
@@ -57,8 +57,10 @@ export const AppRouter = () => {
       </Layout>
       <CursorTrail
         enabled={isEnabled && !isMobile() && isHomePage && !isTransitioning}
-        maxPoints={1000}
-        fadeTime={2500}
+        maxPoints={1500}
+        fadeTime={3000}
+        rippleSize={60}
+        intensity={0.7}
       />
       <ModalRoot />
 

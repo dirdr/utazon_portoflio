@@ -151,16 +151,25 @@ export const CursorTrail = ({
         const baseSize = rippleSize * 0.4;
 
         const rippleProgress = ageRatio;
-        const maxRippleSize = baseSize * 4;
+        const maxRippleSize = baseSize * 6; // Larger expansion for more dramatic effect
 
         const drawExpandingRing = (ringDelay: number, ringOpacity: number) => {
           const ringProgress = Math.max(0, rippleProgress - ringDelay);
           if (ringProgress <= 0) return;
 
-          const currentSize =
-            baseSize + (maxRippleSize - baseSize) * ringProgress;
+          // Smooth easing for more natural wave expansion
+          const easedProgress = 1 - Math.pow(1 - ringProgress, 3);
 
-          const ringFade = Math.pow(1 - ringProgress, 2);
+          // Enhanced fade calculation for smoother transitions
+          const ringFade = Math.pow(1 - ringProgress, 1.5);
+
+          // Add subtle wave oscillation for more dynamic effect
+          const waveOscillation = Math.sin(ringProgress * Math.PI * 4) * 0.1;
+          const sizeMultiplier = 1 + waveOscillation * ringFade;
+
+          const currentSize =
+            (baseSize + (maxRippleSize - baseSize) * easedProgress) * sizeMultiplier;
+
           const finalOpacity = currentOpacity * ringOpacity * ringFade;
 
           if (finalOpacity <= 0.001) return;
@@ -202,10 +211,13 @@ export const CursorTrail = ({
           ctx.fill();
         };
 
-        // Draw multiple expanding rings with staggered timing
-        drawExpandingRing(0, 0.4); // First ring starts immediately
-        drawExpandingRing(0.25, 0.3); // Second ring starts at 25% progress
-        drawExpandingRing(0.5, 0.2); // Third ring starts at 50% progress
+        // Draw multiple expanding rings with staggered timing for wave effect
+        drawExpandingRing(0, 0.5); // First ring starts immediately
+        drawExpandingRing(0.15, 0.4); // Second ring starts at 15% progress
+        drawExpandingRing(0.3, 0.35); // Third ring starts at 30% progress
+        drawExpandingRing(0.45, 0.3); // Fourth ring starts at 45% progress
+        drawExpandingRing(0.6, 0.25); // Fifth ring starts at 60% progress
+        drawExpandingRing(0.75, 0.2); // Sixth ring starts at 75% progress
       }
     };
   }, [fadeTime, intensity, rippleSize]);
@@ -225,8 +237,8 @@ export const CursorTrail = ({
         glowSize,
       );
 
-      gradient.addColorStop(0, `rgba(255, 255, 255, ${intensity * 0.12})`);
-      gradient.addColorStop(0.5, `rgba(255, 255, 255, ${intensity * 0.05})`);
+      gradient.addColorStop(0, `rgba(255, 255, 255, ${intensity * 0.08})`);
+      gradient.addColorStop(0.5, `rgba(255, 255, 255, ${intensity * 0.04})`);
       gradient.addColorStop(1, `rgba(255, 255, 255, 0)`);
 
       ctx.fillStyle = gradient;
