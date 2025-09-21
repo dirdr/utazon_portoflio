@@ -13,7 +13,7 @@ export const useAnimationControl = ({
   triggerOnce = false,
 }: UseAnimationControlOptions = {}) => {
   const [shouldAnimate, setShouldAnimate] = useState(false);
-  
+
   const { ref, inView } = useInView({
     threshold,
     rootMargin,

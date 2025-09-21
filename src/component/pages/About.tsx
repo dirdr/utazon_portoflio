@@ -118,7 +118,7 @@ export const About = () => {
         </div>
 
         {/* Hero content section */}
-        <Container variant="fluid" className="px-4 mb-16">
+        <Container variant="fluid" className="px-4">
           <header className="mb-6">
             <h1 className="HeroHeader">
               <LineSweepText duration={6}>{t("about.title")}</LineSweepText>
@@ -141,7 +141,7 @@ export const About = () => {
         </Container>
 
         {/* Services section */}
-        <Container variant="fluid" className="px-4 mb-32">
+        <Container variant="fluid" className="px-4 my-16">
           <div className="space-y-8">
             <div>
               <h2 className="SectionTitle mb-2">
@@ -176,7 +176,7 @@ export const About = () => {
       </div>
 
       {/* VideoShowcase section */}
-      <Container variant="constrained" className="px-4 lg:px-32 mb-32">
+      <Container variant="constrained" className="px-4 lg:px-32 my-16">
         <VideoShowcase
           data={{
             type: "video",
@@ -190,19 +190,14 @@ export const About = () => {
           }}
           border={true}
         />
-        <div className="flex-1 flex items-center justify-center mt-10">
-          <p className="paragraph text-muted font-neue">
-            Cinema 4D, Blender, Unreal Engine 5, After Effects, DaVinci Resolve
-          </p>
-        </div>
-        <section className="my-32 lg:my-64">
+        <section className="my-16">
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="PageTitle">
               <LineSweepText duration={6}>
                 {t("about.commitment")}
               </LineSweepText>
             </h2>
-            <p className="paragraph text-white my-16">
+            <p className="paragraph text-white my-8">
               {t("about.commitmentDesc")}
             </p>
             <div className="flex justify-center">
