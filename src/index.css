@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@plugin "tailwindcss-debug-screens";
 
 @import "./styles/theme.css";
 @import "./styles/fonts.css";
