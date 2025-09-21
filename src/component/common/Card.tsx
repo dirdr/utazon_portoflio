@@ -6,6 +6,7 @@ import { LineSweepText } from "./LineSweepText";
 import { useTransitionContext } from "../../hooks/useTransitionContext";
 import { useAnimationControl } from "../../hooks/useAnimationControl";
 import { useProjectGridPreloader } from "../../hooks/useProjectGridPreloader";
+import { useActiveVideoCard } from "../../hooks/useActiveVideoCard";
 import { isMobile } from "../../utils/mobileDetection";
 
 import p1 from "../../assets/images/card_backgrounds/1.webp";
@@ -62,6 +63,9 @@ export const Card = ({
     threshold: 0.1,
   });
 
+  const { activeCardId, setActiveCard } = useActiveVideoCard();
+  const isActiveCard = activeCardId === project.id;
+
   const randomBackground = useMemo(() => {
     const hash = project.name.split("").reduce((acc, char) => {
       return char.charCodeAt(0) + ((acc << 5) - acc);
@@ -88,6 +92,7 @@ export const Card = ({
 
   const startVideoAnimation = () => {
     if (thumbnail && videoReady && videoRef.current) {
+      setActiveCard(project.id);
       videoRef.current.currentTime = 0;
       const playPromise = videoRef.current.play();
       if (playPromise !== undefined) {
@@ -96,12 +101,21 @@ export const Card = ({
     }
   };
 
-  const stopVideoAnimation = () => {
+  const stopVideoAnimation = useCallback(() => {
     if (thumbnail && videoReady && videoRef.current) {
       videoRef.current.pause();
       videoRef.current.currentTime = 0;
     }
-  };
+  }, [thumbnail, videoReady]);
+
+  // Auto-stop video when another card becomes active
+  useEffect(() => {
+    if (!isActiveCard && videoRef.current && !videoRef.current.paused) {
+      stopVideoAnimation();
+      setIsHovered(false);
+      setIsTouched(false);
+    }
+  }, [isActiveCard, stopVideoAnimation]);
 
   const handleMouseEnter = () => {
     if (isMobile()) return;
@@ -115,8 +129,7 @@ export const Card = ({
     stopVideoAnimation();
   };
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    e.preventDefault();
+  const handleTouchStart = () => {
     setIsTouched(true);
     setIsHovered(true);
     startVideoAnimation();
@@ -128,9 +141,9 @@ export const Card = ({
   };
 
   const handleTouchEnd = () => {
+    // Don't stop the video on touch end - let it continue playing
     setIsTouched(false);
-    setIsHovered(false);
-    stopVideoAnimation();
+    // Keep isHovered true to maintain video playback and glint effect
 
     // Clear any existing timeout
     if (animationTimeoutRef.current) {
@@ -174,7 +187,7 @@ export const Card = ({
       ref={combinedRef}
       className={cn(
         "group glint-card-wrapper cursor-pointer w-full card-item",
-        { "touch-active": isTouched }, // Add touch-active class for mobile glint
+        { "touch-active": isActiveCard && (isTouched || isHovered) }, // Add touch-active class for mobile glint only when active
         className,
       )}
       data-animate={shouldAnimate}
@@ -218,7 +231,7 @@ export const Card = ({
               "h-full w-full object-cover transition-all duration-300",
               thumbnail &&
                 videoReady &&
-                (isHovered || isTouched) &&
+                (isActiveCard && (isHovered || isTouched)) &&
                 "opacity-0",
             )}
             style={{ clipPath: `url(#rounded-diagonal-cut-${project.id})` }}
@@ -231,7 +244,7 @@ export const Card = ({
               className={cn(
                 "absolute inset-0 h-full w-full object-cover transition-all duration-300",
                 videoReady
-                  ? cn("opacity-0", (isHovered || isTouched) && "opacity-100")
+                  ? cn("opacity-0", (isActiveCard && (isHovered || isTouched)) && "opacity-100")
                   : "hidden",
               )}
               style={{ clipPath: `url(#rounded-diagonal-cut-${project.id})` }}
@@ -270,11 +283,11 @@ export const Card = ({
                 <h3
                   className={cn(
                     "font-nord text-xl font-bold italic mb-1 transition-colors duration-300",
-                    isHovered ? "text-muted" : "text-white",
+                    (isActiveCard && isHovered) ? "text-muted" : "text-white",
                   )}
                 >
                   <LineSweepText
-                    animate={isHovered || isTouched}
+                    animate={(isActiveCard && isHovered) || isTouched}
                     className="text-sm 2xl:text-base"
                   >
                     {project.name}

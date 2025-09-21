@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "../common/Button";
 import { LineSweepText } from "../common/LineSweepText";
 import { useContactModal } from "../../hooks/useContactModal";
+import { useLenis } from "../../hooks/useLenis";
 import { VideoShowcase } from "../showcase/VideoShowcase";
 import { useBackgroundImageStore } from "../../hooks/useBackgroundImageStore";
 import { Container } from "../layout/Container";
@@ -15,6 +16,14 @@ export const About = () => {
   const { setBackground } = useBackgroundImageStore();
 
   const { openContactModal } = useContactModal();
+  const { scrollTo } = useLenis();
+
+  const scrollToShowreel = () => {
+    scrollTo('[data-id="showreel-about"]', {
+      offset: -200,
+      duration: 1.5,
+    });
+  };
 
   useEffect(() => {
     setBackground(
@@ -27,7 +36,7 @@ export const About = () => {
         },
       },
       "About",
-      "/about", // Pass route information for optimization
+      "/about",
     );
 
     return () => setBackground(null, "About");
@@ -59,11 +68,11 @@ export const About = () => {
                   <Button
                     glint={true}
                     as="button"
-                    className="ButtonText px-8 py-3 inline-block w-auto"
-                    onClick={openContactModal}
+                    className="ButtonText"
+                    onClick={scrollToShowreel}
                     proximityIntensity={true}
                   >
-                    {t("nav.contact")}
+                    {t("nav.showreel")}
                   </Button>
                 </div>
               </div>
@@ -122,11 +131,11 @@ export const About = () => {
             <Button
               glint={true}
               as="button"
-              className="ButtonText px-8 py-3 inline-block w-auto"
-              onClick={openContactModal}
+              className="ButtonText"
+              onClick={scrollToShowreel}
               proximityIntensity={true}
             >
-              {t("nav.contact")}
+              {t("nav.showreel")}
             </Button>
           </div>
         </Container>
@@ -200,7 +209,7 @@ export const About = () => {
               <Button
                 glint={true}
                 as="button"
-                className="ButtonText px-8 py-3 inline-block w-auto"
+                className="ButtonText"
                 onClick={openContactModal}
                 proximityIntensity={true}
               >

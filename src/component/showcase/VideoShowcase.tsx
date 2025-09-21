@@ -15,11 +15,11 @@ export const VideoShowcase = ({
   className,
   border = false,
 }: VideoShowcaseProps) => {
-  const { video } = data;
+  const { video, id } = data;
   const videoUrl = getVideoUrl(video.src);
 
   return (
-    <div className={cn("w-full", className)}>
+    <div className={cn("w-full", className)} data-id={id}>
       <div
         className={cn(
           "w-full aspect-video overflow-hidden",

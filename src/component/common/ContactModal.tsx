@@ -412,7 +412,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                 type="submit"
                 disabled={isSubmitting}
                 glint={!isSubmitting}
-                className="text-sm"
+                className=""
                 proximityIntensity={true}
               >
                 {isSubmitting
