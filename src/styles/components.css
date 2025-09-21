@@ -14,7 +14,7 @@
   /* Paragraph - Description default styling */
   .paragraph {
     @apply text-gray leading-relaxed;
-    @apply text-base xl:text-base 2xl:text-lg;
+    @apply text-sm xl:text-base 2xl:text-lg;
   }
 
   /* Section Title - Uppercase section headers */

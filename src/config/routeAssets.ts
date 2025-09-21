@@ -1,5 +1,7 @@
 import { ROUTES } from "../constants/routes";
 import { allProjectsSortedByPriority } from "../data/projects";
+import backgroundImage from "../assets/images/background.webp";
+import backgroundMobileImage from "../assets/images/background_mobile.png";
 
 export interface RouteAssetConfig {
   images?: string[];
@@ -22,6 +24,9 @@ export const ROUTE_ASSETS: Record<string, RouteAssetConfig> = {
 
   [ROUTES.PROJECTS]: {
     images: [
+      // Background images for cache coordination
+      backgroundImage,
+      backgroundMobileImage,
       // All project cover images
       ...allProjectsSortedByPriority.map(
         (project) => `/images/projects/${project.id}/cover.webp`,
@@ -42,6 +47,9 @@ export const ROUTE_ASSETS: Record<string, RouteAssetConfig> = {
 
   [ROUTES.ABOUT]: {
     images: [
+      // Background images for cache coordination
+      backgroundImage,
+      backgroundMobileImage,
       // Add about page specific images here when you have them
       // '/images/about/profile.webp',
       // '/images/about/skills.webp',
@@ -50,7 +58,11 @@ export const ROUTE_ASSETS: Record<string, RouteAssetConfig> = {
   },
 
   [ROUTES.LEGAL]: {
-    images: [],
+    images: [
+      // Background images for cache coordination
+      backgroundImage,
+      backgroundMobileImage,
+    ],
     priority: "low",
   },
 };

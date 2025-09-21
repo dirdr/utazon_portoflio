@@ -43,13 +43,11 @@ export const Home = () => {
     return (
       <Container
         variant="fluid"
-        className="h-[100dvh] flex flex-col justify-end overflow-hidden pb-16"
+        className="h-[100dvh] flex flex-col justify-end overflow-hidden pb-12"
       >
         <div className="flex flex-col">
           <address className="not-italic relative">
-            <p className="paragraph text-muted mb-2">
-              Paris, France
-            </p>
+            <p className="paragraph text-muted mb-2">Paris, France</p>
           </address>
           <header>
             <h1 id="title-heading" className="HeroHeader mb-2">
@@ -96,7 +94,7 @@ export const Home = () => {
   return (
     <Container
       variant="fluid"
-      className="h-full flex flex-col justify-end pb-8 xl:pb-16"
+      className="h-full flex flex-col justify-end pb-4 xl:pb-16"
     >
       <div className="flex justify-between items-end">
         <section className="w-165" aria-labelledby="location-heading">

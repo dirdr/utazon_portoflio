@@ -109,10 +109,16 @@ export const usePreloadAssets = () => {
       });
     }
 
-    // Add appropriate background image based on device type
-    const currentBackgroundImage = isMobileDevice ? backgroundMobileImage : backgroundImage;
+    // Add both desktop and mobile background images for proper cache coordination
     assets.push({
-      url: currentBackgroundImage,
+      url: backgroundImage,
+      loaded: false,
+      error: false,
+      type: "image",
+    });
+
+    assets.push({
+      url: backgroundMobileImage,
       loaded: false,
       error: false,
       type: "image",
@@ -535,8 +541,15 @@ export const usePreloadAssets = () => {
     const currentBackgroundImage = isMobileDevice ? backgroundMobileImage : backgroundImage;
     const currentBackgroundType = isMobileDevice ? "image/png" : "image/webp";
 
+    // Preload both desktop and mobile backgrounds for device switching scenarios
     const criticalAssets = [
       { url: currentBackgroundImage, as: "image", type: currentBackgroundType },
+      // Also preload the alternate device background for faster switching
+      {
+        url: isMobileDevice ? backgroundImage : backgroundMobileImage,
+        as: "image",
+        type: isMobileDevice ? "image/webp" : "image/png"
+      },
     ];
 
     criticalAssets.forEach(({ url, as, type }) => {

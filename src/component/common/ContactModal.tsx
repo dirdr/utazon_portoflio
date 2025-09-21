@@ -207,8 +207,8 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
       )}
 
       {!isSubmitted && (
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-4 lg:gap-6">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-4 lg:gap-6">
             <div>
               <label
                 htmlFor="firstName"
@@ -350,7 +350,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
               name="message"
               value={formData.message}
               onChange={handleInputChange}
-              rows={4}
+              rows={2}
               className={cn(
                 "w-full px-4 py-2 border rounded-lg text-white placeholder-gray-300 resize-none text-sm",
                 "focus:outline-none focus:ring-1 focus:ring-white focus:border-white transition-colors",

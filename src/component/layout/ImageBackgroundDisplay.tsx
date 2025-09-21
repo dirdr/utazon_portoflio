@@ -1,20 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useBackgroundImageStore } from "../../hooks/useBackgroundImageStore";
-import { useRouteBackground } from "../../hooks/useRouteBackground";
 
 export const ImageBackgroundDisplay: React.FC = () => {
-  const routeBackground = useRouteBackground();
-  const { currentBackground, nextBackground, isTransitioning, setBackgroundImage } = useBackgroundImageStore();
+  const { currentBackground, nextBackground, isTransitioning } = useBackgroundImageStore();
 
-  useEffect(() => {
-    setBackgroundImage(routeBackground, "ImageBackgroundDisplay");
-    return () => setBackgroundImage(null, "ImageBackgroundDisplay");
-  }, [routeBackground, setBackgroundImage]);
-  
-  // Skip load state check - assume preloaded assets are ready
-  // Your preload system guarantees these images are cached
-  const isCurrentReady = true;
-  const isNextReady = true;
+  // useTransitionRouter already handles background setting and cache verification
+  // This component only displays the backgrounds that are already verified and ready
+  const isCurrentReady = true; // Already verified by useTransitionRouter
+  const isNextReady = true; // Already verified by useTransitionRouter
 
   // Don't render anything if no background is set
   if (!currentBackground && !nextBackground) {

@@ -298,7 +298,6 @@ export const Card = ({
               glint
               proximityIntensity
               maxDistance={200}
-              className="text-base"
               as="button"
               onClick={handleButtonClick}
               speed={3}

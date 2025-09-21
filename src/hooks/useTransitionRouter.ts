@@ -4,6 +4,9 @@ import { getRouteAssets, shouldPreloadRoute } from "../config/routeAssets";
 import { useLenis } from "./useLenis";
 import { useCanvasReadiness } from "./useCanvasReadiness";
 import { isMobile } from "../utils/mobileDetection";
+import { useBackgroundImageStore } from "./useBackgroundImageStore";
+import backgroundImage from "../assets/images/background.webp";
+import backgroundMobileImage from "../assets/images/background_mobile.png";
 
 const shouldWaitForCanvas = (route: string): boolean => {
   return route === "/about" && !isMobile();
@@ -26,12 +29,22 @@ interface TransitionState {
   fadeInComplete: boolean;
 }
 
+// Helper function to get background for route
+const getBackgroundForRoute = (route: string): string => {
+  // Routes that need background images
+  if (route === "/projects" || route === "/contact" || route === "/showreel" || route === "/legal") {
+    return isMobile() ? backgroundMobileImage : backgroundImage;
+  }
+  return "";
+};
+
 // Router that intercepts navigation and handles smooth transitions
 export const useTransitionRouter = (config: TransitionConfig = {}) => {
   const { duration = 600 } = config;
   const [location, setLocation] = useLocation();
   const { scrollToTop } = useLenis();
   const { areAllCanvasesReady, onCanvasReadyChange, resetAllCanvases } = useCanvasReadiness();
+  const { setBackgroundImage } = useBackgroundImageStore();
   const canvasReadyUnsubscribeRef = useRef<(() => void) | null>(null);
 
 
@@ -131,6 +144,17 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
     const shouldPreload = shouldPreloadRoute(newLocation);
     const cacheUrls = shouldPreload ? getRouteAssets(newLocation) : [];
 
+    setState((prev) => ({ ...prev, progress: 30 }));
+
+    // CRITICAL: Set up the background BEFORE changing location
+    // This ensures the background is ready when the fade-out completes
+    const newBackground = getBackgroundForRoute(newLocation);
+    if (newBackground) {
+      setBackgroundImage(newBackground, "TransitionRouter");
+    } else {
+      setBackgroundImage(null, "TransitionRouter");
+    }
+
     setState((prev) => ({ ...prev, progress: 50 }));
 
     setLocation(newLocation);
@@ -174,7 +198,7 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
       pendingLocation: null,
       fadeInComplete: false,
     }));
-  }, [state.pendingLocation, setLocation, verifyCacheUrls, waitForCanvasReadiness, duration, scrollToTop, resetAllCanvases]);
+  }, [state.pendingLocation, setLocation, verifyCacheUrls, waitForCanvasReadiness, duration, scrollToTop, resetAllCanvases, setBackgroundImage]);
   useEffect(() => {
     return () => {
       if (canvasReadyUnsubscribeRef.current) {
