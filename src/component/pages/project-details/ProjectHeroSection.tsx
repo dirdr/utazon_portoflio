@@ -59,7 +59,7 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
                     <h3 className="SectionTitle">
                       Date
                     </h3>
-                    <p className="font-neue text-gray text-base">
+                    <p className="paragraph">
                       {t(project.date)}
                     </p>
                   </div>
@@ -67,7 +67,7 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
                     <h3 className="SectionTitle">
                       Client
                     </h3>
-                    <p className="font-neue text-gray text-base">
+                    <p className="paragraph">
                       {t(project.client)}
                     </p>
                   </div>
@@ -75,7 +75,7 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
                     <h3 className="SectionTitle">
                       {t("common.roleHeader")}
                     </h3>
-                    <p className="font-neue text-gray text-base">
+                    <p className="paragraph">
                       {t(project.role)}
                     </p>
                   </div>
@@ -127,7 +127,7 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
                     <h3 className="SectionTitle">
                       Date
                     </h3>
-                    <p className="font-neue text-dark-gray text-base">
+                    <p className="paragraph">
                       {t(project.date)}
                     </p>
                   </div>
@@ -135,7 +135,7 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
                     <h3 className="SectionTitle">
                       Client
                     </h3>
-                    <p className="font-neue text-dark-gray text-base">
+                    <p className="paragraph">
                       {t(project.client)}
                     </p>
                   </div>
@@ -143,7 +143,7 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
                     <h3 className="SectionTitle">
                       {t("common.roleHeader")}
                     </h3>
-                    <p className="font-neue text-dark-gray text-base">
+                    <p className="paragraph">
                       {t(project.role)}
                     </p>
                   </div>

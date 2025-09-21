@@ -14,7 +14,7 @@
   /* Paragraph - Description default styling */
   .paragraph {
     @apply text-gray leading-relaxed;
-    @apply text-sm sm:text-base xl:text-base 2xl:text-lg;
+    @apply text-base xl:text-base 2xl:text-lg;
   }
 
   /* Section Title - Uppercase section headers */
@@ -42,7 +42,6 @@
       opacity 0.3s ease,
       filter 0.3s ease;
   }
-
 
   .slider {
     -webkit-appearance: none;
@@ -85,13 +84,13 @@
     overflow: hidden !important;
     position: relative !important;
   }
-  
+
   .react-player > div,
   .react-player__wrapper {
     height: 100% !important;
     width: 100% !important;
   }
-  
+
   .react-player video {
     object-fit: cover !important;
     width: 100% !important;
@@ -100,7 +99,7 @@
     top: 0 !important;
     left: 0 !important;
   }
-  
+
   /* Target all possible ReactPlayer internal elements */
   .react-player__element,
   .react-player__preview,

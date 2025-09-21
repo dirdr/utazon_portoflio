@@ -16,7 +16,7 @@ interface BackgroundImageStore {
   nextBackground: BackgroundConfig | null;
   isTransitioning: boolean;
   setBackgroundImage: (image: string | null, componentId?: string) => void;
-  setBackground: (config: BackgroundConfig | null, componentId?: string) => void;
+  setBackground: (config: BackgroundConfig | null, componentId?: string, route?: string) => void;
 }
 
 const activeBackgroundUsers = new Set<string>();
@@ -36,21 +36,23 @@ export const useBackgroundImageStore = create<BackgroundImageStore>(
       get().setBackground(config, componentId);
     },
 
-    setBackground: (config: BackgroundConfig | null, componentId = "anonymous") => {
+    setBackground: (config: BackgroundConfig | null, componentId = "anonymous", route?: string) => {
       const state = get();
 
       if (config !== null) {
-        // Component is setting a background - add to active users
+        // Skip Three.js background processing for non-about routes
+        if (config.type === 'three' && route && route !== '/about') {
+          return;
+        }
+
         activeBackgroundUsers.add(componentId);
 
-        // Clear any pending clear for this component
         const existingTimeout = clearTimeouts.get(componentId);
         if (existingTimeout) {
           clearTimeout(existingTimeout);
           clearTimeouts.delete(componentId);
         }
 
-        // Check if the new config is the same as current
         const isSameBackground = state.currentBackground &&
           state.currentBackground.type === config.type &&
           state.currentBackground.value === config.value;
@@ -65,7 +67,6 @@ export const useBackgroundImageStore = create<BackgroundImageStore>(
             isTransitioning: true,
           });
 
-          // Complete transition after CSS transition duration
           setTimeout(() => {
             set({
               currentBackground: config,
@@ -74,7 +75,6 @@ export const useBackgroundImageStore = create<BackgroundImageStore>(
             });
           }, 300);
         } else {
-          // First background - set immediately
           set({
             currentBackground: config,
             nextBackground: null,
@@ -82,13 +82,10 @@ export const useBackgroundImageStore = create<BackgroundImageStore>(
           });
         }
       } else {
-        // Component is clearing background - remove from active users
         activeBackgroundUsers.delete(componentId);
 
-        // Only clear if no other components are using backgrounds
         if (activeBackgroundUsers.size === 0) {
           const timeoutId = setTimeout(() => {
-            // Double-check no new users were added
             if (activeBackgroundUsers.size === 0) {
               set({
                 currentBackground: null,

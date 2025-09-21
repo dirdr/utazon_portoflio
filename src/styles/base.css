@@ -1,4 +1,18 @@
 @layer base {
+  :root {
+    /* Mobile viewport units that account for browser UI */
+    --vh: 1vh;
+    --vw: 1vw;
+    --mobile-vh: calc(var(--vh, 1vh) * 100);
+  }
+
+  /* Fallback for older browsers that don't support dvh */
+  @supports not (height: 100dvh) {
+    .h-\[100dvh\] {
+      height: calc(var(--vh, 1vh) * 100);
+    }
+  }
+
   html,
   body {
     overflow-x: hidden;
@@ -6,6 +20,10 @@
 
   body {
     @apply bg-background text-foreground font-neue;
+    /* Ensure proper mobile handling */
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   h1,

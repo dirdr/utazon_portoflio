@@ -72,7 +72,7 @@ export const VideoCarouselShowcase = ({
 
   return (
     <div className={cn("w-full  mx-auto ", className)}>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8 items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-8 items-center">
         <div className="flex items-start">
           <div className="w-px bg-gray-600 mr-6 lg:mr-8 flex-shrink-0 self-stretch"></div>
           <div className="space-y-6 lg:max-w-sm xl:max-w-md 2xl:max-w-xl">
@@ -87,7 +87,7 @@ export const VideoCarouselShowcase = ({
               ).map((paragraph, index) => (
                 <p
                   key={index}
-                  className="text-gray-300 text-base lg:text-sm 2xl:text-base leading-relaxed"
+                  className="paragraph"
                 >
                   {paragraph}
                 </p>
@@ -124,7 +124,7 @@ export const VideoCarouselShowcase = ({
             </AnimatePresence>
           </div>
 
-          <div className="flex justify-center items-center gap-1.5">
+          <div className="flex justify-center items-center gap-1.5 mb-8 lg:mb-0">
             {data.videos.map((_, index) => (
               <motion.button
                 key={index}

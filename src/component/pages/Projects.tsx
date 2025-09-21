@@ -5,6 +5,8 @@ import { Container } from "../layout/Container";
 import { useBackgroundImageStore } from "../../hooks/useBackgroundImageStore";
 import { useEffect } from "react";
 import backgroundImage from "../../assets/images/background.webp";
+import backgroundMobileImage from "../../assets/images/background_mobile.png";
+import { isMobile } from "../../utils/mobileDetection";
 
 export const Projects = () => {
   const { t } = useTranslation();
@@ -13,12 +15,15 @@ export const Projects = () => {
   );
 
   useEffect(() => {
-    setBackgroundImage(backgroundImage, "Projects");
+    const currentBackgroundImage = isMobile()
+      ? backgroundMobileImage
+      : backgroundImage;
+    setBackgroundImage(currentBackgroundImage, "Projects");
     return () => setBackgroundImage(null, "Projects");
   }, [setBackgroundImage]);
 
   return (
-    <Container variant="fluid" className="pt-16 pb-32">
+    <Container variant="fluid" className="pt-12 lg:pt-16 pb-24 lg:pb-32">
       <main>
         <section aria-labelledby="projects-heading">
           <h1 id="projects-heading" className="sr-only">

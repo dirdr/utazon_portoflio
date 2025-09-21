@@ -17,7 +17,6 @@ export const PageTransitionOverlay = ({
 
   useEffect(() => {
     if (isTransitioning && phase === "hidden") {
-      // Start fade in
       setPhase("fading-in");
 
       setTimeout(() => {
@@ -30,7 +29,6 @@ export const PageTransitionOverlay = ({
     } else if (!isTransitioning && phase === "visible") {
       setPhase("fading-out");
 
-      // Hide overlay after fade-out completes
       setTimeout(() => {
         setPhase("hidden");
       }, duration / 2);

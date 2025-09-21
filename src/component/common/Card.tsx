@@ -1,11 +1,12 @@
 import { cn } from "../../utils/cn";
 import { useTranslation } from "react-i18next";
 import { Button } from "./Button";
-import { useMemo, useRef, useState, useCallback } from "react";
+import { useMemo, useRef, useState, useCallback, useEffect } from "react";
 import { LineSweepText } from "./LineSweepText";
 import { useTransitionContext } from "../../hooks/useTransitionContext";
 import { useAnimationControl } from "../../hooks/useAnimationControl";
 import { useProjectGridPreloader } from "../../hooks/useProjectGridPreloader";
+import { isMobile } from "../../utils/mobileDetection";
 
 import p1 from "../../assets/images/card_backgrounds/1.webp";
 import p2 from "../../assets/images/card_backgrounds/2.webp";
@@ -46,6 +47,8 @@ export const Card = ({
   const [videoReady, setVideoReady] = useState(false);
   const [videoError, setVideoError] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isTouched, setIsTouched] = useState(false);
+  const animationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const { ref: animationRef, shouldAnimate } = useAnimationControl({
     threshold: 0.2,
@@ -83,8 +86,7 @@ export const Card = ({
     [animationRef, preloader],
   );
 
-  const handleMouseEnter = () => {
-    setIsHovered(true);
+  const startVideoAnimation = () => {
     if (thumbnail && videoReady && videoRef.current) {
       videoRef.current.currentTime = 0;
       const playPromise = videoRef.current.play();
@@ -94,11 +96,45 @@ export const Card = ({
     }
   };
 
-  const handleMouseLeave = () => {
-    setIsHovered(false);
+  const stopVideoAnimation = () => {
     if (thumbnail && videoReady && videoRef.current) {
       videoRef.current.pause();
       videoRef.current.currentTime = 0;
+    }
+  };
+
+  const handleMouseEnter = () => {
+    if (isMobile()) return;
+    setIsHovered(true);
+    startVideoAnimation();
+  };
+
+  const handleMouseLeave = () => {
+    if (isMobile()) return;
+    setIsHovered(false);
+    stopVideoAnimation();
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    e.preventDefault();
+    setIsTouched(true);
+    setIsHovered(true);
+    startVideoAnimation();
+
+    // Clear any existing timeout
+    if (animationTimeoutRef.current) {
+      clearTimeout(animationTimeoutRef.current);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setIsTouched(false);
+    setIsHovered(false);
+    stopVideoAnimation();
+
+    // Clear any existing timeout
+    if (animationTimeoutRef.current) {
+      clearTimeout(animationTimeoutRef.current);
     }
   };
 
@@ -111,17 +147,38 @@ export const Card = ({
     await navigateWithTransition(`/projects/${project.id}`, { id: project.id });
   };
 
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (animationTimeoutRef.current) {
+        clearTimeout(animationTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  // Conditional event props based on device type
+  const isMobileDevice = isMobile();
+  const eventProps = isMobileDevice
+    ? {
+        onTouchStart: handleTouchStart,
+        onTouchEnd: handleTouchEnd,
+      }
+    : {
+        onMouseEnter: handleMouseEnter,
+        onMouseLeave: handleMouseLeave,
+      };
+
   return (
     <article
       ref={combinedRef}
       className={cn(
         "group glint-card-wrapper cursor-pointer w-full card-item",
+        { "touch-active": isTouched }, // Add touch-active class for mobile glint
         className,
       )}
       data-animate={shouldAnimate}
       style={{ "--glint-card-speed": glintSpeed } as React.CSSProperties}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      {...eventProps}
       onClick={handleClick}
     >
       <div
@@ -158,7 +215,10 @@ export const Card = ({
             alt={image.alt}
             className={cn(
               "h-full w-full object-cover transition-all duration-300",
-              thumbnail && videoReady && "group-hover:opacity-0",
+              thumbnail &&
+                videoReady &&
+                (isHovered || isTouched) &&
+                "opacity-0",
             )}
             style={{ clipPath: `url(#rounded-diagonal-cut-${project.id})` }}
             loading="eager"
@@ -169,7 +229,9 @@ export const Card = ({
               ref={videoRef}
               className={cn(
                 "absolute inset-0 h-full w-full object-cover transition-all duration-300",
-                videoReady ? "opacity-0 group-hover:opacity-100" : "hidden",
+                videoReady
+                  ? cn("opacity-0", (isHovered || isTouched) && "opacity-100")
+                  : "hidden",
               )}
               style={{ clipPath: `url(#rounded-diagonal-cut-${project.id})` }}
               src={thumbnail.src}
@@ -202,7 +264,7 @@ export const Card = ({
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent" />
           <figcaption className="absolute bottom-0 left-0 p-6">
             <div className="flex items-center gap-4">
-              <div className="w-px bg-gray-600 self-stretch min-h-[40px]" />
+              <div className="w-px bg-border self-stretch min-h-[40px]" />
               <div className="flex-1">
                 <h3
                   className={cn(
@@ -211,7 +273,7 @@ export const Card = ({
                   )}
                 >
                   <LineSweepText
-                    animate={isHovered}
+                    animate={isHovered || isTouched}
                     className="text-sm 2xl:text-base"
                   >
                     {project.name}
@@ -225,7 +287,7 @@ export const Card = ({
           </figcaption>
 
           <div className="absolute top-[5%] left-[90%]">
-            <time className="text-muted font-nord font-light text-xs sm:text-sm md:text-lg xl:text-sm 2xl:text-lg">
+            <time className="text-muted font-nord font-light text-[11px] sm:text-sm md:text-lg xl:text-sm 2xl:text-lg">
               {project.date}
             </time>
           </div>

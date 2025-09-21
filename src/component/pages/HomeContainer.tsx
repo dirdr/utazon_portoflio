@@ -87,25 +87,25 @@ export const HomeContainer = () => {
       {isMobileDetected ? (
         <HomeFadeInContainer
           isVisible={videoWorkflow.shouldShowContent}
-          className="h-screen relative z-10"
+          className="h-[100dvh] relative z-10 flex flex-col"
           delay={isFreshLoad ? 50 : 0}
           instantForSPA={!isFreshLoad}
           transitionDuration={400}
         >
           <Navbar />
-          <main className="absolute inset-0 top-auto overflow-hidden">
+          <main className="flex-1 flex flex-col overflow-hidden">
             <Home />
           </main>
         </HomeFadeInContainer>
       ) : (
         <HomeFadeInContainer
           isVisible={videoWorkflow.shouldShowContent}
-          className="h-screen relative z-10"
+          className="h-[100dvh] relative z-10 flex flex-col"
           delay={isFreshLoad ? 300 : 0}
           instantForSPA={!isFreshLoad}
         >
           <Navbar />
-          <main className="absolute inset-0 top-auto overflow-hidden">
+          <main className="flex-1 flex flex-col overflow-hidden">
             <Home />
           </main>
         </HomeFadeInContainer>

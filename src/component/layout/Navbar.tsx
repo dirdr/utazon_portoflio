@@ -174,10 +174,12 @@ export const Navbar = () => {
 
   return (
     <nav className="w-full z-50 bg-transparent relative" ref={menuRef}>
-      <div className={cn(
-        "w-full px-4 lg:px-12 pt-4 pb-0 xl:py-8 relative",
-        isMenuOpen ? "z-50" : ""
-      )}>
+      <div
+        className={cn(
+          "w-full px-4 lg:px-12 pt-4 pb-0  relative",
+          isMenuOpen ? "z-50" : "",
+        )}
+      >
         <WrapperContent />
       </div>
     </nav>

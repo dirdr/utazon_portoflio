@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "../common/Button";
 import { LineSweepText } from "../common/LineSweepText";
@@ -6,23 +6,13 @@ import { useContactModal } from "../../hooks/useContactModal";
 import { VideoShowcase } from "../showcase/VideoShowcase";
 import { useBackgroundImageStore } from "../../hooks/useBackgroundImageStore";
 import { Container } from "../layout/Container";
+import { logoRendered } from "../../hooks/usePreloadAssets";
 
 export const About = () => {
   const [planeOpaque] = useState(false);
   const [bloomEnabled] = useState(true);
   const { t } = useTranslation();
   const { setBackground } = useBackgroundImageStore();
-
-  const titleContent = useMemo(() => {
-    const title = t("home.title");
-    return title.includes("\n")
-      ? title.split("\n").map((line, index) => (
-          <span key={index} className="block">
-            {line}
-          </span>
-        ))
-      : title;
-  }, [t]);
 
   const { openContactModal } = useContactModal();
 
@@ -37,6 +27,7 @@ export const About = () => {
         },
       },
       "About",
+      "/about", // Pass route information for optimization
     );
 
     return () => setBackground(null, "About");
@@ -53,10 +44,12 @@ export const About = () => {
             className="h-full"
           >
             <div className="relative h-full">
-              <div className="absolute top-64 left-0 pointer-events-auto max-w-md">
+              <div className="absolute top-64 left-0 pointer-events-auto max-w-lg">
                 <header className="mb-8">
                   <h1 className="HeroHeader">
-                    <LineSweepText duration={6}>{titleContent}</LineSweepText>
+                    <LineSweepText duration={6}>
+                      {t("about.title")}
+                    </LineSweepText>
                   </h1>
                 </header>
 
@@ -81,7 +74,7 @@ export const About = () => {
                 <p className="paragraph">
                   {t("about.services.motionDesign.description")}
                 </p>
-                <div className="h-px bg-gray-400/30 my-10"></div>
+                <div className="h-px bg-border my-10"></div>
 
                 <h2 className="SectionTitle mb-2">
                   {t("about.services.artDirection.title")}
@@ -89,7 +82,7 @@ export const About = () => {
                 <p className="paragraph">
                   {t("about.services.artDirection.description")}
                 </p>
-                <div className="h-px bg-gray-400/30 my-10"></div>
+                <div className="h-px bg-border my-10"></div>
 
                 <h2 className="SectionTitle mb-2">
                   {t("about.services.editingCompositing.title")}
@@ -97,7 +90,7 @@ export const About = () => {
                 <p className="paragraph">
                   {t("about.services.editingCompositing.description")}
                 </p>
-                <div className="h-px bg-gray-400/30 my-10"></div>
+                <div className="h-px bg-border my-10"></div>
               </div>
             </div>
           </Container>
@@ -107,17 +100,20 @@ export const About = () => {
       {/* Mobile version - xl and below */}
       <div className="mb-32 xl:hidden">
         <div className="relative w-full min-h-screen">
-          {/* Logo area with spacer for Three.js background - adjusted for fixed navbar */}
-          <div className="h-[calc(35vh-2rem)] min-h-[128px] w-full mt-16"></div>
+          {/* Mobile logo */}
+          <div className="w-full h-96 sm:h-[28rem] flex items-center justify-center">
+            <img
+              src={logoRendered}
+              alt="Logo"
+              className="w-full h-full object-contain px-8"
+            />
+          </div>
 
-          {/* Main content - positioned below the logo with proper spacing */}
-          <Container
-            variant="fluid"
-            className="mt-20 sm:mt-24"
-          >
+          {/* Main content */}
+          <Container variant="fluid" className="px-4">
             <header className="mb-6">
               <h1 className="HeroHeader">
-                <LineSweepText duration={6}>{titleContent}</LineSweepText>
+                <LineSweepText duration={6}>{t("about.title")}</LineSweepText>
               </h1>
             </header>
 
@@ -144,7 +140,7 @@ export const About = () => {
                 <p className="paragraph">
                   {t("about.services.motionDesign.description")}
                 </p>
-                <div className="h-px bg-gray-400/30 my-8"></div>
+                <div className="h-px bg-border my-8"></div>
               </div>
 
               <div>
@@ -154,7 +150,7 @@ export const About = () => {
                 <p className="paragraph">
                   {t("about.services.artDirection.description")}
                 </p>
-                <div className="h-px bg-gray-400/30 my-8"></div>
+                <div className="h-px bg-border my-8"></div>
               </div>
 
               <div>

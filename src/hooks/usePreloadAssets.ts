@@ -2,6 +2,8 @@ import { useCallback, useState, useRef } from "react";
 import { isMobile } from "../utils/mobileDetection";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import backgroundImage from "../assets/images/background.webp";
+import backgroundMobileImage from "../assets/images/background_mobile.png";
+import logoRendered from "../assets/images/logo_rendered.png";
 import p1 from "../assets/images/card_backgrounds/1.webp";
 import p2 from "../assets/images/card_backgrounds/2.webp";
 import p3 from "../assets/images/card_backgrounds/3.webp";
@@ -85,6 +87,13 @@ export const usePreloadAssets = () => {
         error: false,
         type: "video",
       });
+      // Add mobile logo for About page
+      assets.push({
+        url: logoRendered,
+        loaded: false,
+        error: false,
+        type: "image",
+      });
     } else {
       assets.push({
         url: `/videos/intro/desktop/entry_desktop.mp4`,
@@ -100,8 +109,10 @@ export const usePreloadAssets = () => {
       });
     }
 
+    // Add appropriate background image based on device type
+    const currentBackgroundImage = isMobileDevice ? backgroundMobileImage : backgroundImage;
     assets.push({
-      url: backgroundImage,
+      url: currentBackgroundImage,
       loaded: false,
       error: false,
       type: "image",
@@ -520,8 +531,12 @@ export const usePreloadAssets = () => {
   );
 
   const addResourceHints = useCallback(() => {
+    const isMobileDevice = isMobile();
+    const currentBackgroundImage = isMobileDevice ? backgroundMobileImage : backgroundImage;
+    const currentBackgroundType = isMobileDevice ? "image/png" : "image/webp";
+
     const criticalAssets = [
-      { url: backgroundImage, as: "image", type: "image/webp" },
+      { url: currentBackgroundImage, as: "image", type: currentBackgroundType },
     ];
 
     criticalAssets.forEach(({ url, as, type }) => {
@@ -602,3 +617,6 @@ export const getPreloadedModel = (url: string) => {
 export const isModelPreloaded = (url: string) => {
   return modelCache.has(url);
 };
+
+// Export logo asset for components
+export { logoRendered };

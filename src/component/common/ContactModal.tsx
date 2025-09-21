@@ -138,13 +138,13 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
 
   return (
     <div
-      className="px-6 sm:px-6 lg:px-8 xl:px-16 pt-4 sm:pt-8 lg:pt-12 pb-4 sm:pb-8 lg:pb-12 h-full overflow-y-auto bg-cover bg-center bg-no-repeat relative"
+      className="px-6 sm:px-6 lg:px-8 xl:px-16 pt-6 sm:pt-8 lg:pt-12 pb-6 sm:pb-8 lg:pb-12 h-full overflow-y-auto bg-cover bg-center bg-no-repeat relative"
       style={{
         backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${backgroundImage})`,
       }}
     >
-      <div className="flex justify-between items-center mb-4 sm:mb-8 lg:mb-12">
-        <p className="text-sm md:text-base text-white italic font-nord flex-1 pr-2">
+      <div className="flex justify-between items-center mb-6 sm:mb-8 lg:mb-12">
+        <p className="text-xs sm:text-sm text-white italic font-nord flex-1 pr-2">
           {t(
             "contact.description",
             "Share your vision, I'll help you bring it to life",
@@ -208,7 +208,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
 
       {!isSubmitted && (
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-4 lg:gap-6">
             <div>
               <label
                 htmlFor="firstName"
@@ -272,9 +272,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                 <p className="mt-1 text-xs text-red-400">{errors.lastName}</p>
               )}
             </div>
-          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
             <div>
               <label
                 htmlFor="email"
@@ -372,7 +370,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
             )}
           </div>
 
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4 sm:pt-6 lg:pt-8">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
             <div className="flex items-center gap-3 sm:gap-4 lg:gap-6 order-2 sm:order-1">
               <a
                 href="https://instagram.com/utazon"
@@ -408,7 +406,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
               </a>
             </div>
 
-            <div className="order-1 sm:order-2 mb-4 sm:mb-0">
+            <div className="order-1 sm:order-2">
               <Button
                 as="button"
                 type="submit"

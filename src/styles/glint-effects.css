@@ -94,7 +94,8 @@
     animation: none;
   }
 
-  .glint-card-wrapper:hover::after {
+  .glint-card-wrapper:hover::after,
+  .glint-card-wrapper.touch-active::after {
     opacity: 1;
   }
 

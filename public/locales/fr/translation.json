@@ -18,7 +18,7 @@
     "diveIn": "Entrer"
   },
   "about": {
-    "title": "ARTISTE 3D\nMOTION DESIGNER",
+    "title": "Antoine Vernez",
     "description": "Artiste 3D et Motion Designer à Paris, je conçois avec grande précision des univers aux visuels soignés et percutants au service des marques, agences et artistes.",
     "commitment": "Engagement",
     "commitmentDesc": "Chaque projet est une collaboration unique. Je m'implique pleinement pour comprendre vos besoins et traduire votre vision en images fortes et mémorables.",
@@ -47,7 +47,7 @@
       "date": "2024"
     },
     "dune": {
-      "title": "DUNE – The Fremen Ambush",
+      "title": "DUNE Short Film",
       "header": "Cinématique 3D",
       "description": "Court-métrage personnel entièrement réalisé en 3D, recréant l'esthétique unique de Dune. Micro-scénario et mise en scène immersive autour d'une embuscade.",
       "role": "Création complète",
@@ -79,7 +79,7 @@
       "date": "2024"
     },
     "fooh": {
-      "title": "FOOH – Fake Out Of Home",
+      "title": "FOOH",
       "header": "3D Motion",
       "description": "Projets de simulation 3D intégrée en environnement réel pour démontrer l'impact des campagnes publicitaires dans l'espace public. De la création complète d'univers conceptuels aux éléments clés pour des marques comme Gérard Darel : modélisation, texturing, particules et compositing.",
       "role": "Création complète & éléments clés 3D",
@@ -87,7 +87,7 @@
       "date": "2024"
     },
     "karmin-corp-lec-reveal": {
-      "title": "KARMINE CORP – LEC Reveal",
+      "title": "KARMINE CORP",
       "header": "Cinématique 3D",
       "description": "Vidéo hommage en 3D pour l'entrée de la Karmine Corp en LEC. Univers épique et mise en scène monumentale autour du trophée.",
       "role": "Création complète",
@@ -95,7 +95,7 @@
       "date": "2024"
     },
     "limova-movali": {
-      "title": "LIMOVA & MOVALI – Kaitonom.IA",
+      "title": "LIMOVA & MOVALI",
       "header": "2D | 3D Motion",
       "description": "Motion design 2D et 3D pour valoriser les fonctionnalités de deux intelligences artificielles destinées à organiser et assister. Projet réalisé en agence.",
       "role": "Motion Design 2D & 3D",

@@ -41,18 +41,18 @@ export const Home = () => {
 
   if (isMobile()) {
     return (
-      <Container variant="fluid" className="h-dvh h-screen flex flex-col justify-end overflow-hidden pb-8">
+      <Container
+        variant="fluid"
+        className="h-[100dvh] flex flex-col justify-end overflow-hidden pb-16"
+      >
         <div className="flex flex-col">
           <address className="not-italic relative">
-            <p className="text-base sm:text-lg md:text-xl text-muted mb-2">
+            <p className="paragraph text-muted mb-2">
               Paris, France
             </p>
           </address>
           <header>
-            <h1
-              id="title-heading"
-              className="HeroHeader mb-2"
-            >
+            <h1 id="title-heading" className="HeroHeader mb-2">
               <LineSweepText duration={6}>{titleContent}</LineSweepText>
             </h1>
           </header>
@@ -61,9 +61,7 @@ export const Home = () => {
             <h2 id="description-heading" className="sr-only">
               Description
             </h2>
-            <p className="paragraph mb-4">
-              {t("home.description")}
-            </p>
+            <p className="paragraph mb-4">{t("home.description")}</p>
           </section>
 
           <div className="flex gap-4 md:gap-8 justify-start">
@@ -96,7 +94,10 @@ export const Home = () => {
   }
 
   return (
-    <Container variant="fluid" className="h-full flex flex-col justify-end pb-8 xl:pb-16">
+    <Container
+      variant="fluid"
+      className="h-full flex flex-col justify-end pb-8 xl:pb-16"
+    >
       <div className="flex justify-between items-end">
         <section className="w-165" aria-labelledby="location-heading">
           <address className="not-italic relative">
@@ -106,10 +107,7 @@ export const Home = () => {
                 isPlaying={isSoundPlaying}
                 className="self-start"
               />
-              <p
-                id="location-heading"
-                className="paragraph text-muted"
-              >
+              <p id="location-heading" className="paragraph text-muted">
                 Paris, France
               </p>
             </div>
@@ -123,9 +121,7 @@ export const Home = () => {
           <h2 id="intro-heading" className="sr-only">
             Introduction
           </h2>
-          <p className="paragraph mb-8">
-            {t("home.description")}
-          </p>
+          <p className="paragraph mb-8">{t("home.description")}</p>
           <nav className="flex gap-8" aria-label="Actions principales">
             <Button
               as="button"
