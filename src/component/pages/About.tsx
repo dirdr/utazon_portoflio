@@ -98,74 +98,76 @@ export const About = () => {
       </div>
 
       {/* Mobile version - xl and below */}
-      <div className="mb-32 xl:hidden">
-        <div className="relative w-full min-h-screen">
-          {/* Mobile logo */}
-          <div className="w-full h-96 sm:h-[28rem] flex items-center justify-center">
-            <img
-              src={logoRendered}
-              alt="Logo"
-              className="w-full h-full object-contain px-8"
-            />
-          </div>
-
-          {/* Main content */}
-          <Container variant="fluid" className="px-4">
-            <header className="mb-6">
-              <h1 className="HeroHeader">
-                <LineSweepText duration={6}>{t("about.title")}</LineSweepText>
-              </h1>
-            </header>
-
-            <p className="paragraph mb-6">{t("home.description")}</p>
-
-            <div className="flex justify-start mb-16">
-              <Button
-                glint={true}
-                as="button"
-                className="ButtonText px-8 py-3 inline-block w-auto"
-                onClick={openContactModal}
-                proximityIntensity={true}
-              >
-                {t("nav.contact")}
-              </Button>
-            </div>
-
-            {/* Services section */}
-            <div className="space-y-8">
-              <div>
-                <h2 className="SectionTitle mb-2">
-                  {t("about.services.motionDesign.title")}
-                </h2>
-                <p className="paragraph">
-                  {t("about.services.motionDesign.description")}
-                </p>
-                <div className="h-px bg-border my-8"></div>
-              </div>
-
-              <div>
-                <h2 className="SectionTitle mb-2">
-                  {t("about.services.artDirection.title")}
-                </h2>
-                <p className="paragraph">
-                  {t("about.services.artDirection.description")}
-                </p>
-                <div className="h-px bg-border my-8"></div>
-              </div>
-
-              <div>
-                <h2 className="SectionTitle mb-2">
-                  {t("about.services.editingCompositing.title")}
-                </h2>
-                <p className="paragraph">
-                  {t("about.services.editingCompositing.description")}
-                </p>
-              </div>
-            </div>
-          </Container>
+      <div className="xl:hidden">
+        {/* Mobile logo section */}
+        <div className="w-full h-96 sm:h-[28rem] flex items-center justify-center">
+          <img
+            src={logoRendered}
+            alt="Logo"
+            className="w-full h-full object-contain px-8"
+          />
         </div>
+
+        {/* Hero content section */}
+        <Container variant="fluid" className="px-4 mb-16">
+          <header className="mb-6">
+            <h1 className="HeroHeader">
+              <LineSweepText duration={6}>{t("about.title")}</LineSweepText>
+            </h1>
+          </header>
+
+          <p className="paragraph mb-6">{t("home.description")}</p>
+
+          <div className="flex justify-start">
+            <Button
+              glint={true}
+              as="button"
+              className="ButtonText px-8 py-3 inline-block w-auto"
+              onClick={openContactModal}
+              proximityIntensity={true}
+            >
+              {t("nav.contact")}
+            </Button>
+          </div>
+        </Container>
+
+        {/* Services section */}
+        <Container variant="fluid" className="px-4 mb-32">
+          <div className="space-y-8">
+            <div>
+              <h2 className="SectionTitle mb-2">
+                {t("about.services.motionDesign.title")}
+              </h2>
+              <p className="paragraph">
+                {t("about.services.motionDesign.description")}
+              </p>
+              <div className="h-px bg-border my-8"></div>
+            </div>
+
+            <div>
+              <h2 className="SectionTitle mb-2">
+                {t("about.services.artDirection.title")}
+              </h2>
+              <p className="paragraph">
+                {t("about.services.artDirection.description")}
+              </p>
+              <div className="h-px bg-border my-8"></div>
+            </div>
+
+            <div>
+              <h2 className="SectionTitle mb-2">
+                {t("about.services.editingCompositing.title")}
+              </h2>
+              <p className="paragraph">
+                {t("about.services.editingCompositing.description")}
+              </p>
+            </div>
+          </div>
+        </Container>
       </div>
-      <Container variant="constrained" className="px-4 lg:px-32">
+
+      {/* VideoShowcase section */}
+      <Container variant="constrained" className="px-4 lg:px-32 mb-32">
         <VideoShowcase
           data={{
             type: "video",
@@ -184,7 +186,7 @@ export const About = () => {
             Cinema 4D, Blender, Unreal Engine 5, After Effects, DaVinci Resolve
           </p>
         </div>
-        <section className="my-48 lg:my-64">
+        <section className="my-32 lg:my-64">
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="PageTitle">
               <LineSweepText duration={6}>

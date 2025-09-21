@@ -149,9 +149,10 @@ export const Card = ({
 
   // Cleanup timeout on unmount
   useEffect(() => {
+    const timeoutRef = animationTimeoutRef.current;
     return () => {
-      if (animationTimeoutRef.current) {
-        clearTimeout(animationTimeoutRef.current);
+      if (timeoutRef) {
+        clearTimeout(timeoutRef);
       }
     };
   }, []);

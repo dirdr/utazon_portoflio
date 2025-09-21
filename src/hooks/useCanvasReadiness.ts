@@ -31,7 +31,7 @@ export const useCanvasReadinessState = () => {
   const resetAllCanvases = useCallback(() => {
     setCanvasStates(new Map());
     setTimeout(() => notifyListeners(false), 0);
-  }, [notifyListeners, canvasStates.size]);
+  }, [notifyListeners]);
 
   const registerCanvas = useCallback((id: string) => {
     setCanvasStates(prev => {
