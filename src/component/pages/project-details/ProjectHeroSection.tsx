@@ -95,7 +95,7 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
           <BackButton to="/projects" />
         </div>
 
-        <div className="absolute top-0 right-0 h-full flex items-center mr-4 lg:mr-32">
+        <div className="absolute top-0 right-0 h-full flex items-center pr-4 xl:pr:24 2xl:pr-32">
           <div className="w-full max-w-md xl:max-w-lg 2xl:max-w-xl">
             <div className="pl-8 pr-4">
               <h1 className="PageTitle mb-1">{t(project.title)}</h1>
