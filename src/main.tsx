@@ -13,14 +13,45 @@ function setViewportHeight() {
   document.documentElement.style.setProperty('--vh', `${vh}px`);
 }
 
-// Set on load
-setViewportHeight();
+// Enhanced viewport height management for better mobile transition support
+function initializeViewportHeight() {
+  setViewportHeight();
 
-// Update on resize (including orientation change)
-window.addEventListener('resize', setViewportHeight);
-window.addEventListener('orientationchange', () => {
-  setTimeout(setViewportHeight, 100);
-});
+  // Update on resize with debouncing for performance
+  let resizeTimeout: number;
+  const debouncedResize = () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = window.setTimeout(setViewportHeight, 16);
+  };
+
+  window.addEventListener('resize', debouncedResize);
+
+  // Handle orientation changes with multiple checks for mobile browser reliability
+  window.addEventListener('orientationchange', () => {
+    // Immediate update
+    setViewportHeight();
+    // Follow-up updates to catch browser UI animations
+    setTimeout(setViewportHeight, 100);
+    setTimeout(setViewportHeight, 300);
+    setTimeout(setViewportHeight, 500);
+  });
+
+  // Handle scroll events that might trigger mobile browser UI changes
+  let scrollTimeout: number;
+  window.addEventListener('scroll', () => {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = window.setTimeout(setViewportHeight, 100);
+  }, { passive: true });
+
+  // Handle focus events that might change mobile browser UI
+  window.addEventListener('focusin', setViewportHeight);
+  window.addEventListener('focusout', () => {
+    setTimeout(setViewportHeight, 100);
+  });
+}
+
+// Initialize enhanced viewport height management
+initializeViewportHeight();
 
 const rootElement = document.getElementById("root");
 if (!rootElement) {
