@@ -42,7 +42,7 @@ export const PageTransitionOverlay = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-black transition-opacity ease-in-out"
+      className="fixed inset-0 z-50 bg-black transition-opacity ease-in-out h-dvh w-full"
       style={{
         opacity: shouldFadeOut ? 0 : opacity,
         transitionDuration: `${duration / 2}ms`,
