@@ -6,11 +6,29 @@
     --mobile-vh: calc(var(--vh, 1vh) * 100);
   }
 
-  /* Fallback for older browsers that don't support dvh */
+  /* Enhanced fallback for older browsers that don't support dvh */
   @supports not (height: 100dvh) {
+    .h-dvh,
     .h-\[100dvh\] {
       height: calc(var(--vh, 1vh) * 100);
     }
+
+    .min-h-dvh {
+      min-height: calc(var(--vh, 1vh) * 100);
+    }
+
+    .max-h-dvh {
+      max-height: calc(var(--vh, 1vh) * 100);
+    }
+  }
+
+  /* Utility for preventing scroll */
+  .prevent-scroll {
+    overflow: hidden !important;
+    touch-action: none !important;
+    height: 100dvh !important;
+    position: fixed !important;
+    width: 100% !important;
   }
 
   html,

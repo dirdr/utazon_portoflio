@@ -13,7 +13,7 @@ export interface SEOProps {
 }
 
 const DEFAULT_SEO: SEOProps = {
-  title: "utazon - Antoine Vernez | Creative Director & Visual Artist",
+  title: "utazon - Antoine Vernez | 3D Artist & Motion Designer",
   description:
     "Portfolio of Antoine Vernez (utazon) - Creative Director, Visual Artist and Video Producer. Discover innovative projects in advertising, music videos, and digital art.",
   keywords:

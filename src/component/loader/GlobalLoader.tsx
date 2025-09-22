@@ -7,7 +7,7 @@ export const GlobalLoader = () => {
 
   return (
     <motion.div
-      className="h-screen w-screen flex items-center justify-center bg-black text-white"
+      className="h-dvh w-screen flex items-center justify-center bg-black text-white"
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.8, ease: "easeInOut" }}

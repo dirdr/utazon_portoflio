@@ -79,7 +79,7 @@ export const FullscreenVideoModal = ({
 
   return createPortal(
     <div
-      className="fixed inset-0 z-50 bg-black"
+      className="fixed inset-0 z-50 bg-black h-dvh w-full"
       onClick={handleBackdropClick}
       style={{ touchAction: 'none' }}
     >

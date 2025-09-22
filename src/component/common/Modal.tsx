@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { cn } from "../../utils/cn";
 import { OVERLAY_Z_INDEX } from "../../constants/overlayZIndex";
+import { ScrollPrevention } from "../../utils/scrollPrevention";
 
 interface ModalProps {
   isOpen: boolean;
@@ -51,13 +52,13 @@ export const Modal: React.FC<ModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       previousActiveElement.current = document.activeElement as HTMLElement;
-      document.body.style.overflow = "hidden";
+      ScrollPrevention.prevent();
 
       if (modalRef.current) {
         modalRef.current.focus();
       }
     } else {
-      document.body.style.overflow = "";
+      ScrollPrevention.restore();
       if (previousActiveElement.current) {
         previousActiveElement.current.focus();
         previousActiveElement.current = null;
@@ -65,7 +66,7 @@ export const Modal: React.FC<ModalProps> = ({
     }
 
     return () => {
-      document.body.style.overflow = "";
+      ScrollPrevention.restore();
     };
   }, [isOpen]);
 
@@ -111,7 +112,7 @@ export const Modal: React.FC<ModalProps> = ({
   const modalContent = (
     <div
       className={cn(
-        "fixed inset-0",
+        "fixed inset-0 h-dvh w-full",
         isClosing ? "animate-modal-backdrop-out" : "animate-modal-backdrop-in",
       )}
       style={{
