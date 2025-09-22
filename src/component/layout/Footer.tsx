@@ -86,7 +86,7 @@ export const Footer = () => {
                 </Link>
                 <button
                   onClick={handleContactClick}
-                  className="text-white hover:text-white transition-colors duration-200 text-xs 2xl:text-sm text-left"
+                  className="text-white hover:text-white transition-colors duration-200 text-xs 2xl:text-sm text-left cursor-pointer"
                 >
                   {t("nav.contact")}
                 </button>
