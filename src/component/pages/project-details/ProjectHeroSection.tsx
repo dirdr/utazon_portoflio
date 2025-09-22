@@ -91,7 +91,7 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
           />
         </div>
 
-        <div className="absolute top-8 left-4 lg:left-12 2xl:left-32 z-20">
+        <div className="absolute top-8 left-4 lg:left-12 xl:left-24 2xl:left-32 z-20">
           <BackButton to="/projects" />
         </div>
 
