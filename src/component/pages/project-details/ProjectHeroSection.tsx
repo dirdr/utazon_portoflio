@@ -91,11 +91,11 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
           />
         </div>
 
-        <div className="absolute top-8 left-32 z-20">
+        <div className="absolute top-8 left-4 lg:left-12 2xl:left-32 z-20">
           <BackButton to="/projects" />
         </div>
 
-        <div className="absolute top-0 right-0 h-full flex items-center pr-4 xl:pr:24 2xl:pr-32">
+        <div className="absolute top-0 right-0 h-full flex items-center pr-4 lg:pr-12 xl:pr-24 2xl:pr-32">
           <div className="w-full max-w-md xl:max-w-lg 2xl:max-w-xl">
             <div className="pl-8 pr-4">
               <h1 className="PageTitle mb-1">{t(project.title)}</h1>
