@@ -138,6 +138,12 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
     }
 
     const blackScreenStartTime = Date.now();
+
+    // Delay scroll to ensure screen is fully black
+    setTimeout(() => {
+      console.log("📜 ROUTER: Executing scroll", { timestamp: Date.now(), currentScrollY: window.scrollY });
+      scrollToTop();
+    }, 50);
     const minBlackScreenDuration = duration / 3;
     const newLocation = state.pendingLocation;
 
@@ -163,8 +169,6 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
       currentLocation: newLocation,
       progress: 60,
     }));
-
-    scrollToTop();
 
     // Reset Canvas states for new route - ensures fresh Canvas registration
     resetAllCanvases();
@@ -212,6 +216,7 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
       if (newLocation === state.currentLocation) {
         return;
       }
+
 
       setState((prev) => ({
         ...prev,

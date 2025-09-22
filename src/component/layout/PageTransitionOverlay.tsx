@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { ScrollPrevention } from "../../utils/scrollPrevention";
 import { OVERLAY_Z_INDEX } from "../../constants/overlayZIndex";
 
 interface PageTransitionOverlayProps {
@@ -20,7 +19,6 @@ export const PageTransitionOverlay = ({
   useEffect(() => {
     if (isTransitioning && phase === "hidden") {
       setPhase("fading-in");
-      ScrollPrevention.prevent();
 
       setTimeout(() => {
         setPhase("visible");
@@ -34,7 +32,6 @@ export const PageTransitionOverlay = ({
 
       setTimeout(() => {
         setPhase("hidden");
-        ScrollPrevention.restore();
       }, duration / 2);
     }
   }, [isTransitioning, phase, duration, onFadeInComplete]);
