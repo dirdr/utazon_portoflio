@@ -2,7 +2,7 @@
   /* Hero Header - LineSweepText default styling */
   .HeroHeader {
     @apply font-nord italic text-muted tracking-tight leading-tight;
-    @apply text-3xl sm:text-4xl md:text-5xl xl:text-4xl 2xl:text-5xl;
+    @apply text-2xl sm:text-3xl md:text-4xl 2xl:text-5xl;
   }
 
   /* Page Title - Main page titles */

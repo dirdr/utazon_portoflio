@@ -2,25 +2,9 @@ import { Card } from "../common/Card";
 import { allProjectsSortedByPriority } from "../../data/projects";
 import { useTranslation } from "react-i18next";
 import { Container } from "../layout/Container";
-import { useBackgroundImageStore } from "../../hooks/useBackgroundImageStore";
-import { useEffect } from "react";
-import backgroundImage from "../../assets/images/background.webp";
-import backgroundMobileImage from "../../assets/images/background_mobile.png";
-import { isMobile } from "../../utils/mobileDetection";
 
 export const Projects = () => {
   const { t } = useTranslation();
-  const setBackgroundImage = useBackgroundImageStore(
-    (state) => state.setBackgroundImage,
-  );
-
-  useEffect(() => {
-    const currentBackgroundImage = isMobile()
-      ? backgroundMobileImage
-      : backgroundImage;
-    setBackgroundImage(currentBackgroundImage, "Projects");
-    return () => setBackgroundImage(null, "Projects");
-  }, [setBackgroundImage]);
 
   return (
     <Container variant="fluid" className="pt-12 lg:pt-16 pb-24 lg:pb-32">
