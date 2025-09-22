@@ -245,6 +245,10 @@ export const usePreloadAssets = () => {
     const startTime = Date.now();
     debugLog(`🎥 Starting video preload: ${url}`);
 
+    // Check if this is an intro video (should load without timeout)
+    const isIntroVideo = url.includes('/videos/intro/');
+    debugLog(`Video ${url} is intro video: ${isIntroVideo}`);
+
     return new Promise((resolve) => {
       debugLog(`Fetching video HEAD request: ${url}`);
 
@@ -276,9 +280,12 @@ export const usePreloadAssets = () => {
         video.addEventListener("error", handleVideoError, { once: true });
         video.src = url;
 
-        setTimeout(() => {
-          handleVideoReady();
-        }, 15000);
+        // Only set timeout for non-intro videos
+        if (!isIntroVideo) {
+          setTimeout(() => {
+            handleVideoReady();
+          }, 15000);
+        }
 
         return;
       }
@@ -364,8 +371,8 @@ export const usePreloadAssets = () => {
               video.remove?.();
             };
 
-            // Add timeout for video preloading
-            const timeoutId = setTimeout(() => {
+            // Add timeout for video preloading (skip for intro videos)
+            const timeoutId = !isIntroVideo ? setTimeout(() => {
               if (!resolved) {
                 resolved = true;
                 const duration = Date.now() - videoStartTime;
@@ -380,7 +387,7 @@ export const usePreloadAssets = () => {
                 cleanup();
                 resolve(); // Don't fail on timeout, just continue
               }
-            }, 15000);
+            }, 15000) : null;
 
             video.addEventListener("loadedmetadata", handleSuccess);
             video.addEventListener("error", handleError);
