@@ -43,7 +43,7 @@ export const Home = () => {
     return (
       <Container
         variant="fluid"
-        className="h-[100dvh] flex flex-col justify-end overflow-hidden pb-12"
+        className="h-[100dvh] flex flex-col justify-end overflow-hidden pb-8"
       >
         <div className="flex flex-col">
           <address className="not-italic relative">

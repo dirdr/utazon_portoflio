@@ -8,6 +8,7 @@ import { VideoShowcase } from "../showcase/VideoShowcase";
 import { useBackgroundImageStore } from "../../hooks/useBackgroundImageStore";
 import { Container } from "../layout/Container";
 import { logoRendered } from "../../hooks/usePreloadAssets";
+import { useMediaQuery } from "../../hooks/useMediaQuery";
 
 export const About = () => {
   const [planeOpaque] = useState(false);
@@ -25,23 +26,24 @@ export const About = () => {
     });
   };
 
+  const isDesktop = useMediaQuery("(min-width: 1280px)");
   useEffect(() => {
-    setBackground(
-      {
-        type: "three",
-        value: "about-logo",
-        options: {
-          planeOpaque,
-          bloomEnabled,
+    if (isDesktop) {
+      setBackground(
+        {
+          type: "three",
+          value: "about-logo",
+          options: { planeOpaque, bloomEnabled },
         },
-      },
-      "About",
-      "/about",
-    );
+        "About",
+        "/about",
+      );
+    } else {
+      setBackground(null, "About");
+    }
 
     return () => setBackground(null, "About");
-  }, [setBackground, planeOpaque, bloomEnabled]);
-
+  }, [isDesktop, setBackground, planeOpaque, bloomEnabled]);
   return (
     <>
       {/* Desktop version - xl and above */}
@@ -106,10 +108,10 @@ export const About = () => {
         </div>
       </div>
 
-      {/* Mobile version - xl and below */}
+      {/* Mobile version - lg and below */}
       <div className="xl:hidden">
         {/* Mobile logo section */}
-        <div className="w-full h-96 sm:h-[28rem] flex items-center justify-center">
+        <div className="w-full flex items-center justify-center">
           <img
             src={logoRendered}
             alt="Logo"
@@ -176,7 +178,7 @@ export const About = () => {
       </div>
 
       {/* VideoShowcase section */}
-      <Container variant="constrained" className="px-4 lg:px-32 my-16">
+      <Container variant="constrained" className="px-4 lg:px-32 mt-16">
         <VideoShowcase
           data={{
             type: "video",
@@ -190,7 +192,7 @@ export const About = () => {
           }}
           border={true}
         />
-        <section className="my-16">
+        <section className="mt-16 pb-24">
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="PageTitle">
               <LineSweepText duration={6}>

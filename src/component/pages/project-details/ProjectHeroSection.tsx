@@ -44,9 +44,7 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
         <div className="bg-black">
           <Container>
             <div className="pb-12">
-              <h1 className="PageTitle mb-1">
-                {t(project.title)}
-              </h1>
+              <h1 className="PageTitle mb-1">{t(project.title)}</h1>
               <h2 className="font-nord text-base mb-8 font-thin text-white">
                 {t(project.header)}
               </h2>
@@ -56,28 +54,16 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
               <div className="space-y-6">
                 <div className="grid grid-cols-1 gap-4 text-base">
                   <div>
-                    <h3 className="SectionTitle">
-                      Date
-                    </h3>
-                    <p className="paragraph">
-                      {t(project.date)}
-                    </p>
+                    <h3 className="SectionTitle">Date</h3>
+                    <p className="paragraph">{t(project.date)}</p>
                   </div>
                   <div>
-                    <h3 className="SectionTitle">
-                      Client
-                    </h3>
-                    <p className="paragraph">
-                      {t(project.client)}
-                    </p>
+                    <h3 className="SectionTitle">Client</h3>
+                    <p className="paragraph">{t(project.client)}</p>
                   </div>
                   <div>
-                    <h3 className="SectionTitle">
-                      {t("common.roleHeader")}
-                    </h3>
-                    <p className="paragraph">
-                      {t(project.role)}
-                    </p>
+                    <h3 className="SectionTitle">{t("common.roleHeader")}</h3>
+                    <p className="paragraph">{t(project.role)}</p>
                   </div>
                 </div>
               </div>
@@ -112,9 +98,7 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
         <div className="absolute top-0 right-0 h-full flex items-center mr-4 lg:mr-32">
           <div className="w-full max-w-md xl:max-w-lg 2xl:max-w-xl">
             <div className="pl-8 pr-4">
-              <h1 className="PageTitle mb-1">
-                {t(project.title)}
-              </h1>
+              <h1 className="PageTitle mb-1">{t(project.title)}</h1>
               <h2 className="font-nord text-base 2xl:text-lg mb-8 font-thin text-dark-gray">
                 {t(project.header)}
               </h2>
@@ -124,28 +108,16 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
               <div className="space-y-6">
                 <div className="grid grid-cols-1 gap-4 text-lg">
                   <div>
-                    <h3 className="SectionTitle">
-                      Date
-                    </h3>
-                    <p className="paragraph">
-                      {t(project.date)}
-                    </p>
+                    <h3 className="SectionTitle">Date</h3>
+                    <p className="paragraph">{t(project.date)}</p>
                   </div>
                   <div>
-                    <h3 className="SectionTitle">
-                      Client
-                    </h3>
-                    <p className="paragraph">
-                      {t(project.client)}
-                    </p>
+                    <h3 className="SectionTitle">Client</h3>
+                    <p className="paragraph">{t(project.client)}</p>
                   </div>
                   <div>
-                    <h3 className="SectionTitle">
-                      {t("common.roleHeader")}
-                    </h3>
-                    <p className="paragraph">
-                      {t(project.role)}
-                    </p>
+                    <h3 className="SectionTitle">{t("common.roleHeader")}</h3>
+                    <p className="paragraph">{t(project.role)}</p>
                   </div>
                 </div>
               </div>
