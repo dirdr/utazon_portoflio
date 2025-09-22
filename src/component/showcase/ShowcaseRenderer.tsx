@@ -36,7 +36,7 @@ export const ShowcaseRenderer = ({ showcase }: ShowcaseRendererProps) => {
   };
 
   return (
-    <Container variant="constrained" className="px-4 lg:px-32">
+    <Container variant="constrained" className="px-4 lg:px-32 ">
       {renderShowcase()}
     </Container>
   );
