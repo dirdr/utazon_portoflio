@@ -113,12 +113,12 @@ export const About = () => {
           <img
             src={logoRendered}
             alt="Logo"
-            className="w-full h-full object-contain px-8"
+            className="w-full h-full object-contain"
           />
         </div>
 
         {/* Hero content section */}
-        <Container variant="fluid" className="px-4">
+        <Container variant="fluid" className="px-4 pt-4">
           <header className="mb-6">
             <h1 className="HeroHeader">
               <LineSweepText duration={6}>{t("about.title")}</LineSweepText>
