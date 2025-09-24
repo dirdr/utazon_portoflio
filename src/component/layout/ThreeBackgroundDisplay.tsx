@@ -3,7 +3,6 @@ import React, {
   useEffect,
   useState,
   useRef,
-  useContext,
   useMemo,
   useCallback,
 } from "react";
@@ -381,7 +380,6 @@ const useMouseBasedLighting = () => {
 
         setKeyLightPos(currentKeyPos);
         setFillLightPos(currentFillPos);
-
       } catch (error) {
         const { keyLightPos: centerKeyPos, fillLightPos: centerFillPos } =
           calculateLightingPositions();

@@ -59,6 +59,3 @@ export const getVideoTransitionConfig = (): VideoTransitionConfig => {
   return DEFAULT_VIDEO_TRANSITION_CONFIG;
 };
 
-export const debugVideoTransition = (_message?: string, _data?: unknown) => {
-  return;
-};

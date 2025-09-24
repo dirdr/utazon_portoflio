@@ -1,14 +1,18 @@
 /**
  * Modern SPA Navigation Detection Utility
- * 
+ *
  * Industry-standard solution for detecting SPA navigation vs fresh page loads
  * using the latest web APIs in order of preference.
  */
 
 export interface NavigationInfo {
   isFreshLoad: boolean;
-  navigationType: 'fresh-load' | 'spa-navigation' | 'back-forward' | 'reload';
-  method: 'navigation-api' | 'performance-timing' | 'document-ready' | 'fallback';
+  navigationType: "fresh-load" | "spa-navigation" | "back-forward" | "reload";
+  method:
+    | "navigation-api"
+    | "performance-timing"
+    | "document-ready"
+    | "fallback";
   details: Record<string, unknown>;
 }
 
@@ -16,7 +20,7 @@ const globalNavigationState = {
   isFirstVisit: true,
   lastNavigationTime: 0,
   routeChangeCount: 0,
-  isHydrating: true
+  isHydrating: true,
 };
 
 /**
@@ -24,7 +28,7 @@ const globalNavigationState = {
  * Most accurate method for detecting navigation types
  */
 const detectWithNavigationAPI = (): NavigationInfo | null => {
-  if (!('navigation' in window)) {
+  if (!("navigation" in window)) {
     return null;
   }
 
@@ -43,28 +47,35 @@ const detectWithNavigationAPI = (): NavigationInfo | null => {
     }
 
     const currentEntry = navigation.currentEntry;
-    
-    const entries = (typeof navigation.entries === 'function' ? navigation.entries() : []);
+
+    const entries =
+      typeof navigation.entries === "function" ? navigation.entries() : [];
     const isFirstEntry = entries.length === 1 && entries[0] === currentEntry;
-    
-    const navigationType = currentEntry.navigationType || 'unknown';
-    
+
+    const navigationType = currentEntry.navigationType || "unknown";
+
     const details = {
       navigationType,
       entriesCount: entries.length,
       isFirstEntry,
       currentEntryId: currentEntry.id,
-      url: currentEntry.url
+      url: currentEntry.url,
     };
 
-    const isFreshLoad = isFirstEntry || navigationType === 'reload' || globalNavigationState.isFirstVisit;
-
+    const isFreshLoad =
+      isFirstEntry ||
+      navigationType === "reload" ||
+      globalNavigationState.isFirstVisit;
 
     return {
       isFreshLoad,
-      navigationType: isFreshLoad ? (navigationType === 'reload' ? 'reload' : 'fresh-load') : 'spa-navigation',
-      method: 'navigation-api',
-      details
+      navigationType: isFreshLoad
+        ? navigationType === "reload"
+          ? "reload"
+          : "fresh-load"
+        : "spa-navigation",
+      method: "navigation-api",
+      details,
     };
   } catch (error) {
     return null;
@@ -77,7 +88,9 @@ const detectWithNavigationAPI = (): NavigationInfo | null => {
  */
 const detectWithPerformanceTiming = (): NavigationInfo | null => {
   try {
-    const entries = performance.getEntriesByType('navigation') as PerformanceNavigationTiming[];
+    const entries = performance.getEntriesByType(
+      "navigation",
+    ) as PerformanceNavigationTiming[];
     if (entries.length === 0) return null;
 
     const entry = entries[0];
@@ -85,23 +98,26 @@ const detectWithPerformanceTiming = (): NavigationInfo | null => {
       type: entry.type,
       loadEventEnd: entry.loadEventEnd,
       domContentLoadedEventEnd: entry.domContentLoadedEventEnd,
-      redirectCount: entry.redirectCount
+      redirectCount: entry.redirectCount,
     };
 
     const navigationAge = performance.now() - entry.loadEventEnd;
     const isRecentNavigation = navigationAge < 1000;
 
-    const isFreshLoad = (
-      (entry.type === 'reload' || entry.type === 'navigate') &&
-      (isRecentNavigation || globalNavigationState.isFirstVisit)
-    );
-
+    const isFreshLoad =
+      (entry.type === "reload" || entry.type === "navigate") &&
+      (isRecentNavigation || globalNavigationState.isFirstVisit);
 
     return {
       isFreshLoad,
-      navigationType: entry.type === 'reload' ? 'reload' : (isFreshLoad ? 'fresh-load' : 'spa-navigation'),
-      method: 'performance-timing',
-      details
+      navigationType:
+        entry.type === "reload"
+          ? "reload"
+          : isFreshLoad
+            ? "fresh-load"
+            : "spa-navigation",
+      method: "performance-timing",
+      details,
     };
   } catch (error) {
     return null;
@@ -120,25 +136,23 @@ const detectWithDocumentReady = (): NavigationInfo | null => {
       performanceNow: now,
       isHydrating: globalNavigationState.isHydrating,
       routeChangeCount: globalNavigationState.routeChangeCount,
-      lastNavigationTime: globalNavigationState.lastNavigationTime
+      lastNavigationTime: globalNavigationState.lastNavigationTime,
     };
 
     const isEarlyExecution = now < 100;
-    const isDocumentLoading = document.readyState !== 'complete';
+    const isDocumentLoading = document.readyState !== "complete";
     const hasMinimalRouteChanges = globalNavigationState.routeChangeCount < 2;
 
-    const isFreshLoad = (
+    const isFreshLoad =
       isEarlyExecution ||
       isDocumentLoading ||
-      (hasMinimalRouteChanges && globalNavigationState.isFirstVisit)
-    );
-
+      (hasMinimalRouteChanges && globalNavigationState.isFirstVisit);
 
     return {
       isFreshLoad,
-      navigationType: isFreshLoad ? 'fresh-load' : 'spa-navigation',
-      method: 'document-ready',
-      details
+      navigationType: isFreshLoad ? "fresh-load" : "spa-navigation",
+      method: "document-ready",
+      details,
     };
   } catch (error) {
     return null;
@@ -153,17 +167,18 @@ const detectWithFallback = (): NavigationInfo => {
   const details = {
     isFirstVisit: globalNavigationState.isFirstVisit,
     routeChangeCount: globalNavigationState.routeChangeCount,
-    isHydrating: globalNavigationState.isHydrating
+    isHydrating: globalNavigationState.isHydrating,
   };
 
-  const isFreshLoad = globalNavigationState.isFirstVisit && globalNavigationState.routeChangeCount === 0;
-
+  const isFreshLoad =
+    globalNavigationState.isFirstVisit &&
+    globalNavigationState.routeChangeCount === 0;
 
   return {
     isFreshLoad,
-    navigationType: isFreshLoad ? 'fresh-load' : 'spa-navigation',
-    method: 'fallback',
-    details
+    navigationType: isFreshLoad ? "fresh-load" : "spa-navigation",
+    method: "fallback",
+    details,
   };
 };
 
@@ -193,13 +208,12 @@ export const detectNavigationType = (): NavigationInfo => {
  */
 export const trackRouteChange = (_newPath: string, isInitialRender = false) => {
   const now = performance.now();
-  
+
   if (!isInitialRender) {
     globalNavigationState.routeChangeCount++;
     globalNavigationState.lastNavigationTime = now;
     globalNavigationState.isHydrating = false;
   }
-
 };
 
 /**
@@ -229,17 +243,12 @@ export const getNavigationState = () => ({ ...globalNavigationState });
  */
 export const initializeNavigationDetection = () => {
   globalNavigationState.isHydrating = true;
-  
-  if (typeof document !== 'undefined') {
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible') {
-      }
-    });
 
-    window.addEventListener('popstate', () => {
+  if (typeof document !== "undefined") {
+    window.addEventListener("popstate", () => {
       globalNavigationState.routeChangeCount++;
       globalNavigationState.lastNavigationTime = performance.now();
     });
   }
-
 };
+

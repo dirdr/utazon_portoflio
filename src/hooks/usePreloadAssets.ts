@@ -8,6 +8,7 @@ import p1 from "../assets/images/card_backgrounds/1.webp";
 import p2 from "../assets/images/card_backgrounds/2.webp";
 import p3 from "../assets/images/card_backgrounds/3.webp";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const debugLog = (_message?: string, _data?: unknown) => {
   return;
 };
@@ -15,10 +16,12 @@ const debugLog = (_message?: string, _data?: unknown) => {
 // Global cache for preloaded models
 const modelCache = new Map<string, unknown>();
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const debugError = (_message?: string, _error?: unknown) => {
   return;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const debugSuccess = (_message?: string, _data?: unknown) => {
   return;
 };
@@ -243,7 +246,7 @@ export const usePreloadAssets = () => {
     debugLog(`🎥 Starting video preload: ${url}`);
 
     // Check if this is an intro video (should load without timeout)
-    const isIntroVideo = url.includes('/videos/intro/');
+    const isIntroVideo = url.includes("/videos/intro/");
     debugLog(`Video ${url} is intro video: ${isIntroVideo}`);
 
     return new Promise((resolve) => {
@@ -369,22 +372,24 @@ export const usePreloadAssets = () => {
             };
 
             // Add timeout for video preloading (skip for intro videos)
-            const timeoutId = !isIntroVideo ? setTimeout(() => {
-              if (!resolved) {
-                resolved = true;
-                const duration = Date.now() - videoStartTime;
-                debugError(
-                  `Video preload timeout (15s): ${url} (${duration}ms)`,
-                  {
-                    readyState: video.readyState,
-                    networkState: video.networkState,
-                    duration: video.duration,
-                  },
-                );
-                cleanup();
-                resolve(); // Don't fail on timeout, just continue
-              }
-            }, 15000) : null;
+            const timeoutId = !isIntroVideo
+              ? setTimeout(() => {
+                  if (!resolved) {
+                    resolved = true;
+                    const duration = Date.now() - videoStartTime;
+                    debugError(
+                      `Video preload timeout (15s): ${url} (${duration}ms)`,
+                      {
+                        readyState: video.readyState,
+                        networkState: video.networkState,
+                        duration: video.duration,
+                      },
+                    );
+                    cleanup();
+                    resolve(); // Don't fail on timeout, just continue
+                  }
+                }, 15000)
+              : null;
 
             video.addEventListener("loadedmetadata", handleSuccess);
             video.addEventListener("error", handleError);
@@ -542,7 +547,9 @@ export const usePreloadAssets = () => {
 
   const addResourceHints = useCallback(() => {
     const isMobileDevice = isMobile();
-    const currentBackgroundImage = isMobileDevice ? backgroundMobileImage : backgroundImage;
+    const currentBackgroundImage = isMobileDevice
+      ? backgroundMobileImage
+      : backgroundImage;
     const currentBackgroundType = isMobileDevice ? "image/png" : "image/webp";
 
     // Preload both desktop and mobile backgrounds for device switching scenarios
@@ -552,7 +559,7 @@ export const usePreloadAssets = () => {
       {
         url: isMobileDevice ? backgroundImage : backgroundMobileImage,
         as: "image",
-        type: isMobileDevice ? "image/webp" : "image/png"
+        type: isMobileDevice ? "image/webp" : "image/png",
       },
     ];
 
