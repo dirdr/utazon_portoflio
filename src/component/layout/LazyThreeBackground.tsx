@@ -5,14 +5,12 @@ interface ThreeBackgroundDisplayProps {
   bloomEnabled?: boolean;
 }
 
-// Lazy load the Three.js component to prevent bundle loading on non-about routes
 const ThreeBackgroundDisplay = React.lazy(() =>
   import('./ThreeBackgroundDisplay').then(module => ({
     default: module.ThreeBackgroundDisplay
   }))
 );
 
-// Loading fallback component
 const ThreeLoadingFallback: React.FC = () => (
   <div className="fixed inset-0" style={{ zIndex: -20 }}>
     <div className="w-full h-full bg-background opacity-50 flex items-center justify-center">
@@ -21,7 +19,6 @@ const ThreeLoadingFallback: React.FC = () => (
   </div>
 );
 
-// Error boundary for Three.js component
 class ThreeErrorBoundary extends React.Component<
   { children: React.ReactNode; fallback?: React.ReactNode },
   { hasError: boolean }

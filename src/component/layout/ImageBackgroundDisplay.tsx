@@ -4,19 +4,15 @@ import { useBackgroundImageStore } from "../../hooks/useBackgroundImageStore";
 export const ImageBackgroundDisplay: React.FC = () => {
   const { currentBackground, nextBackground, isTransitioning } = useBackgroundImageStore();
 
-  // useTransitionRouter already handles background setting and cache verification
-  // This component only displays the backgrounds that are already verified and ready
-  const isCurrentReady = true; // Already verified by useTransitionRouter
-  const isNextReady = true; // Already verified by useTransitionRouter
+  const isCurrentReady = true;
+  const isNextReady = true;
 
-  // Don't render anything if no background is set
   if (!currentBackground && !nextBackground) {
     return null;
   }
 
   return (
     <div className="fixed inset-0" style={{ zIndex: -20 }}>
-      {/* Current background */}
       {currentBackground && (
         <div
           className={`
@@ -33,7 +29,6 @@ export const ImageBackgroundDisplay: React.FC = () => {
         />
       )}
       
-      {/* Next background for smooth transition */}
       {nextBackground && (
         <div
           className={`

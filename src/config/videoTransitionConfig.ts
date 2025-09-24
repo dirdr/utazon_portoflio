@@ -44,10 +44,10 @@ export const DEFAULT_VIDEO_TRANSITION_CONFIG: VideoTransitionConfig = {
   },
 
   mobile: {
-    muted: true, // ← Mobile videos are muted by default
-    animationDuration: 2.5, // ← Duration of mobil_anim.mp4 (will be auto-detected from video)
-    introLoopStart: 0, // ← Start time for looping intro_mobile.mp4
-    enableAnimation: true, // ← Enable mobile animation sequence on fresh loads
+    muted: true,
+    animationDuration: 2.5,
+    introLoopStart: 0,
+    enableAnimation: true,
   },
 
   general: {
@@ -59,7 +59,6 @@ export const getVideoTransitionConfig = (): VideoTransitionConfig => {
   return DEFAULT_VIDEO_TRANSITION_CONFIG;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const debugVideoTransition = (_message?: string, _data?: unknown) => {
   return;
 };

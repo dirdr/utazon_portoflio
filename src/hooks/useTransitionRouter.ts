@@ -1,7 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useLocation } from "wouter";
 import { getRouteAssets, shouldPreloadRoute } from "../config/routeAssets";
-import { useLenis } from "./useLenis";
 import { useCanvasReadiness } from "./useCanvasReadiness";
 import { isMobile } from "../utils/mobileDetection";
 import { useBackgroundImageStore } from "./useBackgroundImageStore";
@@ -29,20 +28,16 @@ interface TransitionState {
   fadeInComplete: boolean;
 }
 
-// Helper function to get background for route
 const getBackgroundForRoute = (route: string): string => {
-  // Routes that need background images
   if (route === "/projects" || route === "/contact" || route === "/showreel" || route === "/legal") {
     return isMobile() ? backgroundMobileImage : backgroundImage;
   }
   return "";
 };
 
-// Router that intercepts navigation and handles smooth transitions
 export const useTransitionRouter = (config: TransitionConfig = {}) => {
   const { duration = 600 } = config;
   const [location, setLocation] = useLocation();
-  const { scrollToTop } = useLenis();
   const { areAllCanvasesReady, onCanvasReadyChange, resetAllCanvases } = useCanvasReadiness();
   const { setBackgroundImage } = useBackgroundImageStore();
   const canvasReadyUnsubscribeRef = useRef<(() => void) | null>(null);
@@ -79,7 +74,6 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
         }
       };
 
-      // Safari/Firefox cache coordination
       const isSafari = /^((?!chrome|android).)*safari/i.test(
         navigator.userAgent,
       );
@@ -123,7 +117,6 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
 
       canvasReadyUnsubscribeRef.current = unsubscribe;
 
-      // Fallback timeout - don't wait forever for canvas
       setTimeout(() => {
         setState((prev) => ({ ...prev, progress: 90 }));
         unsubscribe();
@@ -139,11 +132,6 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
 
     const blackScreenStartTime = Date.now();
 
-    // Delay scroll to ensure screen is fully black
-    setTimeout(() => {
-      console.log("📜 ROUTER: Executing scroll", { timestamp: Date.now(), currentScrollY: window.scrollY });
-      scrollToTop();
-    }, 50);
     const minBlackScreenDuration = duration / 3;
     const newLocation = state.pendingLocation;
 
@@ -152,8 +140,6 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
 
     setState((prev) => ({ ...prev, progress: 30 }));
 
-    // CRITICAL: Set up the background BEFORE changing location
-    // This ensures the background is ready when the fade-out completes
     const newBackground = getBackgroundForRoute(newLocation);
     if (newBackground) {
       setBackgroundImage(newBackground, "TransitionRouter");
@@ -170,7 +156,6 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
       progress: 60,
     }));
 
-    // Reset Canvas states for new route - ensures fresh Canvas registration
     resetAllCanvases();
 
     if (cacheUrls.length > 0) {
@@ -186,7 +171,6 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
       await preloadHomeVideo();
     }
 
-    // Ensure minimum black screen duration for smooth transitions
     const processingTime = Date.now() - blackScreenStartTime;
     const remainingTime = Math.max(0, minBlackScreenDuration - processingTime);
 
@@ -196,13 +180,14 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
 
     setState((prev) => ({ ...prev, progress: 100 }));
 
+
     setState((prev) => ({
       ...prev,
       isTransitioning: false,
       pendingLocation: null,
       fadeInComplete: false,
     }));
-  }, [state.pendingLocation, setLocation, verifyCacheUrls, waitForCanvasReadiness, duration, scrollToTop, resetAllCanvases, setBackgroundImage]);
+  }, [state.pendingLocation, setLocation, verifyCacheUrls, waitForCanvasReadiness, duration, resetAllCanvases, setBackgroundImage]);
   useEffect(() => {
     return () => {
       if (canvasReadyUnsubscribeRef.current) {

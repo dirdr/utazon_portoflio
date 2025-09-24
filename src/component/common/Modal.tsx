@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { cn } from "../../utils/cn";
 import { OVERLAY_Z_INDEX } from "../../constants/overlayZIndex";
-import { ScrollPrevention } from "../../utils/scrollPrevention";
+import { useLenis } from "lenis/react";
 
 interface ModalProps {
   isOpen: boolean;
@@ -25,6 +25,7 @@ export const Modal: React.FC<ModalProps> = ({
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const previousActiveElement = useRef<HTMLElement | null>(null);
+  const lenis = useLenis();
 
   useEffect(() => {
     const handleResize = () => {};
@@ -52,13 +53,13 @@ export const Modal: React.FC<ModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       previousActiveElement.current = document.activeElement as HTMLElement;
-      ScrollPrevention.prevent();
+      lenis?.stop();
 
       if (modalRef.current) {
         modalRef.current.focus();
       }
     } else {
-      ScrollPrevention.restore();
+      lenis?.start();
       if (previousActiveElement.current) {
         previousActiveElement.current.focus();
         previousActiveElement.current = null;
@@ -66,7 +67,7 @@ export const Modal: React.FC<ModalProps> = ({
     }
 
     return () => {
-      ScrollPrevention.restore();
+      lenis?.start();
     };
   }, [isOpen]);
 

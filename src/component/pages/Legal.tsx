@@ -16,7 +16,7 @@ export const Legal = () => {
   }, [setBackgroundImage]);
 
   return (
-    <div className="min-h-screen my-8 lg:my-32">
+    <div className="min-h-screen my-8 lg:my-32 pb-16 lg:pb-24">
       <Container variant="constrained" maxWidth="4xl">
         <div className="mb-8 sm:mb-12 md:mb-16 text-center">
           <h1 className="PageTitle mb-1">

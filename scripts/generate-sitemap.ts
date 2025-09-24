@@ -12,7 +12,6 @@ if (!SITE_URL) {
 }
 
 async function generateSitemap() {
-  console.log(`Generating sitemap for ${SITE_URL}`);
   
   // Static routes with priorities
   const staticRoutes = [
@@ -57,8 +56,6 @@ async function generateSitemap() {
     // Wait for the sitemap to be written
     await streamToPromise(sitemapStream);
     
-    console.log(`✅ Sitemap generated successfully at ${outputPath}`);
-    console.log(`📊 Generated ${routes.length} routes (${staticRoutes.length} static + ${projectRoutes.length} projects)`);
   } catch (error) {
     console.error('❌ Error generating sitemap:', error);
     process.exit(1);

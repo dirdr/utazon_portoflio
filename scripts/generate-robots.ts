@@ -9,7 +9,6 @@ if (!SITE_URL) {
 }
 
 function generateRobotsTxt() {
-  console.log(`Generating robots.txt for ${SITE_URL}`);
   
   const robotsTxtContent = `# Robots.txt for ${SITE_URL}
 
@@ -64,9 +63,6 @@ Crawl-delay: 1
     const resolvedPath = resolve(outputPath);
     writeFileSync(resolvedPath, robotsTxtContent, 'utf8');
     
-    console.log(`✅ Robots.txt generated successfully at ${resolvedPath}`);
-    console.log(`🔗 Site URL: ${SITE_URL}`);
-    console.log(`📋 Includes both sitemap.xml and sitemap-images.xml`);
   } catch (error) {
     console.error('❌ Error generating robots.txt:', error);
     process.exit(1);

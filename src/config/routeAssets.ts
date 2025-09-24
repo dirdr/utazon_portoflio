@@ -16,28 +16,22 @@ export interface RouteAssetConfig {
  */
 export const ROUTE_ASSETS: Record<string, RouteAssetConfig> = {
   [ROUTES.HOME]: {
-    images: [
-      // Already handled by global loader
-    ],
+    images: [],
     priority: "high",
   },
 
   [ROUTES.PROJECTS]: {
     images: [
-      // Background images for cache coordination
       backgroundImage,
       backgroundMobileImage,
-      // All project cover images
       ...allProjectsSortedByPriority.map(
         (project) => `/images/projects/${project.id}/cover.webp`,
       ),
-      // All project background images
       ...allProjectsSortedByPriority.map(
         (project) => `/images/projects/${project.id}/background.webp`,
       ),
     ],
     videos: [
-      // Project thumbnails (optional)
       ...allProjectsSortedByPriority
         .filter((project) => project.hasVideo !== false)
         .map((project) => `/videos/projects/${project.id}/thumbnail.webm`),
@@ -47,19 +41,14 @@ export const ROUTE_ASSETS: Record<string, RouteAssetConfig> = {
 
   [ROUTES.ABOUT]: {
     images: [
-      // Background images for cache coordination
       backgroundImage,
       backgroundMobileImage,
-      // Add about page specific images here when you have them
-      // '/images/about/profile.webp',
-      // '/images/about/skills.webp',
     ],
     priority: "medium",
   },
 
   [ROUTES.LEGAL]: {
     images: [
-      // Background images for cache coordination
       backgroundImage,
       backgroundMobileImage,
     ],
@@ -75,12 +64,10 @@ export const getDynamicRouteAssets = (
   route: string,
   params: Record<string, string>,
 ): RouteAssetConfig => {
-  // Project detail pages
   if (route.startsWith("/projects/") && params.id) {
     const projectId = params.id;
     return {
       images: [
-        // Only the background image is actually used in ProjectHeroSection
         `/images/projects/${projectId}/background.webp`,
       ],
       videos: [],
@@ -100,15 +87,12 @@ export const getRouteAssets = (
 ): string[] => {
   let config: RouteAssetConfig;
 
-  // Check for dynamic routes first
   if (params && Object.keys(params).length > 0) {
     config = getDynamicRouteAssets(route, params);
   } else if (route.startsWith("/projects/")) {
-    // Handle project detail routes without explicit params
     const projectId = route.split("/projects/")[1];
     config = getDynamicRouteAssets(route, { id: projectId });
   } else {
-    // Static routes
     config = ROUTE_ASSETS[route] || { images: [] };
   }
 
@@ -125,7 +109,6 @@ export const getRouteAssets = (
 export const shouldPreloadRoute = (route: string): boolean => {
   const config = ROUTE_ASSETS[route];
 
-  // Project detail routes should preload
   if (route.startsWith("/projects/")) {
     return true;
   }

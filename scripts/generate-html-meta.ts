@@ -88,7 +88,6 @@ const updateIndexHtml = () => {
 
   fs.writeFileSync(indexPath, content, "utf-8");
 
-  console.log(`🏠 Updated index.html meta tags for domain: ${domain}`);
 };
 
 const isMainModule = import.meta.url === `file://${process.argv[1]}`;

@@ -1,5 +1,3 @@
-// Environment-aware configuration utilities
-
 export const getBaseUrl = (): string => {
   // In browser, we can use window.location
   if (typeof window !== 'undefined') {
@@ -22,7 +20,6 @@ export const getBaseUrl = (): string => {
 
 export const getCanonicalUrl = (path: string = ''): string => {
   const baseUrl = getBaseUrl();
-  // Remove leading slash if present to avoid double slashes
   const cleanPath = path.startsWith('/') ? path.slice(1) : path;
   return cleanPath ? `${baseUrl}/${cleanPath}` : baseUrl;
 };

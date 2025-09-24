@@ -51,14 +51,12 @@ export const VideoBackground = forwardRef<
     const videoRef = useRef<HTMLVideoElement>(null);
     const videoRef2 = useRef<HTMLVideoElement>(null);
     
-    // Track which video is currently active
     const [activeVideoIndex, setActiveVideoIndex] = useState<0 | 1>(0);
     const [isTransitioning, setIsTransitioning] = useState(false);
 
     const loadedSources = useRef(new Set<string>());
 
     const videoSource = useMemo(() => {
-      // Return null for empty/undefined src to avoid browser warning
       return src || null;
     }, [src]);
 
@@ -71,7 +69,6 @@ export const VideoBackground = forwardRef<
       const video2 = videoRef2.current;
       if (!isHomePage) return;
 
-      // Set volume programmatically for both videos
       if (video1) video1.volume = 0.3;
       if (video2) video2.volume = 0.3;
 
@@ -84,7 +81,6 @@ export const VideoBackground = forwardRef<
       };
 
       const handleTimeUpdate = (e: Event) => {
-        // Only handle time updates from active video
         const target = e.target as HTMLVideoElement;
         const isActiveVideo = (activeVideoIndex === 0 && target === video1) || 
                              (activeVideoIndex === 1 && target === video2);
@@ -94,7 +90,6 @@ export const VideoBackground = forwardRef<
       };
 
       const handleEnded = (video: HTMLVideoElement) => () => {
-        // Only handle ended events from active video
         const isActiveVideo = (activeVideoIndex === 0 && video === video1) || 
                              (activeVideoIndex === 1 && video === video2);
         if (isActiveVideo) {
@@ -105,7 +100,6 @@ export const VideoBackground = forwardRef<
       const handlePlay = () => {};
       const handlePause = () => {};
 
-      // Add event listeners to both videos
       [video1, video2].forEach(video => {
         if (video) {
           const loadedHandler = handleLoadedData(video);
@@ -173,7 +167,7 @@ export const VideoBackground = forwardRef<
 
         nextVideo.src = newSrc;
         nextVideo.currentTime = 0;
-        nextVideo.volume = 0.3; // Maintain reduced volume
+        nextVideo.volume = 0.3;
         nextVideo.muted = currentMuted;
         nextVideo.style.opacity = '0';
         nextVideo.style.zIndex = '1';
@@ -235,7 +229,6 @@ export const VideoBackground = forwardRef<
         className="fixed inset-0 video-container"
         style={{ zIndex: OVERLAY_Z_INDEX.VIDEO_BACKGROUND }}
       >
-        {/* Primary video element */}
         <video
           ref={videoRef}
           className="w-full h-full object-cover gpu-accelerated absolute inset-0"

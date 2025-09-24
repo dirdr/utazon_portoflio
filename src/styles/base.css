@@ -22,40 +22,6 @@
     }
   }
 
-  /* Utility for preventing scroll */
-  .prevent-scroll {
-    overflow: hidden !important;
-    touch-action: none !important;
-    height: 100dvh !important;
-    position: fixed !important;
-    width: 100% !important;
-  }
-
-  /* Enhanced mobile transition overlay utilities */
-  .mobile-fullscreen-overlay {
-    /* Use custom viewport height for mobile reliability */
-    height: calc(var(--vh, 1vh) * 100) !important;
-    min-height: 100vh !important;
-    max-height: 100vh !important;
-
-    /* Explicit positioning to override browser defaults */
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-
-    /* Ensure full width coverage */
-    width: 100vw !important;
-    max-width: 100vw !important;
-
-    /* Prevent mobile browser interference */
-    transform: translateZ(0) !important;
-    backface-visibility: hidden !important;
-
-    /* Force hardware acceleration */
-    will-change: opacity !important;
-  }
 
   html,
   body {

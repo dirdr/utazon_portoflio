@@ -8,7 +8,6 @@ import p1 from "../assets/images/card_backgrounds/1.webp";
 import p2 from "../assets/images/card_backgrounds/2.webp";
 import p3 from "../assets/images/card_backgrounds/3.webp";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const debugLog = (_message?: string, _data?: unknown) => {
   return;
 };
@@ -16,12 +15,10 @@ const debugLog = (_message?: string, _data?: unknown) => {
 // Global cache for preloaded models
 const modelCache = new Map<string, unknown>();
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const debugError = (_message?: string, _error?: unknown) => {
   return;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const debugSuccess = (_message?: string, _data?: unknown) => {
   return;
 };

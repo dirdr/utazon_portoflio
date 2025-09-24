@@ -22,12 +22,10 @@ export const StandardLayout = ({
   const { currentBackground } = useBackgroundImageStore();
   const [shouldShowThreeBackground, setShouldShowThreeBackground] = useState(false);
 
-  // Cache the Three.js component instance to prevent re-mounting
   const threeComponentCache = useRef<React.ReactElement | null>(null);
   const isAboutRoute = location === '/about';
 
   useEffect(() => {
-    // Only process Three.js background if we're on the about route
     if (currentBackground?.type === 'three' && isAboutRoute) {
       const checkModel = () => {
         if (isModelPreloaded("/models/logo4.glb")) {
@@ -54,9 +52,7 @@ export const StandardLayout = ({
 
       checkModel();
     } else {
-      // Clean up Three.js background when not on about route
       setShouldShowThreeBackground(false);
-      // Clear cache when leaving about route
       if (!isAboutRoute) {
         threeComponentCache.current = null;
       }

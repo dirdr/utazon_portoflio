@@ -16,7 +16,7 @@ import {
   getPreloadedModel,
   isModelPreloaded,
 } from "../../hooks/usePreloadAssets";
-import { LenisContext } from "../../contexts/LenisContext";
+import { useLenis } from "lenis/react";
 import { useCanvasComponent } from "../../hooks/useCanvasReadiness";
 import { mouseTracker } from "../../utils/mouseTracker";
 
@@ -97,13 +97,11 @@ const LIGHT_CONFIG = {
 
 const CAMERA_CONFIG = {
   BREAKPOINTS: {
-    // xl: 1280px+
     XL: {
       POSITION: [0, 0, -4] as [number, number, number],
       FOV: 60,
       TARGET: [0, 0, -7.4] as [number, number, number],
     },
-    // 2xl: 1536px+
     XXL: {
       POSITION: [0, 0.2, -4.5] as [number, number, number],
       FOV: 55,
@@ -204,7 +202,6 @@ function Model({ url, planeOpaque = false }: ModelProps) {
   const scrollY = useScrollOffset();
 
   const logoYOffset = useMemo(() => {
-    // Desktop-only scroll effect
     const scrollDivisor = 5;
     const maxOffset = 4.5;
     const scrollFactor = scrollY / (window.innerHeight * scrollDivisor);
@@ -258,7 +255,6 @@ function Model({ url, planeOpaque = false }: ModelProps) {
   }, [gltf]);
 
   useEffect(() => {
-    // Update logo and plane positions based on scroll
     const logoMesh = meshCacheRef.current.get("LOGO");
     const planeMesh = meshCacheRef.current.get("PLANE");
 
@@ -364,7 +360,6 @@ const useMouseBasedLighting = () => {
     LIGHT_CONFIG.BASE_Z,
   ]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const throttledHandleMouseMove = useCallback(
     throttle((event: MouseEvent) => {
       const { keyLightPos: newKeyPos, fillLightPos: newFillPos } =
@@ -372,7 +367,7 @@ const useMouseBasedLighting = () => {
 
       setKeyLightPos(newKeyPos);
       setFillLightPos(newFillPos);
-    }, 16), // ~60fps
+    }, 16),
     [setFillLightPos, setKeyLightPos],
   );
 
@@ -392,7 +387,6 @@ const useMouseBasedLighting = () => {
           calculateLightingPositions();
         setKeyLightPos(centerKeyPos);
         setFillLightPos(centerFillPos);
-
       }
     };
 
@@ -407,16 +401,13 @@ const useMouseBasedLighting = () => {
   return { keyLightPos, fillLightPos };
 };
 
-
-
 const useDesktopLighting = () => {
-  // Desktop-only mouse-based lighting
   const mouseLighting = useMouseBasedLighting();
 
   return {
     keyLightPos: mouseLighting.keyLightPos,
     fillLightPos: mouseLighting.fillLightPos,
-    rimLightPos: [0, 0, -8] as [number, number, number], // Standard rim light
+    rimLightPos: [0, 0, -8] as [number, number, number],
     keyIntensity: LIGHT_CONFIG.KEY_LIGHT.INTENSITY,
     fillIntensity: LIGHT_CONFIG.FILL_LIGHT.INTENSITY,
     rimIntensity: 0.8,
@@ -426,11 +417,9 @@ const useDesktopLighting = () => {
 
 const useScrollOffset = () => {
   const [scrollY, setScrollY] = useState(0);
-  const lenisContext = useContext(LenisContext);
+  const lenis = useLenis();
 
   useEffect(() => {
-    const lenis = lenisContext?.lenis;
-
     if (lenis) {
       const handleLenisScroll = (e: { scroll: number }) => {
         setScrollY(e.scroll);
@@ -443,7 +432,7 @@ const useScrollOffset = () => {
       window.addEventListener("scroll", handleScroll, { passive: true });
       return () => window.removeEventListener("scroll", handleScroll);
     }
-  }, [lenisContext]);
+  }, [lenis]);
 
   return scrollY;
 };
@@ -480,12 +469,11 @@ const useResponsiveCameraBase = () => {
   return cameraConfig;
 };
 
-
 const useResponsiveCamera = (): CameraConfig => {
   const baseCameraConfig = useResponsiveCameraBase();
 
   return useMemo(() => {
-      return {
+    return {
       position: baseCameraConfig.POSITION,
       target: baseCameraConfig.TARGET,
       fov: baseCameraConfig.FOV,
@@ -543,10 +531,8 @@ export const ThreeBackgroundDisplay: React.FC<ThreeBackgroundDisplayProps> = ({
     checkModelReady();
   }, []);
 
-  // Report canvas readiness when model is ready and rendered
   useEffect(() => {
     if (isModelReady && !canvasReadinessReported.current) {
-      // Small delay to ensure Canvas is rendered
       const timer = setTimeout(() => {
         setReady();
         canvasReadinessReported.current = true;

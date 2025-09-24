@@ -1,16 +1,9 @@
 export interface HomeState {
-  // Navigation detection
   isInitialLoad: boolean;
-  
-  // UI state
   showDiveInButton: boolean;
   showContent: boolean;
-  
-  // Video state
   videoStartTime: number;
   isVideoPlaying: boolean;
-  
-  // Loading state
   isPreloadComplete: boolean;
 }
 
@@ -30,12 +23,8 @@ export type HomeAction =
 export interface HomeContextValue {
   state: HomeState;
   dispatch: React.Dispatch<HomeAction>;
-  
-  // Derived state helpers
   shouldShowDiveIn: boolean;
   shouldStartVideoAt: number;
   shouldSkipAnimations: boolean;
-  
-  // Integration with AppLoadingContext
   hideDiveInButton: () => void;
 }

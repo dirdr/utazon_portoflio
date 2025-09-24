@@ -9,7 +9,7 @@ export interface Project {
   description: string;
   client: string;
   role: string;
-  hasVideo?: boolean; // Indicates if project has thumbnail video
+  hasVideo?: boolean;
   images?: {
     src: string;
     alt: string;

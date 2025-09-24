@@ -128,7 +128,6 @@ export const CursorTrail = ({
         lastTrailPointRef.current = { x: clientX, y: clientY, timestamp: now };
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [enabled, addPoint, fadeTime],
   );
 
@@ -151,19 +150,16 @@ export const CursorTrail = ({
         const baseSize = rippleSize * 0.4;
 
         const rippleProgress = ageRatio;
-        const maxRippleSize = baseSize * 6; // Larger expansion for more dramatic effect
+        const maxRippleSize = baseSize * 6;
 
         const drawExpandingRing = (ringDelay: number, ringOpacity: number) => {
           const ringProgress = Math.max(0, rippleProgress - ringDelay);
           if (ringProgress <= 0) return;
 
-          // Smooth easing for more natural wave expansion
           const easedProgress = 1 - Math.pow(1 - ringProgress, 3);
 
-          // Enhanced fade calculation for smoother transitions
           const ringFade = Math.pow(1 - ringProgress, 1.5);
 
-          // Add subtle wave oscillation for more dynamic effect
           const waveOscillation = Math.sin(ringProgress * Math.PI * 4) * 0.1;
           const sizeMultiplier = 1 + waveOscillation * ringFade;
 
@@ -211,13 +207,12 @@ export const CursorTrail = ({
           ctx.fill();
         };
 
-        // Draw multiple expanding rings with staggered timing for wave effect
-        drawExpandingRing(0, 0.5); // First ring starts immediately
-        drawExpandingRing(0.15, 0.4); // Second ring starts at 15% progress
-        drawExpandingRing(0.3, 0.35); // Third ring starts at 30% progress
-        drawExpandingRing(0.45, 0.3); // Fourth ring starts at 45% progress
-        drawExpandingRing(0.6, 0.25); // Fifth ring starts at 60% progress
-        drawExpandingRing(0.75, 0.2); // Sixth ring starts at 75% progress
+        drawExpandingRing(0, 0.5);
+        drawExpandingRing(0.15, 0.4);
+        drawExpandingRing(0.3, 0.35);
+        drawExpandingRing(0.45, 0.3);
+        drawExpandingRing(0.6, 0.25);
+        drawExpandingRing(0.75, 0.2);
       }
     };
   }, [fadeTime, intensity, rippleSize]);

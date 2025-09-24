@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "../common/Button";
 import { LineSweepText } from "../common/LineSweepText";
 import { useContactModal } from "../../hooks/useContactModal";
-import { useLenis } from "../../hooks/useLenis";
+import { useLenis } from "lenis/react";
 import { VideoShowcase } from "../showcase/VideoShowcase";
 import { useBackgroundImageStore } from "../../hooks/useBackgroundImageStore";
 import { Container } from "../layout/Container";
@@ -17,10 +17,10 @@ export const About = () => {
   const { setBackground } = useBackgroundImageStore();
 
   const { openContactModal } = useContactModal();
-  const { scrollTo } = useLenis();
+  const lenis = useLenis();
 
   const scrollToShowreel = () => {
-    scrollTo('[data-id="showreel-about"]', {
+    lenis?.scrollTo('[data-id="showreel-about"]', {
       offset: -200,
       duration: 1.5,
     });
@@ -46,7 +46,6 @@ export const About = () => {
   }, [isDesktop, setBackground, planeOpaque, bloomEnabled]);
   return (
     <>
-      {/* Desktop version - xl and above */}
       <div className="mb-32 hidden xl:block">
         <div className="relative w-full h-screen">
           <Container
@@ -55,7 +54,7 @@ export const About = () => {
             className="h-full"
           >
             <div className="relative h-full">
-              <div className="absolute top-64 left-0 pointer-events-auto max-w-lg">
+              <div className="absolute top-16 2xl:top-32 3xl:top-64 left-0 pointer-events-auto max-w-lg">
                 <header className="mb-8">
                   <h1 className="HeroHeader">
                     <LineSweepText duration={6}>
@@ -108,9 +107,7 @@ export const About = () => {
         </div>
       </div>
 
-      {/* Mobile version - lg and below */}
       <div className="xl:hidden">
-        {/* Mobile logo section */}
         <div className="w-full flex items-center justify-center">
           <img
             src={logoRendered}
@@ -119,7 +116,6 @@ export const About = () => {
           />
         </div>
 
-        {/* Hero content section */}
         <Container variant="fluid" className="px-4 pt-4">
           <header className="mb-6">
             <h1 className="HeroHeader">
@@ -142,7 +138,6 @@ export const About = () => {
           </div>
         </Container>
 
-        {/* Services section */}
         <Container variant="fluid" className="px-4 my-16">
           <div className="space-y-8">
             <div>
@@ -177,7 +172,6 @@ export const About = () => {
         </Container>
       </div>
 
-      {/* VideoShowcase section */}
       <Container variant="constrained" className="px-4 lg:px-32 mt-16">
         <VideoShowcase
           data={{
@@ -192,7 +186,7 @@ export const About = () => {
           }}
           border={true}
         />
-        <section className="mt-16 pb-24">
+        <section className="mt-16 lg:mt-32 pb-16 lg:pb-24">
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="PageTitle">
               <LineSweepText duration={6}>

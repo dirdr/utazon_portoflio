@@ -43,25 +43,21 @@ export const useAppInitialization = () => {
     [isFreshLoad, isHomePage],
   );
 
-  // Start preloading immediately on fresh load
   useEffect(() => {
     if (isFreshLoad) {
       preloadState.startPreloading();
     }
   }, [isFreshLoad, preloadState]);
 
-  // Handle SPA navigation - immediate initialization
   useEffect(() => {
     if (!isFreshLoad && navigation.isSPANavigation) {
       setShowDiveInButton(false);
       setShowLoader(false);
       setIsAppInitialized(true);
-      // Reset dive-in state for clean SPA navigation
       isDiveInActive = false;
     }
   }, [isFreshLoad, navigation.isSPANavigation]);
 
-  // Handle fresh load completion with minimum loading time
   useEffect(() => {
     if (isFreshLoad) {
       const elapsedTime = Date.now() - startTime;
@@ -70,16 +66,13 @@ export const useAppInitialization = () => {
       const timer = setTimeout(() => {
         setIsAppInitialized(true);
         
-        // Show dive-in button for home page
         if (isHomePage) {
           setShowDiveInButton(true);
         }
 
-        // Hide loader after small delay
         setTimeout(() => {
           setShowLoader(false);
           
-          // Reset navigation state for non-home pages
           if (!isHomePage) {
             navigation.resetNavigation();
             isDiveInActive = false;
@@ -103,12 +96,10 @@ export const useAppInitialization = () => {
 
   const hideDiveInButton = useCallback(() => {
     setShowDiveInButton(false);
-    // Mark dive-in as active but maintain fresh load state for proper video workflow
     isDiveInActive = true;
   }, []);
 
   return {
-    // Legacy loader properties
     showLoader,
     isInitialized: isAppInitialized,
     progress: shouldPreload ? preloadState.progress : 1,
@@ -116,17 +107,14 @@ export const useAppInitialization = () => {
     totalAssets: shouldPreload ? preloadState.totalAssets : 0,
     failedAssets: shouldPreload ? preloadState.failedAssets : 0,
 
-    // Navigation properties (enhanced with modern detection)
     isFreshLoad,
     navigationType: navigation.navigationType,
     detectionMethod: navigation.detectionMethod,
     isSPANavigation: navigation.isSPANavigation,
 
-    // Dive-in properties
     showDiveInButton,
     hideDiveInButton,
 
-    // Video behavior properties
     videoBehavior,
   };
 };

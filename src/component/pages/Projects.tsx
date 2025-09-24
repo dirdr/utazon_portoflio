@@ -7,7 +7,7 @@ export const Projects = () => {
   const { t } = useTranslation();
 
   return (
-    <Container variant="fluid" className="pt-12 lg:pt-16 pb-24 lg:pb-32">
+    <Container variant="fluid" className="pt-12 lg:pt-16 pb-16 lg:pb-24">
       <main>
         <section aria-labelledby="projects-heading">
           <h1 id="projects-heading" className="sr-only">

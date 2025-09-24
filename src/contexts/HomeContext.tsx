@@ -4,7 +4,7 @@ import { HomeState, HomeAction, HomeContextValue } from '../types/home';
 import { useAppLoading } from './AppLoadingContext';
 
 const initialState: HomeState = {
-  isInitialLoad: false, // Will be set from AppLoadingContext
+  isInitialLoad: false,
   showDiveInButton: false,
   showContent: false,
   videoStartTime: 0,
@@ -13,7 +13,6 @@ const initialState: HomeState = {
 };
 
 function homeReducer(state: HomeState, action: HomeAction): HomeState {
-  
   switch (action.type) {
     case 'PRELOAD_COMPLETE':
       return {
@@ -50,7 +49,7 @@ function homeReducer(state: HomeState, action: HomeAction): HomeState {
         showContent: true,
         videoStartTime: 8,
         isVideoPlaying: false,
-        isPreloadComplete: true, // Don't need to wait for preload on SPA navigation
+        isPreloadComplete: true,
       };
       
     case 'SYNC_WITH_APP_LOADING':
@@ -70,7 +69,6 @@ function homeReducer(state: HomeState, action: HomeAction): HomeState {
 
 const HomeContext = createContext<HomeContextValue | null>(null);
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useHome = (): HomeContextValue => {
   const context = useContext(HomeContext);
   if (!context) {
@@ -90,22 +88,18 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
   
   const isHomePage = location === '/';
   
-  // Sync with AppLoadingContext on mount and location changes
   useEffect(() => {
-    
     dispatch({ 
       type: 'SYNC_WITH_APP_LOADING', 
       payload: {
         isInitialLoad: isFreshLoad,
         showDiveInButton: isHomePage ? showDiveInButton : false,
-        isPreloadComplete: true, // AppLoadingContext handles preloading
-        // Fix: For fresh loads with dive-in button, don't show content yet
+        isPreloadComplete: true,
         showContent: isHomePage ? (!isFreshLoad || (isFreshLoad && !showDiveInButton)) : false
       }
     });
   }, [isHomePage, isFreshLoad, showDiveInButton]);
   
-  // Handle SPA navigation to home page
   useEffect(() => {
     if (isHomePage && !isFreshLoad) {
       dispatch({ type: 'RESET_FOR_SPA_NAVIGATION' });
@@ -118,12 +112,10 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
     state,
     dispatch,
     
-    // Derived state
     shouldShowDiveIn,
     shouldStartVideoAt: state.videoStartTime,
     shouldSkipAnimations: !state.isInitialLoad,
     
-    // Integrate with AppLoadingContext
     hideDiveInButton,
   };
   

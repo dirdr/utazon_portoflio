@@ -12,7 +12,6 @@ export interface NavigationInfo {
   details: Record<string, unknown>;
 }
 
-// Global state to track navigation across the app lifecycle
 const globalNavigationState = {
   isFirstVisit: true,
   lastNavigationTime: 0,
@@ -45,11 +44,9 @@ const detectWithNavigationAPI = (): NavigationInfo | null => {
 
     const currentEntry = navigation.currentEntry;
     
-    // Check if this is the first navigation entry
     const entries = (typeof navigation.entries === 'function' ? navigation.entries() : []);
     const isFirstEntry = entries.length === 1 && entries[0] === currentEntry;
     
-    // Navigation API can tell us about navigation types more precisely
     const navigationType = currentEntry.navigationType || 'unknown';
     
     const details = {
@@ -60,9 +57,6 @@ const detectWithNavigationAPI = (): NavigationInfo | null => {
       url: currentEntry.url
     };
 
-    // Fresh load indicators:
-    // - First entry in navigation history
-    // - navigationType is 'reload' or undefined (initial load)
     const isFreshLoad = isFirstEntry || navigationType === 'reload' || globalNavigationState.isFirstVisit;
 
 
@@ -94,14 +88,9 @@ const detectWithPerformanceTiming = (): NavigationInfo | null => {
       redirectCount: entry.redirectCount
     };
 
-    // Check if this navigation happened recently (indicating it's related to current page)
     const navigationAge = performance.now() - entry.loadEventEnd;
-    const isRecentNavigation = navigationAge < 1000; // Within 1 second
+    const isRecentNavigation = navigationAge < 1000;
 
-    // Fresh load indicators:
-    // - type is 'reload' or 'navigate' (not 'back_forward')
-    // - Recent navigation timing
-    // - First visit flag
     const isFreshLoad = (
       (entry.type === 'reload' || entry.type === 'navigate') &&
       (isRecentNavigation || globalNavigationState.isFirstVisit)
@@ -134,10 +123,6 @@ const detectWithDocumentReady = (): NavigationInfo | null => {
       lastNavigationTime: globalNavigationState.lastNavigationTime
     };
 
-    // Fresh load indicators:
-    // - Script running very early in page lifecycle (< 100ms)
-    // - Document is still loading or interactive
-    // - First visit or very few route changes
     const isEarlyExecution = now < 100;
     const isDocumentLoading = document.readyState !== 'complete';
     const hasMinimalRouteChanges = globalNavigationState.routeChangeCount < 2;
@@ -186,7 +171,6 @@ const detectWithFallback = (): NavigationInfo => {
  * Main detection function - tries methods in order of preference
  */
 export const detectNavigationType = (): NavigationInfo => {
-  // Try detection methods in order of preference
   const detectionMethods = [
     detectWithNavigationAPI,
     detectWithPerformanceTiming,
@@ -200,7 +184,6 @@ export const detectNavigationType = (): NavigationInfo => {
     }
   }
 
-  // Fallback method always returns a result
   return detectWithFallback();
 };
 
@@ -245,18 +228,14 @@ export const getNavigationState = () => ({ ...globalNavigationState });
  * Call this early in app initialization
  */
 export const initializeNavigationDetection = () => {
-  // Mark hydration start
   globalNavigationState.isHydrating = true;
   
-  // Listen for page visibility changes to detect back/forward navigation
   if (typeof document !== 'undefined') {
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'visible') {
-        // Page became visible - could be back/forward navigation
       }
     });
 
-    // Listen for popstate (back/forward button)
     window.addEventListener('popstate', () => {
       globalNavigationState.routeChangeCount++;
       globalNavigationState.lastNavigationTime = performance.now();
