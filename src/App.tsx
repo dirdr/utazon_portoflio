@@ -1,4 +1,4 @@
-import { RouteScrollReset } from "./components/RouteScrollReset";
+import { RouteScrollReset } from "./component/common/RouteScrollReset";
 import { AppContent } from "./component/app/AppContent";
 import "./index.css";
 
