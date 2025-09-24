@@ -17,9 +17,9 @@ mod services;
 mod state;
 
 use crate::{
-    config::AppConfig, 
-    handlers::health::health_handler, 
-    routes::{videos::video_routes, contact::mail_routes},
+    config::AppConfig,
+    handlers::health::health_handler,
+    routes::{contact::mail_routes, videos::video_routes},
     services::minio::MinioService,
     state::AppState,
 };
@@ -34,50 +34,29 @@ async fn main() -> anyhow::Result<()> {
         .with(tracing_subscriber::fmt::layer())
         .init();
 
-    let config = AppConfig::from_env().map_err(|e| {
-        tracing::error!("Failed to load configuration: {}", e);
-        e
-    })?;
+    let config = AppConfig::from_env()?;
     let port = config.port;
 
-    tracing::info!("Initializing MinIO service...");
-    let minio_service = MinioService::new(&config).await.map_err(|e| {
-        tracing::error!("Failed to initialize MinIO service: {}", e);
-        e
-    })?;
-    tracing::info!("✅ MinIO service initialized successfully");
+    let minio_service = MinioService::new(&config).await?;
 
-    tracing::info!("Configuring CORS with allowed origins: {:?}", config.allowed_origins);
-    
     let cors = CorsLayer::new()
         .allow_origin(
             config
                 .allowed_origins
                 .iter()
-                .map(|origin| {
-                    tracing::debug!("Parsing CORS origin: {}", origin);
-                    origin.parse::<HeaderValue>()
-                })
+                .map(|origin| origin.parse::<HeaderValue>())
                 .collect::<Result<Vec<_>, _>>()
-                .map_err(|e| {
-                    tracing::error!("Failed to parse CORS allowed origins: {}", e);
-                    e
-                })?,
+                .map_err(|e| e)?,
         )
-        .allow_methods([Method::GET, Method::POST, Method::OPTIONS, Method::PUT, Method::DELETE])
+        .allow_methods([Method::GET, Method::POST, Method::OPTIONS])
         .allow_headers([
             header::CONTENT_TYPE,
-            header::AUTHORIZATION,
             header::ACCEPT,
             header::ORIGIN,
             header::RANGE,
-            header::ACCESS_CONTROL_ALLOW_ORIGIN,
-            header::ACCESS_CONTROL_ALLOW_HEADERS,
-            header::ACCESS_CONTROL_ALLOW_METHODS,
         ])
         .allow_credentials(true);
 
-    // Build the application router
     let app_state = AppState::new(minio_service, config);
     let app = Router::<AppState>::new()
         .route("/", get(root_handler))
@@ -94,22 +73,10 @@ async fn main() -> anyhow::Result<()> {
         .with_state(app_state);
 
     let addr = SocketAddr::from(([0, 0, 0, 0], port));
-    tracing::info!("Starting Utazon Backend Server...");
-    tracing::info!("Binding to address: {}", addr);
+    tracing::info!("Starting server on port {}", port);
 
-    let listener = tokio::net::TcpListener::bind(addr).await.map_err(|e| {
-        tracing::error!("Failed to bind to address {}: {}", addr, e);
-        e
-    })?;
-    
-    tracing::info!("✅ Utazon Backend Server successfully started and listening on port {}", port);
-    tracing::info!("Health check endpoint: http://{}:{}/api/health", "localhost", port);
-    tracing::info!("Ready to accept connections!");
-    
-    axum::serve(listener, app).await.map_err(|e| {
-        tracing::error!("Server failed to start: {}", e);
-        e
-    })?;
+    let listener = tokio::net::TcpListener::bind(addr).await?;
+    axum::serve(listener, app).await?;
 
     Ok(())
 }

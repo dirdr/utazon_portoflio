@@ -74,17 +74,14 @@ pub async fn list_videos_handler(
             "videos": videos,
             "count": videos.len()
         }))),
-        Err(e) => {
-            tracing::error!("Failed to list videos: {}", e);
-            Err((
-                StatusCode::INTERNAL_SERVER_ERROR,
-                Json(json!({
-                    "error": "Internal Server Error",
-                    "message": "Failed to list videos",
-                    "code": "VIDEO_LIST_FAILED"
-                })),
-            ))
-        }
+        Err(_) => Err((
+            StatusCode::INTERNAL_SERVER_ERROR,
+            Json(json!({
+                "error": "Internal Server Error",
+                "message": "Failed to list videos",
+                "code": "VIDEO_LIST_FAILED"
+            })),
+        ))
     }
 }
 
@@ -105,10 +102,7 @@ pub async fn stream_video_handler(
         .await
     {
         Ok(metadata) => metadata,
-        Err(e) => {
-            tracing::error!("Failed to get object metadata: {}", e);
-            return Err(StreamError::not_found().into_response());
-        }
+        Err(_) => return Err(StreamError::not_found().into_response()),
     };
 
     let content_type = from_path(&video_path).first_or_octet_stream();
@@ -117,10 +111,7 @@ pub async fn stream_video_handler(
     let (start, end, partial_content) = if let Some(range) = range_header {
         match parse_range_header(range, file_size as u64) {
             Ok((start, end)) => (start, end, true),
-            Err(_) => {
-                tracing::warn!("Invalid range header for {}: {:?}", video_path, range);
-                (0, file_size as u64 - 1, false)
-            }
+            Err(_) => (0, file_size as u64 - 1, false),
         }
     } else {
         (0, file_size as u64 - 1, false)
@@ -134,10 +125,7 @@ pub async fn stream_video_handler(
         .await
     {
         Ok(stream) => stream,
-        Err(e) => {
-            tracing::error!("Failed to get object stream: {}", e);
-            return Err(StreamError::internal_error().into_response());
-        }
+        Err(_) => return Err(StreamError::internal_error().into_response()),
     };
 
     let reader_stream = ReaderStream::new(byte_stream.into_async_read());

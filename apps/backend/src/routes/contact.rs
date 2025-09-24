@@ -111,16 +111,13 @@ async fn contact_handler(
             "success": true,
             "message": "Contact form submitted successfully"
         }))),
-        Err(e) => {
-            eprintln!("Failed to send Discord notification: {}", e);
-            Err((
-                StatusCode::INTERNAL_SERVER_ERROR,
-                Json(serde_json::json!({
-                    "error": "Failed to process contact form",
-                    "message": "An error occurred while processing your request"
-                })),
-            ))
-        }
+        Err(_) => Err((
+            StatusCode::INTERNAL_SERVER_ERROR,
+            Json(serde_json::json!({
+                "error": "Failed to process contact form",
+                "message": "An error occurred while processing your request"
+            })),
+        ))
     }
 }
 
