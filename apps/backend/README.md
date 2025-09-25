@@ -1,16 +1,10 @@
 # Utazon Backend
 
-API for Utazon Portfolio
-
-## What it does
-
-REST API That :
-
+REST API :
 1. Stream MinIO storage videos
 2. Handle the contact
 
 ## API Endpoints
-
 - `GET /` - API information
 - `GET /api/health` - Health check
 - `GET /api/videos` - List available videos
