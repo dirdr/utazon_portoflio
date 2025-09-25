@@ -22,13 +22,23 @@ export const useIntersectionPreloader = (
   } = config;
 
   const [isIntersecting, setIsIntersecting] = useState(false);
+  const isIntersectingRef = useRef(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const elementRef = useRef<HTMLElement | null>(null);
 
   const handleIntersection = useCallback((entries: IntersectionObserverEntry[]) => {
     entries.forEach((entry) => {
-      setIsIntersecting(entry.isIntersecting);
-      if (entry.isIntersecting && onIntersect) {
+      const wasIntersecting = isIntersectingRef.current;
+      const isNowIntersecting = entry.isIntersecting;
+
+      isIntersectingRef.current = isNowIntersecting;
+
+      // Only trigger state update if intersection status actually changed
+      if (wasIntersecting !== isNowIntersecting) {
+        setIsIntersecting(isNowIntersecting);
+      }
+
+      if (isNowIntersecting && onIntersect) {
         onIntersect(entry);
       }
     });

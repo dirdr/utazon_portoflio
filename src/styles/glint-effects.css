@@ -81,22 +81,18 @@
     );
     border-radius: 1rem; /* Mobile: rounded-2xl */
     opacity: 0;
+    animation: none;
     transition: opacity 0.3s ease;
+    will-change: auto;
     z-index: 2;
   }
 
-  .glint-card-wrapper[data-animate="true"]::after {
-    animation: border-spin var(--glint-card-speed) linear infinite;
-    will-change: transform;
-  }
-
-  .glint-card-wrapper[data-animate="false"]::after {
-    animation: none;
-  }
-
+  /* Show glint on hover and when card is touch-active */
   .glint-card-wrapper:hover::after,
   .glint-card-wrapper.touch-active::after {
     opacity: 1;
+    animation: border-spin var(--glint-card-speed) linear infinite;
+    will-change: transform;
   }
 
   .glint-card-wrapper-disabled::before,

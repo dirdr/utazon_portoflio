@@ -1,10 +1,9 @@
 import { cn } from "../../utils/cn";
 import { useTranslation } from "react-i18next";
 import { Button } from "./Button";
-import { useMemo, useRef, useState, useCallback, useEffect } from "react";
+import { useMemo, useRef, useState, useCallback, useEffect, memo } from "react";
 import { LineSweepText } from "./LineSweepText";
 import { useTransitionContext } from "../../hooks/useTransitionContext";
-import { useAnimationControl } from "../../hooks/useAnimationControl";
 import { useProjectGridPreloader } from "../../hooks/useProjectGridPreloader";
 import { useActiveVideoCard } from "../../hooks/useActiveVideoCard";
 import { isMobile } from "../../utils/mobileDetection";
@@ -35,26 +34,48 @@ export interface CardProps {
   priority?: boolean;
 }
 
-export const Card = ({
+const CardComponent = ({
   image,
   thumbnail,
   project,
   className,
   glintSpeed = "6s",
 }: CardProps) => {
+
   const { t } = useTranslation();
   const { navigateWithTransition } = useTransitionContext();
   const videoRef = useRef<HTMLVideoElement>(null);
+  const elementRef = useRef<HTMLElement | null>(null);
+  const animationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+
+  // Simple state management with logging
   const [videoReady, setVideoReady] = useState(false);
   const [videoError, setVideoError] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isTouched, setIsTouched] = useState(false);
-  const animationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const videoReadyTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const { ref: animationRef, shouldAnimate } = useAnimationControl({
-    threshold: 0.2,
-    rootMargin: "100px",
-  });
+  // Debounce video ready events to prevent triple re-renders
+  const loggedSetVideoReady = useCallback((value: boolean) => {
+    if (videoReadyTimeoutRef.current) {
+      clearTimeout(videoReadyTimeoutRef.current);
+    }
+
+    videoReadyTimeoutRef.current = setTimeout(() => {
+      setVideoReady(value);
+      videoReadyTimeoutRef.current = null;
+    }, 10); // Small delay to batch multiple rapid events
+  }, []);
+
+  const loggedSetIsHovered = useCallback((value: boolean) => {
+    setIsHovered(value);
+  }, []);
+
+  const loggedSetIsTouched = useCallback((value: boolean) => {
+    setIsTouched(value);
+  }, []);
+
 
   const preloader = useProjectGridPreloader({
     projectId: project.id,
@@ -63,8 +84,10 @@ export const Card = ({
     threshold: 0.1,
   });
 
-  const { activeCardId, setActiveCard } = useActiveVideoCard();
-  const isActiveCard = activeCardId === project.id;
+
+  // Use selective Zustand subscription
+  const { setActiveCard, isActiveCard } = useActiveVideoCard(project.id);
+
 
   const randomBackground = useMemo(() => {
     const hash = project.name.split("").reduce((acc, char) => {
@@ -74,20 +97,17 @@ export const Card = ({
     return cardBackgrounds[index];
   }, [project.name]);
 
-  const elementRef = useRef<HTMLElement | null>(null);
-
   const combinedRef = useCallback(
     (node: HTMLElement | null) => {
       if (elementRef.current) {
         preloader.observeElement(null);
       }
       elementRef.current = node;
-      animationRef(node);
       if (node) {
         preloader.observeElement(node);
       }
     },
-    [animationRef, preloader],
+    [preloader],
   );
 
   const startVideoAnimation = () => {
@@ -112,40 +132,36 @@ export const Card = ({
   useEffect(() => {
     if (!isActiveCard && videoRef.current && !videoRef.current.paused) {
       stopVideoAnimation();
-      setIsHovered(false);
-      setIsTouched(false);
+      loggedSetIsHovered(false);
+      loggedSetIsTouched(false);
     }
-  }, [isActiveCard, stopVideoAnimation]);
+  }, [isActiveCard, stopVideoAnimation, loggedSetIsHovered, loggedSetIsTouched]);
 
   const handleMouseEnter = () => {
     if (isMobile()) return;
-    setIsHovered(true);
+    loggedSetIsHovered(true);
     startVideoAnimation();
   };
 
   const handleMouseLeave = () => {
     if (isMobile()) return;
-    setIsHovered(false);
+    loggedSetIsHovered(false);
     stopVideoAnimation();
   };
 
   const handleTouchStart = () => {
-    setIsTouched(true);
-    setIsHovered(true);
+    loggedSetIsTouched(true);
+    loggedSetIsHovered(true); // Keep this true after touch until another card is active
     startVideoAnimation();
 
-    // Clear any existing timeout
     if (animationTimeoutRef.current) {
       clearTimeout(animationTimeoutRef.current);
     }
   };
 
   const handleTouchEnd = () => {
-    // Don't stop the video on touch end - let it continue playing
-    setIsTouched(false);
-    // Keep isHovered true to maintain video playback and glint effect
-
-    // Clear any existing timeout
+    loggedSetIsTouched(false);
+    // Don't stop video/glint on touch end - let it continue until another card is touched
     if (animationTimeoutRef.current) {
       clearTimeout(animationTimeoutRef.current);
     }
@@ -160,19 +176,36 @@ export const Card = ({
     await navigateWithTransition(`/projects/${project.id}`, { id: project.id });
   };
 
-  // Cleanup timeout on unmount
+  // Cleanup timeouts on unmount
   useEffect(() => {
-    const timeoutRef = animationTimeoutRef.current;
+    const animationTimeout = animationTimeoutRef.current;
+    const videoReadyTimeout = videoReadyTimeoutRef.current;
     return () => {
-      if (timeoutRef) {
-        clearTimeout(timeoutRef);
+      if (animationTimeout) {
+        clearTimeout(animationTimeout);
+      }
+      if (videoReadyTimeout) {
+        clearTimeout(videoReadyTimeout);
       }
     };
   }, []);
 
-  // Conditional event props based on device type
-  const isMobileDevice = isMobile();
-  const eventProps = isMobileDevice
+  // Simple style object
+  const cardStyle = useMemo(() => ({
+    "--glint-card-speed": glintSpeed
+  }), [glintSpeed]);
+
+  // Simple className
+  const cardClassName = cn(
+    "group glint-card-wrapper cursor-pointer w-full card-item",
+    {
+      "touch-active": isActiveCard && (isTouched || isHovered),
+    },
+    className,
+  );
+
+  // Event props based on device type
+  const eventProps = isMobile()
     ? {
         onTouchStart: handleTouchStart,
         onTouchEnd: handleTouchEnd,
@@ -185,13 +218,8 @@ export const Card = ({
   return (
     <article
       ref={combinedRef}
-      className={cn(
-        "group glint-card-wrapper cursor-pointer w-full card-item",
-        { "touch-active": isActiveCard && (isTouched || isHovered) }, // Add touch-active class for mobile glint only when active
-        className,
-      )}
-      data-animate={shouldAnimate}
-      style={{ "--glint-card-speed": glintSpeed } as React.CSSProperties}
+      className={cardClassName}
+      style={cardStyle as React.CSSProperties}
       {...eventProps}
       onClick={handleClick}
     >
@@ -254,18 +282,18 @@ export const Card = ({
               playsInline
               webkit-playsinline="true"
               x5-playsinline="true"
-              preload={shouldAnimate ? "metadata" : "none"}
+              preload="metadata"
               onLoadedData={() => {
-                setVideoReady(true);
+                loggedSetVideoReady(true);
               }}
               onLoadedMetadata={() => {
                 if (videoRef.current) {
-                  setVideoReady(true);
+                  loggedSetVideoReady(true);
                 }
               }}
               onCanPlay={() => {
                 if (videoRef.current) {
-                  setVideoReady(true);
+                  loggedSetVideoReady(true);
                 }
               }}
               onError={() => {
@@ -323,3 +351,18 @@ export const Card = ({
     </article>
   );
 };
+
+// Memoize the component to prevent unnecessary re-renders
+export const Card = memo(CardComponent, (prevProps, nextProps) => {
+  // Custom comparison to avoid re-renders when props haven't meaningfully changed
+  return (
+    prevProps.image.src === nextProps.image.src &&
+    prevProps.project.id === nextProps.project.id &&
+    prevProps.project.name === nextProps.project.name &&
+    prevProps.project.header === nextProps.project.header &&
+    prevProps.project.date === nextProps.project.date &&
+    prevProps.className === nextProps.className &&
+    prevProps.glintSpeed === nextProps.glintSpeed &&
+    prevProps.thumbnail?.src === nextProps.thumbnail?.src
+  );
+});

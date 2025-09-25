@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState, useEffect } from 'react';
 import { useIntersectionPreloader } from './useIntersectionPreloader';
 import { isMobile } from '../utils/mobileDetection';
 
@@ -26,11 +26,39 @@ export const useProjectGridPreloader = (
   config: ProjectGridPreloaderConfig
 ): ProjectGridPreloaderResult => {
   const { projectId, hasVideo = true, rootMargin = '200px', threshold = 0.1 } = config;
-  
+
   const [assetsLoaded, setAssetsLoaded] = useState(false);
   const [loadProgress, setLoadProgress] = useState(0);
   const loadedAssetsRef = useRef(new Set<string>());
   const loadingRef = useRef(false);
+  const progressUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Batch progress updates to prevent cascade re-renders
+  const updateProgress = useCallback((immediate = false) => {
+    if (progressUpdateTimeoutRef.current && !immediate) {
+      return; // Already scheduled
+    }
+
+    const updateFn = () => {
+      const totalAssets = Object.entries(getProjectAssets()).filter(([, url]) => url).length;
+      const loadedCount = loadedAssetsRef.current.size;
+      const progress = totalAssets > 0 ? Math.min(loadedCount / totalAssets, 1) : 1;
+
+      setLoadProgress(progress);
+
+      if (progress >= 1) {
+        setAssetsLoaded(true);
+      }
+
+      progressUpdateTimeoutRef.current = null;
+    };
+
+    if (immediate) {
+      updateFn();
+    } else {
+      progressUpdateTimeoutRef.current = setTimeout(updateFn, 16); // Next frame
+    }
+  }, [projectId]);
 
   const getProjectAssets = useCallback((): ProjectAssets => {
     const assets: ProjectAssets = {
@@ -94,6 +122,7 @@ export const useProjectGridPreloader = (
       return;
     }
 
+    // Load assets and batch progress updates
     const promises = assetEntries.map(async ([key, url]) => {
       if (loadedAssetsRef.current.has(url)) return;
 
@@ -107,16 +136,14 @@ export const useProjectGridPreloader = (
         loadedAssetsRef.current.add(url);
       }
 
-      const loadedCount = loadedAssetsRef.current.size;
-      const progress = Math.min(loadedCount / totalAssets, 1);
-      setLoadProgress(progress);
-
-      if (progress >= 1) {
-        setAssetsLoaded(true);
-      }
+      // Batch the progress update instead of immediate state change
+      updateProgress();
     });
 
     await Promise.allSettled(promises);
+
+    // Final immediate update after all assets complete
+    updateProgress(true); // Immediate final update
     loadingRef.current = false;
   }, [getProjectAssets, preloadImage, preloadVideo]);
 
@@ -129,6 +156,15 @@ export const useProjectGridPreloader = (
     threshold,
     onIntersect: handleIntersection,
   });
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (progressUpdateTimeoutRef.current) {
+        clearTimeout(progressUpdateTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return {
     observeElement,

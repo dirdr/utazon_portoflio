@@ -1,9 +1,9 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 import { ReactLenis } from 'lenis/react';
 import App from "./App.tsx";
 import { AppLoadingProvider } from "./contexts/AppLoadingContext";
 import { CursorTrailProvider } from "./contexts/CursorTrailProvider";
+import { CanvasReadinessProvider } from "./contexts/CanvasReadinessProvider";
 import { GlobalLoaderWrapper } from "./component/app/GlobalLoaderWrapper";
 import "./index.css";
 import "./i18n";
@@ -51,22 +51,22 @@ if (!rootElement) {
 }
 
 ReactDOM.createRoot(rootElement).render(
-  <React.StrictMode>
-    <ReactLenis
-      root
-      options={{
-        lerp: 0.08,
-        wheelMultiplier: 1.2,
-        touchMultiplier: 1.8,
-      }}
-    >
-      <AppLoadingProvider>
-        <CursorTrailProvider>
+  <ReactLenis
+    root
+    options={{
+      lerp: 0.08,
+      wheelMultiplier: 1.2,
+      touchMultiplier: 1.8,
+    }}
+  >
+    <AppLoadingProvider>
+      <CursorTrailProvider>
+        <CanvasReadinessProvider>
           <GlobalLoaderWrapper>
             <App />
           </GlobalLoaderWrapper>
-        </CursorTrailProvider>
-      </AppLoadingProvider>
-    </ReactLenis>
-  </React.StrictMode>,
+        </CanvasReadinessProvider>
+      </CursorTrailProvider>
+    </AppLoadingProvider>
+  </ReactLenis>,
 );
