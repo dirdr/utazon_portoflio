@@ -1,0 +1,25 @@
+services:
+  utazon_backend:
+    container_name: utazon_backend
+    build: .
+    environment:
+      - PORT=3001
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
+      - DISCORD_BOT_TOKEN=${DISCORD_BOT_TOKEN}
+      - DISCORD_USER_IDS=${DISCORD_USER_IDS}
+      - RUST_LOG=${RUST_LOG}
+    restart: unless-stopped
+    networks:
+      - traefik_public
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.utazon_backend.rule=Host(`utazon-backend.adrienpelfresne.com`)"
+      - "traefik.http.routers.utazon_backend.entrypoints=websecure"
+      - "traefik.http.routers.utazon_backend.tls=true"
+      - "traefik.http.routers.utazon_backend.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.utazon_backend.service=utazon_backend"
+      - "traefik.http.services.utazon_backend.loadbalancer.server.port=3001"
+
+networks:
+  traefik_public:
+    external: true

@@ -57,7 +57,6 @@ impl DiscordNotifier {
         let url = "https://discord.com/api/v10/users/@me/channels";
         let payload = serde_json::json!({ "recipient_id": user_id });
 
-        // Create DM channel with the user
         let dm_response = client
             .post(url)
             .header("Authorization", format!("Bot {}", self.bot_token))
@@ -72,7 +71,6 @@ impl DiscordNotifier {
             .as_str()
             .ok_or_else(|| anyhow::anyhow!("Failed to get DM channel ID"))?;
 
-        // Send message to the DM channel
         let message_url = format!(
             "https://discord.com/api/v10/channels/{}/messages",
             channel_id
