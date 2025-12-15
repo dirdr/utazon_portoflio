@@ -1,3 +1,15 @@
+# Stage 1: Plan dependencies
+FROM rust:1.86-slim as planner
+
+WORKDIR /app
+
+RUN cargo install cargo-chef
+
+COPY . .
+
+RUN cargo chef prepare --recipe-path recipe.json
+
+# Stage 2: Build dependencies
 FROM rust:1.86-slim as builder
 
 WORKDIR /app
@@ -7,11 +19,14 @@ RUN apt-get update && apt-get install -y \
   libssl-dev \
   && rm -rf /var/lib/apt/lists/*
 
-COPY dummy.rs .
-COPY Cargo.toml .
-RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
-RUN cargo build --release
-RUN sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
+RUN cargo install cargo-chef
+
+COPY --from=planner /app/recipe.json recipe.json
+
+# Build dependencies - this layer is cached unless dependencies change
+RUN cargo chef cook --release --recipe-path recipe.json
+
+# Copy source code and build application
 COPY . .
 
 RUN cargo build --release

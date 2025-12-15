@@ -39,7 +39,10 @@ impl Notification for DiscordNotifier {
         if errors.is_empty() {
             Ok(())
         } else {
-            Err(anyhow::anyhow!("Some notifications failed: {}", errors.join("; ")))
+            Err(anyhow::anyhow!(
+                "Some notifications failed: {}",
+                errors.join("; ")
+            ))
         }
     }
 }
@@ -70,7 +73,10 @@ impl DiscordNotifier {
             .ok_or_else(|| anyhow::anyhow!("Failed to get DM channel ID"))?;
 
         // Send message to the DM channel
-        let message_url = format!("https://discord.com/api/v10/channels/{}/messages", channel_id);
+        let message_url = format!(
+            "https://discord.com/api/v10/channels/{}/messages",
+            channel_id
+        );
         let message_payload = serde_json::json!({ "content": message });
 
         client
@@ -102,10 +108,10 @@ async fn contact_handler(
 
     let notifier = DiscordNotifier::new(
         state.config.discord_bot_token.clone(),
-        state.config.discord_user_ids.clone()
+        state.config.discord_user_ids.clone(),
     );
     let message = format_contact_message(&form);
-    
+
     match notifier.notify(message).await {
         Ok(()) => Ok(Json(serde_json::json!({
             "success": true,
@@ -117,7 +123,7 @@ async fn contact_handler(
                 "error": "Failed to process contact form",
                 "message": "An error occurred while processing your request"
             })),
-        ))
+        )),
     }
 }
 
@@ -146,30 +152,30 @@ fn validate_contact_form(form: &ContactForm) -> Result<(), String> {
     if form.first_name.trim().is_empty() {
         return Err("First name is required".to_string());
     }
-    
+
     if form.last_name.trim().is_empty() {
         return Err("Last name is required".to_string());
     }
-    
+
     if form.email.trim().is_empty() {
         return Err("Email is required".to_string());
     }
-    
+
     if !form.email.contains('@') {
         return Err("Invalid email format".to_string());
     }
-    
+
     if form.message.trim().is_empty() {
         return Err("Message is required".to_string());
     }
-    
+
     if form.first_name.len() > 50 || form.last_name.len() > 50 {
         return Err("Name fields cannot exceed 50 characters".to_string());
     }
-    
+
     if form.message.len() > 1000 {
         return Err("Message cannot exceed 1000 characters".to_string());
     }
-    
+
     Ok(())
 }

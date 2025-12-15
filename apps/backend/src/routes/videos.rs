@@ -81,7 +81,7 @@ pub async fn list_videos_handler(
                 "message": "Failed to list videos",
                 "code": "VIDEO_LIST_FAILED"
             })),
-        ))
+        )),
     }
 }
 
