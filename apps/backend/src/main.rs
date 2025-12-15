@@ -10,19 +10,13 @@ use tower::ServiceBuilder;
 use tower_http::{cors::CorsLayer, trace::TraceLayer};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
-mod config;
-mod errors;
-mod handlers;
-mod middleware;
-mod routes;
-mod services;
-mod state;
-mod validation;
+// Feature modules
+mod common;
+mod health;
+mod contact;
+mod video;
 
-use crate::{
-    config::AppConfig, handlers::health::health_handler, routes::contact::contact_routes,
-    state::AppState,
-};
+use crate::common::{AppConfig, AppState};
 
 const API_VERSION: &str = "v1";
 
@@ -69,19 +63,19 @@ async fn main() -> anyhow::Result<()> {
 
     let app_state = AppState::new(config);
 
-    let api_v1 = Router::new()
-        .route("/health", get(health_handler))
-        .merge(contact_routes());
+    // API routes
+    let api_routes = Router::new()
+        .merge(health::routes())
+        .merge(contact::routes());
+        // .merge(video::routes())  // Uncomment when video feature is ready
 
     let app = Router::new()
         .route("/", get(root_handler))
-        .nest(&format!("/api/{}", API_VERSION), api_v1)
-        .route("/api/health", get(health_handler))
-        .nest("/api", contact_routes())
+        .nest(&format!("/api/{}", API_VERSION), api_routes)
         .layer(
             ServiceBuilder::new()
                 .layer(axum::middleware::from_fn(
-                    crate::middleware::request_id::request_id_middleware,
+                    crate::common::middleware::request_id_middleware,
                 ))
                 .layer(TraceLayer::new_for_http())
                 .layer(cors)
@@ -108,8 +102,6 @@ async fn root_handler() -> Json<Value> {
         "endpoints": {
             "health": format!("GET /api/{}/health", API_VERSION),
             "contact": format!("POST /api/{}/contact - submit contact form", API_VERSION),
-            "legacy_health": "GET /api/health (deprecated, use versioned endpoint)",
-            "legacy_contact": "POST /api/contact (deprecated, use versioned endpoint)"
         },
         "timestamp": chrono::Utc::now().to_rfc3339()
     }))

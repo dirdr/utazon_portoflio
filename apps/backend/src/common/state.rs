@@ -1,7 +1,7 @@
 use std::sync::Arc;
 use std::time::SystemTime;
 
-use crate::config::AppConfig;
+use crate::common::config::AppConfig;
 
 #[derive(Clone)]
 pub struct AppState {

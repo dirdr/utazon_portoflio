@@ -3,12 +3,8 @@ use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use validator::Validate;
 
-use crate::{
-    errors::AppResult,
-    services::notification::{DiscordNotifier, Notification},
-    state::AppState,
-    validation,
-};
+use crate::common::{AppResult, AppState, validate};
+use crate::contact::service::{DiscordNotifier, Notification};
 
 #[derive(Debug, Clone, Deserialize, Serialize, Validate)]
 pub struct ContactForm {
@@ -51,7 +47,7 @@ pub async fn contact_handler(
 ) -> AppResult<Json<Value>> {
     tracing::info!("Received contact form submission");
 
-    validation::validate(&form)?;
+    validate(&form)?;
 
     let notifier = DiscordNotifier::new(
         state.http_client.clone(),
@@ -111,7 +107,7 @@ mod tests {
             message: "Test message".to_string(),
         };
 
-        assert!(validation::validate(&form).is_ok());
+        assert!(validate(&form).is_ok());
     }
 
     #[test]
@@ -124,7 +120,7 @@ mod tests {
             message: "Test message".to_string(),
         };
 
-        assert!(validation::validate(&form).is_err());
+        assert!(validate(&form).is_err());
     }
 
     #[test]
@@ -137,7 +133,7 @@ mod tests {
             message: "a".repeat(1001),
         };
 
-        assert!(validation::validate(&form).is_err());
+        assert!(validate(&form).is_err());
     }
 
     #[test]
@@ -150,6 +146,6 @@ mod tests {
             message: "Test".to_string(),
         };
 
-        assert!(validation::validate(&form).is_err());
+        assert!(validate(&form).is_err());
     }
 }

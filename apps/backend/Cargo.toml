@@ -26,3 +26,4 @@ thiserror = "2.0"
 validator = { version = "0.18", features = ["derive"] }
 uuid = { version = "1.11", features = ["v4", "serde"] }
 async-trait = "0.1"
+aws-sdk-s3 = "1.117.0"

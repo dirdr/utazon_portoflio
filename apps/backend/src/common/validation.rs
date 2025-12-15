@@ -1,6 +1,6 @@
 use validator::Validate;
 
-use crate::errors::AppError;
+use crate::common::errors::AppError;
 
 pub fn validate<T: Validate>(data: &T) -> Result<(), AppError> {
     data.validate()

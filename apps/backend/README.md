@@ -1,12 +1,7 @@
-# Utazon Backend
+# Backend service for [utazon](https:://utazon.fr) portfolio
 
-REST API :
-1. Stream MinIO storage videos
-2. Handle the contact
+This rust axum backend handle presigned url generation and contact discord hook
 
-## API Endpoints
-- `GET /` - API information
-- `GET /api/health` - Health check
-- `GET /api/videos` - List available videos
-- `GET /api/videos/:videoId` - Stream video content
+## Setup
 
+Copy env.example and fill out required env variable

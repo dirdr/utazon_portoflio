@@ -1,6 +1,6 @@
 use async_trait::async_trait;
 
-use crate::errors::{AppError, AppResult};
+use crate::common::errors::{AppError, AppResult};
 
 #[async_trait]
 pub trait Notification: Send + Sync {
