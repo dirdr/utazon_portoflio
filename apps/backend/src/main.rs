@@ -19,8 +19,7 @@ mod state;
 use crate::{
     config::AppConfig,
     handlers::health::health_handler,
-    routes::{contact::mail_routes, videos::video_routes},
-    services::minio::MinioService,
+    routes::contact::mail_routes,
     state::AppState,
 };
 
@@ -36,8 +35,6 @@ async fn main() -> anyhow::Result<()> {
 
     let config = AppConfig::from_env()?;
     let port = config.port;
-
-    let minio_service = MinioService::new(&config).await?;
 
     let cors = CorsLayer::new()
         .allow_origin(
@@ -57,11 +54,10 @@ async fn main() -> anyhow::Result<()> {
         ])
         .allow_credentials(true);
 
-    let app_state = AppState::new(minio_service, config);
+    let app_state = AppState::new(config);
     let app = Router::<AppState>::new()
         .route("/", get(root_handler))
         .route("/api/health", get(health_handler))
-        .nest("/api/videos", video_routes(app_state.clone()))
         .nest("/api", mail_routes(app_state.clone()))
         .layer(
             ServiceBuilder::new()
@@ -87,8 +83,6 @@ async fn root_handler() -> Json<Value> {
         "version": "1.0.0",
         "endpoints": {
             "health": "GET /api/health",
-            "listVideos": "GET /api/videos",
-            "videoStream": "GET /api/videos/:videoId - supports paths like 'showreel.mp4' or 'aurum-nova/details.mp4'",
             "contact": "POST /api/contact - submit contact form"
         },
         "timestamp": chrono::Utc::now().to_rfc3339()
