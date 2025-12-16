@@ -4,7 +4,7 @@ use serde_json::{Value, json};
 use validator::Validate;
 
 use crate::common::{AppResult, AppState, validate};
-use crate::contact::service::{DiscordNotifier, Notification};
+use crate::domains::contact::service::{DiscordNotifier, Notification};
 
 #[derive(Debug, Clone, Deserialize, Serialize, Validate)]
 pub struct ContactForm {
@@ -41,7 +41,7 @@ pub struct ContactForm {
 }
 
 #[tracing::instrument(skip(state, form), fields(email = %form.email))]
-pub async fn contact_handler(
+pub(super) async fn contact_handler(
     State(state): State<AppState>,
     Json(form): Json<ContactForm>,
 ) -> AppResult<Json<Value>> {
@@ -65,7 +65,7 @@ pub async fn contact_handler(
     })))
 }
 
-pub fn format_contact_message(form: &ContactForm) -> String {
+fn format_contact_message(form: &ContactForm) -> String {
     format!(
         "**Yo brozer, nouvelle demande de contact!**\n\
         👤 Nom: {}\n\

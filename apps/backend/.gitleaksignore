@@ -1,0 +1,6 @@
+# Gitleaks ignore file for false positives
+# Add patterns or specific findings to ignore
+
+# Example test tokens
+tests/test_helpers.rs:*test_token*
+tests/test_helpers.rs:*test_user_id*

@@ -10,13 +10,8 @@ use tower::ServiceBuilder;
 use tower_http::{cors::CorsLayer, trace::TraceLayer};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
-// Feature modules
-mod common;
-mod health;
-mod contact;
-mod video;
-
-use crate::common::{AppConfig, AppState};
+use utazon_backend::common::{AppConfig, AppState};
+use utazon_backend::domains;
 
 const API_VERSION: &str = "v1";
 
@@ -63,11 +58,9 @@ async fn main() -> anyhow::Result<()> {
 
     let app_state = AppState::new(config);
 
-    // API routes
     let api_routes = Router::new()
-        .merge(health::routes())
-        .merge(contact::routes());
-        // .merge(video::routes())  // Uncomment when video feature is ready
+        .merge(domains::health::routes())
+        .merge(domains::contact::routes());
 
     let app = Router::new()
         .route("/", get(root_handler))
@@ -75,7 +68,7 @@ async fn main() -> anyhow::Result<()> {
         .layer(
             ServiceBuilder::new()
                 .layer(axum::middleware::from_fn(
-                    crate::common::middleware::request_id_middleware,
+                    utazon_backend::common::middleware::request_id_middleware,
                 ))
                 .layer(TraceLayer::new_for_http())
                 .layer(cors)

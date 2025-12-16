@@ -6,8 +6,7 @@ use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-use crate::common::AppState;
-use crate::video::service::GetPresignedVideoUrl;
+use crate::{common::AppState, domains::video::GetPresignedVideoUrl};
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct GetPresignedVideoUrlQuery {
@@ -16,8 +15,8 @@ pub struct GetPresignedVideoUrlQuery {
 }
 
 pub async fn video_handler(
-    Query(params): Query<GetPresignedVideoUrlQuery>,
-    State(state): State<AppState>,
+    Query(_params): Query<GetPresignedVideoUrlQuery>,
+    State(_state): State<AppState>,
 ) -> (StatusCode, Json<Value>) {
     todo!()
 }

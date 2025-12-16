@@ -5,6 +5,10 @@ edition = "2024"
 authors = ["Adrien Pelfresne"]
 description = "API for Utazon Portfolio, handling presigned url generation, and contact requests"
 
+[lib]
+name = "utazon_backend"
+path = "src/lib.rs"
+
 [[bin]]
 name = "utazon_backend"
 path = "src/main.rs"
@@ -27,3 +31,7 @@ validator = { version = "0.18", features = ["derive"] }
 uuid = { version = "1.11", features = ["v4", "serde"] }
 async-trait = "0.1"
 aws-sdk-s3 = "1.117.0"
+
+[dev-dependencies]
+tower = { version = "0.5", features = ["util"] }
+http-body-util = "0.1"
