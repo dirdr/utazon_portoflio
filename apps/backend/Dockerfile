@@ -1,5 +1,4 @@
-# Stage 1: Plan dependencies
-FROM rust:1.86-slim as planner
+FROM rust:1.92-slim as planner
 
 WORKDIR /app
 
@@ -9,8 +8,7 @@ COPY . .
 
 RUN cargo chef prepare --recipe-path recipe.json
 
-# Stage 2: Build dependencies
-FROM rust:1.86-slim as builder
+FROM rust:1.92-slim as builder
 
 WORKDIR /app
 
@@ -23,10 +21,8 @@ RUN cargo install cargo-chef
 
 COPY --from=planner /app/recipe.json recipe.json
 
-# Build dependencies - this layer is cached unless dependencies change
 RUN cargo chef cook --release --recipe-path recipe.json
 
-# Copy source code and build application
 COPY . .
 
 RUN cargo build --release
