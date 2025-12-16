@@ -11,8 +11,6 @@ use utazon_backend::common::infrastructure::storage::{StorageClient, StorageErro
 use utazon_backend::common::{AppError, AppResult, AppState, PublicConfig, Secrets};
 use utazon_backend::domains::contact::service::Notification;
 
-// ============= Mock Storage =============
-
 #[derive(Clone)]
 pub struct MockStorage {
     pub should_fail: bool,
@@ -26,6 +24,12 @@ impl MockStorage {
     #[allow(dead_code)]
     pub fn with_failure() -> Self {
         Self { should_fail: true }
+    }
+}
+
+impl Default for MockStorage {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
@@ -47,8 +51,6 @@ impl StorageClient for MockStorage {
     }
 }
 
-// ============= Mock Notifier =============
-
 #[derive(Clone)]
 pub struct MockNotifier {
     pub should_fail: bool,
@@ -65,6 +67,12 @@ impl MockNotifier {
     }
 }
 
+impl Default for MockNotifier {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 #[async_trait]
 impl Notification for MockNotifier {
     async fn notify(&self, _message: String) -> AppResult<()> {
@@ -74,8 +82,6 @@ impl Notification for MockNotifier {
         Ok(())
     }
 }
-
-// ============= Test App Creation =============
 
 pub fn create_test_app() -> Router {
     let http_client = reqwest::Client::builder()
@@ -163,8 +169,6 @@ fn create_app_with_state(app_state: AppState) -> Router {
         )
         .with_state(app_state)
 }
-
-// ============= Test Request Helpers =============
 
 pub async fn request(method: Method, uri: &str) -> axum::response::Response {
     let app = create_test_app();
