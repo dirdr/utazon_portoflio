@@ -1,3 +1,4 @@
+use async_trait::async_trait;
 use axum::{
     Router,
     body::Body,
@@ -5,10 +6,9 @@ use axum::{
 };
 use std::sync::Arc;
 use tower::ServiceExt;
-use async_trait::async_trait;
 
-use utazon_backend::common::{AppState, PublicConfig, Secrets, AppResult, AppError};
 use utazon_backend::common::infrastructure::storage::{StorageClient, StorageError};
+use utazon_backend::common::{AppError, AppResult, AppState, PublicConfig, Secrets};
 use utazon_backend::domains::contact::service::Notification;
 
 // ============= Mock Storage =============
@@ -20,16 +20,12 @@ pub struct MockStorage {
 
 impl MockStorage {
     pub fn new() -> Self {
-        Self {
-            should_fail: false,
-        }
+        Self { should_fail: false }
     }
 
     #[allow(dead_code)]
     pub fn with_failure() -> Self {
-        Self {
-            should_fail: true,
-        }
+        Self { should_fail: true }
     }
 }
 
@@ -44,7 +40,10 @@ impl StorageClient for MockStorage {
             return Err(StorageError::S3Error("Mock storage error".to_string()));
         }
 
-        Ok(format!("https://mock-r2.com/{}?expires={}", object_key, expires_in_secs))
+        Ok(format!(
+            "https://mock-r2.com/{}?expires={}",
+            object_key, expires_in_secs
+        ))
     }
 }
 
@@ -57,16 +56,12 @@ pub struct MockNotifier {
 
 impl MockNotifier {
     pub fn new() -> Self {
-        Self {
-            should_fail: false,
-        }
+        Self { should_fail: false }
     }
 
     #[allow(dead_code)]
     pub fn with_failure() -> Self {
-        Self {
-            should_fail: true,
-        }
+        Self { should_fail: true }
     }
 }
 
