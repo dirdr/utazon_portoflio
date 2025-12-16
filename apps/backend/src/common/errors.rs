@@ -6,6 +6,8 @@ use axum::{
 use serde_json::json;
 use thiserror::Error;
 
+use crate::common::infrastructure::storage::StorageError;
+
 #[derive(Error, Debug)]
 pub enum AppError {
     #[error("Validation error: {0}")]
@@ -16,6 +18,9 @@ pub enum AppError {
 
     #[error("HTTP client error: {0}")]
     HttpClient(#[from] reqwest::Error),
+
+    #[error("Storage error: {0}")]
+    Storage(#[from] StorageError),
 }
 
 impl IntoResponse for AppError {
@@ -34,6 +39,13 @@ impl IntoResponse for AppError {
                 (
                     StatusCode::INTERNAL_SERVER_ERROR,
                     "Failed to process request".to_string(),
+                )
+            }
+            AppError::Storage(err) => {
+                tracing::error!("Storage error: {}", err);
+                (
+                    StatusCode::INTERNAL_SERVER_ERROR,
+                    "Failed to generate presigned URL".to_string(),
                 )
             }
         };

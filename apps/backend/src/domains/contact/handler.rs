@@ -1,42 +1,25 @@
 use axum::{Json, extract::State};
+use garde::Validate;
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
-use validator::Validate;
 
 use crate::common::{AppResult, AppState, validate};
-use crate::domains::contact::service::{DiscordNotifier, Notification};
 
 #[derive(Debug, Clone, Deserialize, Serialize, Validate)]
 pub struct ContactForm {
-    #[validate(length(
-        min = 1,
-        max = 50,
-        message = "First name must be between 1 and 50 characters"
-    ))]
+    #[garde(length(min = 1, max = 50))]
     pub first_name: String,
 
-    #[validate(length(
-        min = 1,
-        max = 50,
-        message = "Last name must be between 1 and 50 characters"
-    ))]
+    #[garde(length(min = 1, max = 50))]
     pub last_name: String,
 
-    #[validate(length(
-        min = 1,
-        max = 20,
-        message = "Phone number must be between 1 and 20 characters"
-    ))]
+    #[garde(length(min = 1, max = 20))]
     pub number: String,
 
-    #[validate(email(message = "Invalid email format"))]
+    #[garde(email)]
     pub email: String,
 
-    #[validate(length(
-        min = 1,
-        max = 1000,
-        message = "Message must be between 1 and 1000 characters"
-    ))]
+    #[garde(length(min = 1, max = 1000))]
     pub message: String,
 }
 
@@ -49,14 +32,8 @@ pub(super) async fn contact_handler(
 
     validate(&form)?;
 
-    let notifier = DiscordNotifier::new(
-        state.http_client.clone(),
-        state.secrets.discord_bot_token.clone(),
-        state.config.discord_user_ids.clone(),
-    );
-
     let message = format_contact_message(&form);
-    notifier.notify(message).await?;
+    state.notifier.notify(message).await?;
 
     tracing::info!("Contact form processed successfully");
     Ok(Json(json!({

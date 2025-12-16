@@ -1,22 +1,22 @@
-use validator::Validate;
+use garde::Validate;
 
 use crate::common::errors::AppError;
 
-pub fn validate<T: Validate>(data: &T) -> Result<(), AppError> {
+pub fn validate<T: Validate>(data: &T) -> Result<(), AppError>
+where
+    T::Context: Default,
+{
     data.validate()
         .map_err(|e| AppError::Validation(format_validation_errors(&e)))
 }
 
-fn format_validation_errors(errors: &validator::ValidationErrors) -> String {
+fn format_validation_errors(errors: &garde::Report) -> String {
     errors
-        .field_errors()
         .iter()
-        .map(|(field, errors)| {
-            let messages: Vec<String> = errors
-                .iter()
-                .filter_map(|error| error.message.as_ref().map(|m| m.to_string()))
-                .collect();
-            format!("{}: {}", field, messages.join(", "))
+        .map(|(path, error)| {
+            let field = path.to_string();
+            let message = error.to_string();
+            format!("{}: {}", field, message)
         })
         .collect::<Vec<_>>()
         .join("; ")
@@ -25,13 +25,13 @@ fn format_validation_errors(errors: &validator::ValidationErrors) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use validator::Validate;
+    use garde::Validate;
 
     #[derive(Debug, Validate)]
     struct TestStruct {
-        #[validate(length(min = 1, max = 10, message = "Must be 1-10 chars"))]
+        #[garde(length(min = 1, max = 10))]
         name: String,
-        #[validate(email(message = "Invalid email"))]
+        #[garde(email)]
         email: String,
     }
 

@@ -27,7 +27,7 @@ anyhow = "1.0"
 chrono = { version = "0.4", features = ["serde"] }
 reqwest = { version = "0.12.22", features = ["json"] }
 thiserror = "2.0"
-validator = { version = "0.18", features = ["derive"] }
+garde = { version = "0.20", features = ["derive", "email"] }
 uuid = { version = "1.11", features = ["v4", "serde"] }
 async-trait = "0.1"
 aws-sdk-s3 = "1.117.0"

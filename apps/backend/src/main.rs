@@ -60,7 +60,8 @@ async fn main() -> anyhow::Result<()> {
 
     let api_routes = Router::new()
         .merge(domains::health::routes())
-        .merge(domains::contact::routes());
+        .merge(domains::contact::routes())
+        .merge(domains::video::routes());
 
     let app = Router::new()
         .route("/", get(root_handler))
@@ -95,6 +96,7 @@ async fn root_handler() -> Json<Value> {
         "endpoints": {
             "health": format!("GET /api/{}/health", API_VERSION),
             "contact": format!("POST /api/{}/contact - submit contact form", API_VERSION),
+            "video": format!("GET /api/{}/video?object_key=<key>&expires_in=<seconds> - generate presigned URL", API_VERSION),
         },
         "timestamp": chrono::Utc::now().to_rfc3339()
     }))
