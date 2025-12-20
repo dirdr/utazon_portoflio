@@ -40,13 +40,19 @@ async fn main() -> anyhow::Result<()> {
     let port = config.port;
 
     let cors = CorsLayer::new()
-        .allow_origin(
-            config
-                .allowed_origins
-                .iter()
-                .map(|origin| origin.parse::<HeaderValue>())
-                .collect::<Result<Vec<_>, _>>()?,
-        )
+        .allow_origin_fn(move |origin: &HeaderValue, _| {
+            origin
+                .to_str()
+                .ok()
+                .map(|o| {
+                    allowed_origins.iter().any(|ao| {
+                        let ao_str = ao.to_str().unwrap_or_default();
+                        // Exact match OR allow any subdomain
+                        o == ao_str || o.ends_with(&format!(".{}", ao_str))
+                    })
+                })
+                .unwrap_or(false)
+        })
         .allow_methods([Method::GET, Method::POST, Method::OPTIONS])
         .allow_headers([
             header::CONTENT_TYPE,
