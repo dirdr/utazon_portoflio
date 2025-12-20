@@ -17,7 +17,7 @@ services:
       - traefik_public
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.utazon_backend.rule=Host(`utazon-backend.adrienpelfresne.com`)"
+      - "traefik.http.routers.utazon_backend.rule=Host(`api.utazon.fr`)"
       - "traefik.http.routers.utazon_backend.entrypoints=websecure"
       - "traefik.http.routers.utazon_backend.tls=true"
       - "traefik.http.routers.utazon_backend.tls.certresolver=letsencrypt"
