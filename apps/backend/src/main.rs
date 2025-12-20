@@ -51,7 +51,7 @@ async fn main() -> anyhow::Result<()> {
             header::ORIGIN,
             header::RANGE,
         ])
-        .expose_headers(header::CONTENT_RANGE)
+        .expose_headers([header::CONTENT_RANGE])
         .allow_credentials(false);
 
     let app_state = AppState::new(config);
