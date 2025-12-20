@@ -48,6 +48,6 @@ USER utazon
 EXPOSE 3001
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
-  CMD curl -f http://localhost:3001/api/health -v || exit 1
+  CMD curl -f http://localhost:3001/api/v1/health -v || exit 1
 
 CMD ["./utazon_backend"]
