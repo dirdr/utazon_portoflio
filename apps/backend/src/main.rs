@@ -51,7 +51,7 @@ async fn main() -> anyhow::Result<()> {
             header::ORIGIN,
             header::RANGE,
         ])
-        .allow_credentials(true);
+        .allow_credentials(false);
 
     let app_state = AppState::new(config);
 
