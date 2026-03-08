@@ -59,3 +59,60 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
       - run: cargo build --release --verbose
+
+  docker:
+    name: Docker Build & Push
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs: [gitleaks, fmt, clippy, test, build]
+    permissions:
+      contents: read
+      packages: write
+    env:
+      IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/utazon-backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_NAME }}
+          tags: |
+            type=sha,prefix=sha-,format=short
+            type=ref,event=tag
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Update image tag in IAC repo
+        env:
+          GH_TOKEN: ${{ secrets.IAC_REPO_TOKEN }}
+          SHORT_SHA: ${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.revision'] }}
+        run: |
+          SHORT=$(echo "$SHORT_SHA" | cut -c1-7)
+          git clone https://x-access-token:${GH_TOKEN}@github.com/dirdr/iac.git  # TODO: replace YOUR_ORG
+          cd iac
+          git config user.email "ci@github.com"
+          git config user.name "CI"
+          sed -i "s|tag:.*|tag: \"sha-${SHORT}\"|" charts/utazon-backend/values.prod.yaml
+          git add charts/utazon-backend/values.prod.yaml
+          git commit -m "chore(utazon-backend): bump to sha-${SHORT}"
+          git push
