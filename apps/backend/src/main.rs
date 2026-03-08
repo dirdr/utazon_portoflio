@@ -1,7 +1,7 @@
 use axum::{
     Json, Router,
     extract::DefaultBodyLimit,
-    http::{HeaderValue, Method, header},
+    http::{Method, header},
     routing::get,
 };
 use serde_json::{Value, json};
