@@ -109,8 +109,8 @@ jobs:
         id: app-token
         uses: actions/create-github-app-token@v1
         with:
-          app-id: ${{ secrets.IAC_APP_ID }}
-          private-key: ${{ secrets.IAC_APP_PRIVATE_KEY }}
+          app-id: ${{ secrets.DIRDR_CI_APP_ID}}
+          private-key: ${{ secrets.DIRDR_CI_APP_PEM }}
           owner: dirdr
           repositories: iac
 
