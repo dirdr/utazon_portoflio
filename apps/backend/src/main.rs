@@ -49,7 +49,10 @@ async fn main() -> anyhow::Result<()> {
 
     let exact_origins = exact
         .into_iter()
-        .map(|o| o.parse::<header::HeaderValue>().expect("Invalid origin in ALLOWED_ORIGINS"))
+        .map(|o| {
+            o.parse::<header::HeaderValue>()
+                .expect("Invalid origin in ALLOWED_ORIGINS")
+        })
         .collect::<Vec<_>>();
 
     // Wildcard entries like "*.pages.dev" → match any origin ending with ".pages.dev"
@@ -62,7 +65,9 @@ async fn main() -> anyhow::Result<()> {
         .allow_origin(AllowOrigin::predicate(move |origin, _req| {
             let s = origin.to_str().unwrap_or("");
             exact_origins.iter().any(|e| e == origin)
-                || wildcard_suffixes.iter().any(|suffix| s.ends_with(suffix.as_str()))
+                || wildcard_suffixes
+                    .iter()
+                    .any(|suffix| s.ends_with(suffix.as_str()))
         }))
         .allow_methods([Method::GET, Method::POST, Method::OPTIONS])
         .allow_headers([
