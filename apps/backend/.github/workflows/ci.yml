@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [main]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   CARGO_TERM_COLOR: always
 
@@ -13,6 +17,8 @@ jobs:
   gitleaks:
     name: Secret Scanning
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
         with:
@@ -24,6 +30,8 @@ jobs:
   fmt:
     name: Format
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
@@ -34,6 +42,8 @@ jobs:
   clippy:
     name: Clippy
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
@@ -45,26 +55,19 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
       - run: cargo test --verbose
 
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
-      - run: cargo build --release --verbose
-
   docker:
     name: Docker Build & Push
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    needs: [gitleaks, fmt, clippy, test, build]
+    needs: [gitleaks, fmt, clippy, test]
     permissions:
       contents: read
       packages: write
@@ -89,7 +92,6 @@ jobs:
           images: ${{ env.IMAGE_NAME }}
           tags: |
             type=sha,prefix=sha-,format=short
-            type=ref,event=tag
             type=raw,value=latest,enable={{is_default_branch}}
 
       - name: Build and push
@@ -101,18 +103,26 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          provenance: false
+
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.IAC_APP_ID }}
+          private-key: ${{ secrets.IAC_APP_PRIVATE_KEY }}
+          owner: dirdr
+          repositories: iac
 
       - name: Update image tag in IAC repo
         env:
-          GH_TOKEN: ${{ secrets.IAC_REPO_TOKEN }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           SHORT_SHA: ${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.revision'] }}
         run: |
           SHORT=$(echo "$SHORT_SHA" | cut -c1-7)
-          git clone https://x-access-token:${GH_TOKEN}@github.com/dirdr/iac.git  # TODO: replace YOUR_ORG
+          git clone https://x-access-token:${GH_TOKEN}@github.com/dirdr/iac.git
           cd iac
-          git config user.email "ci@github.com"
-          git config user.name "CI"
           sed -i "s|tag:.*|tag: \"sha-${SHORT}\"  # auto-updated by CI|" helm/utazon-backend/values.yaml
           git add helm/utazon-backend/values.yaml
-          git commit -m "chore(utazon-backend): bump to sha-${SHORT}"
+          git diff --cached --quiet || git commit -m "chore(utazon-backend): bump to sha-${SHORT}"
           git push
