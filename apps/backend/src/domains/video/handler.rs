@@ -37,7 +37,7 @@ struct ExpiresIn(u64);
 impl TryFrom<u64> for ExpiresIn {
     type Error = String;
     fn try_from(n: u64) -> Result<Self, Self::Error> {
-        if n < 60 || n > 3600 {
+        if !(60..=3600).contains(&n) {
             Err("must be between 60 and 3600 seconds".to_string())
         } else {
             Ok(ExpiresIn(n))
