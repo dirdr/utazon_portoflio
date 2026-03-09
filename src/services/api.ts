@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_UTAZON_API_URL || "api.utazon.fr";
+const API_URL = import.meta.env.VITE_UTAZON_API_URL || "https://api.utazon.fr";
 
 class ApiClient {
   private baseUrl: string;
@@ -76,7 +76,7 @@ class ApiClient {
       message: data.message,
     };
 
-    const response = await fetch(`${API_URL}/api/contact`, {
+    const response = await fetch(`${API_URL}/api/v1/contact`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
