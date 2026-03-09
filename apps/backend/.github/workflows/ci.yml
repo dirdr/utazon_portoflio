@@ -112,7 +112,7 @@ jobs:
           cd iac
           git config user.email "ci@github.com"
           git config user.name "CI"
-          sed -i "s|tag:.*|tag: \"sha-${SHORT}\"|" charts/utazon-backend/values.prod.yaml
-          git add charts/utazon-backend/values.prod.yaml
+          sed -i "s|tag:.*|tag: \"sha-${SHORT}\"  # auto-updated by CI|" helm/utazon-backend/values.yaml
+          git add helm/utazon-backend/values.yaml
           git commit -m "chore(utazon-backend): bump to sha-${SHORT}"
           git push

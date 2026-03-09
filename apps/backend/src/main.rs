@@ -8,7 +8,7 @@ use serde_json::{Value, json};
 use std::net::SocketAddr;
 use tower::ServiceBuilder;
 use tower_http::{
-    cors::{Any, CorsLayer},
+    cors::CorsLayer,
     trace::TraceLayer,
 };
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
@@ -42,8 +42,14 @@ async fn main() -> anyhow::Result<()> {
     let config = AppConfig::from_env()?;
     let port = config.port;
 
+    let allowed_origins = config
+        .allowed_origins
+        .iter()
+        .map(|o| o.parse().expect("Invalid origin in ALLOWED_ORIGINS"))
+        .collect::<Vec<_>>();
+
     let cors = CorsLayer::new()
-        .allow_origin(Any)
+        .allow_origin(allowed_origins)
         .allow_methods([Method::GET, Method::POST, Method::OPTIONS])
         .allow_headers([
             header::CONTENT_TYPE,
