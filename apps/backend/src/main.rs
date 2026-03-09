@@ -7,7 +7,10 @@ use axum::{
 use serde_json::{Value, json};
 use std::net::SocketAddr;
 use tower::ServiceBuilder;
-use tower_http::{cors::CorsLayer, trace::TraceLayer};
+use tower_http::{
+    cors::{AllowOrigin, CorsLayer},
+    trace::TraceLayer,
+};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 use utazon_backend::common::{AppConfig, AppState};
@@ -39,14 +42,28 @@ async fn main() -> anyhow::Result<()> {
     let config = AppConfig::from_env()?;
     let port = config.port;
 
-    let allowed_origins = config
+    let (exact, wildcards): (Vec<_>, Vec<_>) = config
         .allowed_origins
         .iter()
-        .map(|o| o.parse().expect("Invalid origin in ALLOWED_ORIGINS"))
+        .partition(|o| !o.starts_with("*."));
+
+    let exact_origins = exact
+        .into_iter()
+        .map(|o| o.parse::<header::HeaderValue>().expect("Invalid origin in ALLOWED_ORIGINS"))
+        .collect::<Vec<_>>();
+
+    // Wildcard entries like "*.pages.dev" → match any origin ending with ".pages.dev"
+    let wildcard_suffixes = wildcards
+        .into_iter()
+        .map(|o| o[1..].to_string()) // strip leading "*"
         .collect::<Vec<_>>();
 
     let cors = CorsLayer::new()
-        .allow_origin(allowed_origins)
+        .allow_origin(AllowOrigin::predicate(move |origin, _req| {
+            let s = origin.to_str().unwrap_or("");
+            exact_origins.iter().any(|e| e == origin)
+                || wildcard_suffixes.iter().any(|suffix| s.ends_with(suffix.as_str()))
+        }))
         .allow_methods([Method::GET, Method::POST, Method::OPTIONS])
         .allow_headers([
             header::CONTENT_TYPE,
