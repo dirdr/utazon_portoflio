@@ -1,23 +1,19 @@
-FROM rust:1.92-bookworm AS planner
+FROM lukemathwalker/cargo-chef:latest-rust-1.92-bookworm AS chef
 
 WORKDIR /app
 
-RUN cargo install cargo-chef
+FROM chef AS planner
 
 COPY . .
 
 RUN cargo chef prepare --recipe-path recipe.json
 
-FROM rust:1.92-bookworm AS builder
-
-WORKDIR /app
+FROM chef AS builder
 
 RUN apt-get update && apt-get install -y \
   pkg-config \
   libssl-dev \
   && rm -rf /var/lib/apt/lists/*
-
-RUN cargo install cargo-chef
 
 COPY --from=planner /app/recipe.json recipe.json
 
