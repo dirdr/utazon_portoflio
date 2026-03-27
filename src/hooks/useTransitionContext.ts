@@ -13,4 +13,3 @@ export const useTransitionContext = (): TransitionContextType => {
   }
   return context;
 };
-

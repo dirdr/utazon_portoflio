@@ -100,4 +100,3 @@ export const useNavigationDetection = () => {
     currentLocation: location,
   };
 };
-

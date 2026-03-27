@@ -51,7 +51,7 @@ export const DEFAULT_VIDEO_TRANSITION_CONFIG: VideoTransitionConfig = {
   },
 
   general: {
-    debug: true,
+    debug: import.meta.env.DEV,
   },
 };
 

@@ -20,9 +20,9 @@ export const HomeFadeInContainer = ({
   instantForSPA = false,
   transitionDuration,
 }: HomeFadeInContainerProps) => {
-  const baseClasses = instantForSPA 
-    ? "" 
-    : transitionDuration 
+  const baseClasses = instantForSPA
+    ? ""
+    : transitionDuration
       ? "transition-opacity ease-in-out" // Use custom duration, skip default
       : ANIMATION_CLASSES.TRANSITION;
   const visibilityClasses = isVisible
@@ -32,8 +32,10 @@ export const HomeFadeInContainer = ({
   const combinedStyle = useMemo(() => {
     const delayStyle =
       delay > 0 && !instantForSPA ? { transitionDelay: `${delay}ms` } : {};
-    const durationStyle = 
-      transitionDuration && !instantForSPA ? { transitionDuration: `${transitionDuration}ms` } : {};
+    const durationStyle =
+      transitionDuration && !instantForSPA
+        ? { transitionDuration: `${transitionDuration}ms` }
+        : {};
     return { ...delayStyle, ...durationStyle, ...style };
   }, [delay, instantForSPA, transitionDuration, style]);
 
@@ -47,14 +49,23 @@ export const HomeFadeInContainer = ({
     } else {
       startTimeRef.current = undefined;
     }
-  }, [isVisible, delay, transitionDuration, instantForSPA, baseClasses, visibilityClasses, combinedStyle]);
+  }, [
+    isVisible,
+    delay,
+    transitionDuration,
+    instantForSPA,
+    baseClasses,
+    visibilityClasses,
+    combinedStyle,
+  ]);
 
   return (
     <div
       className={`${baseClasses} ${visibilityClasses} ${className}`}
       style={combinedStyle}
       onTransitionEnd={(e) => {
-        if (e.target === e.currentTarget) { // Only log for this element, not children
+        if (e.target === e.currentTarget) {
+          // Only log for this element, not children
         }
       }}
     >

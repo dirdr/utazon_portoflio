@@ -9,13 +9,13 @@ interface SingleImageShowcaseProps {
   border?: boolean;
 }
 
-export const SingleImageShowcase = ({ 
-  data, 
+export const SingleImageShowcase = ({
+  data,
   className,
-  border = false
+  border = false,
 }: SingleImageShowcaseProps) => {
   const { image } = data;
-  
+
   return (
     <div className={cn("w-full", className)}>
       <ShowcaseImage
@@ -24,7 +24,7 @@ export const SingleImageShowcase = ({
         className={cn(
           "w-full h-auto object-contain",
           border && SHOWCASE_STYLES.borderRadius,
-          border && SHOWCASE_STYLES.border
+          border && SHOWCASE_STYLES.border,
         )}
       />
     </div>

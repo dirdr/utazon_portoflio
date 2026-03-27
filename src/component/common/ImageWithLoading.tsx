@@ -7,11 +7,11 @@ interface ImageWithLoadingProps {
   placeholderClassName?: string;
 }
 
-export const ImageWithLoading = ({ 
-  src, 
-  alt, 
-  className = "", 
-  placeholderClassName = ""
+export const ImageWithLoading = ({
+  src,
+  alt,
+  className = "",
+  placeholderClassName = "",
 }: ImageWithLoadingProps) => {
   const { isLoaded } = useImageLoadState(src);
 

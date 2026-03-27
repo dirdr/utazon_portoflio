@@ -28,9 +28,7 @@ export const CopyrightOverlay = ({
   className = "",
 }: CopyrightOverlayProps) => {
   return (
-    <div
-      className={`absolute bottom-2 left-0 w-full text-center ${className}`}
-    >
+    <div className={`absolute bottom-2 left-0 w-full text-center ${className}`}>
       <p className="text-xs text-white px-2 py-1 inline-block">
         {t(translationKey)}
       </p>

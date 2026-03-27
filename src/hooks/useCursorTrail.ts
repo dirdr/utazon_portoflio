@@ -8,4 +8,3 @@ export const useCursorTrail = () => {
   }
   return context;
 };
-

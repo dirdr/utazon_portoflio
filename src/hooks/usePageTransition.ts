@@ -164,4 +164,3 @@ export const usePageTransition = (config: PageTransitionConfig = {}) => {
     startManualTransition,
   };
 };
-

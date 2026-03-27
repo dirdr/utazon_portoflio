@@ -105,7 +105,9 @@ export const SoundPlayer: React.FC<SoundPlayerProps> = ({
           {barsConfig.map((bar, index) => (
             <div
               key={index}
-              ref={(el) => { barsRef.current[index] = el; }}
+              ref={(el) => {
+                barsRef.current[index] = el;
+              }}
               className={cn(
                 "h-1.5 md:h-2.5 bg-white rounded-full transform-gpu",
                 !isPlaying && "scale-y-[0.2]",

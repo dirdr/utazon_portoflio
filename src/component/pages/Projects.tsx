@@ -7,7 +7,6 @@ import { useMemo } from "react";
 export const Projects = () => {
   const { t } = useTranslation();
 
-
   // Memoize the translated project data to prevent re-renders
   const translatedProjects = useMemo(() => {
     return allProjectsSortedByPriority.map((project) => ({

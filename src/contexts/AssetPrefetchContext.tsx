@@ -1,7 +1,6 @@
 import React, {
   createContext,
   useContext,
-  useState,
   useCallback,
   useRef,
   ReactNode,
@@ -86,8 +85,6 @@ export const AssetPrefetchProvider: React.FC<AssetPrefetchProviderProps> = ({
   // Track pending promises for request deduplication
   const pendingPromises = useRef<Map<string, Promise<void>>>(new Map());
 
-  const [, forceUpdate] = useState({});
-
   /**
    * Check if a video is already cached
    */
@@ -128,7 +125,6 @@ export const AssetPrefetchProvider: React.FC<AssetPrefetchProviderProps> = ({
 
       // Mark keys as in-flight
       keysToFetch.forEach((key) => inFlightRequests.current.add(key));
-      forceUpdate({}); // Trigger re-render for stats
 
       try {
         // Create a single promise for this batch
@@ -151,7 +147,6 @@ export const AssetPrefetchProvider: React.FC<AssetPrefetchProviderProps> = ({
           inFlightRequests.current.delete(key);
           pendingPromises.current.delete(key);
         });
-        forceUpdate({}); // Trigger re-render for stats
       }
     },
     [isVideoCached],

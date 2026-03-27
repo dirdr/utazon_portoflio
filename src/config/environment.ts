@@ -3,12 +3,12 @@
  */
 
 export const ENVIRONMENTS = {
-  DEVELOPMENT: 'development',
-  INTEGRATION: 'integration',
-  PRODUCTION: 'production',
+  DEVELOPMENT: "development",
+  INTEGRATION: "integration",
+  PRODUCTION: "production",
 } as const;
 
-export type Environment = typeof ENVIRONMENTS[keyof typeof ENVIRONMENTS];
+export type Environment = (typeof ENVIRONMENTS)[keyof typeof ENVIRONMENTS];
 
 export interface EnvironmentConfig {
   environment: Environment;
@@ -27,27 +27,27 @@ function resolveSiteUrl(): string {
   }
 
   // Runtime: browser location
-  if (typeof window !== 'undefined') {
+  if (typeof window !== "undefined") {
     return window.location.origin;
   }
 
   // Development fallback
   if (import.meta.env.DEV) {
-    return 'http://localhost:5173';
+    return "http://localhost:5173";
   }
 
   // Production fallback
-  return 'https://utazon.fr';
+  return "https://utazon.fr";
 }
 
 /**
  * Determine environment from URL
  */
 function resolveEnvironment(siteUrl: string): Environment {
-  if (siteUrl.includes('localhost')) {
+  if (siteUrl.includes("localhost")) {
     return ENVIRONMENTS.DEVELOPMENT;
   }
-  if (siteUrl.includes('integration')) {
+  if (siteUrl.includes("integration")) {
     return ENVIRONMENTS.INTEGRATION;
   }
   return ENVIRONMENTS.PRODUCTION;
@@ -63,7 +63,7 @@ export function buildConfig(): EnvironmentConfig {
   return {
     environment,
     siteUrl,
-    apiUrl: import.meta.env.VITE_UTAZON_API_URL || '',
+    apiUrl: import.meta.env.VITE_UTAZON_API_URL || "",
   };
 }
 

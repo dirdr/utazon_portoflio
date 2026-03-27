@@ -1,8 +1,5 @@
 import { ROUTES } from "../constants/routes";
-import {
-  allProjectsSortedByPriority,
-  getProjectById,
-} from "../data/projects";
+import { allProjectsSortedByPriority, getProjectById } from "../data/projects";
 import backgroundImage from "../assets/images/background.webp";
 import backgroundMobileImage from "../assets/images/background_mobile.png";
 import {

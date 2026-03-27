@@ -85,10 +85,7 @@ export const VideoCarouselShowcase = ({
                   returnObjects: true,
                 }) as string[]
               ).map((paragraph, index) => (
-                <p
-                  key={index}
-                  className="paragraph"
-                >
+                <p key={index} className="paragraph">
                   {paragraph}
                 </p>
               ))}

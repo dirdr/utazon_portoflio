@@ -31,4 +31,3 @@ export interface HomeContextValue {
   shouldSkipAnimations: boolean;
   hideDiveInButton: () => void;
 }
-

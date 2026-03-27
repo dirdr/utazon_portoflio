@@ -27,7 +27,6 @@ export const HomeContainer = () => {
     return videoBackgroundRef.current?.video || null;
   }, []);
 
-  
   const videoWorkflow = useVideoWorkflow(getVideoElement, videoBackgroundRef);
 
   useEffect(() => {
@@ -58,7 +57,6 @@ export const HomeContainer = () => {
   const handleDiveIn = useCallback(() => {
     videoWorkflow.onDiveInClick();
   }, [videoWorkflow]);
-
 
   if (!isHomePage) {
     return null;

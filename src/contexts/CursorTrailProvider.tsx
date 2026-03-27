@@ -38,4 +38,3 @@ export const CursorTrailProvider: React.FC<CursorTrailProviderProps> = ({
     </CursorTrailContext.Provider>
   );
 };
-

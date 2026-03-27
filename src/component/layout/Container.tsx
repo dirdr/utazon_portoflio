@@ -36,7 +36,7 @@ const MAX_WIDTH_CLASSES = {
   "screen-xl": "max-w-screen-xl",
   "screen-2xl": "max-w-screen-2xl",
   "screen-3xl": "max-w-[1700px]",
-  "screen-4xl": "max-w-[1920px]"
+  "screen-4xl": "max-w-[1920px]",
 } as const;
 
 export const Container = ({

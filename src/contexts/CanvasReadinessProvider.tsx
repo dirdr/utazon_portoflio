@@ -19,4 +19,3 @@ export const CanvasReadinessProvider: React.FC<
     </CanvasReadinessContext.Provider>
   );
 };
-

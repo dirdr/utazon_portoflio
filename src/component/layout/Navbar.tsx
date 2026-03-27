@@ -34,144 +34,6 @@ export const Navbar = () => {
     onClose: closeMenu,
   });
 
-  const WrapperContent = () => (
-    <>
-      <div className="flex items-center justify-between h-16">
-        <div className="flex flex-col items-start">
-          <button
-            onClick={handleHomeClick}
-            className="text-sm 2xl:text-base font-nord hover:text-white transition-colors cursor-pointer text-left"
-          >
-            UTAZON
-          </button>
-          <button
-            onClick={handleHomeClick}
-            className="font-nord text-muted text-xs 2xl:text-sm hover:text-white transition-colors cursor-pointer text-left"
-          >
-            ANTOINE VERNEZ
-          </button>
-        </div>
-
-        {pageConfig.showNavbarLogo && (
-          <div className="hidden xl:flex absolute left-1/2 transform -translate-x-1/2">
-            <button onClick={handleHomeClick}>
-              <img
-                src={logo}
-                alt="Utazon Logo"
-                className="h-6 xl:h-8 w-auto cursor-pointer hover:opacity-80 transition-opacity"
-              />
-            </button>
-          </div>
-        )}
-
-        <nav
-          className="hidden xl:flex items-center space-x-4 xl:space-x-8 2xl:space-x-12"
-          role="navigation"
-          aria-label="Main navigation"
-        >
-          {NAVIGATION_ITEMS.map(({ label, href }) => (
-            <NavLink key={href} href={href} label={label} />
-          ))}
-          <Button
-            glint={true}
-            as="button"
-            className="ButtonText"
-            onClick={openContactModal}
-            speed={3}
-          >
-            {t("nav.contact")}
-          </Button>
-          <LanguageSwitcher />
-        </nav>
-
-        <button
-          onClick={toggleMenu}
-          className="xl:hidden text-foreground hover:text-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary transition-colors"
-          aria-expanded={isMenuOpen}
-          aria-controls="mobile-menu"
-          aria-label="Toggle navigation menu"
-        >
-          <span className="sr-only">
-            {isMenuOpen ? "Close menu" : "Open menu"}
-          </span>
-          {isMenuOpen ? (
-            <svg
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          ) : (
-            <div className="h-6 w-6 flex flex-col justify-center items-end gap-1">
-              <div className="h-0.5 bg-current w-full"></div>
-              <div className="h-0.5 bg-current w-3/4"></div>
-              <div className="h-0.5 bg-current w-1/2"></div>
-            </div>
-          )}
-        </button>
-      </div>
-
-      {isMenuOpen && (
-        <div
-          className="xl:hidden fixed inset-0 bg-black/60 z-40 pointer-events-none"
-          aria-hidden="true"
-        />
-      )}
-
-      <div
-        id="mobile-menu"
-        className={cn(
-          "xl:hidden transition-all duration-300 ease-in-out absolute top-16 left-0 right-0 z-50",
-          isMenuOpen
-            ? "transform translate-y-0 opacity-100 pointer-events-auto"
-            : "transform -translate-y-4 opacity-0 pointer-events-none",
-        )}
-      >
-        <div className="mt-4 mx-4 lg:mx-12 rounded-2xl border border-button-border bg-black/75 backdrop-blur-md p-6 shadow-2xl">
-          <nav
-            className="flex flex-col space-y-2"
-            role="navigation"
-            aria-label="Mobile navigation"
-          >
-            {NAVIGATION_ITEMS.map(({ label, href }) => (
-              <NavLink
-                key={href}
-                href={href}
-                label={label}
-                onClick={closeMenu}
-                className="text-center py-2"
-              />
-            ))}
-
-            <div className="flex justify-center py-2">
-              <Button
-                className="ButtonText"
-                as="button"
-                onClick={() => {
-                  openContactModal();
-                  closeMenu();
-                }}
-              >
-                {t("nav.contact")}
-              </Button>
-            </div>
-
-            <div className="flex justify-center py-2">
-              <LanguageSwitcher />
-            </div>
-          </nav>
-        </div>
-      </div>
-    </>
-  );
-
   return (
     <nav className="w-full z-50 bg-transparent relative" ref={menuRef}>
       <div
@@ -180,7 +42,139 @@ export const Navbar = () => {
           isMenuOpen ? "z-50" : "",
         )}
       >
-        <WrapperContent />
+        <div className="flex items-center justify-between h-16">
+          <div className="flex flex-col items-start">
+            <button
+              onClick={handleHomeClick}
+              className="text-sm 2xl:text-base font-nord hover:text-white transition-colors cursor-pointer text-left"
+            >
+              UTAZON
+            </button>
+            <button
+              onClick={handleHomeClick}
+              className="font-nord text-muted text-xs 2xl:text-sm hover:text-white transition-colors cursor-pointer text-left"
+            >
+              ANTOINE VERNEZ
+            </button>
+          </div>
+
+          {pageConfig.showNavbarLogo && (
+            <div className="hidden xl:flex absolute left-1/2 transform -translate-x-1/2">
+              <button onClick={handleHomeClick}>
+                <img
+                  src={logo}
+                  alt="Utazon Logo"
+                  className="h-6 xl:h-8 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+                />
+              </button>
+            </div>
+          )}
+
+          <nav
+            className="hidden xl:flex items-center space-x-4 xl:space-x-8 2xl:space-x-12"
+            role="navigation"
+            aria-label="Main navigation"
+          >
+            {NAVIGATION_ITEMS.map(({ label, href }) => (
+              <NavLink key={href} href={href} label={label} />
+            ))}
+            <Button
+              glint={true}
+              as="button"
+              className="ButtonText"
+              onClick={openContactModal}
+              speed={3}
+            >
+              {t("nav.contact")}
+            </Button>
+            <LanguageSwitcher />
+          </nav>
+
+          <button
+            onClick={toggleMenu}
+            className="xl:hidden text-foreground hover:text-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary transition-colors"
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-menu"
+            aria-label="Toggle navigation menu"
+          >
+            <span className="sr-only">
+              {isMenuOpen ? "Close menu" : "Open menu"}
+            </span>
+            {isMenuOpen ? (
+              <svg
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            ) : (
+              <div className="h-6 w-6 flex flex-col justify-center items-end gap-1">
+                <div className="h-0.5 bg-current w-full"></div>
+                <div className="h-0.5 bg-current w-3/4"></div>
+                <div className="h-0.5 bg-current w-1/2"></div>
+              </div>
+            )}
+          </button>
+        </div>
+
+        {isMenuOpen && (
+          <div
+            className="xl:hidden fixed inset-0 bg-black/60 z-40 pointer-events-none"
+            aria-hidden="true"
+          />
+        )}
+
+        <div
+          id="mobile-menu"
+          className={cn(
+            "xl:hidden transition-all duration-300 ease-in-out absolute top-16 left-0 right-0 z-50",
+            isMenuOpen
+              ? "transform translate-y-0 opacity-100 pointer-events-auto"
+              : "transform -translate-y-4 opacity-0 pointer-events-none",
+          )}
+        >
+          <div className="mt-4 mx-4 lg:mx-12 rounded-2xl border border-button-border bg-black/75 backdrop-blur-md p-6 shadow-2xl">
+            <nav
+              className="flex flex-col space-y-2"
+              role="navigation"
+              aria-label="Mobile navigation"
+            >
+              {NAVIGATION_ITEMS.map(({ label, href }) => (
+                <NavLink
+                  key={href}
+                  href={href}
+                  label={label}
+                  onClick={closeMenu}
+                  className="text-center py-2"
+                />
+              ))}
+
+              <div className="flex justify-center py-2">
+                <Button
+                  className="ButtonText"
+                  as="button"
+                  onClick={() => {
+                    openContactModal();
+                    closeMenu();
+                  }}
+                >
+                  {t("nav.contact")}
+                </Button>
+              </div>
+
+              <div className="flex justify-center py-2">
+                <LanguageSwitcher />
+              </div>
+            </nav>
+          </div>
+        </div>
       </div>
     </nav>
   );

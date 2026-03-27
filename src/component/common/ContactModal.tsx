@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from "react";
+import React, { useState, useCallback, FormEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "./Button";
 import { cn } from "../../utils/cn";
@@ -37,7 +37,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const validateForm = (): boolean => {
+  const validateForm = useCallback((): boolean => {
     const newErrors: FormErrors = {};
 
     if (!formData.firstName.trim()) {
@@ -66,62 +66,63 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }, [formData, t]);
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const { name, value } = e.target;
+      setFormData((prev) => ({ ...prev, [name]: value }));
+      setErrors((prev) => (prev[name] ? { ...prev, [name]: "" } : prev));
+    },
+    [],
+  );
 
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: "" }));
-    }
-  };
+  const handleSubmit = useCallback(
+    async (e: FormEvent) => {
+      e.preventDefault();
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-
-    if (!validateForm()) {
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      const result = await apiClient.sendContact(formData);
-
-      if (result.success) {
-        setIsSubmitted(true);
-        setTimeout(() => {
-          setFormData({
-            firstName: "",
-            lastName: "",
-            email: "",
-            telephone: "",
-            message: "",
-          });
-          setIsSubmitted(false);
-          onClose();
-        }, 2000);
-      } else {
-        throw new Error(
-          result.message || t("contact.validation.sendingFailed"),
-        );
+      if (!validateForm()) {
+        return;
       }
-    } catch (error) {
-      setErrors({
-        general:
-          error instanceof Error
-            ? error.message
-            : t("contact.validation.sendingFailed"),
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
-  const handleClose = () => {
+      setIsSubmitting(true);
+
+      try {
+        const result = await apiClient.sendContact(formData);
+
+        if (result.success) {
+          setIsSubmitted(true);
+          setTimeout(() => {
+            setFormData({
+              firstName: "",
+              lastName: "",
+              email: "",
+              telephone: "",
+              message: "",
+            });
+            setIsSubmitted(false);
+            onClose();
+          }, 2000);
+        } else {
+          throw new Error(
+            result.message || t("contact.validation.sendingFailed"),
+          );
+        }
+      } catch (error) {
+        setErrors({
+          general:
+            error instanceof Error
+              ? error.message
+              : t("contact.validation.sendingFailed"),
+        });
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [formData, validateForm, onClose, t],
+  );
+
+  const handleClose = useCallback(() => {
     if (!isSubmitting) {
       setFormData({
         firstName: "",
@@ -134,7 +135,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
       setIsSubmitted(false);
       onClose();
     }
-  };
+  }, [isSubmitting, onClose]);
 
   return (
     <div

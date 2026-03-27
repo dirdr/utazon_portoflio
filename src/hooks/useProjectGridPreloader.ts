@@ -146,7 +146,7 @@ export const useProjectGridPreloader = (
         } else {
           await preloadImage(url);
         }
-      } catch (error) {
+      } catch {
         loadedAssetsRef.current.add(url);
       }
 
@@ -202,4 +202,3 @@ export const useProjectGridPreloader = (
     loadProgress,
   };
 };
-
