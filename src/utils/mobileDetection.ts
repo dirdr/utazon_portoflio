@@ -15,4 +15,3 @@ export const isMobile = (): boolean => {
     MOBILE_SHORT_REGEX.test(userAgent.substr(0, 4))
   );
 };
-

@@ -12,7 +12,7 @@ interface GridImagesShowcaseProps {
 export const GridImagesShowcase = ({
   data,
   className,
-  border = false
+  border = false,
 }: GridImagesShowcaseProps) => {
   const { images } = data;
 

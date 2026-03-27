@@ -155,4 +155,3 @@ export const useCanvasComponent = (canvasId: string) => {
 
   return { setReady, setNotReady };
 };
-

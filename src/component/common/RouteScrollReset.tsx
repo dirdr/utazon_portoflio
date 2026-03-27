@@ -16,4 +16,3 @@ export const RouteScrollReset = () => {
 
   return null;
 };
-

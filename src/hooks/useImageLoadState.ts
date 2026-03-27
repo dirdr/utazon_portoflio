@@ -42,4 +42,3 @@ export const useImageLoadState = (src: string): ImageLoadState => {
 
   return state;
 };
-

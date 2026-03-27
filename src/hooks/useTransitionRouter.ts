@@ -10,13 +10,13 @@ import { isMobile } from "../utils/mobileDetection";
 import { useBackgroundImageStore } from "./useBackgroundImageStore";
 import { getBackgroundForRoute } from "../config/routeBackgroundConfig";
 import { useAssetPrefetch } from "../contexts/AssetPrefetchContext";
+import { ROUTES } from "../constants/routes";
+
+const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+const isFirefox = navigator.userAgent.toLowerCase().includes("firefox");
 
 const shouldWaitForCanvas = (route: string): boolean => {
-  return route === "/about" && !isMobile();
-};
-
-const preloadHomeVideo = (): Promise<void> => {
-  return Promise.resolve();
+  return route === ROUTES.ABOUT && !isMobile();
 };
 
 interface TransitionConfig {
@@ -71,11 +71,6 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
           resolve();
         }
       };
-
-      const isSafari = /^((?!chrome|android).)*safari/i.test(
-        navigator.userAgent,
-      );
-      const isFirefox = navigator.userAgent.toLowerCase().includes("firefox");
 
       urls.forEach((url, index) => {
         const img = new Image();
@@ -171,10 +166,6 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
 
     if (shouldWaitForCanvas(newLocation)) {
       await waitForCanvasReadiness();
-    }
-
-    if (newLocation === "/") {
-      await preloadHomeVideo();
     }
 
     const processingTime = Date.now() - blackScreenStartTime;

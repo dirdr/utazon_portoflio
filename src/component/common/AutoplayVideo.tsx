@@ -1,4 +1,7 @@
-import { useVideoAutoplay, UseVideoAutoplayOptions } from "../../hooks/useVideoAutoplay";
+import {
+  useVideoAutoplay,
+  UseVideoAutoplayOptions,
+} from "../../hooks/useVideoAutoplay";
 import { cn } from "../../utils/cn";
 
 export interface AutoplayVideoProps extends UseVideoAutoplayOptions {

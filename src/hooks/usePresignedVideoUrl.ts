@@ -169,7 +169,10 @@ export async function prefetchPresignedUrls(
         await apiClient.getPresignedVideoUrl(objectKey);
       presignedUrlCache.set(objectKey, url, expires_in);
     } catch (error) {
-      console.error(`Failed to prefetch presigned URL for ${objectKey}:`, error);
+      console.error(
+        `Failed to prefetch presigned URL for ${objectKey}:`,
+        error,
+      );
     }
   });
 

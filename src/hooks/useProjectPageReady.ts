@@ -10,4 +10,3 @@ export const useProjectPageReady = (projectId: string) => {
 
   return { isReady: isLoaded };
 };
-

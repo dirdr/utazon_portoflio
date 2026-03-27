@@ -1,13 +1,13 @@
-import { writeFileSync } from 'fs';
-import { resolve } from 'path';
-import { SitemapStream, streamToPromise } from 'sitemap';
-import { allProjectsSortedByPriority } from '../src/data/projects/index.js';
-import { ROUTES } from '../src/constants/routes.js';
+import { writeFileSync } from "fs";
+import { resolve } from "path";
+import { SitemapStream, streamToPromise } from "sitemap";
+import { allProjectsSortedByPriority } from "../src/data/projects/index.js";
+import { ROUTES } from "../src/constants/routes.js";
 
 const SITE_URL = process.env.VITE_SITE_URL;
 
 if (!SITE_URL) {
-  console.error('❌ ERROR: VITE_SITE_URL environment variable is required');
+  console.error("❌ ERROR: VITE_SITE_URL environment variable is required");
   process.exit(1);
 }
 
@@ -16,15 +16,15 @@ if (!SITE_URL) {
  */
 async function generateSitemap(): Promise<void> {
   const staticRoutes = [
-    { url: ROUTES.HOME, changefreq: 'weekly', priority: 1.0 },
-    { url: ROUTES.ABOUT, changefreq: 'monthly', priority: 0.8 },
-    { url: ROUTES.PROJECTS, changefreq: 'weekly', priority: 0.9 },
-    { url: ROUTES.LEGAL, changefreq: 'yearly', priority: 0.3 },
+    { url: ROUTES.HOME, changefreq: "weekly", priority: 1.0 },
+    { url: ROUTES.ABOUT, changefreq: "monthly", priority: 0.8 },
+    { url: ROUTES.PROJECTS, changefreq: "weekly", priority: 0.9 },
+    { url: ROUTES.LEGAL, changefreq: "yearly", priority: 0.3 },
   ];
 
   const projectRoutes = allProjectsSortedByPriority.map((project) => ({
     url: `/projects/${project.id}`,
-    changefreq: 'monthly',
+    changefreq: "monthly",
     priority: 0.7,
   }));
 
@@ -42,10 +42,10 @@ async function generateSitemap(): Promise<void> {
   sitemapStream.end();
 
   const sitemapXml = await streamToPromise(sitemapStream);
-  const outputPath = resolve('./dist/sitemap.xml');
+  const outputPath = resolve("./dist/sitemap.xml");
 
   writeFileSync(outputPath, sitemapXml.toString());
-  console.log('✅ Generated sitemap.xml');
+  console.log("✅ Generated sitemap.xml");
 }
 
 /**
@@ -56,9 +56,9 @@ function generateRobots(): void {
 Allow: /
 Sitemap: ${SITE_URL}/sitemap.xml`;
 
-  const outputPath = resolve('./dist/robots.txt');
+  const outputPath = resolve("./dist/robots.txt");
   writeFileSync(outputPath, robotsTxt);
-  console.log('✅ Generated robots.txt');
+  console.log("✅ Generated robots.txt");
 }
 
 /**
@@ -70,9 +70,9 @@ async function main() {
   try {
     await generateSitemap();
     generateRobots();
-    console.log('\n✅ All SEO artifacts generated successfully');
+    console.log("\n✅ All SEO artifacts generated successfully");
   } catch (error) {
-    console.error('❌ Error generating SEO artifacts:', error);
+    console.error("❌ Error generating SEO artifacts:", error);
     process.exit(1);
   }
 }

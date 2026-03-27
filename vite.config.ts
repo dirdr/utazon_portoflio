@@ -9,27 +9,46 @@ export default defineConfig({
     "import.meta.env.VITE_BUILD_TIME": JSON.stringify(Date.now().toString()),
   },
   plugins: [tailwindcss(), react(), seoPlugin()],
-  assetsInclude: ['**/*.woff', '**/*.woff2', '**/*.ttf', '**/*.eot'],
+  assetsInclude: ["**/*.woff", "**/*.woff2", "**/*.ttf", "**/*.eot"],
   build: {
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
         assetFileNames: (assetInfo) => {
-          if (assetInfo.name?.endsWith('.woff2') || assetInfo.name?.endsWith('.woff')) {
-            return 'fonts/[name][extname]';
+          if (
+            assetInfo.name?.endsWith(".woff2") ||
+            assetInfo.name?.endsWith(".woff")
+          ) {
+            return "fonts/[name][extname]";
           }
-          return 'assets/[name]-[hash][extname]';
+          return "assets/[name]-[hash][extname]";
         },
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
-          framer: ['framer-motion'],
-          ui: ['wouter', 'zustand'],
-          i18n: ['i18next', 'react-i18next', 'i18next-browser-languagedetector', 'i18next-http-backend'],
-          player: ['react-player'],
-          intersection: ['react-intersection-observer'],
-          lenis: ['lenis']
-        }
-      }
-    }
-  }
+        manualChunks(id) {
+          if (
+            id.includes("node_modules/react-dom/") ||
+            id.includes("node_modules/react/")
+          )
+            return "vendor";
+          if (id.includes("node_modules/framer-motion/")) return "framer";
+          if (
+            id.includes("node_modules/wouter/") ||
+            id.includes("node_modules/zustand/")
+          )
+            return "ui";
+          if (
+            id.includes("node_modules/i18next") ||
+            id.includes("node_modules/react-i18next/")
+          )
+            return "i18n";
+          if (id.includes("node_modules/react-player/")) return "player";
+          if (id.includes("node_modules/react-intersection-observer/"))
+            return "intersection";
+          if (id.includes("node_modules/lenis/")) return "lenis";
+          if (id.includes("node_modules/three/")) return "three";
+          if (id.includes("node_modules/postprocessing/"))
+            return "postprocessing";
+        },
+      },
+    },
+  },
 });

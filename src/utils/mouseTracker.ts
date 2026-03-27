@@ -150,4 +150,3 @@ class MouseTracker {
 }
 
 export const mouseTracker = MouseTracker.getInstance();
-

@@ -19,11 +19,7 @@ export const VideoShowcase = ({
 
   return (
     <div
-      className={cn(
-        "w-full",
-        isVertical && "max-w-2xl mx-auto",
-        className
-      )}
+      className={cn("w-full", isVertical && "max-w-2xl mx-auto", className)}
       data-id={id}
     >
       <div

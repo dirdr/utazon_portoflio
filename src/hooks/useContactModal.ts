@@ -13,4 +13,3 @@ export const useContactModal = () => {
     openContactModal,
   };
 };
-

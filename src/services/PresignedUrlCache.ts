@@ -89,7 +89,10 @@ class PresignedUrlCache {
       size: this.cache.size,
       entries: Array.from(this.cache.entries()).map(([key, value]) => ({
         key,
-        expiresIn: Math.max(0, Math.floor((value.expiresAt - Date.now()) / 1000)),
+        expiresIn: Math.max(
+          0,
+          Math.floor((value.expiresAt - Date.now()) / 1000),
+        ),
         age: Math.floor((Date.now() - value.fetchedAt) / 1000),
       })),
     };

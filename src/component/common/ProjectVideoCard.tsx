@@ -64,9 +64,7 @@ export const ProjectVideoCard = ({
             <h3 className="font-nord text-white text-sm sm:text-base md:text-lg xl:text-base 2xl:text-xl font-bold italic mb-1 sm:mb-2 md:mb-3 xl:mb-2 2xl:mb-4">
               {title}
             </h3>
-            <p className="paragraph text-white">
-              {description}
-            </p>
+            <p className="paragraph text-white">{description}</p>
           </div>
         </div>
       </div>

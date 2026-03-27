@@ -1,6 +1,6 @@
-import React from 'react';
-import { useModal } from '../../contexts/ModalContext';
-import { Modal } from './Modal';
+import React from "react";
+import { useModal } from "../../contexts/ModalContext";
+import { Modal } from "./Modal";
 
 export const ModalRoot: React.FC = () => {
   const { isOpen, isClosing, modalContent, closeModal } = useModal();

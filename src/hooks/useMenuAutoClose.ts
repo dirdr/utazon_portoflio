@@ -41,4 +41,3 @@ export const useMenuAutoClose = ({
 
   return menuRef;
 };
-

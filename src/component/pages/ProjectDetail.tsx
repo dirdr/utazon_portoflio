@@ -20,7 +20,7 @@ export const ProjectDetail = () => {
 
   if (!displayProject) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-black">
         <Container>
           <h1 className="font-nord text-2xl text-center">Project not found</h1>
         </Container>
@@ -29,7 +29,7 @@ export const ProjectDetail = () => {
   }
 
   return (
-    <article className="min-h-screen flex flex-col">
+    <article className="min-h-screen flex flex-col bg-black">
       <div className="flex-1 pb-16 lg:pb-24">
         <header className="lg:mb-16">
           <ProjectHeroSection project={displayProject} />

@@ -22,7 +22,7 @@ export const FullscreenVideoModal = ({
   const handleClose = useCallback(() => {
     setIsClosing(true);
     setIsPlaying(false);
-    
+
     // Small delay to ensure video stops before closing
     setTimeout(() => {
       setIsClosing(false);
@@ -38,7 +38,7 @@ export const FullscreenVideoModal = ({
         handleClose();
       }
     },
-    [handleClose]
+    [handleClose],
   );
 
   const handleBackdropClick = (e: React.MouseEvent) => {
@@ -60,13 +60,13 @@ export const FullscreenVideoModal = ({
       setIsPlaying(true);
       document.addEventListener("keydown", handleEscape);
       // Prevent scrolling when modal is open
-      document.body.style.overflow = 'hidden';
-      document.body.style.touchAction = 'none';
-      
+      document.body.style.overflow = "hidden";
+      document.body.style.touchAction = "none";
+
       return () => {
         document.removeEventListener("keydown", handleEscape);
-        document.body.style.overflow = '';
-        document.body.style.touchAction = '';
+        document.body.style.overflow = "";
+        document.body.style.touchAction = "";
       };
     } else {
       setIsPlaying(false);
@@ -79,7 +79,7 @@ export const FullscreenVideoModal = ({
     <div
       className="fixed inset-0 z-50 bg-black h-dvh w-full"
       onClick={handleBackdropClick}
-      style={{ touchAction: 'none' }}
+      style={{ touchAction: "none" }}
     >
       <button
         onClick={handleCloseButtonClick}
@@ -102,8 +102,8 @@ export const FullscreenVideoModal = ({
           <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
       </button>
-      
-      <div className="w-full h-full" style={{ touchAction: 'manipulation' }}>
+
+      <div className="w-full h-full" style={{ touchAction: "manipulation" }}>
         <InteractiveVideoPlayer
           src="showreel.mp4"
           width="100%"
@@ -115,6 +115,6 @@ export const FullscreenVideoModal = ({
         />
       </div>
     </div>,
-    document.body
+    document.body,
   );
 };

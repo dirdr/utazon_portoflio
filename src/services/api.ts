@@ -22,9 +22,9 @@ class ApiClient {
 
   private async request(
     endpoint: string,
-    options: RequestInit,
+    options: globalThis.RequestInit,
   ): Promise<Response> {
-    const config: RequestInit = {
+    const config: globalThis.RequestInit = {
       ...options,
       headers: {
         "Content-Type": "application/json",
@@ -76,13 +76,7 @@ class ApiClient {
       message: data.message,
     };
 
-    const response = await fetch(`${API_URL}/api/v1/contact`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
+    const response = await this.post("/api/v1/contact", payload);
 
     if (!response.ok) {
       throw new Error(`Contact sending failed: ${response.status}`);

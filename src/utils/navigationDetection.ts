@@ -66,7 +66,7 @@ const detectWithNavigationAPI = (): NavigationInfo | null => {
       method: "navigation-api",
       details,
     };
-  } catch (error) {
+  } catch {
     return null;
   }
 };
@@ -108,7 +108,7 @@ const detectWithPerformanceTiming = (): NavigationInfo | null => {
       method: "performance-timing",
       details,
     };
-  } catch (error) {
+  } catch {
     return null;
   }
 };
@@ -143,7 +143,7 @@ const detectWithDocumentReady = (): NavigationInfo | null => {
       method: "document-ready",
       details,
     };
-  } catch (error) {
+  } catch {
     return null;
   }
 };

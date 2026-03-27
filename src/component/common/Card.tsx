@@ -82,12 +82,10 @@ const CardComponent = ({
 
   const { setActiveCard, isActiveCard } = useActiveVideoCard(project.id);
 
-  const {
-    onMouseEnter: onPrefetchEnter,
-    onMouseLeave: onPrefetchLeave,
-  } = usePrefetchOnHover(project.id, {
-    enabled: !isMobile(), // Only on desktop
-  });
+  const { onMouseEnter: onPrefetchEnter, onMouseLeave: onPrefetchLeave } =
+    usePrefetchOnHover(project.id, {
+      enabled: !isMobile(), // Only on desktop
+    });
 
   const randomBackground = useMemo(() => {
     const hash = project.name.split("").reduce((acc, char) => {
@@ -110,7 +108,7 @@ const CardComponent = ({
     [preloader],
   );
 
-  const startVideoAnimation = () => {
+  const startVideoAnimation = useCallback(() => {
     if (thumbnail && videoReady && videoRef.current) {
       setActiveCard(project.id);
       videoRef.current.currentTime = 0;
@@ -119,7 +117,7 @@ const CardComponent = ({
         playPromise.catch(() => {});
       }
     }
-  };
+  }, [thumbnail, videoReady, project.id, setActiveCard]);
 
   const stopVideoAnimation = useCallback(() => {
     if (thumbnail && videoReady && videoRef.current) {
@@ -141,21 +139,21 @@ const CardComponent = ({
     loggedSetIsTouched,
   ]);
 
-  const handleMouseEnter = () => {
+  const handleMouseEnter = useCallback(() => {
     if (isMobile()) return;
-    onPrefetchEnter(); // Trigger prefetch
+    onPrefetchEnter();
     loggedSetIsHovered(true);
     startVideoAnimation();
-  };
+  }, [onPrefetchEnter, loggedSetIsHovered, startVideoAnimation]);
 
-  const handleMouseLeave = () => {
+  const handleMouseLeave = useCallback(() => {
     if (isMobile()) return;
-    onPrefetchLeave(); // Cancel prefetch
+    onPrefetchLeave();
     loggedSetIsHovered(false);
     stopVideoAnimation();
-  };
+  }, [onPrefetchLeave, loggedSetIsHovered, stopVideoAnimation]);
 
-  const handleTouchStart = () => {
+  const handleTouchStart = useCallback(() => {
     loggedSetIsTouched(true);
     loggedSetIsHovered(true);
     startVideoAnimation();
@@ -163,23 +161,28 @@ const CardComponent = ({
     if (animationTimeoutRef.current) {
       clearTimeout(animationTimeoutRef.current);
     }
-  };
+  }, [loggedSetIsTouched, loggedSetIsHovered, startVideoAnimation]);
 
-  const handleTouchEnd = () => {
+  const handleTouchEnd = useCallback(() => {
     loggedSetIsTouched(false);
     if (animationTimeoutRef.current) {
       clearTimeout(animationTimeoutRef.current);
     }
-  };
+  }, [loggedSetIsTouched]);
 
-  const handleClick = async () => {
+  const handleClick = useCallback(async () => {
     await navigateWithTransition(`/projects/${project.id}`, { id: project.id });
-  };
+  }, [navigateWithTransition, project.id]);
 
-  const handleButtonClick = async (e: React.MouseEvent) => {
-    e.stopPropagation();
-    await navigateWithTransition(`/projects/${project.id}`, { id: project.id });
-  };
+  const handleButtonClick = useCallback(
+    async (e: React.MouseEvent) => {
+      e.stopPropagation();
+      await navigateWithTransition(`/projects/${project.id}`, {
+        id: project.id,
+      });
+    },
+    [navigateWithTransition, project.id],
+  );
 
   // Cleanup timeouts on unmount
   useEffect(() => {
@@ -196,9 +199,10 @@ const CardComponent = ({
   }, []);
 
   const cardStyle = useMemo(
-    () => ({
-      "--glint-card-speed": glintSpeed,
-    }),
+    (): React.CSSProperties =>
+      ({
+        "--glint-card-speed": glintSpeed,
+      }) as React.CSSProperties,
     [glintSpeed],
   );
 
@@ -224,7 +228,7 @@ const CardComponent = ({
     <article
       ref={combinedRef}
       className={cardClassName}
-      style={cardStyle as React.CSSProperties}
+      style={cardStyle}
       {...eventProps}
       onClick={handleClick}
     >

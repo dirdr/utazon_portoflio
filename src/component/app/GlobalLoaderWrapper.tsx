@@ -1,18 +1,17 @@
-import { AnimatePresence, motion } from 'framer-motion';
-import { useLocation } from 'wouter';
-import { useAppLoading } from '../../contexts/AppLoadingContext';
-import { GlobalLoader } from '../loader/GlobalLoader';
-import { useBackgroundImageStore } from '../../hooks/useBackgroundImageStore';
-import { useCanvasReadiness } from '../../hooks/useCanvasReadiness';
-import { getRouteAssets, shouldPreloadRoute } from '../../config/routeAssets';
-import { isMobile } from '../../utils/mobileDetection';
-import { getBackgroundForRoute } from '../../config/routeBackgroundConfig';
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { AnimatePresence, motion } from "framer-motion";
+import { useLocation } from "wouter";
+import { useAppLoading } from "../../contexts/AppLoadingContext";
+import { GlobalLoader } from "../loader/GlobalLoader";
+import { useBackgroundImageStore } from "../../hooks/useBackgroundImageStore";
+import { useCanvasReadiness } from "../../hooks/useCanvasReadiness";
+import { getRouteAssets, shouldPreloadRoute } from "../../config/routeAssets";
+import { isMobile } from "../../utils/mobileDetection";
+import { getBackgroundForRoute } from "../../config/routeBackgroundConfig";
+import { useState, useCallback, useEffect, useRef } from "react";
 
 const shouldWaitForCanvas = (route: string): boolean => {
   return route === "/about" && !isMobile();
 };
-
 
 /**
  * GlobalLoaderWrapper handles the global loading screen for the entire app
@@ -24,11 +23,16 @@ const shouldWaitForCanvas = (route: string): boolean => {
  * - Cache coordination and background settings after loading
  * - Works consistently across all routes
  */
-export const GlobalLoaderWrapper = ({ children }: { children: React.ReactNode }) => {
+export const GlobalLoaderWrapper = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const [location] = useLocation();
   const { showLoader } = useAppLoading();
   const { setBackgroundImage } = useBackgroundImageStore();
-  const { areAllCanvasesReady, onCanvasReadyChange, resetAllCanvases } = useCanvasReadiness();
+  const { areAllCanvasesReady, onCanvasReadyChange, resetAllCanvases } =
+    useCanvasReadiness();
   const [isCoordinating, setIsCoordinating] = useState(false);
   const hasCoordinatedRef = useRef(false);
 
@@ -48,7 +52,9 @@ export const GlobalLoaderWrapper = ({ children }: { children: React.ReactNode })
         }
       };
 
-      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+      const isSafari = /^((?!chrome|android).)*safari/i.test(
+        navigator.userAgent,
+      );
       const isFirefox = navigator.userAgent.toLowerCase().includes("firefox");
 
       urls.forEach((url, index) => {
@@ -126,7 +132,14 @@ export const GlobalLoaderWrapper = ({ children }: { children: React.ReactNode })
 
       coordinateAfterLoading();
     }
-  }, [showLoader, location, setBackgroundImage, verifyCacheUrls, resetAllCanvases, waitForCanvasReadiness]);
+  }, [
+    showLoader,
+    location,
+    setBackgroundImage,
+    verifyCacheUrls,
+    resetAllCanvases,
+    waitForCanvasReadiness,
+  ]);
 
   return (
     <div className="relative w-full min-h-screen">
@@ -142,7 +155,7 @@ export const GlobalLoaderWrapper = ({ children }: { children: React.ReactNode })
             transition={{
               duration: 0.6,
               ease: [0.4, 0, 0.2, 1],
-              delay: isCoordinating ? 0.2 : 0.1
+              delay: isCoordinating ? 0.2 : 0.1,
             }}
           >
             {children}

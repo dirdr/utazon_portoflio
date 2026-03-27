@@ -20,13 +20,14 @@ export const StandardLayout = ({
   const [location] = useLocation();
   const pageConfig = getPageConfig(location);
   const { currentBackground } = useBackgroundImageStore();
-  const [shouldShowThreeBackground, setShouldShowThreeBackground] = useState(false);
+  const [shouldShowThreeBackground, setShouldShowThreeBackground] =
+    useState(false);
 
   const threeComponentCache = useRef<React.ReactElement | null>(null);
-  const isAboutRoute = location === '/about';
+  const isAboutRoute = location === "/about";
 
   useEffect(() => {
-    if (currentBackground?.type === 'three' && isAboutRoute) {
+    if (currentBackground?.type === "three" && isAboutRoute) {
       const checkModel = () => {
         if (isModelPreloaded("/models/logo4.glb")) {
           setShouldShowThreeBackground(true);
@@ -68,7 +69,12 @@ export const StandardLayout = ({
     const isMobile = window.innerWidth < 1280;
 
     // Only mount Three.js canvas when on about route AND on desktop
-    if (currentBackground.type === 'three' && shouldShowThreeBackground && isAboutRoute && !isMobile) {
+    if (
+      currentBackground.type === "three" &&
+      shouldShowThreeBackground &&
+      isAboutRoute &&
+      !isMobile
+    ) {
       // Use cached component if available, otherwise create new one
       if (!threeComponentCache.current) {
         threeComponentCache.current = (
@@ -82,33 +88,23 @@ export const StandardLayout = ({
     }
 
     // For mobile with Three.js background, render black background instead
-    if (currentBackground.type === 'three' && isAboutRoute && isMobile) {
-      return (
-        <div
-          className="fixed inset-0 bg-black"
-          style={{ zIndex: -20 }}
-        />
-      );
+    if (currentBackground.type === "three" && isAboutRoute && isMobile) {
+      return <div className="fixed inset-0 bg-black" style={{ zIndex: -20 }} />;
     }
 
-    if (currentBackground.type === 'image') {
+    if (currentBackground.type === "image") {
       return <ImageBackgroundDisplay />;
     }
 
     return null;
   };
 
-
   return (
     <div className="relative min-h-screen">
       {renderBackground()}
-      <div
-        className={`min-h-screen flex flex-col ${className}`}
-      >
+      <div className={`min-h-screen flex flex-col ${className}`}>
         <Navbar />
-        <main className="flex-1">
-          {children}
-        </main>
+        <main className="flex-1">{children}</main>
         {pageConfig.showFooter && <Footer />}
       </div>
     </div>

@@ -5,7 +5,12 @@ import { useEffect } from "react";
 
 export const RouteBackground: React.FC = () => {
   const routeBackground = useRouteBackground();
-  const { currentBackground, nextBackground, isTransitioning, setBackgroundImage } = useBackgroundImageStore();
+  const {
+    currentBackground,
+    nextBackground,
+    isTransitioning,
+    setBackgroundImage,
+  } = useBackgroundImageStore();
 
   useEffect(() => {
     setBackgroundImage(routeBackground, "RouteBackground");
@@ -37,4 +42,3 @@ export const RouteBackground: React.FC = () => {
     </>
   );
 };
-

@@ -50,7 +50,7 @@ export const VideoBackground = forwardRef<
 
     const videoRef = useRef<HTMLVideoElement>(null);
     const videoRef2 = useRef<HTMLVideoElement>(null);
-    
+
     const [activeVideoIndex, setActiveVideoIndex] = useState<0 | 1>(0);
     const [isTransitioning, setIsTransitioning] = useState(false);
 
@@ -72,44 +72,49 @@ export const VideoBackground = forwardRef<
       if (video1) video1.volume = 0.3;
       if (video2) video2.volume = 0.3;
 
-      const handleLoadedData = (video: HTMLVideoElement) => () => {
-        const currentSource = video.src;
-        if (!loadedSources.current.has(currentSource)) {
-          loadedSources.current.add(currentSource);
-          onLoadedData?.();
-        }
-      };
+      const handlersMap = new Map<
+        HTMLVideoElement,
+        { loaded: () => void; ended: () => void }
+      >();
 
       const handleTimeUpdate = (e: Event) => {
         const target = e.target as HTMLVideoElement;
-        const isActiveVideo = (activeVideoIndex === 0 && target === video1) || 
-                             (activeVideoIndex === 1 && target === video2);
+        const isActiveVideo =
+          (activeVideoIndex === 0 && target === video1) ||
+          (activeVideoIndex === 1 && target === video2);
         if (isActiveVideo) {
-          onTimeUpdate?.(e as unknown as React.SyntheticEvent<HTMLVideoElement>);
+          onTimeUpdate?.(
+            e as unknown as React.SyntheticEvent<HTMLVideoElement>,
+          );
         }
       };
 
-      const handleEnded = (video: HTMLVideoElement) => () => {
-        const isActiveVideo = (activeVideoIndex === 0 && video === video1) || 
-                             (activeVideoIndex === 1 && video === video2);
-        if (isActiveVideo) {
-          onEnded?.();
-        }
-      };
-
-      const handlePlay = () => {};
-      const handlePause = () => {};
-
-      [video1, video2].forEach(video => {
+      [video1, video2].forEach((video) => {
         if (video) {
-          const loadedHandler = handleLoadedData(video);
-          const endedHandler = handleEnded(video);
-          
+          const loadedHandler = () => {
+            const currentSource = video.src;
+            if (!loadedSources.current.has(currentSource)) {
+              loadedSources.current.add(currentSource);
+              onLoadedData?.();
+            }
+          };
+          const endedHandler = () => {
+            const isActiveVideo =
+              (activeVideoIndex === 0 && video === video1) ||
+              (activeVideoIndex === 1 && video === video2);
+            if (isActiveVideo) {
+              onEnded?.();
+            }
+          };
+
+          handlersMap.set(video, {
+            loaded: loadedHandler,
+            ended: endedHandler,
+          });
+
           video.addEventListener("loadeddata", loadedHandler);
           video.addEventListener("timeupdate", handleTimeUpdate);
           video.addEventListener("ended", endedHandler);
-          video.addEventListener("play", handlePlay);
-          video.addEventListener("pause", handlePause);
 
           if (video.readyState >= 2 && !loadedSources.current.has(video.src)) {
             loadedSources.current.add(video.src);
@@ -119,16 +124,14 @@ export const VideoBackground = forwardRef<
       });
 
       return () => {
-        [video1, video2].forEach(video => {
+        [video1, video2].forEach((video) => {
           if (video) {
-            const loadedHandler = handleLoadedData(video);
-            const endedHandler = handleEnded(video);
-            
-            video.removeEventListener("loadeddata", loadedHandler);
+            const handlers = handlersMap.get(video);
+            if (handlers) {
+              video.removeEventListener("loadeddata", handlers.loaded);
+              video.removeEventListener("ended", handlers.ended);
+            }
             video.removeEventListener("timeupdate", handleTimeUpdate);
-            video.removeEventListener("ended", endedHandler);
-            video.removeEventListener("play", handlePlay);
-            video.removeEventListener("pause", handlePause);
           }
         });
       };
@@ -149,65 +152,71 @@ export const VideoBackground = forwardRef<
       if (video2) video2.muted = muted;
     }, []);
 
-    const transitionToVideo = useCallback(async (newSrc: string) => {
-      if (isTransitioning) return;
-      
-      setIsTransitioning(true);
-      
-      const currentVideo = activeVideoIndex === 0 ? videoRef.current : videoRef2.current;
-      const nextVideo = activeVideoIndex === 0 ? videoRef2.current : videoRef.current;
-      
-      if (!currentVideo || !nextVideo) {
-        setIsTransitioning(false);
-        return;
-      }
+    const transitionToVideo = useCallback(
+      async (newSrc: string) => {
+        if (isTransitioning) return;
 
-      try {
-        const currentMuted = currentVideo.muted;
+        setIsTransitioning(true);
 
-        nextVideo.src = newSrc;
-        nextVideo.currentTime = 0;
-        nextVideo.volume = 0.3;
-        nextVideo.muted = currentMuted;
-        nextVideo.style.opacity = '0';
-        nextVideo.style.zIndex = '1';
-        
-        await new Promise((resolve, reject) => {
-          const handleCanPlay = () => {
-            nextVideo.removeEventListener('canplaythrough', handleCanPlay);
-            nextVideo.removeEventListener('error', handleError);
-            resolve(undefined);
-          };
-          const handleError = () => {
-            nextVideo.removeEventListener('canplaythrough', handleCanPlay);
-            nextVideo.removeEventListener('error', handleError);
-            reject(new Error('Video load failed'));
-          };
-          
-          nextVideo.addEventListener('canplaythrough', handleCanPlay, { once: true });
-          nextVideo.addEventListener('error', handleError, { once: true });
-          nextVideo.load();
-        });
+        const currentVideo =
+          activeVideoIndex === 0 ? videoRef.current : videoRef2.current;
+        const nextVideo =
+          activeVideoIndex === 0 ? videoRef2.current : videoRef.current;
 
-        await nextVideo.play();
-        
-        requestAnimationFrame(() => {
-          nextVideo.style.opacity = '1';
-          nextVideo.style.zIndex = '2';
-          currentVideo.style.opacity = '0';
-          currentVideo.style.zIndex = '0';
-          
-          requestAnimationFrame(() => {
-            currentVideo.pause();
-            setActiveVideoIndex(activeVideoIndex === 0 ? 1 : 0);
-            setIsTransitioning(false);
+        if (!currentVideo || !nextVideo) {
+          setIsTransitioning(false);
+          return;
+        }
+
+        try {
+          const currentMuted = currentVideo.muted;
+
+          nextVideo.src = newSrc;
+          nextVideo.currentTime = 0;
+          nextVideo.volume = 0.3;
+          nextVideo.muted = currentMuted;
+          nextVideo.style.opacity = "0";
+          nextVideo.style.zIndex = "1";
+
+          await new Promise((resolve, reject) => {
+            const handleCanPlay = () => {
+              nextVideo.removeEventListener("canplaythrough", handleCanPlay);
+              nextVideo.removeEventListener("error", handleError);
+              resolve(undefined);
+            };
+            const handleError = () => {
+              nextVideo.removeEventListener("canplaythrough", handleCanPlay);
+              nextVideo.removeEventListener("error", handleError);
+              reject(new Error("Video load failed"));
+            };
+
+            nextVideo.addEventListener("canplaythrough", handleCanPlay, {
+              once: true,
+            });
+            nextVideo.addEventListener("error", handleError, { once: true });
+            nextVideo.load();
           });
-        });
-        
-      } catch (error) {
-        setIsTransitioning(false);
-      }
-    }, [activeVideoIndex, isTransitioning]);
+
+          await nextVideo.play();
+
+          requestAnimationFrame(() => {
+            nextVideo.style.opacity = "1";
+            nextVideo.style.zIndex = "2";
+            currentVideo.style.opacity = "0";
+            currentVideo.style.zIndex = "0";
+
+            requestAnimationFrame(() => {
+              currentVideo.pause();
+              setActiveVideoIndex(activeVideoIndex === 0 ? 1 : 0);
+              setIsTransitioning(false);
+            });
+          });
+        } catch {
+          setIsTransitioning(false);
+        }
+      },
+      [activeVideoIndex, isTransitioning],
+    );
 
     useImperativeHandle(
       ref,
@@ -245,10 +254,10 @@ export const VideoBackground = forwardRef<
             willChange: "auto",
             opacity: activeVideoIndex === 0 ? 1 : 0,
             zIndex: activeVideoIndex === 0 ? 1 : 0,
-            transition: 'none'
+            transition: "none",
           }}
         />
-        
+
         <video
           ref={videoRef2}
           className="w-full h-full object-cover gpu-accelerated absolute inset-0"
@@ -263,7 +272,7 @@ export const VideoBackground = forwardRef<
             willChange: "auto",
             opacity: activeVideoIndex === 1 ? 1 : 0,
             zIndex: activeVideoIndex === 1 ? 1 : 0,
-            transition: 'none'
+            transition: "none",
           }}
         />
 

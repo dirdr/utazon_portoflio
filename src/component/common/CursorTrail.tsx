@@ -95,7 +95,8 @@ export const CursorTrail = ({
           const sizeMultiplier = 1 + waveOscillation * ringFade;
 
           const currentSize =
-            (baseSize + (maxRippleSize - baseSize) * easedProgress) * sizeMultiplier;
+            (baseSize + (maxRippleSize - baseSize) * easedProgress) *
+            sizeMultiplier;
 
           const finalOpacity = currentOpacity * ringOpacity * ringFade;
 
@@ -191,17 +192,10 @@ export const CursorTrail = ({
             return;
           }
 
-          const needsResize =
-            canvas.width !== window.innerWidth ||
-            canvas.height !== window.innerHeight;
-
-          if (needsResize) {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            canvasSizeRef.current = {
-              width: canvas.width,
-              height: canvas.height,
-            };
+          const { width, height } = canvasSizeRef.current;
+          if (canvas.width !== width || canvas.height !== height) {
+            canvas.width = width;
+            canvas.height = height;
           }
 
           ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -210,9 +204,17 @@ export const CursorTrail = ({
 
           if (currentTime - lastCleanupRef.current > 100) {
             const cutoff = currentTime - fadeTime;
-            pointsRef.current = pointsRef.current.filter(
-              (point) => point.timestamp >= cutoff,
-            );
+            const points = pointsRef.current;
+            let validStart = 0;
+            while (
+              validStart < points.length &&
+              points[validStart].timestamp < cutoff
+            ) {
+              validStart++;
+            }
+            if (validStart > 0) {
+              points.splice(0, validStart);
+            }
             lastCleanupRef.current = currentTime;
           }
 
@@ -242,6 +244,23 @@ export const CursorTrail = ({
     },
     [enabled, addPoint, fadeTime, drawTrailPoints, drawStaticGlow],
   );
+
+  // Use ResizeObserver to track canvas size instead of checking every frame
+  useEffect(() => {
+    canvasSizeRef.current = {
+      width: window.innerWidth,
+      height: window.innerHeight,
+    };
+
+    const observer = new ResizeObserver(() => {
+      canvasSizeRef.current = {
+        width: window.innerWidth,
+        height: window.innerHeight,
+      };
+    });
+    observer.observe(document.documentElement);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     if (!enabled) {
