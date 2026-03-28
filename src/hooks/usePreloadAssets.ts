@@ -66,13 +66,13 @@ export const usePreloadAssets = () => {
       });
     } else {
       assets.push({
-        url: `/videos/intro/desktop/entry_desktop.mp4`,
+        url: `/videos/intro/desktop/entry_desktop_4K.mp4`,
         loaded: false,
         error: false,
         type: "video",
       });
       assets.push({
-        url: `/videos/intro/desktop/loop_desktop.mp4`,
+        url: `/videos/intro/desktop/loop_desktop_4K.mp4`,
         loaded: false,
         error: false,
         type: "video",

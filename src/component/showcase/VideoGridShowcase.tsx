@@ -30,16 +30,18 @@ const GridVideoItem = ({
 }: GridVideoItemProps) => {
   const { url: videoUrl, loading } = usePresignedVideoUrl(src);
 
+  const isFill = aspectRatio === "fill";
+
   return (
-    <figure className="w-full">
+    <figure className={cn("w-full", isFill && "h-full")}>
       <div
         className={cn(
           "w-full overflow-hidden relative",
-          !aspectRatio && "aspect-video",
+          isFill ? "h-full" : !aspectRatio && "aspect-video",
           border && SHOWCASE_STYLES.borderRadius,
           border && SHOWCASE_STYLES.border,
         )}
-        style={aspectRatio ? { aspectRatio } : undefined}
+        style={!isFill && aspectRatio ? { aspectRatio } : undefined}
       >
         {loading && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/10">
