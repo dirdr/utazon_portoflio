@@ -15,12 +15,8 @@ interface BackgroundImageStore {
   currentBackground: BackgroundConfig | null;
   nextBackground: BackgroundConfig | null;
   isTransitioning: boolean;
-  setBackgroundImage: (image: string | null, componentId?: string) => void;
-  setBackground: (
-    config: BackgroundConfig | null,
-    componentId?: string,
-    route?: string,
-  ) => void;
+  setBackgroundImage: (image: string | null) => void;
+  setBackground: (config: BackgroundConfig | null, route?: string) => void;
 }
 
 export const useBackgroundImageStore = create<BackgroundImageStore>(
@@ -29,19 +25,15 @@ export const useBackgroundImageStore = create<BackgroundImageStore>(
     nextBackground: null,
     isTransitioning: false,
 
-    setBackgroundImage: (image: string | null, componentId = "anonymous") => {
+    setBackgroundImage: (image: string | null) => {
       const config: BackgroundConfig | null = image
         ? { type: "image", value: image }
         : null;
 
-      get().setBackground(config, componentId);
+      get().setBackground(config);
     },
 
-    setBackground: (
-      config: BackgroundConfig | null,
-      _componentId = "anonymous",
-      route?: string,
-    ) => {
+    setBackground: (config: BackgroundConfig | null, route?: string) => {
       const state = get();
 
       if (config !== null) {
