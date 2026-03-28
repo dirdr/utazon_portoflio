@@ -10,54 +10,31 @@ export const Vaziva: Project = {
   client: "projects.vaziva.client",
   role: "projects.vaziva.role",
   hasVideo: true,
+  background: "/images/projects/vaziva/background.webp",
   showcases: [
     {
-      type: "video",
-      id: "video-1",
+      type: "video-grid",
+      id: "video-grid-1",
       order: 1,
-      video: {
-        src: "vaziva/1.mp4",
-      },
+      columns: 4,
+      aspectRatio: "9/16",
+      videos: [
+        { src: "vaziva/1.mp4" },
+        { src: "vaziva/2.mp4" },
+        { src: "vaziva/3.mp4" },
+        { src: "vaziva/4.mp4" },
+      ],
     },
     {
-      type: "video",
-      id: "video-2",
+      type: "video-grid",
+      id: "video-grid-2",
       order: 2,
-      video: {
-        src: "vaziva/2.mp4",
-      },
-    },
-    {
-      type: "video",
-      id: "video-3",
-      order: 3,
-      video: {
-        src: "vaziva/3.mp4",
-      },
-    },
-    {
-      type: "video",
-      id: "video-4",
-      order: 4,
-      video: {
-        src: "vaziva/4.mp4",
-      },
-    },
-    {
-      type: "video",
-      id: "video-5",
-      order: 5,
-      video: {
-        src: "vaziva/5.mp4",
-      },
-    },
-    {
-      type: "video",
-      id: "video-6",
-      order: 6,
-      video: {
-        src: "vaziva/6.mp4",
-      },
+      columns: 4,
+      aspectRatio: "9/16",
+      videos: [
+        { src: "vaziva/5.mp4", span: 3, aspectRatio: "16/9" },
+        { src: "vaziva/6.mp4" },
+      ],
     },
   ],
 };

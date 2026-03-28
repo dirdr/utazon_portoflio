@@ -54,8 +54,11 @@ export interface VideoGridShowcaseData extends ShowcaseItem {
     title?: string;
     light?: string | null;
     startTime?: number;
+    span?: number;
+    aspectRatio?: string;
   }[];
-  columns?: 2 | 3;
+  columns?: 2 | 3 | 4;
+  aspectRatio?: string;
   copyright?: {
     key: string;
   };
