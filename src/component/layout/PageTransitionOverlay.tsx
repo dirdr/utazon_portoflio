@@ -48,6 +48,8 @@ export const PageTransitionOverlay = ({
         opacity: shouldFadeOut ? 0 : opacity,
         transitionDuration: `${duration / 2}ms`,
         zIndex: OVERLAY_Z_INDEX.PAGE_TRANSITION_OVERLAY,
+        height: "100lvh",
+        overscrollBehavior: "none",
         willChange: "opacity",
         WebkitBackfaceVisibility: "hidden",
         backfaceVisibility: "hidden",
