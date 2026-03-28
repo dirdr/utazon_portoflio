@@ -69,7 +69,7 @@ export const getDynamicRouteAssets = (
     const project = getProjectById(projectId);
 
     return {
-      images: [`/images/projects/${projectId}/background.webp`],
+      images: project?.background ? [project.background] : [],
       videos: [],
       videoKeys: project ? extractProjectVideoKeys(project) : [],
       priority: "high",

@@ -4,7 +4,7 @@ export const FamilyTechDrive: Project = {
   id: "family-tech-drive",
   title: "projects.family-tech-drive.title",
   date: "projects.family-tech-drive.date",
-  priority: 13,
+  priority: 14,
   header: "projects.family-tech-drive.header",
   description: "projects.family-tech-drive.description",
   client: "projects.family-tech-drive.client",

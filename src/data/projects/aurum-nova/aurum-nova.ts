@@ -4,7 +4,7 @@ export const AurumNova: Project = {
   id: "aurum-nova",
   title: "projects.aurum-nova.title",
   date: "projects.aurum-nova.date",
-  priority: 3,
+  priority: 4,
   header: "projects.aurum-nova.header",
   description: "projects.aurum-nova.description",
   client: "projects.aurum-nova.client",

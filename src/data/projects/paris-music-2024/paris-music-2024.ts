@@ -4,7 +4,7 @@ export const ParisMusic2024: Project = {
   id: "paris-music-2024",
   title: "projects.paris-music-2024.title",
   date: "projects.paris-music-2024.date",
-  priority: 9,
+  priority: 10,
   header: "projects.paris-music-2024.header",
   description: "projects.paris-music-2024.description",
   client: "projects.paris-music-2024.client",

@@ -4,7 +4,7 @@ export const NmaSnake: Project = {
   id: "nma-snake",
   title: "projects.nma-snake.title",
   date: "projects.nma-snake.date",
-  priority: 1,
+  priority: 2,
   header: "projects.nma-snake.header",
   description: "projects.nma-snake.description",
   client: "projects.nma-snake.client",

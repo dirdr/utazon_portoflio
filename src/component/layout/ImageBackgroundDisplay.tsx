@@ -5,9 +5,6 @@ export const ImageBackgroundDisplay: React.FC = () => {
   const { currentBackground, nextBackground, isTransitioning } =
     useBackgroundImageStore();
 
-  const isCurrentReady = true;
-  const isNextReady = true;
-
   if (!currentBackground && !nextBackground) {
     return null;
   }
@@ -17,9 +14,9 @@ export const ImageBackgroundDisplay: React.FC = () => {
       {currentBackground && (
         <div
           className={`
-            absolute inset-0 
+            absolute inset-0
             transition-opacity duration-500 ease-in-out
-            ${isTransitioning ? "opacity-0" : isCurrentReady ? "opacity-100" : "opacity-0"}
+            ${isTransitioning ? "opacity-0" : "opacity-100"}
           `}
           style={{
             backgroundImage: `url(${currentBackground.value})`,
@@ -33,9 +30,9 @@ export const ImageBackgroundDisplay: React.FC = () => {
       {nextBackground && (
         <div
           className={`
-            absolute inset-0 
+            absolute inset-0
             transition-opacity duration-500 ease-in-out
-            ${isTransitioning && isNextReady ? "opacity-100" : "opacity-0"}
+            ${isTransitioning ? "opacity-100" : "opacity-0"}
           `}
           style={{
             backgroundImage: `url(${nextBackground.value})`,

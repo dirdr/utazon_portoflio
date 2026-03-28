@@ -10,7 +10,7 @@ export type VideoSourceType = "local" | "external" | "backend";
  * @see usePresignedVideoUrl
  */
 export const getVideoUrl = (src: string): string => {
-  if (src.startsWith("/")) return src; // Local: "/videos/intro.mp4"
+  if (src.startsWith("/")) return src; // Local: "/videos/intro/desktop/entry_desktop.mp4"
   if (src.startsWith("http")) return src; // External: "https://..."
   return apiClient.getVideoUrl(src); // Backend: "dals/live/video.mp4" - DEPRECATED
 };
@@ -23,7 +23,7 @@ export const getVideoUrl = (src: string): string => {
  *
  * @example
  * ```ts
- * getVideoSourceType("/videos/intro.mp4") // "local"
+ * getVideoSourceType("/videos/intro/desktop/entry_desktop.mp4") // "local"
  * getVideoSourceType("https://example.com/video.mp4") // "external"
  * getVideoSourceType("fooh/details.mp4") // "backend"
  * ```

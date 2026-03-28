@@ -55,6 +55,7 @@ export interface VideoGridShowcaseData extends ShowcaseItem {
     light?: string | null;
     startTime?: number;
   }[];
+  columns?: 2 | 3;
   copyright?: {
     key: string;
   };

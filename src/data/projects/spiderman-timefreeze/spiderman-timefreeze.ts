@@ -4,7 +4,7 @@ export const SpidermanTimefreeze: Project = {
   id: "spiderman-timefreeze",
   title: "projects.spiderman-timefreeze.title",
   date: "projects.spiderman-timefreeze.date",
-  priority: 6,
+  priority: 7,
   header: "projects.spiderman-timefreeze.header",
   description: "projects.spiderman-timefreeze.description",
   client: "projects.spiderman-timefreeze.client",

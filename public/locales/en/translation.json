@@ -179,6 +179,23 @@
       "role": "3D Creation",
       "client": "NRJ",
       "date": "2025"
+    },
+    "domo": {
+      "title": "DOMO",
+      "header": "3D Motion",
+      "description": "I supported DOMO, a new virtual collectible card application, in creating numerous motion design and 3D assets for their events, keynotes, social media communications, and in-app integration.",
+      "role": "Motion Design, 3D",
+      "client": "Blackmotion / Client: DOMO",
+      "date": "2026",
+      "carouselDescription": ["3D Stage visuals", "Domo App launch party"]
+    },
+    "vaziva": {
+      "title": "VAZIVA",
+      "header": "3D Motion",
+      "description": "I supported VAZIVA, a publicly traded French fintech company, in showcasing their offering and repositioning. I designed and produced a series of 3D \"beauty\" visuals around their cards and services. This content was crafted for marketing, digital, and social media use, with a clean and impactful look. To wrap up the project, I also contributed to creating a large-scale brand video dedicated to their new branding.",
+      "role": "Filming, Motion Design, 3D, Compositing, Color Grading",
+      "client": "Blackmotion / Client: VAZIVA",
+      "date": "2026"
     }
   },
   "footer": {

@@ -23,9 +23,6 @@ interface BackgroundImageStore {
   ) => void;
 }
 
-const activeBackgroundUsers = new Set<string>();
-const clearTimeouts = new Map<string, number>();
-
 export const useBackgroundImageStore = create<BackgroundImageStore>(
   (set, get) => ({
     currentBackground: null,
@@ -42,7 +39,7 @@ export const useBackgroundImageStore = create<BackgroundImageStore>(
 
     setBackground: (
       config: BackgroundConfig | null,
-      componentId = "anonymous",
+      _componentId = "anonymous",
       route?: string,
     ) => {
       const state = get();
@@ -51,14 +48,6 @@ export const useBackgroundImageStore = create<BackgroundImageStore>(
         // Skip Three.js background processing for non-about routes
         if (config.type === "three" && route && route !== "/about") {
           return;
-        }
-
-        activeBackgroundUsers.add(componentId);
-
-        const existingTimeout = clearTimeouts.get(componentId);
-        if (existingTimeout) {
-          clearTimeout(existingTimeout);
-          clearTimeouts.delete(componentId);
         }
 
         const isSameBackground =
@@ -91,22 +80,11 @@ export const useBackgroundImageStore = create<BackgroundImageStore>(
           });
         }
       } else {
-        activeBackgroundUsers.delete(componentId);
-
-        if (activeBackgroundUsers.size === 0) {
-          const timeoutId = setTimeout(() => {
-            if (activeBackgroundUsers.size === 0) {
-              set({
-                currentBackground: null,
-                nextBackground: null,
-                isTransitioning: false,
-              });
-            }
-            clearTimeouts.delete(componentId);
-          }, 100);
-
-          clearTimeouts.set(componentId, timeoutId as unknown as number);
-        }
+        set({
+          currentBackground: null,
+          nextBackground: null,
+          isTransitioning: false,
+        });
       }
     },
   }),

@@ -104,7 +104,7 @@ export function usePresignedVideoUrl(
       return;
     }
 
-    // Handle local videos (e.g., "/videos/intro.mp4")
+    // Handle local videos (e.g., "/videos/intro/desktop/entry_desktop.mp4")
     if (src.startsWith("/")) {
       setUrl(src);
       return;

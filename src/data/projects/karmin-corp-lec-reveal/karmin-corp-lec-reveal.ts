@@ -4,7 +4,7 @@ export const KarminCorpLecReveal: Project = {
   id: "karmin-corp-lec-reveal",
   title: "projects.karmin-corp-lec-reveal.title",
   date: "projects.karmin-corp-lec-reveal.date",
-  priority: 10,
+  priority: 11,
   header: "projects.karmin-corp-lec-reveal.header",
   description: "projects.karmin-corp-lec-reveal.description",
   client: "projects.karmin-corp-lec-reveal.client",

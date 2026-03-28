@@ -4,7 +4,7 @@ export const NmaKatseye: Project = {
   id: "nma-katseye",
   title: "projects.nma-katseye.title",
   date: "projects.nma-katseye.date",
-  priority: 2,
+  priority: 3,
   header: "projects.nma-katseye.header",
   description: "projects.nma-katseye.description",
   client: "projects.nma-katseye.client",

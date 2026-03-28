@@ -4,7 +4,7 @@ export const Trybz: Project = {
   id: "trybz",
   title: "projects.trybz.title",
   date: "projects.trybz.date",
-  priority: 17,
+  priority: 18,
   header: "projects.trybz.header",
   description: "projects.trybz.description",
   client: "projects.trybz.client",

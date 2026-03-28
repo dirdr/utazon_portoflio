@@ -69,25 +69,34 @@ const GridVideoItem = ({
   );
 };
 
+const GRID_COLUMNS = {
+  2: "grid-cols-1 md:grid-cols-2",
+  3: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
+} as const;
+
 export const VideoGridShowcase = ({
   data,
   className,
   border = false,
 }: VideoGridShowcaseProps) => {
-  const { videos } = data;
+  const { videos, columns = 2 } = data;
 
   return (
     <div className={cn("w-full", className)}>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-8">
+      <div className={cn("grid gap-4 lg:gap-8", GRID_COLUMNS[columns])}>
         {videos.map((video, index) => (
-          <GridVideoItem
+          <div
             key={index}
-            src={video.src}
-            title={video.title}
-            border={border}
-            showCopyright={!!data.copyright}
-            copyrightKey={data.copyright?.key}
-          />
+            className={cn(videos.length === 1 && `col-span-full`)}
+          >
+            <GridVideoItem
+              src={video.src}
+              title={video.title}
+              border={border}
+              showCopyright={!!data.copyright}
+              copyrightKey={data.copyright?.key}
+            />
+          </div>
         ))}
       </div>
     </div>

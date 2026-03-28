@@ -43,7 +43,7 @@ const CardComponent = ({
   glintSpeed = "6s",
 }: CardProps) => {
   const { t } = useTranslation();
-  const { navigateWithTransition } = useTransitionContext();
+  const { navigateWithTransition, isTransitioning: isPageTransitioning } = useTransitionContext();
   const videoRef = useRef<HTMLVideoElement>(null);
   const elementRef = useRef<HTMLElement | null>(null);
   const animationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -108,8 +108,11 @@ const CardComponent = ({
     [preloader],
   );
 
+  const videoReadyRef = useRef(false);
+  videoReadyRef.current = videoReady;
+
   const startVideoAnimation = useCallback(() => {
-    if (thumbnail && videoReady && videoRef.current) {
+    if (thumbnail && videoReadyRef.current && videoRef.current) {
       setActiveCard(project.id);
       videoRef.current.currentTime = 0;
       const playPromise = videoRef.current.play();
@@ -117,7 +120,7 @@ const CardComponent = ({
         playPromise.catch(() => {});
       }
     }
-  }, [thumbnail, videoReady, project.id, setActiveCard]);
+  }, [thumbnail, setActiveCard, project.id]);
 
   const stopVideoAnimation = useCallback(() => {
     if (thumbnail && videoReady && videoRef.current) {
@@ -183,6 +186,17 @@ const CardComponent = ({
     },
     [navigateWithTransition, project.id],
   );
+
+  // Check if cursor is already over the card after page transition completes
+  useEffect(() => {
+    if (isPageTransitioning || isHovered) return;
+    const el = elementRef.current;
+    if (el && !isMobile() && el.matches(":hover")) {
+      loggedSetIsHovered(true);
+      onPrefetchEnter();
+      startVideoAnimation();
+    }
+  }, [isPageTransitioning, isHovered, startVideoAnimation, loggedSetIsHovered, onPrefetchEnter]);
 
   // Cleanup timeouts on unmount
   useEffect(() => {

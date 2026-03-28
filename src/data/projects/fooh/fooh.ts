@@ -4,7 +4,7 @@ export const Fooh: Project = {
   id: "fooh",
   title: "projects.fooh.title",
   date: "projects.fooh.date",
-  priority: 14,
+  priority: 15,
   header: "projects.fooh.header",
   description: "projects.fooh.description",
   client: "projects.fooh.client",

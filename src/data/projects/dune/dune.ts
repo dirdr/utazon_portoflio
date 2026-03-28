@@ -4,7 +4,7 @@ export const Dune: Project = {
   id: "dune",
   title: "projects.dune.title",
   date: "projects.dune.date",
-  priority: 11,
+  priority: 12,
   header: "projects.dune.header",
   description: "projects.dune.description",
   client: "projects.dune.client",

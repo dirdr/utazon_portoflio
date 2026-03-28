@@ -4,7 +4,7 @@ export const Lyner: Project = {
   id: "lyner",
   title: "projects.lyner.title",
   date: "projects.lyner.date",
-  priority: 5,
+  priority: 6,
   header: "projects.lyner.header",
   description: "projects.lyner.description",
   client: "projects.lyner.client",

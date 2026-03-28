@@ -4,7 +4,7 @@ export const Dals: Project = {
   id: "dals",
   title: "projects.dals.title",
   date: "projects.dals.date",
-  priority: 4,
+  priority: 5,
   header: "projects.dals.header",
   description: "projects.dals.description",
   client: "projects.dals.client",

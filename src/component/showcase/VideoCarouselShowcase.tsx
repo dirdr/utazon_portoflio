@@ -70,115 +70,112 @@ export const VideoCarouselShowcase = ({
     return () => clearTimeout(timer);
   }, [currentIndex]);
 
+  const carouselDescription = (() => {
+    if (!projectId) return null;
+    const desc = t(`projects.${projectId}.carouselDescription`, {
+      returnObjects: true,
+    });
+    if (!Array.isArray(desc)) return null;
+    return desc;
+  })();
+
   return (
-    <div className={cn("w-full  mx-auto ", className)}>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-8 items-center">
-        <div className="flex items-start">
-          <div className="w-px bg-gray-600 mr-6 lg:mr-8 flex-shrink-0 self-stretch"></div>
-          <div className="space-y-6 lg:max-w-sm xl:max-w-md 2xl:max-w-xl">
-            {projectId &&
-              t(`projects.${projectId}.carouselDescription`, {
-                returnObjects: true,
-              }) &&
-              (
-                t(`projects.${projectId}.carouselDescription`, {
-                  returnObjects: true,
-                }) as string[]
-              ).map((paragraph, index) => (
-                <p key={index} className="paragraph">
-                  {paragraph}
-                </p>
-              ))}
-          </div>
-        </div>
-
-        <div className="space-y-4">
-          <div
-            className={cn(
-              "w-full aspect-video overflow-hidden",
-              border && SHOWCASE_STYLES.borderRadius,
-              border && SHOWCASE_STYLES.border,
-            )}
+    <div className={cn("w-full mx-auto", className)}>
+      <div
+        className={cn(
+          "w-full aspect-video overflow-hidden",
+          border && SHOWCASE_STYLES.borderRadius,
+          border && SHOWCASE_STYLES.border,
+        )}
+      >
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentIndex}
+            initial={{ opacity: 0, scale: 1.05 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="w-full h-full"
           >
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentIndex}
-                initial={{ opacity: 0, scale: 1.05 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="w-full h-full"
-              >
-                <CarouselVideoCard
-                  src={data.videos[currentIndex].src}
-                  title={data.videos[currentIndex].title}
-                  onDurationChange={handleDurationChange}
-                  onEnded={handleVideoEnd}
-                  onPlay={handleVideoPlay}
-                  isActive={true}
-                />
-              </motion.div>
-            </AnimatePresence>
-          </div>
+            <CarouselVideoCard
+              src={data.videos[currentIndex].src}
+              title={data.videos[currentIndex].title}
+              onDurationChange={handleDurationChange}
+              onEnded={handleVideoEnd}
+              onPlay={handleVideoPlay}
+              isActive={true}
+            />
+          </motion.div>
+        </AnimatePresence>
+      </div>
 
-          <div className="flex justify-center items-center gap-1.5 mb-8 lg:mb-0">
-            {data.videos.map((_, index) => (
-              <motion.button
-                key={index}
-                onClick={() => handleDotClick(index)}
-                className="relative focus:outline-none"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
-              >
-                <AnimatePresence mode="wait">
-                  {index === currentIndex ? (
-                    <motion.div
-                      key={`expanded-${index}`}
-                      className="w-12 h-2.5 bg-gray-600 rounded-full relative overflow-hidden smooth-animation"
-                      initial={{ width: 10, height: 10, borderRadius: "50%" }}
-                      animate={{
-                        width: 48,
-                        height: 10,
-                        borderRadius: "9999px",
+      <div className="flex items-center justify-center mt-4 gap-6">
+        <div className="flex items-center gap-1.5">
+          {data.videos.map((_, index) => (
+            <motion.button
+              key={index}
+              onClick={() => handleDotClick(index)}
+              className="relative focus:outline-none"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 400, damping: 25 }}
+            >
+              <AnimatePresence mode="wait">
+                {index === currentIndex ? (
+                  <motion.div
+                    key={`expanded-${index}`}
+                    className="w-12 h-2.5 bg-gray-600 rounded-full relative overflow-hidden smooth-animation"
+                    initial={{ width: 10, height: 10, borderRadius: "50%" }}
+                    animate={{
+                      width: 48,
+                      height: 10,
+                      borderRadius: "9999px",
+                    }}
+                    exit={{ width: 10, height: 10, borderRadius: "50%" }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    style={{ contentVisibility: "auto" }}
+                  >
+                    <div
+                      key={animationKey}
+                      className="h-full bg-white rounded-full animate-progress-bar"
+                      style={{
+                        animationDuration: `${videoDuration || 10}s`,
+                        animationPlayState: isProgressRunning
+                          ? "running"
+                          : "paused",
                       }}
-                      exit={{ width: 10, height: 10, borderRadius: "50%" }}
-                      transition={{ duration: 0.3, ease: "easeInOut" }}
-                      style={{ contentVisibility: "auto" }}
-                    >
-                      <div
-                        key={animationKey}
-                        className="h-full bg-white rounded-full animate-progress-bar"
-                        style={{
-                          animationDuration: `${videoDuration || 10}s`,
-                          animationPlayState: isProgressRunning
-                            ? "running"
-                            : "paused",
-                        }}
-                      />
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key={`collapsed-${index}`}
-                      className="w-2.5 h-2.5 bg-white rounded-full hover:bg-white/80"
-                      initial={{
-                        width: 48,
-                        height: 10,
-                        borderRadius: "9999px",
-                      }}
-                      animate={{ width: 10, height: 10, borderRadius: "50%" }}
-                      exit={{ width: 48, height: 10, borderRadius: "9999px" }}
-                      whileHover={{
-                        backgroundColor: "rgba(255, 255, 255, 0.8)",
-                      }}
-                      transition={{ duration: 0.3, ease: "easeInOut" }}
                     />
-                  )}
-                </AnimatePresence>
-              </motion.button>
-            ))}
-          </div>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key={`collapsed-${index}`}
+                    className="w-2.5 h-2.5 bg-white rounded-full hover:bg-white/80"
+                    initial={{
+                      width: 48,
+                      height: 10,
+                      borderRadius: "9999px",
+                    }}
+                    animate={{ width: 10, height: 10, borderRadius: "50%" }}
+                    exit={{ width: 48, height: 10, borderRadius: "9999px" }}
+                    whileHover={{
+                      backgroundColor: "rgba(255, 255, 255, 0.8)",
+                    }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                  />
+                )}
+              </AnimatePresence>
+            </motion.button>
+          ))}
         </div>
+
+        {carouselDescription && (
+          <div className="flex items-center gap-3">
+            <div className="w-px h-4 bg-gray-600"></div>
+            <p className="paragraph text-sm">
+              {carouselDescription[currentIndex]}
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -16,6 +16,8 @@ import { PixelBreak } from "./pixel-break/pixel-break";
 import { Trybz } from "./trybz/trybz";
 import { NmaSnake } from "./nma-snake/nma-snake";
 import { NmaKatseye } from "./nma-katseye/nma-katseye";
+import { Domo } from "./domo/domo";
+import { Vaziva } from "./vaziva/vaziva";
 
 const allProjects: Project[] = [
   AurumNova,
@@ -35,6 +37,8 @@ const allProjects: Project[] = [
   Trybz,
   NmaSnake,
   NmaKatseye,
+  Domo,
+  Vaziva,
 ];
 
 export const allProjectsSortedByPriority: Project[] = allProjects

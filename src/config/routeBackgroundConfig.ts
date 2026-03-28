@@ -63,8 +63,9 @@ function findMatchingRoute(route: string): string {
     return route;
   }
 
+  // Project detail pages (/projects/:id) have no background — they use inline hero backgrounds
   if (route.startsWith("/projects/")) {
-    return route; // Will not find a match, returns undefined, which results in 'none' type
+    return "/";
   }
 
   return route;
