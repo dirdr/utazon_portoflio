@@ -36,14 +36,6 @@ export const PageTransitionOverlay = ({
     }
   }, [isTransitioning, phase, duration, onFadeInComplete]);
 
-  useEffect(() => {
-    if (phase !== "hidden") {
-      document.documentElement.style.backgroundColor = "black";
-    } else {
-      document.documentElement.style.backgroundColor = "";
-    }
-  }, [phase]);
-
   if (phase === "hidden") return null;
 
   const opacity = phase === "visible" || phase === "fading-out" ? 1 : 0;
