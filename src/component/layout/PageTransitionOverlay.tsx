@@ -43,19 +43,11 @@ export const PageTransitionOverlay = ({
 
   return (
     <div
-      className="fixed bg-black transition-opacity ease-in-out"
+      className="fixed inset-0 bg-black transition-opacity ease-in-out"
       style={{
         opacity: shouldFadeOut ? 0 : opacity,
         transitionDuration: `${duration / 2}ms`,
         zIndex: OVERLAY_Z_INDEX.PAGE_TRANSITION_OVERLAY,
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        height: "100dvh",
-        minHeight: "100dvh",
-        width: "100vw",
         willChange: "opacity",
         WebkitBackfaceVisibility: "hidden",
         backfaceVisibility: "hidden",
