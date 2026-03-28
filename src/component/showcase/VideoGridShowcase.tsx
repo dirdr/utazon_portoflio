@@ -18,6 +18,7 @@ interface GridVideoItemProps {
   showCopyright?: boolean;
   copyrightKey?: string;
   aspectRatio?: string;
+  controls?: boolean;
 }
 
 const GridVideoItem = ({
@@ -27,6 +28,7 @@ const GridVideoItem = ({
   showCopyright,
   copyrightKey,
   aspectRatio,
+  controls = false,
 }: GridVideoItemProps) => {
   const { url: videoUrl, loading } = usePresignedVideoUrl(src);
 
@@ -51,10 +53,10 @@ const GridVideoItem = ({
         {videoUrl && (
           <ReactPlayer
             src={videoUrl}
-            playing={true}
-            muted={true}
-            loop={true}
-            controls={false}
+            playing={!controls}
+            muted={!controls}
+            loop={!controls}
+            controls={controls}
             playsInline={true}
             width="100%"
             height="100%"
@@ -113,6 +115,7 @@ export const VideoGridShowcase = ({
               showCopyright={!!data.copyright}
               copyrightKey={data.copyright?.key}
               aspectRatio={video.aspectRatio ?? aspectRatio}
+              controls={video.controls}
             />
           </div>
         ))}

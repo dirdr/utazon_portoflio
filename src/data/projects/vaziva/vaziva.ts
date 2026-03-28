@@ -31,7 +31,7 @@ export const Vaziva: Project = {
       order: 2,
       columns: 4,
       videos: [
-        { src: "vaziva/5.mp4", span: 3, aspectRatio: "16/9" },
+        { src: "vaziva/5.mp4", span: 3, aspectRatio: "16/9", controls: true },
         { src: "vaziva/6.mp4", aspectRatio: "fill" },
       ],
     },
