@@ -11,8 +11,8 @@ export const Legal = () => {
   );
 
   useEffect(() => {
-    setBackgroundImage(backgroundImage, "Legal");
-    return () => setBackgroundImage(null, "Legal");
+    setBackgroundImage(backgroundImage);
+    return () => setBackgroundImage(null);
   }, [setBackgroundImage]);
 
   return (

@@ -105,9 +105,9 @@ export const GlobalLoaderWrapper = ({
           // Set background for current route
           const newBackground = getBackgroundForRoute(location);
           if (newBackground) {
-            setBackgroundImage(newBackground, "GlobalLoaderWrapper");
+            setBackgroundImage(newBackground);
           } else {
-            setBackgroundImage(null, "GlobalLoaderWrapper");
+            setBackgroundImage(null);
           }
 
           // Verify route-specific cache URLs

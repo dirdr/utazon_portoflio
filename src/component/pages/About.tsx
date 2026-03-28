@@ -35,14 +35,13 @@ export const About = () => {
           value: "about-logo",
           options: { planeOpaque, bloomEnabled },
         },
-        "About",
         "/about",
       );
     } else {
-      setBackground(null, "About");
+      setBackground(null);
     }
 
-    return () => setBackground(null, "About");
+    return () => setBackground(null);
   }, [isDesktop, setBackground, planeOpaque, bloomEnabled]);
   return (
     <>

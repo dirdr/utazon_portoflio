@@ -135,9 +135,9 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
 
     const newBackground = getBackgroundForRoute(newLocation);
     if (newBackground) {
-      setBackgroundImage(newBackground, "TransitionRouter");
+      setBackgroundImage(newBackground);
     } else {
-      setBackgroundImage(null, "TransitionRouter");
+      setBackgroundImage(null);
     }
 
     setState((prev) => ({ ...prev, progress: 50 }));
