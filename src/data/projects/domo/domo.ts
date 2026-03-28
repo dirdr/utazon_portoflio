@@ -27,9 +27,7 @@ export const Domo: Project = {
       type: "video-grid",
       id: "video-grid-2",
       order: 2,
-      videos: [
-        { src: "domo/4.mp4" },
-      ],
+      videos: [{ src: "domo/4.mp4" }],
     },
     {
       type: "video-carousel",

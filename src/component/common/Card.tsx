@@ -43,7 +43,8 @@ const CardComponent = ({
   glintSpeed = "6s",
 }: CardProps) => {
   const { t } = useTranslation();
-  const { navigateWithTransition, isTransitioning: isPageTransitioning } = useTransitionContext();
+  const { navigateWithTransition, isTransitioning: isPageTransitioning } =
+    useTransitionContext();
   const videoRef = useRef<HTMLVideoElement>(null);
   const elementRef = useRef<HTMLElement | null>(null);
   const animationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -196,7 +197,13 @@ const CardComponent = ({
       onPrefetchEnter();
       startVideoAnimation();
     }
-  }, [isPageTransitioning, isHovered, startVideoAnimation, loggedSetIsHovered, onPrefetchEnter]);
+  }, [
+    isPageTransitioning,
+    isHovered,
+    startVideoAnimation,
+    loggedSetIsHovered,
+    onPrefetchEnter,
+  ]);
 
   // Cleanup timeouts on unmount
   useEffect(() => {
