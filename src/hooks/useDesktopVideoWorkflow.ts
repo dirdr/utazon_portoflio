@@ -33,8 +33,8 @@ export interface DesktopVideoResult {
 }
 
 const DESKTOP_VIDEOS = {
-  ENTRY: "/videos/intro/desktop/entry_desktop_4K.mp4",
-  LOOP: "/videos/intro/desktop/loop_desktop_4K.mp4",
+  ENTRY: "/videos/intro/desktop/entry_desktop_4K.webm",
+  LOOP: "/videos/intro/desktop/loop_desktop_4K.webm",
 };
 
 function desktopReducer(
