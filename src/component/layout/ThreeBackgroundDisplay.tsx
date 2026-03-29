@@ -82,7 +82,7 @@ export const ThreeBackgroundDisplay: React.FC<ThreeBackgroundDisplayProps> = ({
   }
 
   return (
-    <div className="fixed inset-0" style={{ zIndex: -20 }}>
+    <div className="fixed inset-0 z-0">
       <div className="w-full h-full">
         <Canvas
           shadows

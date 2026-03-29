@@ -86,7 +86,7 @@ export const StandardLayout = ({
 
     // For mobile with Three.js background, render black background instead
     if (currentBackground.type === "three" && isAboutRoute && isMobile) {
-      return <div className="fixed inset-0 bg-black" style={{ zIndex: -20 }} />;
+      return <div className="fixed inset-0 z-0 bg-black" />;
     }
 
     if (currentBackground.type === "image") {
@@ -99,7 +99,7 @@ export const StandardLayout = ({
   return (
     <div className="relative min-h-screen">
       {renderBackground()}
-      <div className={`min-h-screen flex flex-col ${className}`}>
+      <div className={`relative z-10 min-h-screen flex flex-col ${className}`}>
         <Navbar />
         <main className="flex-1">{children}</main>
         {pageConfig.showFooter && <Footer />}

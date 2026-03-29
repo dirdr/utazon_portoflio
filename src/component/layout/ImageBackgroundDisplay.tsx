@@ -10,7 +10,7 @@ export const ImageBackgroundDisplay: React.FC = () => {
   }
 
   return (
-    <div className="fixed inset-0" style={{ zIndex: -20 }}>
+    <div className="fixed inset-0 z-0">
       {currentBackground && (
         <div
           className={`

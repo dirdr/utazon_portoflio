@@ -13,7 +13,7 @@ const ThreeBackgroundDisplay = React.lazy(() =>
 );
 
 const ThreeLoadingFallback = memo(() => (
-  <div className="fixed inset-0" style={{ zIndex: -20 }}>
+  <div className="fixed inset-0 z-0">
     <div className="w-full h-full bg-background opacity-50 flex items-center justify-center">
       <div className="text-muted text-sm">Loading 3D background...</div>
     </div>
