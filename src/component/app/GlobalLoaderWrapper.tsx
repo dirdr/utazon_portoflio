@@ -162,7 +162,6 @@ export const GlobalLoaderWrapper = ({
           </motion.div>
         )}
       </AnimatePresence>
-
     </div>
   );
 };

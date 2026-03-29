@@ -108,15 +108,17 @@ export const VideoGridShowcase = ({
 }: VideoGridShowcaseProps) => {
   const { videos, columns = 2, gridTemplate, matchHeight, aspectRatio } = data;
 
-  const computedTemplate = gridTemplate ?? (matchHeight
-    ? videos
-        .map((v) => {
-          if (!v.aspectRatio) return "1fr";
-          const [w, h] = v.aspectRatio.split("/").map(Number);
-          return `${w / h}fr`;
-        })
-        .join(" ")
-    : undefined);
+  const computedTemplate =
+    gridTemplate ??
+    (matchHeight
+      ? videos
+          .map((v) => {
+            if (!v.aspectRatio) return "1fr";
+            const [w, h] = v.aspectRatio.split("/").map(Number);
+            return `${w / h}fr`;
+          })
+          .join(" ")
+      : undefined);
 
   return (
     <div className={cn("w-full", className)}>
