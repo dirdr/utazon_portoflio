@@ -113,4 +113,27 @@
   .react-player__play-icon {
     border-left-color: white !important;
   }
+
+  /* Page transition overlay — always mounted, toggled via opacity */
+  .page-transition-overlay {
+    position: fixed;
+    top: -100px;
+    left: 0;
+    right: 0;
+    bottom: -100px;
+    z-index: 2750;
+    background: black;
+    opacity: 0;
+    pointer-events: none;
+    transition-property: opacity;
+    transition-timing-function: ease-in-out;
+  }
+
+  .page-transition-overlay[data-active="true"] {
+    pointer-events: auto;
+  }
+
+  .page-transition-overlay[data-opaque="true"] {
+    opacity: 1;
+  }
 }

@@ -18,9 +18,9 @@ export const Domo: Project = {
       order: 1,
       columns: 3,
       videos: [
-        { src: "domo/1.mp4" },
-        { src: "domo/2.mp4" },
-        { src: "domo/3.mp4" },
+        { src: "domo/1.mp4", aspectRatio: "1/1" },
+        { src: "domo/2.mp4", aspectRatio: "1/1" },
+        { src: "domo/3.mp4", aspectRatio: "1/1" },
       ],
     },
     {

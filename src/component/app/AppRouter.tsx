@@ -25,7 +25,7 @@ const AppRouterContent = () => {
     duration,
     onFadeInComplete,
   } = useTransitionRouter({
-    duration: 600,
+    duration: 300,
   });
 
   const isHomePage = currentLocation === "/";

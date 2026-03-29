@@ -17,7 +17,7 @@ export const Vaziva: Project = {
       id: "video-grid-1",
       order: 1,
       columns: 4,
-      aspectRatio: "9/16",
+      aspectRatio: "auto",
       videos: [
         { src: "vaziva/1.mp4" },
         { src: "vaziva/2.mp4" },
@@ -29,10 +29,11 @@ export const Vaziva: Project = {
       type: "video-grid",
       id: "video-grid-2",
       order: 2,
-      columns: 4,
+      gridTemplate: "3fr 1.27fr",
+      aspectRatio: "auto",
       videos: [
-        { src: "vaziva/5.mp4", span: 3, aspectRatio: "16/9", controls: true },
-        { src: "vaziva/6.mp4", aspectRatio: "fill" },
+        { src: "vaziva/5.mp4", controls: true },
+        { src: "vaziva/6.mp4" },
       ],
     },
   ],

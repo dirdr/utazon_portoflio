@@ -33,24 +33,35 @@ const GridVideoItem = ({
   const { url: videoUrl, loading } = usePresignedVideoUrl(src);
 
   const isFill = aspectRatio === "fill";
+  const isAuto = aspectRatio === "auto";
 
   return (
     <figure className={cn("w-full", isFill && "h-full")}>
       <div
         className={cn(
           "w-full overflow-hidden relative",
-          isFill ? "h-full" : !aspectRatio && "aspect-video",
+          isFill ? "h-full" : !aspectRatio && !isAuto && "aspect-video",
           border && SHOWCASE_STYLES.borderRadius,
           border && SHOWCASE_STYLES.border,
         )}
-        style={!isFill && aspectRatio ? { aspectRatio } : undefined}
+        style={!isFill && !isAuto && aspectRatio ? { aspectRatio } : undefined}
       >
         {loading && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/10">
             <div className="w-10 h-10 border-3 border-white/30 border-t-white rounded-full animate-spin" />
           </div>
         )}
-        {videoUrl && (
+        {videoUrl && isAuto ? (
+          <video
+            src={videoUrl}
+            autoPlay={!controls}
+            muted={!controls}
+            loop={!controls}
+            controls={controls}
+            playsInline
+            className="w-full h-auto block"
+          />
+        ) : videoUrl ? (
           <ReactPlayer
             src={videoUrl}
             playing={!controls}
@@ -65,7 +76,7 @@ const GridVideoItem = ({
               objectFit: "cover" as const,
             }}
           />
-        )}
+        ) : null}
 
         {/* COPYRIGHT OVERLAY */}
         {showCopyright && copyrightKey && (
@@ -95,11 +106,17 @@ export const VideoGridShowcase = ({
   className,
   border = false,
 }: VideoGridShowcaseProps) => {
-  const { videos, columns = 2, aspectRatio } = data;
+  const { videos, columns = 2, gridTemplate, aspectRatio } = data;
 
   return (
     <div className={cn("w-full", className)}>
-      <div className={cn("grid gap-4 lg:gap-8", GRID_COLUMNS[columns])}>
+      <div
+        className={cn(
+          "grid gap-4 lg:gap-8",
+          !gridTemplate && GRID_COLUMNS[columns],
+        )}
+        style={gridTemplate ? { gridTemplateColumns: gridTemplate } : undefined}
+      >
         {videos.map((video, index) => (
           <div
             key={index}
