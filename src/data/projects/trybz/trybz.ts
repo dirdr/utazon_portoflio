@@ -8,6 +8,7 @@ export const Trybz: Project = {
   header: "projects.trybz.header",
   description: "projects.trybz.description",
   client: "projects.trybz.client",
+  agency: "projects.trybz.agency",
   role: "projects.trybz.role",
   hasVideo: false,
   background: "/images/projects/trybz/background.webp",

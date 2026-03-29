@@ -8,6 +8,7 @@ export interface Project {
   header: string;
   description: string;
   client: string;
+  agency?: string;
   role: string;
   hasVideo?: boolean;
   images?: {

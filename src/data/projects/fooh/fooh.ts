@@ -8,6 +8,7 @@ export const Fooh: Project = {
   header: "projects.fooh.header",
   description: "projects.fooh.description",
   client: "projects.fooh.client",
+  agency: "projects.fooh.agency",
   role: "projects.fooh.role",
   hasVideo: true,
   background: "/images/projects/fooh/background.webp",

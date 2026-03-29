@@ -9,7 +9,8 @@
     "utazon": "UTAZON",
     "antoine_vernez": "ANTOINE VERNEZ",
     "seeProject": "See project",
-    "roleHeader": "Role"
+    "roleHeader": "Role",
+    "agencyHeader": "Agency"
   },
   "home": {
     "description": "3D Artist and Motion Designer based in Paris, I craft precisely designed worlds with polished and impactful visuals for brands, agencies, and artists.",
@@ -84,7 +85,8 @@
       "header": "3D Motion",
       "description": "3D simulation projects seamlessly integrated into real-world environments, showcasing the visual power of fictional ad campaigns in public spaces. From full conceptual universe creation to core 3D assets for brands like Gérard Darel: modeling, texturing, particles and compositing for hyper-realistic staging.",
       "role": "Full solo creation & core 3D assets",
-      "client": "Personal projects & Blackmotion / Gérard Darel",
+      "client": "Personal projects & Gérard Darel",
+      "agency": "Blackmotion",
       "date": "2024"
     },
     "karmin-corp-lec-reveal": {
@@ -100,7 +102,8 @@
       "header": "2D | 3D Motion",
       "description": "2D and 3D motion design work for Kaitonom.IA, a smart assistant solution aimed at professionals and associations. Designed to explain key features with clarity and visual appeal.",
       "role": "Motion design 2D & 3D",
-      "client": "Blackmotion / Client: Kaitonom.IA",
+      "client": "Kaitonom.IA",
+      "agency": "Blackmotion",
       "date": "2024"
     },
     "spiderman-timefreeze": {
@@ -116,7 +119,8 @@
       "header": "3D Motion",
       "description": "3D commercial made at Blackmotion for Lyner, a dental service offering custom aligners and full support. A clean and bright visual treatment to convey trust, simplicity and modernity.",
       "role": "All 3D scenes",
-      "client": "Blackmotion / Client: Lyner",
+      "client": "Lyner",
+      "agency": "Blackmotion",
       "date": "2024"
     },
     "mr-help": {
@@ -124,7 +128,8 @@
       "header": "3D Motion",
       "description": "A series of 3D videos for Mr. Help, a company specializing in furniture and A/C installations. Each piece highlights the ease of use, service guarantees and the value of the 'Serenity Pack'.",
       "role": "3D production at the agency",
-      "client": "Blackmotion / Client: Mr. Help",
+      "client": "Mr. Help",
+      "agency": "Blackmotion",
       "date": "2024"
     },
     "dals": {
@@ -132,7 +137,8 @@
       "header": "3D Stage Visuals",
       "description": "Creation of 3D-mapped stage visuals for the French TV show Danse avec les Stars (TF1), working with talents like Lénie, Jungeli, Claude Dartois, Florent Manaudou and Adil Rami. Each tableau was designed to enhance the choreography with bespoke visuals and real-time projection mapping.",
       "role": "Design and creation of 3D stage visuals",
-      "client": "Blackmotion / Client: TF1 – Danse avec les Stars",
+      "client": "TF1 – Danse avec les Stars",
+      "agency": "Blackmotion",
       "date": "2024",
       "carouselDescription": [
         "For the 14th season of Danse avec les Stars, I collaborated with the agency Blackmotion on the creation of several visual environments designed to accompany the performances of the dancers and celebrities.",
@@ -145,7 +151,7 @@
       "header": "3D Cinematic Animation",
       "description": "A tailor-made waiting screen for Twitch streamer YassEncore, reflecting his favorite universes: Breaking Bad, Dragon Ball, football... Designed to kick off streams with personality and atmosphere.",
       "role": "Full concept and production",
-      "client": "Creator commission / Client: YassEncore",
+      "client": "Creator commission – YassEncore",
       "date": "2024"
     },
     "pixel-break": {
@@ -161,7 +167,8 @@
       "header": "3D Vizualization",
       "description": "Stand design for a beverage brand, TRYBZ, showcased at Adil Rami's birthday event",
       "role": "3D Modeling",
-      "client": "Blackmotion",
+      "client": "TRYBZ",
+      "agency": "Blackmotion",
       "date": "2024"
     },
     "nma-snake": {
@@ -185,7 +192,8 @@
       "header": "3D Motion",
       "description": "I supported DOMO, a new virtual collectible card application, in creating numerous motion design and 3D assets for their events, keynotes, social media communications, and in-app integration.",
       "role": "Motion Design, 3D",
-      "client": "Blackmotion / Client: DOMO",
+      "client": "DOMO",
+      "agency": "Blackmotion",
       "date": "2026",
       "carouselDescription": ["3D Stage visuals", "Domo App launch party"]
     },
@@ -194,7 +202,8 @@
       "header": "3D Motion",
       "description": "I supported VAZIVA, a publicly traded French fintech company, in showcasing their offering and repositioning. I designed and produced a series of 3D \"beauty\" visuals around their cards and services. This content was crafted for marketing, digital, and social media use, with a clean and impactful look. To wrap up the project, I also contributed to creating a large-scale brand video dedicated to their new branding.",
       "role": "Filming, Motion Design, 3D, Compositing, Color Grading",
-      "client": "Blackmotion / Client: VAZIVA",
+      "client": "VAZIVA",
+      "agency": "Blackmotion",
       "date": "2026"
     }
   },

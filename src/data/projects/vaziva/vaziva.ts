@@ -8,6 +8,7 @@ export const Vaziva: Project = {
   header: "projects.vaziva.header",
   description: "projects.vaziva.description",
   client: "projects.vaziva.client",
+  agency: "projects.vaziva.agency",
   role: "projects.vaziva.role",
   hasVideo: true,
   background: "/images/projects/vaziva/background.webp",

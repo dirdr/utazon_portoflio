@@ -8,6 +8,7 @@ export const Dals: Project = {
   header: "projects.dals.header",
   description: "projects.dals.description",
   client: "projects.dals.client",
+  agency: "projects.dals.agency",
   role: "projects.dals.role",
   hasVideo: true,
   background: "/images/projects/dals/background.webp",

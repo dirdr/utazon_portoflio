@@ -62,6 +62,14 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
                     <h3 className="SectionTitle">Client</h3>
                     <p className="paragraph">{t(project.client)}</p>
                   </div>
+                  {project.agency && (
+                    <div>
+                      <h3 className="SectionTitle">
+                        {t("common.agencyHeader")}
+                      </h3>
+                      <p className="paragraph">{t(project.agency)}</p>
+                    </div>
+                  )}
                   <div>
                     <h3 className="SectionTitle">{t("common.roleHeader")}</h3>
                     <p className="paragraph">{t(project.role)}</p>
@@ -116,6 +124,14 @@ export const ProjectHeroSection = ({ project }: ProjectHeroSectionProps) => {
                     <h3 className="SectionTitle">Client</h3>
                     <p className="paragraph">{t(project.client)}</p>
                   </div>
+                  {project.agency && (
+                    <div>
+                      <h3 className="SectionTitle">
+                        {t("common.agencyHeader")}
+                      </h3>
+                      <p className="paragraph">{t(project.agency)}</p>
+                    </div>
+                  )}
                   <div>
                     <h3 className="SectionTitle">{t("common.roleHeader")}</h3>
                     <p className="paragraph">{t(project.role)}</p>

@@ -8,6 +8,7 @@ export const Domo: Project = {
   header: "projects.domo.header",
   description: "projects.domo.description",
   client: "projects.domo.client",
+  agency: "projects.domo.agency",
   role: "projects.domo.role",
   hasVideo: true,
   background: "/images/projects/domo/background.webp",

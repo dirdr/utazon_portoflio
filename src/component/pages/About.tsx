@@ -1,20 +1,14 @@
-import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "../common/Button";
 import { LineSweepText } from "../common/LineSweepText";
 import { useContactModal } from "../../hooks/useContactModal";
 import { useLenis } from "lenis/react";
 import { VideoShowcase } from "../showcase/VideoShowcase";
-import { useBackgroundImageStore } from "../../hooks/useBackgroundImageStore";
 import { Container } from "../layout/Container";
 import { logoRendered } from "../../hooks/usePreloadAssets";
-import { useMediaQuery } from "../../hooks/useMediaQuery";
 
 export const About = () => {
-  const [planeOpaque] = useState(false);
-  const [bloomEnabled] = useState(true);
   const { t } = useTranslation();
-  const { setBackground } = useBackgroundImageStore();
 
   const { openContactModal } = useContactModal();
   const lenis = useLenis();
@@ -25,24 +19,6 @@ export const About = () => {
       duration: 1.5,
     });
   };
-
-  const isDesktop = useMediaQuery("(min-width: 1280px)");
-  useEffect(() => {
-    if (isDesktop) {
-      setBackground(
-        {
-          type: "three",
-          value: "about-logo",
-          options: { planeOpaque, bloomEnabled },
-        },
-        "/about",
-      );
-    } else {
-      setBackground(null);
-    }
-
-    return () => setBackground(null);
-  }, [isDesktop, setBackground, planeOpaque, bloomEnabled]);
   return (
     <>
       <div className="mb-32 hidden xl:block">

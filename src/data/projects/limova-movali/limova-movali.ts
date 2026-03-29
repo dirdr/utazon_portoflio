@@ -8,6 +8,7 @@ export const LimovaMovali: Project = {
   header: "projects.limova-movali.header",
   description: "projects.limova-movali.description",
   client: "projects.limova-movali.client",
+  agency: "projects.limova-movali.agency",
   role: "projects.limova-movali.role",
   hasVideo: true,
   background: "/images/projects/limova-movali/background.webp",

@@ -8,6 +8,7 @@ export const MrHelp: Project = {
   header: "projects.mr-help.header",
   description: "projects.mr-help.description",
   client: "projects.mr-help.client",
+  agency: "projects.mr-help.agency",
   role: "projects.mr-help.role",
   hasVideo: true,
   background: "/images/projects/mr-help/background.webp",

@@ -9,7 +9,8 @@
     "utazon": "UTAZON",
     "antoine_vernez": "ANTOINE VERNEZ",
     "seeProject": "Voir le projet",
-    "roleHeader": "Rôle"
+    "roleHeader": "Rôle",
+    "agencyHeader": "Agence"
   },
   "home": {
     "description": "Artiste 3D et Motion Designer à Paris, je conçois avec grande précision des univers aux visuels soignés et percutants au service des marques, agences et artistes.",
@@ -83,7 +84,8 @@
       "header": "3D Motion",
       "description": "Projets de simulation 3D intégrée en environnement réel pour démontrer l'impact des campagnes publicitaires dans l'espace public. De la création complète d'univers conceptuels aux éléments clés pour des marques comme Gérard Darel : modélisation, texturing, particules et compositing.",
       "role": "Création complète & éléments clés 3D",
-      "client": "Projets personnels & Blackmotion / Gérard Darel",
+      "client": "Projets personnels & Gérard Darel",
+      "agency": "Blackmotion",
       "date": "2024"
     },
     "karmin-corp-lec-reveal": {
@@ -99,7 +101,8 @@
       "header": "2D | 3D Motion",
       "description": "Motion design 2D et 3D pour valoriser les fonctionnalités de deux intelligences artificielles destinées à organiser et assister. Projet réalisé en agence.",
       "role": "Motion Design 2D & 3D",
-      "client": "Blackmotion / Client : Kaitonom.IA",
+      "client": "Kaitonom.IA",
+      "agency": "Blackmotion",
       "date": "2024"
     },
     "spiderman-timefreeze": {
@@ -115,7 +118,8 @@
       "header": "3D Motion",
       "description": "Vidéo 3D réalisée au sein de l'agence Blackmotion pour Lyner, un service spécialisé dans les gouttières dentaires sur mesure. L'objectif : mettre en avant l'accompagnement complet du service, la simplicité du parcours client et la modernité de la solution.",
       "role": "Réalisation de l'ensemble des plans 3D",
-      "client": "Blackmotion / Client : Lyner",
+      "client": "Lyner",
+      "agency": "Blackmotion",
       "date": "2025"
     },
     "mr-help": {
@@ -123,7 +127,8 @@
       "header": "3D Motion",
       "description": "Série de vidéos 3D réalisées pour Mr. Help, une entreprise spécialisée dans l'installation de mobilier et de climatiseurs. Chaque vidéo met en avant, de façon claire et stylisée, la facilité du parcours client, la fiabilité du service, et les garanties incluses dans leur Pack Sérénité.",
       "role": "Réalisation des séquences 3D au sein de l'agence",
-      "client": "Blackmotion / Client : Mr. Help",
+      "client": "Mr. Help",
+      "agency": "Blackmotion",
       "date": "2025"
     },
     "dals": {
@@ -131,7 +136,8 @@
       "header": "Visuels de plateau en 3D",
       "description": "Création de tableaux en 3D mapping projetés en live pour l'émission Danse avec les Stars (TF1), au sein de l'agence Blackmotion. Chaque univers a été conçu pour amplifier l'émotion des chorégraphies de Lénie, Jungeli, Claude Dartois, Florent Manaudou ou Adil Rami.",
       "role": "Création des tableaux en 3D mapping pour plusieurs chorégraphies",
-      "client": "Blackmotion / Client : TF1 – Danse avec les Stars",
+      "client": "TF1 – Danse avec les Stars",
+      "agency": "Blackmotion",
       "date": "2025",
       "carouselDescription": [
         "Pour la saison 14 de Danse avec les Stars, j’ai collaboré avec l’agence Blackmotion sur la création de plusieurs univers visuels destinés à accompagner les prestations des danseurs et stars.",
@@ -144,7 +150,7 @@
       "header": "Cinématique 3D",
       "description": "Création d'un écran d'attente Twitch sur mesure pour le streamer YassEncore, imaginé comme un hommage visuel à ses univers préférés : Breaking Bad, Dragon Ball, le football... Un décor animé unique et immersif pour ouvrir chaque live avec impact.",
       "role": "Conception et réalisation complète du waiting screen",
-      "client": "Commande créateur / Client : YassEncore",
+      "client": "Commande créateur – YassEncore",
       "date": "2024"
     },
     "pixel-break": {
@@ -160,7 +166,8 @@
       "header": "Visualisation 3D",
       "description": "Création d'un stand pour une marque de boisson, TRYBZ, présenté lors de l'anniversaire d'Adil Rami",
       "role": "3D Modeling",
-      "client": "Blackmotion",
+      "client": "TRYBZ",
+      "agency": "Blackmotion",
       "date": "2024"
     },
     "nma-snake": {
@@ -184,7 +191,8 @@
       "header": "3D Motion",
       "description": "J'ai accompagné DOMO, une nouvelle application de cartes virtuelles à collectionner, dans la création de nombreux assets de motion design et de 3D, pour leurs évènements, keynotes, communications sur les réseaux et intégration in app.",
       "role": "Motion Design, 3D",
-      "client": "Blackmotion / Client : DOMO",
+      "client": "DOMO",
+      "agency": "Blackmotion",
       "date": "2026",
       "carouselDescription": ["3D Stage visuals", "Domo App launch party"]
     },
@@ -193,7 +201,8 @@
       "header": "3D Motion",
       "description": "J'ai accompagné VAZIVA, fintech française cotée en bourse, dans la mise en valeur de son offre et de son repositionnement. J'ai conçu et produit une série de visuels 3D \"beauty\" autour de leurs cartes et services. Ces contenus ont été pensés pour des usages marketing, digitaux et social media, avec un rendu clair et impactant. Pour conclure ce projet, j'ai également participé à la création d'une brand video d'envergure dédiée à leur nouveau branding.",
       "role": "Captation, Motion Design, 3D, Compositing, Étalonnage",
-      "client": "Blackmotion / Client : VAZIVA",
+      "client": "VAZIVA",
+      "agency": "Blackmotion",
       "date": "2026"
     }
   },

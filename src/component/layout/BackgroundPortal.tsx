@@ -5,81 +5,73 @@ import { LazyThreeBackground } from "./LazyThreeBackground";
 import { useBackgroundImageStore } from "../../hooks/useBackgroundImageStore";
 import { useLocation } from "wouter";
 import { isModelPreloaded } from "../../hooks/usePreloadAssets";
+import { useMediaQuery } from "../../hooks/useMediaQuery";
 
 /**
  * Renders background layers (image or Three.js) via a portal to document.body.
- * This avoids being trapped inside framer-motion's stacking context,
- * which would break position:fixed on the background.
+ * - Three.js background is shown on /about (desktop only), driven by route, not by component effects.
+ * - Image backgrounds are driven by the zustand store.
+ * - Portal to document.body avoids framer-motion stacking context traps.
  */
 export const BackgroundPortal = () => {
   const [location] = useLocation();
   const { currentBackground } = useBackgroundImageStore();
-  const [shouldShowThreeBackground, setShouldShowThreeBackground] =
-    useState(false);
-
-  const threeComponentCache = useRef<React.ReactElement | null>(null);
+  const isDesktop = useMediaQuery("(min-width: 1280px)");
   const isAboutRoute = location === "/about";
+  const showThreeBackground = isAboutRoute && isDesktop;
 
+  const [isModelReady, setIsModelReady] = useState(false);
+  const threeComponentCache = useRef<React.ReactElement | null>(null);
+
+  // Track model readiness for the Three.js background
   useEffect(() => {
-    if (currentBackground?.type === "three" && isAboutRoute) {
-      if (isModelPreloaded("/models/logo4.glb")) {
-        setShouldShowThreeBackground(true);
-        return;
-      }
-
-      const interval = setInterval(() => {
-        if (isModelPreloaded("/models/logo4.glb")) {
-          setShouldShowThreeBackground(true);
-          clearInterval(interval);
-        }
-      }, 50);
-
-      const timeout = setTimeout(() => {
-        setShouldShowThreeBackground(true);
-        clearInterval(interval);
-      }, 2000);
-
-      return () => {
-        clearInterval(interval);
-        clearTimeout(timeout);
-      };
-    } else {
-      setShouldShowThreeBackground(false);
-      if (!isAboutRoute) {
-        threeComponentCache.current = null;
-      }
+    if (!showThreeBackground) {
+      setIsModelReady(false);
+      threeComponentCache.current = null;
+      return;
     }
-  }, [currentBackground, isAboutRoute]);
+
+    if (isModelPreloaded("/models/logo4.glb")) {
+      setIsModelReady(true);
+      return;
+    }
+
+    const interval = setInterval(() => {
+      if (isModelPreloaded("/models/logo4.glb")) {
+        setIsModelReady(true);
+        clearInterval(interval);
+      }
+    }, 50);
+
+    const timeout = setTimeout(() => {
+      setIsModelReady(true);
+      clearInterval(interval);
+    }, 2000);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+  }, [showThreeBackground]);
 
   const renderBackground = () => {
-    if (!currentBackground) {
-      return null;
-    }
-
-    const isMobile = window.innerWidth < 1280;
-
-    if (
-      currentBackground.type === "three" &&
-      shouldShowThreeBackground &&
-      isAboutRoute &&
-      !isMobile
-    ) {
+    // Three.js background for /about on desktop
+    if (showThreeBackground && isModelReady) {
       if (!threeComponentCache.current) {
         threeComponentCache.current = (
-          <LazyThreeBackground
-            planeOpaque={currentBackground.options?.planeOpaque}
-            bloomEnabled={currentBackground.options?.bloomEnabled}
-          />
+          <LazyThreeBackground planeOpaque={false} bloomEnabled={true} />
         );
       }
       return threeComponentCache.current;
     }
 
-    if (currentBackground.type === "three" && isAboutRoute && isMobile) {
+    // Black fallback for /about on mobile
+    if (isAboutRoute && !isDesktop) {
       return <div className="fixed inset-0 z-0 bg-black" />;
     }
 
-    if (currentBackground.type === "image") {
+    // Image backgrounds (projects, etc.)
+    if (currentBackground?.type === "image") {
       return <ImageBackgroundDisplay />;
     }
 
