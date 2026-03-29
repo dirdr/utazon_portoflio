@@ -106,16 +106,33 @@ export const VideoGridShowcase = ({
   className,
   border = false,
 }: VideoGridShowcaseProps) => {
-  const { videos, columns = 2, gridTemplate, aspectRatio } = data;
+  const { videos, columns = 2, gridTemplate, matchHeight, aspectRatio } = data;
+
+  const computedTemplate = gridTemplate ?? (matchHeight
+    ? videos
+        .map((v) => {
+          if (!v.aspectRatio) return "1fr";
+          const [w, h] = v.aspectRatio.split("/").map(Number);
+          return `${w / h}fr`;
+        })
+        .join(" ")
+    : undefined);
 
   return (
     <div className={cn("w-full", className)}>
+      {computedTemplate && data.id && (
+        <style>{`
+          @media (min-width: 768px) {
+            #${data.id} { grid-template-columns: ${computedTemplate}; }
+          }
+        `}</style>
+      )}
       <div
+        id={computedTemplate ? data.id : undefined}
         className={cn(
           "grid gap-4 lg:gap-8",
-          !gridTemplate && GRID_COLUMNS[columns],
+          computedTemplate ? "grid-cols-1" : GRID_COLUMNS[columns],
         )}
-        style={gridTemplate ? { gridTemplateColumns: gridTemplate } : undefined}
       >
         {videos.map((video, index) => (
           <div

@@ -31,7 +31,7 @@ export const MixedGrid2x2Showcase = ({
   });
 
   return (
-    <div className={cn("w-full max-w-5xl mx-auto", className)}>
+    <div className={cn("w-full mx-auto", className)}>
       <div
         className={cn(
           "grid grid-cols-1 md:grid-cols-2",

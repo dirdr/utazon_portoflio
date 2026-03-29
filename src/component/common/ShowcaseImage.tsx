@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { cn } from "../../utils/cn";
 
+// Global cache of URLs that have been loaded at least once.
+// Survives re-mounts and tab switches — prevents fade-in flash on re-decode.
+const loadedImageCache = new Set<string>();
+
 interface OptimizedImageProps {
   src: string;
   alt: string;
@@ -22,10 +26,12 @@ export const ShowcaseImage = ({
   height,
   sizes = "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw",
 }: OptimizedImageProps) => {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const alreadyLoaded = loadedImageCache.has(src);
+  const [isLoaded, setIsLoaded] = useState(alreadyLoaded);
   const [hasError, setHasError] = useState(false);
 
   const handleLoad = () => {
+    loadedImageCache.add(src);
     setIsLoaded(true);
   };
 
@@ -40,7 +46,8 @@ export const ShowcaseImage = ({
         src={src}
         alt={alt}
         className={cn(
-          "transition-opacity duration-300 gpu-accelerated",
+          "gpu-accelerated",
+          alreadyLoaded ? "opacity-100" : "transition-opacity duration-300",
           isLoaded ? "opacity-100" : "opacity-0",
           className,
         )}

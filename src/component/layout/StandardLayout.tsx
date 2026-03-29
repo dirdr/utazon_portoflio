@@ -28,30 +28,27 @@ export const StandardLayout = ({
 
   useEffect(() => {
     if (currentBackground?.type === "three" && isAboutRoute) {
-      const checkModel = () => {
+      if (isModelPreloaded("/models/logo4.glb")) {
+        setShouldShowThreeBackground(true);
+        return;
+      }
+
+      const interval = setInterval(() => {
         if (isModelPreloaded("/models/logo4.glb")) {
           setShouldShowThreeBackground(true);
-        } else {
-          const interval = setInterval(() => {
-            if (isModelPreloaded("/models/logo4.glb")) {
-              setShouldShowThreeBackground(true);
-              clearInterval(interval);
-            }
-          }, 50);
-
-          const timeout = setTimeout(() => {
-            setShouldShowThreeBackground(true);
-            clearInterval(interval);
-          }, 2000);
-
-          return () => {
-            clearInterval(interval);
-            clearTimeout(timeout);
-          };
+          clearInterval(interval);
         }
-      };
+      }, 50);
 
-      checkModel();
+      const timeout = setTimeout(() => {
+        setShouldShowThreeBackground(true);
+        clearInterval(interval);
+      }, 2000);
+
+      return () => {
+        clearInterval(interval);
+        clearTimeout(timeout);
+      };
     } else {
       setShouldShowThreeBackground(false);
       if (!isAboutRoute) {

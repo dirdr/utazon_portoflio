@@ -60,6 +60,7 @@ export interface VideoGridShowcaseData extends ShowcaseItem {
   }[];
   columns?: 2 | 3 | 4;
   gridTemplate?: string;
+  matchHeight?: boolean;
   aspectRatio?: string;
   copyright?: {
     key: string;
