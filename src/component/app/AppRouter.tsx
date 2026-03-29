@@ -28,8 +28,6 @@ const AppRouterContent = () => {
     duration: 300,
   });
 
-  const isHomePage = currentLocation === "/";
-
   return (
     <TransitionProvider
       value={{
@@ -57,7 +55,7 @@ const AppRouterContent = () => {
         </Switch>
       </Layout>
       <CursorTrail
-        enabled={isEnabled && !isMobile() && isHomePage && !isTransitioning}
+        enabled={isEnabled && !isMobile() && !isTransitioning}
         maxPoints={1500}
         fadeTime={3000}
         rippleSize={60}

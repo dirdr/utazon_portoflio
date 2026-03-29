@@ -11,7 +11,7 @@ interface CursorTrailProviderProps {
 export const CursorTrailProvider: React.FC<CursorTrailProviderProps> = ({
   children,
 }) => {
-  const [isEnabled, setIsEnabled] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(true);
 
   const enableTrail = useCallback(() => {
     setIsEnabled(true);
