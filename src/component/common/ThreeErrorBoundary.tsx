@@ -34,9 +34,7 @@ export class ThreeErrorBoundary extends React.Component<
     if (this.state.hasError) {
       if (this.props.fallback) return this.props.fallback;
       return (
-        <div
-          className="fixed inset-0 z-0 flex items-center justify-center"
-        >
+        <div className="fixed inset-0 z-0 flex items-center justify-center">
           <button
             onClick={this.handleRetry}
             className="text-muted text-sm px-4 py-2 border border-neutral-700 rounded-lg hover:border-neutral-500 transition-colors"
