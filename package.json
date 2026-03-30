@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && bun run seo:generate",
-    "build:integration": "VITE_SITE_URL=https://integration.utazon.fr bun run build",
-    "build:production": "VITE_SITE_URL=https://utazon.fr bun run build",
+    "build": "tsc && vite build && pnpm run seo:generate",
+    "build:integration": "VITE_SITE_URL=https://integration.utazon.fr pnpm run build",
+    "build:production": "VITE_SITE_URL=https://utazon.fr pnpm run build",
     "seo:generate": "tsx scripts/generate-seo.ts",
     "lint": "eslint . --report-unused-disable-directives",
     "preview": "vite preview"
@@ -34,6 +34,7 @@
     "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.2.2",
     "three": "^0.183.2",
+    "three-stdlib": "^2.36.1",
     "wouter": "^3.9.0",
     "zustand": "^5.0.12"
   },
