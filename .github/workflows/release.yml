@@ -95,8 +95,8 @@ jobs:
 
       - name: Update package.json version
         run: |
-          npm version ${{ steps.new_version.outputs.version }} --no-git-tag-version
-          git add package.json pnpm-lock.yaml
+          pnpm version ${{ steps.new_version.outputs.version }} --no-git-tag-version
+          git add package.json
 
       - name: Commit version bump
         run: |
@@ -113,6 +113,8 @@ jobs:
       - name: Update production branch
         run: |
           git fetch origin
+
+          git clean -fd
 
           if git ls-remote --heads origin production | grep -q production; then
             echo "Production branch exists, checking out..."
