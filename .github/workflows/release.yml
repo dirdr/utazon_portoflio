@@ -38,10 +38,16 @@ jobs:
           current_version=${latest_tag#v}
           echo "current_version=$current_version" >> $GITHUB_OUTPUT
 
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
         with:
-          bun-version: latest
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
 
       - name: Calculate new version
         id: new_version
@@ -89,8 +95,8 @@ jobs:
 
       - name: Update package.json version
         run: |
-          bunx npm version ${{ steps.new_version.outputs.version }} --no-git-tag-version
-          git add package.json bun.lock
+          npm version ${{ steps.new_version.outputs.version }} --no-git-tag-version
+          git add package.json pnpm-lock.yaml
 
       - name: Commit version bump
         run: |
@@ -123,19 +129,14 @@ jobs:
 
           echo "Production branch updated with ${{ steps.new_version.outputs.tag }}"
 
-      - name: Setup Bun for deployment
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Build application for production
         env:
           VITE_SITE_URL: https://utazon.fr
           VITE_UTAZON_API_URL: ${{ secrets.VITE_UTAZON_API_URL }}
-        run: bun run build
+        run: pnpm run build
 
       - name: Deploy to Cloudflare Pages (Production)
         uses: cloudflare/wrangler-action@v3
