@@ -114,20 +114,15 @@ jobs:
         run: |
           git fetch origin
 
-          git clean -fd
-
           if git ls-remote --heads origin production | grep -q production; then
-            echo "Production branch exists, checking out..."
-            git checkout production
-            git pull origin production
+            echo "Production branch exists, resetting to main..."
+            git branch -f production main
           else
             echo "Production branch doesn't exist, creating..."
-            git checkout -b production
+            git branch production main
           fi
 
-          git merge main --no-edit -m "chore: release ${{ steps.new_version.outputs.tag }} to production"
-
-          git push origin production
+          git push origin production --force
 
           echo "Production branch updated with ${{ steps.new_version.outputs.tag }}"
 
