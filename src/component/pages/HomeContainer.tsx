@@ -67,6 +67,11 @@ export const HomeContainer = () => {
       <VideoBackground
         ref={videoBackgroundRef}
         src={videoWorkflow.videoSrc}
+        poster={
+          isMobileDetected
+            ? "/images/intro/mobile/poster_mobile.jpg"
+            : "/images/intro/desktop/poster_desktop.jpg"
+        }
         showGradient={videoWorkflow.shouldShowContent}
         gradientDelay={isFreshLoad ? 300 : 0}
         onLoadedData={videoWorkflow.onVideoLoaded}

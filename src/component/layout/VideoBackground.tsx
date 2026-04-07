@@ -22,6 +22,7 @@ export interface VideoBackgroundRef {
 
 interface VideoBackgroundProps {
   src?: string;
+  poster?: string;
   showGradient?: boolean;
   gradientDelay?: number;
   onLoadedData?: () => void;
@@ -36,6 +37,7 @@ export const VideoBackground = forwardRef<
   (
     {
       src,
+      poster,
       showGradient = false,
       gradientDelay = 0,
       onLoadedData,
@@ -248,6 +250,7 @@ export const VideoBackground = forwardRef<
           disableRemotePlayback
           preload="auto"
           crossOrigin="anonymous"
+          poster={poster}
           src={videoSource || undefined}
           style={{
             contentVisibility: "auto",
@@ -267,6 +270,7 @@ export const VideoBackground = forwardRef<
           disableRemotePlayback
           preload="auto"
           crossOrigin="anonymous"
+          poster={poster}
           style={{
             contentVisibility: "auto",
             willChange: "auto",
