@@ -1,6 +1,57 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
+    "config:base",
+    ":dependencyDashboard",
+    ":semanticCommits",
+    "helpers:pinGitHubActionDigests"
+  ],
+  "timezone": "Europe/Paris",
+  "schedule": ["every weekend"],
+  "prConcurrentLimit": 5,
+  "prHourlyLimit": 2,
+  "rebaseWhen": "conflicted",
+  "osvVulnerabilityAlerts": true,
+  "cargo": {
+    "enabled": true
+  },
+  "github-actions": {
+    "fileMatch": ["^\\.github/workflows/[^/]+\\.ya?ml$"]
+  },
+  "packageRules": [
+    {
+      "matchManagers": ["cargo"],
+      "matchUpdateTypes": ["patch"],
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeStrategy": "squash"
+    },
+    {
+      "matchManagers": ["cargo"],
+      "matchUpdateTypes": ["minor"],
+      "groupName": "cargo-minor",
+      "automerge": false
+    },
+    {
+      "matchManagers": ["cargo"],
+      "matchPackageNames": ["axum", "tokio", "tower", "hyper"],
+      "groupName": "axum-ecosystem",
+      "automerge": false,
+      "dependencyDashboardApproval": true
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "github-actions",
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeStrategy": "squash"
+    },
+    {
+      "matchUpdateTypes": ["major"],
+      "labels": ["major-update"],
+      "automerge": false,
+      "dependencyDashboardApproval": true
+    }
   ]
 }
