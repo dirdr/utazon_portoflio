@@ -124,7 +124,7 @@ jobs:
           cd adrien_kubernetes_cluster
           git config user.name "dirdr-ci[bot]"
           git config user.email "${{ secrets.DIRDR_CI_APP_ID }}+dirdr-ci[bot]@users.noreply.github.com"
-          sed -i "s|tag:.*|tag: \"sha-${SHORT}\"
+          sed -i "s|tag:.*|tag: \"sha-${SHORT}\"|" helm/utazon-backend/values.yaml
           git add helm/utazon-backend/values.yaml
           git diff --cached --quiet || git commit -m "chore(utazon-backend): bump to sha-${SHORT}"
           git push
