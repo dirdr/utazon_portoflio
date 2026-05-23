@@ -112,7 +112,7 @@ jobs:
           app-id: ${{ secrets.DIRDR_CI_APP_ID}}
           private-key: ${{ secrets.DIRDR_CI_APP_PEM }}
           owner: dirdr
-          repositories: iac
+          repositories: adrien_kubernetes_cluster
 
       - name: Update image tag in IAC repo
         env:
@@ -121,7 +121,7 @@ jobs:
         run: |
           SHORT=$(echo "$SHORT_SHA" | cut -c1-7)
           git clone https://x-access-token:${GH_TOKEN}@github.com/dirdr/adrien_kubernetes_cluster.git
-          cd iac
+          cd adrien_kubernetes_cluster
           git config user.name "dirdr-ci[bot]"
           git config user.email "${{ secrets.DIRDR_CI_APP_ID }}+dirdr-ci[bot]@users.noreply.github.com"
           sed -i "s|tag:.*|tag: \"sha-${SHORT}\"
