@@ -15,7 +15,7 @@
   "osvVulnerabilityAlerts": true,
   "rangeStrategy": "pin",
   "constraints": {
-    "pnpm": ">=11"
+    "pnpm": "11.2.2"
   },
   "postUpdateOptions": ["pnpmDedupe"],
   "lockFileMaintenance": {

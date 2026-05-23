@@ -41,12 +41,12 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6
         with:
-          version: 11
+          version: 11.2.2
 
       - name: Setup Node.js
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
-          node-version: 24
+          node-version: 24.16.0
           cache: pnpm
 
       - name: Calculate new version
@@ -143,7 +143,7 @@ jobs:
           command: pages deploy dist --project-name=utazon-portfolio --branch=production --commit-dirty=true
 
       - name: Send Discord notification
-        uses: Ilshidur/action-discord@master
+        uses: Ilshidur/action-discord@d2594079a10f1d6739ee50a2471f0ca57418b554 # master
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
