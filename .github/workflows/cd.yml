@@ -36,7 +36,7 @@ jobs:
         run: pnpm run build
 
       - name: Deploy to Cloudflare Pages (Preview)
-        uses: cloudflare/wrangler-action@v3
+        uses: cloudflare/wrangler-action@ebbaa1584979971c8614a24965b4405ff95890e0 # v4
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
