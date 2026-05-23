@@ -120,11 +120,11 @@ jobs:
           SHORT_SHA: ${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.revision'] }}
         run: |
           SHORT=$(echo "$SHORT_SHA" | cut -c1-7)
-          git clone https://x-access-token:${GH_TOKEN}@github.com/dirdr/iac.git
+          git clone https://x-access-token:${GH_TOKEN}@github.com/dirdr/adrien_kubernetes_cluster.git
           cd iac
           git config user.name "dirdr-ci[bot]"
           git config user.email "${{ secrets.DIRDR_CI_APP_ID }}+dirdr-ci[bot]@users.noreply.github.com"
-          sed -i "s|tag:.*|tag: \"sha-${SHORT}\"  # auto-updated by CI|" helm/utazon-backend/values.yaml
+          sed -i "s|tag:.*|tag: \"sha-${SHORT}\"
           git add helm/utazon-backend/values.yaml
           git diff --cached --quiet || git commit -m "chore(utazon-backend): bump to sha-${SHORT}"
           git push
