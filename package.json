@@ -33,7 +33,7 @@
     "sitemap": "9.0.1",
     "tailwind-merge": "3.5.0",
     "tailwindcss": "4.3.0",
-    "three": "0.183.2",
+    "three": "0.185.1",
     "three-stdlib": "2.36.1",
     "wouter": "3.9.0",
     "zustand": "5.0.14"
