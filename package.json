@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@react-three/drei": "10.7.7",
-    "@react-three/fiber": "9.5.0",
+    "@react-three/fiber": "9.6.1",
     "@react-three/postprocessing": "3.0.4",
     "@tailwindcss/vite": "4.3.0",
     "@types/three": "0.185.1",
