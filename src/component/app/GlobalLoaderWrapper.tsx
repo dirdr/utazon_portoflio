@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from "motion/react";
 import { useLocation } from "wouter";
 import { useAppLoading } from "../../contexts/AppLoadingContext";
 import { GlobalLoader } from "../loader/GlobalLoader";

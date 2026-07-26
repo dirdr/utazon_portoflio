@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { VideoCarouselShowcaseData } from "../../types/showcase";
 import { CarouselVideoCard } from "./CarouselVideoCard";
 import { SHOWCASE_STYLES } from "../../constants/showcaseStyles";

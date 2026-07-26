@@ -11,7 +11,7 @@ import { useMediaQuery } from "../../hooks/useMediaQuery";
  * Renders background layers (image or Three.js) via a portal to document.body.
  * - Three.js background is shown on /about (desktop only), driven by route, not by component effects.
  * - Image backgrounds are driven by the zustand store.
- * - Portal to document.body avoids framer-motion stacking context traps.
+ * - Portal to document.body avoids motion stacking context traps.
  */
 export const BackgroundPortal = () => {
   const [location] = useLocation();

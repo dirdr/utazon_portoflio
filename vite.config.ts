@@ -29,7 +29,13 @@ export default defineConfig({
             id.includes("node_modules/react/")
           )
             return "vendor";
-          if (id.includes("node_modules/framer-motion/")) return "framer";
+          if (
+            id.includes("node_modules/framer-motion/") ||
+            id.includes("node_modules/motion/") ||
+            id.includes("node_modules/motion-dom/") ||
+            id.includes("node_modules/motion-utils/")
+          )
+            return "motion";
           if (
             id.includes("node_modules/wouter/") ||
             id.includes("node_modules/zustand/")
