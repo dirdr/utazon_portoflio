@@ -181,7 +181,6 @@ const CardComponent = ({
       ref={combinedRef}
       className={cn(
         "group glint-card-wrapper cursor-pointer w-full card-item",
-        { "touch-active": isActiveCard },
         className,
       )}
       style={cardStyle}
@@ -296,18 +295,20 @@ const CardComponent = ({
             </time>
           </div>
 
-          <div className="absolute bottom-8 right-8 transform translate-x-full opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 ease-out will-change-transform">
-            <Button
-              glint
-              proximityIntensity
-              maxDistance={200}
-              as="button"
-              onClick={handleButtonClick}
-              speed={3}
-            >
-              {t("common.seeProject")}
-            </Button>
-          </div>
+          {canHover && (
+            <div className="absolute bottom-8 right-8 transform translate-x-full opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 ease-out will-change-transform">
+              <Button
+                glint
+                proximityIntensity
+                maxDistance={200}
+                as="button"
+                onClick={handleButtonClick}
+                speed={3}
+              >
+                {t("common.seeProject")}
+              </Button>
+            </div>
+          )}
         </figure>
       </div>
     </article>

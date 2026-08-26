@@ -90,12 +90,14 @@
     pointer-events: none;
   }
 
-  /* Show glint on hover and when card is touch-active */
-  .glint-card-wrapper:hover::after,
-  .glint-card-wrapper.touch-active::after {
-    opacity: 1;
-    animation: border-spin var(--glint-card-speed) linear infinite;
-    will-change: transform;
+  /* Hover-only: on touch devices the emulated hover latches on tap, which
+     fought the centred-card video for attention. */
+  @media (hover: hover) and (pointer: fine) {
+    .glint-card-wrapper:hover::after {
+      opacity: 1;
+      animation: border-spin var(--glint-card-speed) linear infinite;
+      will-change: transform;
+    }
   }
 
   .glint-card-wrapper-disabled::before,
