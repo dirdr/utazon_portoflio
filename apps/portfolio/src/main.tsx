@@ -61,6 +61,12 @@ ReactDOM.createRoot(rootElement).render(
     options={{
       wheelMultiplier: 1.2,
       touchMultiplier: 1.5,
+      // lenis 1.3.26 began honouring prefers-reduced-motion by default, which
+      // routes user scroll through scrollTo with lerp 1 and removes the easing
+      // entirely. The rest of the site (3D, video, page transitions) does not
+      // yet honour that preference, so disabling it here keeps behaviour
+      // consistent. Revisit together with site-wide reduced-motion support.
+      respectReducedMotion: false,
     }}
   >
     <AppLoadingProvider>
