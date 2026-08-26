@@ -3,10 +3,13 @@ import { useTranslation } from "react-i18next";
 import { Button } from "./Button";
 import { useMemo, useRef, useState, useCallback, useEffect, memo } from "react";
 import { LineSweepText } from "./LineSweepText";
+import { Skeleton } from "./Skeleton";
 import { useTransitionContext } from "../../hooks/useTransitionContext";
 import { useProjectGridPreloader } from "../../hooks/useProjectGridPreloader";
 import { useActiveVideoCard } from "../../hooks/useActiveVideoCard";
-import { isMobile } from "../../utils/mobileDetection";
+import { useCardActivation } from "../../hooks/useCardActivation";
+import { useImageLoaded } from "../../hooks/useImageLoaded";
+import { useMediaQuery } from "../../hooks/useMediaQuery";
 import { usePrefetchOnHover } from "../../hooks/usePrefetchOnHover";
 
 import p1 from "../../assets/images/card_backgrounds/1.webp";
@@ -41,38 +44,22 @@ const CardComponent = ({
   project,
   className,
   glintSpeed = "6s",
+  priority = false,
 }: CardProps) => {
   const { t } = useTranslation();
-  const { navigateWithTransition, isTransitioning: isPageTransitioning } =
-    useTransitionContext();
+  const { navigateWithTransition } = useTransitionContext();
   const videoRef = useRef<HTMLVideoElement>(null);
   const elementRef = useRef<HTMLElement | null>(null);
-  const animationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const [videoReady, setVideoReady] = useState(false);
-  const [videoError, setVideoError] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
-  const [isTouched, setIsTouched] = useState(false);
-  const videoReadyTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  /**
+   * Hover-preview is only meaningful where a pointer can rest on a card.
+   * Everywhere else the viewport centre decides, so a scroll gesture never
+   * starts or stops playback.
+   */
+  const canHover = useMediaQuery("(hover: hover) and (pointer: fine)");
 
-  const loggedSetVideoReady = useCallback((value: boolean) => {
-    if (videoReadyTimeoutRef.current) {
-      clearTimeout(videoReadyTimeoutRef.current);
-    }
-
-    videoReadyTimeoutRef.current = setTimeout(() => {
-      setVideoReady(value);
-      videoReadyTimeoutRef.current = null;
-    }, 10); // Small delay to batch multiple rapid events
-  }, []);
-
-  const loggedSetIsHovered = useCallback((value: boolean) => {
-    setIsHovered(value);
-  }, []);
-
-  const loggedSetIsTouched = useCallback((value: boolean) => {
-    setIsTouched(value);
-  }, []);
+  const cover = useImageLoaded(image.src);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const preloader = useProjectGridPreloader({
     projectId: project.id,
@@ -83,10 +70,14 @@ const CardComponent = ({
 
   const { setActiveCard, isActiveCard } = useActiveVideoCard(project.id);
 
+  useCardActivation({
+    cardId: project.id,
+    enabled: !canHover && !!thumbnail,
+    elementRef,
+  });
+
   const { onMouseEnter: onPrefetchEnter, onMouseLeave: onPrefetchLeave } =
-    usePrefetchOnHover(project.id, {
-      enabled: !isMobile(), // Only on desktop
-    });
+    usePrefetchOnHover(project.id, { enabled: canHover });
 
   const randomBackground = useMemo(() => {
     const hash = project.name.split("").reduce((acc, char) => {
@@ -109,70 +100,53 @@ const CardComponent = ({
     [preloader],
   );
 
-  const videoReadyRef = useRef(false);
-  videoReadyRef.current = videoReady;
-
-  const startVideoAnimation = useCallback(() => {
-    if (thumbnail && videoReadyRef.current && videoRef.current) {
-      setActiveCard(project.id);
-      videoRef.current.currentTime = 0;
-      const playPromise = videoRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {});
-      }
-    }
-  }, [thumbnail, setActiveCard, project.id]);
-
-  const stopVideoAnimation = useCallback(() => {
-    if (thumbnail && videoReady && videoRef.current) {
-      videoRef.current.pause();
-      videoRef.current.currentTime = 0;
-    }
-  }, [thumbnail, videoReady]);
-
+  /**
+   * Single owner of playback. The video carries preload="none", so nothing is
+   * fetched until this card is elected, and only one video streams at a time.
+   */
   useEffect(() => {
-    if (!isActiveCard && videoRef.current && !videoRef.current.paused) {
-      stopVideoAnimation();
-      loggedSetIsHovered(false);
-      loggedSetIsTouched(false);
+    const video = videoRef.current;
+    if (!video || !thumbnail) return;
+
+    if (!isActiveCard) {
+      video.pause();
+      setIsPlaying(false);
+      return;
     }
-  }, [
-    isActiveCard,
-    stopVideoAnimation,
-    loggedSetIsHovered,
-    loggedSetIsTouched,
-  ]);
+
+    let cancelled = false;
+    const start = () => {
+      if (cancelled) return;
+      video.currentTime = 0;
+      video.play().catch(() => {});
+    };
+
+    // readyState >= HAVE_FUTURE_DATA means we can start without waiting.
+    if (video.readyState >= 3) {
+      start();
+      return;
+    }
+
+    video.preload = "auto";
+    video.load();
+    video.addEventListener("canplay", start, { once: true });
+    return () => {
+      cancelled = true;
+      video.removeEventListener("canplay", start);
+    };
+  }, [isActiveCard, thumbnail]);
 
   const handleMouseEnter = useCallback(() => {
-    if (isMobile()) return;
+    if (!canHover) return;
     onPrefetchEnter();
-    loggedSetIsHovered(true);
-    startVideoAnimation();
-  }, [onPrefetchEnter, loggedSetIsHovered, startVideoAnimation]);
+    setActiveCard(project.id);
+  }, [canHover, onPrefetchEnter, setActiveCard, project.id]);
 
   const handleMouseLeave = useCallback(() => {
-    if (isMobile()) return;
+    if (!canHover) return;
     onPrefetchLeave();
-    loggedSetIsHovered(false);
-    stopVideoAnimation();
-  }, [onPrefetchLeave, loggedSetIsHovered, stopVideoAnimation]);
-
-  const handleTouchStart = useCallback(() => {
-    loggedSetIsTouched(true);
-    loggedSetIsHovered(true);
-    startVideoAnimation();
-
-    if (animationTimeoutRef.current) {
-      clearTimeout(animationTimeoutRef.current);
-    }
-  }, [loggedSetIsTouched, loggedSetIsHovered, startVideoAnimation]);
-
-  const handleTouchEnd = useCallback(() => {
-    loggedSetIsTouched(false);
-    if (animationTimeoutRef.current) {
-      clearTimeout(animationTimeoutRef.current);
-    }
-  }, [loggedSetIsTouched]);
+    setActiveCard(null);
+  }, [canHover, onPrefetchLeave, setActiveCard]);
 
   const handleClick = useCallback(async () => {
     await navigateWithTransition(`/projects/${project.id}`, { id: project.id });
@@ -188,37 +162,6 @@ const CardComponent = ({
     [navigateWithTransition, project.id],
   );
 
-  // Check if cursor is already over the card after page transition completes
-  useEffect(() => {
-    if (isPageTransitioning || isHovered) return;
-    const el = elementRef.current;
-    if (el && !isMobile() && el.matches(":hover")) {
-      loggedSetIsHovered(true);
-      onPrefetchEnter();
-      startVideoAnimation();
-    }
-  }, [
-    isPageTransitioning,
-    isHovered,
-    startVideoAnimation,
-    loggedSetIsHovered,
-    onPrefetchEnter,
-  ]);
-
-  // Cleanup timeouts on unmount
-  useEffect(() => {
-    const animationTimeout = animationTimeoutRef.current;
-    const videoReadyTimeout = videoReadyTimeoutRef.current;
-    return () => {
-      if (animationTimeout) {
-        clearTimeout(animationTimeout);
-      }
-      if (videoReadyTimeout) {
-        clearTimeout(videoReadyTimeout);
-      }
-    };
-  }, []);
-
   const cardStyle = useMemo(
     (): React.CSSProperties =>
       ({
@@ -227,30 +170,19 @@ const CardComponent = ({
     [glintSpeed],
   );
 
-  const cardClassName = cn(
-    "group glint-card-wrapper cursor-pointer w-full card-item",
-    {
-      "touch-active": isActiveCard && (isTouched || isHovered),
-    },
-    className,
-  );
-
-  const eventProps = isMobile()
-    ? {
-        onTouchStart: handleTouchStart,
-        onTouchEnd: handleTouchEnd,
-      }
-    : {
-        onMouseEnter: handleMouseEnter,
-        onMouseLeave: handleMouseLeave,
-      };
+  const clipPath = `url(#rounded-diagonal-cut-${project.id})`;
 
   return (
     <article
       ref={combinedRef}
-      className={cardClassName}
+      className={cn(
+        "group glint-card-wrapper cursor-pointer w-full card-item",
+        { "touch-active": isActiveCard },
+        className,
+      )}
       style={cardStyle}
-      {...eventProps}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       onClick={handleClick}
     >
       <div
@@ -259,7 +191,10 @@ const CardComponent = ({
           background: `url(${randomBackground}) center/cover`,
         }}
       >
-        <figure className="relative aspect-[16/9] w-full rounded-xl overflow-hidden group">
+        <figure
+          className="relative aspect-[16/9] w-full rounded-xl overflow-hidden group"
+          aria-busy={!cover.loaded}
+        >
           <svg className="absolute w-0 h-0">
             <defs>
               <clipPath
@@ -282,58 +217,44 @@ const CardComponent = ({
             </defs>
           </svg>
 
+          {!cover.loaded && (
+            <Skeleton className="absolute inset-0" style={{ clipPath }} />
+          )}
+
           <img
             src={image.src}
             alt={image.alt}
             className={cn(
-              "h-full w-full object-cover transition-all duration-300",
-              thumbnail &&
-                videoReady &&
-                isActiveCard &&
-                (isHovered || isTouched) &&
-                "opacity-0",
+              "h-full w-full object-cover transition-opacity duration-300",
+              cover.loaded ? "opacity-100" : "opacity-0",
+              isPlaying && "opacity-0",
             )}
-            style={{ clipPath: `url(#rounded-diagonal-cut-${project.id})` }}
-            loading="eager"
+            style={{ clipPath }}
+            loading={priority ? "eager" : "lazy"}
+            fetchPriority={priority ? "high" : "auto"}
+            decoding="async"
+            onLoad={cover.onLoad}
+            onError={cover.onError}
           />
 
-          {thumbnail && !videoError && (
+          {thumbnail && (
             <video
               ref={videoRef}
               className={cn(
-                "absolute inset-0 h-full w-full object-cover transition-all duration-300",
-                videoReady
-                  ? cn(
-                      "opacity-0",
-                      isActiveCard && (isHovered || isTouched) && "opacity-100",
-                    )
-                  : "hidden",
+                "absolute inset-0 h-full w-full object-cover transition-opacity duration-300",
+                isPlaying ? "opacity-100" : "opacity-0",
               )}
-              style={{ clipPath: `url(#rounded-diagonal-cut-${project.id})` }}
+              style={{ clipPath }}
               src={thumbnail.src}
               muted
               loop
               playsInline
-              webkit-playsinline="true"
-              x5-playsinline="true"
-              preload="metadata"
-              onLoadedData={() => {
-                loggedSetVideoReady(true);
-              }}
-              onLoadedMetadata={() => {
-                if (videoRef.current) {
-                  loggedSetVideoReady(true);
-                }
-              }}
-              onCanPlay={() => {
-                if (videoRef.current) {
-                  loggedSetVideoReady(true);
-                }
-              }}
-              onError={() => {
-                setVideoReady(false);
-                setVideoError(true);
-              }}
+              preload="none"
+              tabIndex={-1}
+              aria-hidden="true"
+              onPlaying={() => setIsPlaying(true)}
+              onPause={() => setIsPlaying(false)}
+              onError={() => setIsPlaying(false)}
             />
           )}
 
@@ -345,11 +266,11 @@ const CardComponent = ({
                 <h3
                   className={cn(
                     "font-nord text-xl font-bold italic mb-1 transition-colors duration-300",
-                    isActiveCard && isHovered ? "text-muted" : "text-white",
+                    isActiveCard ? "text-muted" : "text-white",
                   )}
                 >
                   <LineSweepText
-                    animate={(isActiveCard && isHovered) || isTouched}
+                    animate={isActiveCard}
                     className="text-sm 2xl:text-base"
                   >
                     {project.name}
@@ -395,6 +316,7 @@ export const Card = memo(CardComponent, (prevProps, nextProps) => {
     prevProps.project.date === nextProps.project.date &&
     prevProps.className === nextProps.className &&
     prevProps.glintSpeed === nextProps.glintSpeed &&
+    prevProps.priority === nextProps.priority &&
     prevProps.thumbnail?.src === nextProps.thumbnail?.src
   );
 });
