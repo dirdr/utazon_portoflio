@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
 interface PageTransitionOverlayProps {
   isTransitioning: boolean;
@@ -45,12 +46,16 @@ export const PageTransitionOverlay = ({
   const isOpaque = phase === "visible";
   const isActive = phase !== "hidden";
 
-  return (
+  // Portalled to the body so no ancestor can become its containing block. A
+  // transform or filter anywhere above would re-anchor this fixed element to
+  // that box and let the page show through around it.
+  return createPortal(
     <div
       className="page-transition-overlay"
       style={{ transitionDuration: `${duration / 2}ms` }}
       data-active={isActive}
       data-opaque={isOpaque}
-    />
+    />,
+    document.body,
   );
 };

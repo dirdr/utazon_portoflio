@@ -119,20 +119,33 @@
   /* Page transition overlay — always mounted, toggled via opacity */
   .page-transition-overlay {
     position: fixed;
-    /* Bleed proportionally rather than by a fixed 100px. Mobile browser chrome
-       (address bar, bottom toolbar) changes height mid-transition and differs
-       per browser, so a pixel bleed was sometimes shorter than the gap and a
-       strip of the outgoing page stayed visible. */
-    top: -15vh;
     left: 0;
     right: 0;
-    bottom: -15vh;
+    /* Size against the large viewport, not vh. Safari resolves vh against the
+       largest viewport but keeps fixed elements pinned to the layout viewport,
+       so while its chrome animates the two disagree and a strip of the
+       outgoing page shows through. Anchoring above the top and running well
+       past 100lvh covers every chrome position, top bar or bottom bar. */
+    top: -20vh;
+    height: calc(100vh + 40vh);
     z-index: 2750;
     background: black;
     opacity: 0;
     pointer-events: none;
     transition-property: opacity;
     transition-timing-function: ease-in-out;
+    /* Keep it on its own compositing layer so Safari does not recompute the
+       painted bounds partway through the fade. */
+    will-change: opacity;
+    backface-visibility: hidden;
+  }
+
+  /* Separate rule: two height declarations in one block get collapsed by the
+     minifier, which would drop the vh fallback for Safari below 15.4. */
+  @supports (height: 100lvh) {
+    .page-transition-overlay {
+      height: calc(100lvh + 40vh);
+    }
   }
 
   .page-transition-overlay[data-active="true"] {
