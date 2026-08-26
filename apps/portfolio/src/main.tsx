@@ -1,5 +1,6 @@
 import ReactDOM from "react-dom/client";
 import { ReactLenis } from "lenis/react";
+import "lenis/dist/lenis.css";
 import App from "./App.tsx";
 import { AppLoadingProvider } from "./contexts/AppLoadingContext";
 import { CursorTrailProvider } from "./contexts/CursorTrailProvider";
