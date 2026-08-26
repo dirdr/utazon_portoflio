@@ -21,8 +21,8 @@ export const SingleImageShowcase = ({
       <ShowcaseImage
         src={image.src}
         alt={image.alt}
-        className={cn(
-          "w-full h-auto object-contain",
+        className="w-full h-auto object-contain"
+        frameClassName={cn(
           border && SHOWCASE_STYLES.borderRadius,
           border && SHOWCASE_STYLES.border,
         )}

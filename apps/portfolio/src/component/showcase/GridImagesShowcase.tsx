@@ -24,8 +24,8 @@ export const GridImagesShowcase = ({
             <ShowcaseImage
               src={image.src}
               alt={image.alt}
-              className={cn(
-                "w-full aspect-video object-cover",
+              className="w-full aspect-video object-cover"
+              frameClassName={cn(
                 border && SHOWCASE_STYLES.borderRadius,
                 border && SHOWCASE_STYLES.border,
               )}

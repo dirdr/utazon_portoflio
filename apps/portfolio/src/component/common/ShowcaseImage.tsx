@@ -6,6 +6,8 @@ interface OptimizedImageProps {
   src: string;
   alt: string;
   className?: string;
+  /** Frame styling for the wrapper: radius, border, backdrop. */
+  frameClassName?: string;
   style?: React.CSSProperties;
   priority?: boolean;
   width?: number;
@@ -17,6 +19,7 @@ export const ShowcaseImage = ({
   src,
   alt,
   className,
+  frameClassName,
   style,
   priority = false,
   width,
@@ -35,7 +38,7 @@ export const ShowcaseImage = ({
 
   return (
     <div
-      className="relative overflow-hidden"
+      className={cn("relative overflow-hidden", frameClassName)}
       style={reservedRatio ? { aspectRatio: reservedRatio } : undefined}
       aria-busy={!loaded}
     >
@@ -60,7 +63,7 @@ export const ShowcaseImage = ({
       />
 
       {!loaded && (
-        <Skeleton className={cn(className, "absolute inset-0")} style={style} />
+        <Skeleton className="absolute inset-0" />
       )}
 
       {error && (

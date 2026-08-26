@@ -78,8 +78,9 @@ export const MixedGrid2x2Showcase = ({
             <ShowcaseImage
               src={images[0].src}
               alt={images[0].alt}
-              className={cn(
-                "w-full h-auto object-cover bg-black",
+              className="w-full h-auto object-cover"
+              frameClassName={cn(
+                "bg-black",
                 border && SHOWCASE_STYLES.borderRadius,
                 border && SHOWCASE_STYLES.border,
               )}
@@ -98,8 +99,9 @@ export const MixedGrid2x2Showcase = ({
             <ShowcaseImage
               src={images[1].src}
               alt={images[1].alt}
-              className={cn(
-                "w-full h-auto object-cover bg-black",
+              className="w-full h-auto object-cover"
+              frameClassName={cn(
+                "bg-black",
                 border && SHOWCASE_STYLES.borderRadius,
                 border && SHOWCASE_STYLES.border,
               )}
@@ -118,8 +120,9 @@ export const MixedGrid2x2Showcase = ({
             <ShowcaseImage
               src={images[2].src}
               alt={images[2].alt}
-              className={cn(
-                "w-full h-auto object-cover bg-black",
+              className="w-full h-auto object-cover"
+              frameClassName={cn(
+                "bg-black",
                 border && SHOWCASE_STYLES.borderRadius,
                 border && SHOWCASE_STYLES.border,
               )}
