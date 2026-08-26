@@ -28,13 +28,19 @@
   }
 
   /* Anything the overlay or the page does not paint (rubber-band overscroll,
-     a browser-chrome gap) then reads as black rather than exposing content. */
+     a browser-chrome gap) then reads as black rather than exposing content.
+     This colour reaches the canvas, which paints below every layer. */
   html {
     background-color: var(--color-background);
   }
 
   body {
-    @apply bg-background text-foreground font-neue;
+    @apply text-foreground font-neue;
+    /* Transparent on purpose. The rule above already paints the page colour on
+       the canvas. Giving body its own background stops the canvas propagation
+       and paints an opaque box over the fixed intro video, which sits at
+       OVERLAY_Z_INDEX.VIDEO_BACKGROUND (-20). */
+    background-color: transparent;
     /* Ensure proper mobile handling */
     -webkit-text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
