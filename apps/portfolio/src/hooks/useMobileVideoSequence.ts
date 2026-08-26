@@ -123,41 +123,85 @@ export const useMobileVideoSequence = (
         videoElement.preload = "auto";
         videoElement.load();
       }
-
-      if (state.phase === "PLAYING_ANIM") {
-        const introVideo = document.createElement("video");
-        introVideo.src = MOBILE_VIDEOS.INTRO;
-        introVideo.preload = "auto";
-        introVideo.load();
-      }
     }
   }, [state.videoSrc, state.phase, getVideoElement]);
+
+  /**
+   * Warm the loop clip only once the entry clip is actually playing. Fetching
+   * both at once split the connection and competed for the small number of
+   * media decoders mobile browsers allow.
+   */
+  useEffect(() => {
+    if (state.phase !== "PLAYING_ANIM") return;
+
+    const videoElement = getVideoElement();
+    if (!videoElement) return;
+
+    let warmer: HTMLVideoElement | null = null;
+    const warm = () => {
+      if (warmer) return;
+      warmer = document.createElement("video");
+      warmer.muted = true;
+      warmer.preload = "auto";
+      warmer.src = MOBILE_VIDEOS.INTRO;
+      warmer.load();
+    };
+
+    videoElement.addEventListener("playing", warm, { once: true });
+    return () => {
+      videoElement.removeEventListener("playing", warm);
+      if (warmer) {
+        warmer.removeAttribute("src");
+        warmer.load();
+        warmer = null;
+      }
+    };
+  }, [state.phase, getVideoElement]);
 
   useEffect(() => {
     const videoElement = getVideoElement();
     if (!videoElement) return;
 
     if (
-      state.phase === "PLAYING_ANIM" ||
-      state.phase === "PLAYING_INTRO" ||
-      state.phase === "LOOPING"
+      state.phase !== "PLAYING_ANIM" &&
+      state.phase !== "PLAYING_INTRO" &&
+      state.phase !== "LOOPING"
     ) {
-      const playVideo = () => {
-        videoElement.currentTime = 0;
-        videoElement.play().catch(() => {});
-      };
-
-      if (videoElement.readyState >= 4) {
-        playVideo();
-      } else {
-        videoElement.addEventListener("canplaythrough", playVideo, {
-          once: true,
-        });
-        return () =>
-          videoElement.removeEventListener("canplaythrough", playVideo);
-      }
+      return;
     }
-  }, [state.phase, getVideoElement]);
+
+    let cancelled = false;
+    let started = false;
+    const playVideo = () => {
+      if (cancelled || started) return;
+      started = true;
+      videoElement.currentTime = 0;
+      videoElement.play().catch(() => {});
+    };
+
+    // HAVE_CURRENT_DATA is enough to start rendering. The previous code waited
+    // for canplaythrough, which mobile Safari frequently never fires under Low
+    // Power Mode or a throttled connection, so the intro simply never played.
+    if (videoElement.readyState >= 2) {
+      playVideo();
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    videoElement.addEventListener("loadeddata", playVideo);
+    videoElement.addEventListener("canplay", playVideo);
+
+    // The element can become ready between the check above and these
+    // listeners being attached, which would otherwise wait forever.
+    if (videoElement.readyState >= 2) playVideo();
+
+    return () => {
+      cancelled = true;
+      videoElement.removeEventListener("loadeddata", playVideo);
+      videoElement.removeEventListener("canplay", playVideo);
+    };
+  }, [state.phase, state.videoSrc, getVideoElement]);
 
   useEffect(() => {
     if (state.phase === "PLAYING_ANIM" && !state.showContent) {

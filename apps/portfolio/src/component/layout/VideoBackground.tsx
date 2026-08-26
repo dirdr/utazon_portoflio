@@ -181,22 +181,40 @@ export const VideoBackground = forwardRef<
           nextVideo.style.zIndex = "1";
 
           await new Promise((resolve, reject) => {
-            const handleCanPlay = () => {
-              nextVideo.removeEventListener("canplaythrough", handleCanPlay);
+            let settled = false;
+            let timer: ReturnType<typeof setTimeout> | undefined;
+
+            const cleanup = () => {
+              nextVideo.removeEventListener("loadeddata", handleReady);
+              nextVideo.removeEventListener("canplay", handleReady);
               nextVideo.removeEventListener("error", handleError);
+              if (timer) clearTimeout(timer);
+            };
+            const handleReady = () => {
+              if (settled) return;
+              settled = true;
+              cleanup();
               resolve(undefined);
             };
             const handleError = () => {
-              nextVideo.removeEventListener("canplaythrough", handleCanPlay);
-              nextVideo.removeEventListener("error", handleError);
+              if (settled) return;
+              settled = true;
+              cleanup();
               reject(new Error("Video load failed"));
             };
 
-            nextVideo.addEventListener("canplaythrough", handleCanPlay, {
-              once: true,
-            });
+            // Resolve on HAVE_CURRENT_DATA rather than canplaythrough, which
+            // mobile Safari often withholds. The caller awaits this before
+            // swapping layers, so the old code could hang the intro forever;
+            // the timeout guarantees the sequence always moves on.
+            timer = setTimeout(handleReady, 3000);
+
+            nextVideo.addEventListener("loadeddata", handleReady);
+            nextVideo.addEventListener("canplay", handleReady);
             nextVideo.addEventListener("error", handleError, { once: true });
             nextVideo.load();
+
+            if (nextVideo.readyState >= 2) handleReady();
           });
 
           await nextVideo.play();
