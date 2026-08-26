@@ -13,6 +13,9 @@ const useActiveVideoCardStore = create<ActiveVideoCardState>()(
   })),
 );
 
+/** Reads the active card without subscribing, for one-shot checks in effects. */
+export const getActiveCardId = () => useActiveVideoCardStore.getState().activeCardId;
+
 export const useActiveVideoCard = (cardId?: string) => {
   const activeCardId = useActiveVideoCardStore((state) => state.activeCardId);
   const setActiveCard = useActiveVideoCardStore((state) => state.setActiveCard);

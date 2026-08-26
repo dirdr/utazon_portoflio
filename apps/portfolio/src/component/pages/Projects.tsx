@@ -47,6 +47,7 @@ export const Projects = () => {
                     : undefined
                 }
                 priority={index < 4}
+                isFirst={index === 0}
               />
             ))}
           </div>

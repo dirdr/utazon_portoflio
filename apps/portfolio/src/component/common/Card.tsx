@@ -36,6 +36,8 @@ export interface CardProps {
   className?: string;
   glintSpeed?: string;
   priority?: boolean;
+  /** Seeds playback before any scroll happens. */
+  isFirst?: boolean;
 }
 
 const CardComponent = ({
@@ -45,6 +47,7 @@ const CardComponent = ({
   className,
   glintSpeed = "6s",
   priority = false,
+  isFirst = false,
 }: CardProps) => {
   const { t } = useTranslation();
   const { navigateWithTransition } = useTransitionContext();
@@ -73,6 +76,7 @@ const CardComponent = ({
   useCardActivation({
     cardId: project.id,
     enabled: !canHover && !!thumbnail,
+    isFirst,
     elementRef,
   });
 
@@ -188,7 +192,10 @@ const CardComponent = ({
       <div
         className="glint-card-content p-3 sm:p-4 md:p-5 lg:p-6 xl:p-5 2xl:p-6"
         style={{
-          background: `url(${randomBackground}) center/cover`,
+          backgroundColor: "oklch(18% 0 0)",
+          backgroundImage: `url(${randomBackground})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
         }}
       >
         <figure
@@ -317,6 +324,7 @@ export const Card = memo(CardComponent, (prevProps, nextProps) => {
     prevProps.className === nextProps.className &&
     prevProps.glintSpeed === nextProps.glintSpeed &&
     prevProps.priority === nextProps.priority &&
+    prevProps.isFirst === nextProps.isFirst &&
     prevProps.thumbnail?.src === nextProps.thumbnail?.src
   );
 });
