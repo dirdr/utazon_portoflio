@@ -205,7 +205,11 @@
     }
   }
 
-  .skeleton {
+  /* :where() keeps these at zero specificity so a caller's utility class still
+     wins. Every caller passes "absolute inset-0", and a plain .skeleton rule
+     sits later in this same layer, so it would silently override position and
+     collapse the placeholder to a zero-height box in normal flow. */
+  :where(.skeleton) {
     position: relative;
     overflow: hidden;
     background-color: oklch(21% 0 0);
