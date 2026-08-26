@@ -232,3 +232,25 @@
     }
   }
 }
+
+/* One reveal for the whole showcase area, once its leading media is warm. */
+.showcase-reveal {
+  animation: showcase-reveal 400ms ease-out both;
+}
+
+@keyframes showcase-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .showcase-reveal {
+    animation: none;
+  }
+}

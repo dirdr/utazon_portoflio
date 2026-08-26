@@ -4,6 +4,7 @@ import {
   VideoShowcaseData,
   VideoCarouselShowcaseData,
   VideoGridShowcaseData,
+  MixedGrid2x2ShowcaseData,
 } from "../types/showcase";
 import { requiresPresignedUrl } from "./videoUrl";
 
@@ -39,6 +40,13 @@ function extractShowcaseVideoKeys(showcase: ShowcaseData): string[] {
       });
       break;
     }
+    case "mixed-grid-2x2": {
+      const mixedShowcase = showcase as MixedGrid2x2ShowcaseData;
+      if (requiresPresignedUrl(mixedShowcase.video.src)) {
+        keys.push(mixedShowcase.video.src);
+      }
+      break;
+    }
     // Image types don't have videos
     case "image-single":
     case "image-grid":
@@ -46,6 +54,22 @@ function extractShowcaseVideoKeys(showcase: ShowcaseData): string[] {
   }
 
   return keys;
+}
+
+/**
+ * Extract all backend video keys from a list of showcases
+ *
+ * @param showcases - Showcases to scan
+ * @returns Array of unique video keys that require presigned URLs
+ */
+export function extractShowcasesVideoKeys(showcases: ShowcaseData[]): string[] {
+  const allKeys: string[] = [];
+
+  showcases.forEach((showcase) => {
+    allKeys.push(...extractShowcaseVideoKeys(showcase));
+  });
+
+  return Array.from(new Set(allKeys));
 }
 
 /**
@@ -69,37 +93,5 @@ export function extractProjectVideoKeys(project: Project): string[] {
     return [];
   }
 
-  const allKeys: string[] = [];
-
-  project.showcases.forEach((showcase) => {
-    const keys = extractShowcaseVideoKeys(showcase);
-    allKeys.push(...keys);
-  });
-
-  // Remove duplicates
-  return Array.from(new Set(allKeys));
-}
-
-/**
- * Extract all backend video keys from multiple projects
- *
- * @param projects - Array of projects
- * @returns Array of unique video keys from all projects
- *
- * @example
- * ```ts
- * const keys = extractAllProjectsVideoKeys(allProjectsSortedByPriority);
- * // All backend video keys from all projects
- * ```
- */
-export function extractAllProjectsVideoKeys(projects: Project[]): string[] {
-  const allKeys: string[] = [];
-
-  projects.forEach((project) => {
-    const keys = extractProjectVideoKeys(project);
-    allKeys.push(...keys);
-  });
-
-  // Remove duplicates
-  return Array.from(new Set(allKeys));
+  return extractShowcasesVideoKeys(project.showcases);
 }

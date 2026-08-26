@@ -2,10 +2,7 @@ import { ROUTES } from "../constants/routes";
 import { allProjectsSortedByPriority, getProjectById } from "../data/projects";
 import backgroundImage from "../assets/images/background.webp";
 import backgroundMobileImage from "../assets/images/background_mobile.png";
-import {
-  extractProjectVideoKeys,
-  extractAllProjectsVideoKeys,
-} from "../utils/extractProjectVideoKeys";
+import { extractProjectVideoKeys } from "../utils/extractProjectVideoKeys";
 
 export interface RouteAssetConfig {
   images?: string[];
@@ -41,7 +38,8 @@ export const ROUTE_ASSETS: Record<string, RouteAssetConfig> = {
         .filter((project) => project.hasVideo !== false)
         .map((project) => `/videos/projects/${project.id}/thumbnail.webm`),
     ],
-    videoKeys: extractAllProjectsVideoKeys(allProjectsSortedByPriority),
+    // No videoKeys: the cards play local thumbnails. Showcase clips are
+    // presigned per project by getDynamicRouteAssets when you open one.
     priority: "high",
   },
 
