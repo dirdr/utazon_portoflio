@@ -11,7 +11,8 @@ interface SoundState {
 
 interface SoundActions {
   setVideoElement: (video: HTMLVideoElement | null) => void;
-  toggleSound: () => void;
+  toggleSound: (newState?: boolean) => void;
+  muteForPolicy: () => void;
   updateForNavigation: (isMobile: boolean, isFreshLoad: boolean) => void;
 }
 
@@ -26,6 +27,19 @@ export const useSoundStore = create<SoundState & SoundActions>((set, get) => ({
     if (video) {
       video.muted = !isSoundPlaying;
     }
+  },
+
+  /**
+   * The browser refused audible playback. Reflect that in the UI so the toggle
+   * shows the real state, but keep muteSource as "navigation" so this is not
+   * mistaken for a deliberate choice by the visitor.
+   */
+  muteForPolicy: () => {
+    const { videoElement } = get();
+    if (videoElement) {
+      videoElement.muted = true;
+    }
+    set({ isSoundPlaying: false, muteSource: "navigation" });
   },
 
   toggleSound: (newState?: boolean) => {

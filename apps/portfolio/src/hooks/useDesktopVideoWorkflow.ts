@@ -1,5 +1,6 @@
 import { useReducer, useEffect, useRef, useCallback } from "react";
 import { useAppLoading } from "../contexts/AppLoadingContext";
+import { useSoundStore } from "../stores/soundStore";
 import { VideoBackgroundRef } from "../component/layout/VideoBackground";
 
 type DesktopPhase =
@@ -143,22 +144,43 @@ export const useDesktopVideoWorkflow = (
     const videoElement = getVideoElement();
     if (!videoElement) return;
 
-    if (state.phase === "PLAYING_ENTRY" || state.phase === "PLAYING_LOOP") {
-      const playVideo = () => {
-        videoElement.currentTime = 0;
-        videoElement.play().catch(() => {});
-      };
-
-      if (videoElement.readyState >= 4) {
-        playVideo();
-      } else {
-        videoElement.addEventListener("canplaythrough", playVideo, {
-          once: true,
-        });
-        return () =>
-          videoElement.removeEventListener("canplaythrough", playVideo);
-      }
+    if (state.phase !== "PLAYING_ENTRY" && state.phase !== "PLAYING_LOOP") {
+      return;
     }
+
+    let started = false;
+
+    const detach = () => {
+      videoElement.removeEventListener("loadeddata", playVideo);
+      videoElement.removeEventListener("canplay", playVideo);
+      videoElement.removeEventListener("canplaythrough", playVideo);
+    };
+
+    function playVideo() {
+      if (started || !videoElement || videoElement.readyState < 2) return;
+      started = true;
+      detach();
+
+      videoElement.currentTime = 0;
+      videoElement.play().catch(() => {
+        // The intro is unmuted on desktop, and browsers reject audible
+        // playback that is not tied to a user gesture. Retry muted rather than
+        // leave a black frame; the sound toggle can turn it back on.
+        videoElement.muted = true;
+        useSoundStore.getState().muteForPolicy();
+        videoElement.play().catch(() => {});
+      });
+    }
+
+    // HAVE_CURRENT_DATA is enough to start. Waiting for canplaythrough on a 4K
+    // clip can defer playback indefinitely, and deferring it out of the click
+    // that triggered it is what gets audible playback blocked.
+    videoElement.addEventListener("loadeddata", playVideo);
+    videoElement.addEventListener("canplay", playVideo);
+    videoElement.addEventListener("canplaythrough", playVideo);
+    playVideo();
+
+    return detach;
   }, [state.phase, getVideoElement]);
 
   useEffect(() => {
