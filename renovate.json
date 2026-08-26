@@ -1,7 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base",
+    "config:recommended",
     ":dependencyDashboard",
     ":semanticCommits",
     "helpers:pinGitHubActionDigests",
@@ -13,11 +13,13 @@
   "prHourlyLimit": 2,
   "rebaseWhen": "conflicted",
   "osvVulnerabilityAlerts": true,
-  "rangeStrategy": "pin",
+  "postUpdateOptions": ["pnpmDedupe"],
   "constraints": {
     "pnpm": "11.22.0"
   },
-  "postUpdateOptions": ["pnpmDedupe"],
+  "cargo": {
+    "enabled": true
+  },
   "lockFileMaintenance": {
     "enabled": true,
     "schedule": ["on the first day of the month"]
@@ -26,6 +28,11 @@
     "fileMatch": ["^\\.github/workflows/[^/]+\\.ya?ml$"]
   },
   "packageRules": [
+    {
+      "description": "Portfolio (apps/portfolio) pins exact npm versions; Cargo keeps its semver ranges.",
+      "matchManagers": ["npm"],
+      "rangeStrategy": "pin"
+    },
     {
       "matchManagers": ["npm"],
       "matchDepTypes": ["devDependencies"],
@@ -44,11 +51,31 @@
     },
     {
       "matchManagers": ["npm"],
-      "matchPackagePrefixes": ["@types/"],
+      "matchPackageNames": ["@types/**"],
       "groupName": "typescript-types",
       "automerge": true,
       "automergeType": "pr",
       "automergeStrategy": "squash"
+    },
+    {
+      "matchManagers": ["cargo"],
+      "matchUpdateTypes": ["patch"],
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeStrategy": "squash"
+    },
+    {
+      "matchManagers": ["cargo"],
+      "matchUpdateTypes": ["minor"],
+      "groupName": "cargo-minor",
+      "automerge": false
+    },
+    {
+      "matchManagers": ["cargo"],
+      "matchPackageNames": ["axum", "tokio", "tower", "hyper"],
+      "groupName": "axum-ecosystem",
+      "automerge": false,
+      "dependencyDashboardApproval": true
     },
     {
       "matchManagers": ["github-actions"],

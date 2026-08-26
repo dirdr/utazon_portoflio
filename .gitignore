@@ -1,41 +1,14 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
-node_modules
-dist
-dist-ssr
-*.local
-
-# Environment variables
-.env
-
-.claude
-
-# Wrangler
-.wrangler/
-wrangler.toml
-# Editor directories and files
+# OS / editor
+.DS_Store
+.idea
 .vscode/*
 !.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
 *.sw?
-.DS_Store
-compress.sh
-*.mov
 
-# Refactoring TODO files
-PRELOADER_REFACTOR_TODO.md
+# Agent tooling
+.claude
 
-# Container spacing unification plan
-container-spacing-unification-plan.md
+# Environment variables — each app keeps its own .env
+.env
+
+# Per-app build output and dependencies are ignored in apps/*/.gitignore
