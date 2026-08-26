@@ -117,10 +117,14 @@
   /* Page transition overlay — always mounted, toggled via opacity */
   .page-transition-overlay {
     position: fixed;
-    top: -100px;
+    /* Bleed proportionally rather than by a fixed 100px. Mobile browser chrome
+       (address bar, bottom toolbar) changes height mid-transition and differs
+       per browser, so a pixel bleed was sometimes shorter than the gap and a
+       strip of the outgoing page stayed visible. */
+    top: -15vh;
     left: 0;
     right: 0;
-    bottom: -100px;
+    bottom: -15vh;
     z-index: 2750;
     background: black;
     opacity: 0;

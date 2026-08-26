@@ -27,6 +27,12 @@
     overflow-x: hidden;
   }
 
+  /* Anything the overlay or the page does not paint (rubber-band overscroll,
+     a browser-chrome gap) then reads as black rather than exposing content. */
+  html {
+    background-color: var(--color-background);
+  }
+
   body {
     @apply bg-background text-foreground font-neue;
     /* Ensure proper mobile handling */
