@@ -11,6 +11,7 @@ import { isMobile } from "../../utils/mobileDetection";
 import { useCursorTrail } from "../../hooks/useCursorTrail";
 import { useVideoWorkflow } from "../../hooks/useVideoWorkflow";
 import { useSoundStore } from "../../stores/soundStore";
+import { useMediaQuery } from "../../hooks/useMediaQuery";
 
 export const HomeContainer = () => {
   const [location] = useLocation();
@@ -20,6 +21,7 @@ export const HomeContainer = () => {
   const { isFreshLoad } = useAppLoading();
 
   const { setTrailEnabled } = useCursorTrail();
+  const prefersReducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
   const videoBackgroundRef = useRef<VideoBackgroundRef>(null);
   const { setVideoElement, updateForNavigation } = useSoundStore();
 
@@ -45,12 +47,14 @@ export const HomeContainer = () => {
   useEffect(() => {
     const shouldEnable =
       (videoWorkflow.shouldShowDiveIn || videoWorkflow.shouldShowContent) &&
-      !isMobileDetected;
+      !isMobileDetected &&
+      !prefersReducedMotion;
     setTrailEnabled(shouldEnable);
   }, [
     videoWorkflow.shouldShowDiveIn,
     videoWorkflow.shouldShowContent,
     isMobileDetected,
+    prefersReducedMotion,
     setTrailEnabled,
   ]);
 
