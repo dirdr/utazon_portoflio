@@ -3,6 +3,7 @@ import ReactPlayer from "react-player";
 import { usePresignedVideoUrl } from "../../hooks/usePresignedVideoUrl";
 import { useVideoReady } from "../../hooks/useVideoReady";
 import { Skeleton } from "../common/Skeleton";
+import { useShowcaseRevealed } from "../../contexts/showcaseReveal";
 
 interface CarouselVideoCardProps {
   src: string;
@@ -23,6 +24,7 @@ export const CarouselVideoCard = ({
   const playerRef = useRef<HTMLVideoElement | null>(null);
   const { url: videoUrl, loading } = usePresignedVideoUrl(src);
   const media = useVideoReady();
+  const revealed = useShowcaseRevealed();
 
   const handleDuration = (event: React.SyntheticEvent<HTMLVideoElement>) => {
     const video = event.target as HTMLVideoElement;
@@ -45,7 +47,7 @@ export const CarouselVideoCard = ({
 
   return (
     <div className="relative w-full h-full">
-      {(loading || !media.ready) && (
+      {(loading || !media.ready || !revealed) && (
         <Skeleton className="absolute inset-0 z-[5]" />
       )}
       {videoUrl && (

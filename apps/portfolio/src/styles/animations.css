@@ -208,7 +208,7 @@
   .skeleton {
     position: relative;
     overflow: hidden;
-    background-color: oklch(18% 0 0);
+    background-color: oklch(21% 0 0);
   }
 
   .skeleton::after {
@@ -216,13 +216,17 @@
     position: absolute;
     inset: 0;
     transform: translateX(-100%);
+    /* A narrow bright band with soft shoulders reads as a sweep of light; a
+       single wide midpoint just looks like the tile is pulsing. */
     background: linear-gradient(
       90deg,
       transparent 0%,
-      oklch(100% 0 0 / 0.07) 50%,
+      oklch(100% 0 0 / 0.03) 30%,
+      oklch(100% 0 0 / 0.16) 50%,
+      oklch(100% 0 0 / 0.03) 70%,
       transparent 100%
     );
-    animation: skeleton-sweep 1.6s ease-in-out infinite;
+    animation: skeleton-sweep 1.4s ease-in-out infinite;
     will-change: transform;
   }
 

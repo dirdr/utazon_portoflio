@@ -2,6 +2,7 @@ import ReactPlayer from "react-player";
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import { usePresignedVideoUrl } from "../../hooks/usePresignedVideoUrl";
 import { Skeleton } from "./Skeleton";
+import { useShowcaseRevealed } from "../../contexts/showcaseReveal";
 
 interface InteractiveVideoPlayerProps {
   src: string;
@@ -32,6 +33,7 @@ export const InteractiveVideoPlayer = ({
   const [hasUserClicked, setHasUserClicked] = useState(false);
   const [userHasPaused, setUserHasPaused] = useState(false);
   const [isReady, setIsReady] = useState(false);
+  const revealed = useShowcaseRevealed();
   const playerRef = useRef<HTMLVideoElement | null>(null);
 
   // Fetch presigned URL for backend videos
@@ -89,7 +91,7 @@ export const InteractiveVideoPlayer = ({
 
   return (
     <div style={{ position: "relative", width: width, height: height }}>
-      {(urlLoading || !isReady) && (
+      {(urlLoading || !isReady || !revealed) && (
         <Skeleton className="absolute inset-0 z-[5]" />
       )}
       {videoUrl && (

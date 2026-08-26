@@ -6,6 +6,7 @@ import { cn } from "../../utils/cn";
 import { usePresignedVideoUrl } from "../../hooks/usePresignedVideoUrl";
 import { useVideoReady } from "../../hooks/useVideoReady";
 import { Skeleton } from "../common/Skeleton";
+import { useShowcaseRevealed } from "../../contexts/showcaseReveal";
 
 interface MixedGrid2x2ShowcaseProps {
   data: MixedGrid2x2ShowcaseData;
@@ -25,6 +26,7 @@ export const MixedGrid2x2Showcase = ({
   );
 
   const media = useVideoReady();
+  const revealed = useShowcaseRevealed();
 
   return (
     <div className={cn("w-full mx-auto", className)}>
@@ -41,7 +43,7 @@ export const MixedGrid2x2Showcase = ({
             border && SHOWCASE_STYLES.border,
           )}
         >
-          {(urlLoading || !media.ready) && (
+          {(urlLoading || !media.ready || !revealed) && (
             <Skeleton className="absolute inset-0 z-[5]" />
           )}
 

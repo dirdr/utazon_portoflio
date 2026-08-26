@@ -6,6 +6,7 @@ import ReactPlayer from "react-player";
 import { usePresignedVideoUrl } from "../../hooks/usePresignedVideoUrl";
 import { useVideoReady } from "../../hooks/useVideoReady";
 import { Skeleton } from "../common/Skeleton";
+import { useShowcaseRevealed } from "../../contexts/showcaseReveal";
 
 interface VideoGridShowcaseProps {
   data: VideoGridShowcaseData;
@@ -34,6 +35,7 @@ const GridVideoItem = ({
 }: GridVideoItemProps) => {
   const { url: videoUrl, loading } = usePresignedVideoUrl(src);
   const media = useVideoReady();
+  const revealed = useShowcaseRevealed();
 
   const isFill = aspectRatio === "fill";
   const isAuto = aspectRatio === "auto";
@@ -49,7 +51,7 @@ const GridVideoItem = ({
         )}
         style={!isFill && !isAuto && aspectRatio ? { aspectRatio } : undefined}
       >
-        {(loading || !media.ready) && (
+        {(loading || !media.ready || !revealed) && (
           <Skeleton className="absolute inset-0 z-[5]" />
         )}
         {videoUrl && isAuto ? (
