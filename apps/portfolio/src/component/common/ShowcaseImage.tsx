@@ -25,13 +25,26 @@ export const ShowcaseImage = ({
 }: OptimizedImageProps) => {
   const { loaded, error, onLoad, onError } = useImageLoaded(src);
 
+  // The wrapper takes its height from the image, and an <img> with no width or
+  // height attribute has none until it decodes. Without a reservation the box
+  // is zero-high, so the placeholder inside it has nothing to fill. Exact
+  // dimensions win when the caller knows them; otherwise hold a 16/9 box until
+  // the real image can size the wrapper itself.
+  const knownRatio = width && height ? `${width} / ${height}` : undefined;
+  const reservedRatio = knownRatio ?? (loaded ? undefined : "16 / 9");
+
   return (
-    <div className="relative overflow-hidden" aria-busy={!loaded}>
+    <div
+      className="relative overflow-hidden"
+      style={reservedRatio ? { aspectRatio: reservedRatio } : undefined}
+      aria-busy={!loaded}
+    >
       <img
         src={src}
         alt={alt}
         className={cn(
           "gpu-accelerated transition-opacity duration-300",
+          knownRatio && "w-full h-full",
           loaded ? "opacity-100" : "opacity-0",
           className,
         )}
