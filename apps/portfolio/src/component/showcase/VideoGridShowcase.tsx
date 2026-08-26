@@ -4,6 +4,8 @@ import { CopyrightOverlay } from "../common/CopyrightOverlay";
 import { cn } from "../../utils/cn";
 import ReactPlayer from "react-player";
 import { usePresignedVideoUrl } from "../../hooks/usePresignedVideoUrl";
+import { useVideoReady } from "../../hooks/useVideoReady";
+import { Skeleton } from "../common/Skeleton";
 
 interface VideoGridShowcaseProps {
   data: VideoGridShowcaseData;
@@ -31,6 +33,7 @@ const GridVideoItem = ({
   controls = false,
 }: GridVideoItemProps) => {
   const { url: videoUrl, loading } = usePresignedVideoUrl(src);
+  const media = useVideoReady();
 
   const isFill = aspectRatio === "fill";
   const isAuto = aspectRatio === "auto";
@@ -46,10 +49,8 @@ const GridVideoItem = ({
         )}
         style={!isFill && !isAuto && aspectRatio ? { aspectRatio } : undefined}
       >
-        {loading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/10">
-            <div className="w-10 h-10 border-3 border-white/30 border-t-white rounded-full animate-spin" />
-          </div>
+        {(loading || !media.ready) && (
+          <Skeleton className="absolute inset-0 z-[5]" />
         )}
         {videoUrl && isAuto ? (
           <video
@@ -59,6 +60,8 @@ const GridVideoItem = ({
             loop={!controls}
             controls={controls}
             playsInline
+            onCanPlay={media.onCanPlay}
+            onError={media.onError}
             className="w-full h-auto block"
           />
         ) : videoUrl ? (
@@ -72,6 +75,8 @@ const GridVideoItem = ({
             width="100%"
             height="100%"
             className="react-player"
+            onReady={media.onCanPlay}
+            onError={media.onError}
             style={{
               objectFit: "cover" as const,
             }}

@@ -4,7 +4,8 @@ import { CopyrightOverlay } from "../common/CopyrightOverlay";
 import { SHOWCASE_STYLES } from "../../constants/showcaseStyles";
 import { cn } from "../../utils/cn";
 import { usePresignedVideoUrl } from "../../hooks/usePresignedVideoUrl";
-import { useVideoAutoplay } from "../../hooks/useVideoAutoplay";
+import { useVideoReady } from "../../hooks/useVideoReady";
+import { Skeleton } from "../common/Skeleton";
 
 interface MixedGrid2x2ShowcaseProps {
   data: MixedGrid2x2ShowcaseData;
@@ -23,12 +24,7 @@ export const MixedGrid2x2Showcase = ({
     video.src,
   );
 
-  // Centralized autoplay hook with mobile compatibility
-  const { videoRef, hasError, videoProps } = useVideoAutoplay({
-    enabled: true,
-    retryDelay: 500,
-    maxRetries: 3,
-  });
+  const media = useVideoReady();
 
   return (
     <div className={cn("w-full mx-auto", className)}>
@@ -45,30 +41,30 @@ export const MixedGrid2x2Showcase = ({
             border && SHOWCASE_STYLES.border,
           )}
         >
-          {urlLoading && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/10">
-              <div
-                className="w-10 h-10 border-3 border-white/30 border-t-white rounded-full"
-                style={{ animation: "spin 1s linear infinite" }}
-              />
-            </div>
+          {(urlLoading || !media.ready) && (
+            <Skeleton className="absolute inset-0 z-[5]" />
           )}
 
-          {!hasError && videoUrl && (
+          {!media.error && videoUrl && (
             <video
-              ref={videoRef}
               className="w-full h-full object-cover"
               src={videoUrl}
-              {...videoProps}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              onCanPlay={media.onCanPlay}
+              onError={media.onError}
             />
           )}
 
           {/* COPYRIGHT OVERLAY */}
-          {!hasError && videoUrl && data.copyright && (
+          {!media.error && videoUrl && data.copyright && (
             <CopyrightOverlay translationKey={data.copyright.key} />
           )}
 
-          {hasError && (
+          {media.error && (
             <div className="w-full h-full flex items-center justify-center">
               <p className="text-white text-sm">Video unavailable</p>
             </div>
