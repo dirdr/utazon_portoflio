@@ -1,0 +1,32 @@
+name: Security
+
+# Repo-wide, deliberately not path-filtered: gitleaks scans git history, not the
+# diff, so it must run for every change to either app.
+#
+# push only, no pull_request. Pushes to every branch are covered below, so a
+# pull_request trigger would only duplicate the scan, and it does so by deriving
+# a <base>^..<head> range that breaks when a PR contains a root commit (as the
+# monorepo merge did). Fork PRs push no branch here and are not a concern for
+# this repo.
+on:
+  push:
+    branches: ["**"]
+
+concurrency:
+  group: security-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  gitleaks:
+    name: Secret Scanning
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

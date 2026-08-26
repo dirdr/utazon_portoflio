@@ -1,66 +1,159 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base",
+    "config:recommended",
     ":dependencyDashboard",
     ":semanticCommits",
     "helpers:pinGitHubActionDigests",
     "npm:unpublishSafe"
   ],
   "timezone": "Europe/Paris",
-  "schedule": ["every weekend"],
+  "schedule": [
+    "every weekend"
+  ],
   "prConcurrentLimit": 5,
   "prHourlyLimit": 2,
   "rebaseWhen": "conflicted",
   "osvVulnerabilityAlerts": true,
-  "rangeStrategy": "pin",
+  "postUpdateOptions": [
+    "pnpmDedupe"
+  ],
   "constraints": {
     "pnpm": "11.22.0"
   },
-  "postUpdateOptions": ["pnpmDedupe"],
+  "cargo": {
+    "enabled": true
+  },
   "lockFileMaintenance": {
     "enabled": true,
-    "schedule": ["on the first day of the month"]
+    "schedule": [
+      "on the first day of the month"
+    ]
   },
   "github-actions": {
-    "fileMatch": ["^\\.github/workflows/[^/]+\\.ya?ml$"]
+    "fileMatch": [
+      "^\\.github/workflows/[^/]+\\.ya?ml$"
+    ]
   },
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Keep the cargo-chef base image's Rust version current; its tag shape hides the version from the docker manager.",
+      "fileMatch": [
+        "^apps/backend/Dockerfile$"
+      ],
+      "matchStrings": [
+        "lukemathwalker/cargo-chef:latest-rust-(?<currentValue>[0-9.]+)-bookworm"
+      ],
+      "depNameTemplate": "rust",
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "docker"
+    }
+  ],
   "packageRules": [
     {
-      "matchManagers": ["npm"],
-      "matchDepTypes": ["devDependencies"],
-      "matchUpdateTypes": ["minor", "patch"],
+      "description": "Portfolio (apps/portfolio) pins exact npm versions; Cargo keeps its semver ranges.",
+      "matchManagers": [
+        "npm"
+      ],
+      "rangeStrategy": "pin"
+    },
+    {
+      "matchManagers": [
+        "npm"
+      ],
+      "matchDepTypes": [
+        "devDependencies"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
       "groupName": "dev-dependencies",
       "automerge": true,
       "automergeType": "pr",
       "automergeStrategy": "squash"
     },
     {
-      "matchManagers": ["npm"],
-      "matchPackageNames": ["react", "react-dom", "react-router-dom"],
+      "matchManagers": [
+        "npm"
+      ],
+      "matchPackageNames": [
+        "react",
+        "react-dom",
+        "react-router-dom"
+      ],
       "groupName": "react-core",
       "automerge": false,
       "dependencyDashboardApproval": true
     },
     {
-      "matchManagers": ["npm"],
-      "matchPackagePrefixes": ["@types/"],
+      "matchManagers": [
+        "npm"
+      ],
+      "matchPackageNames": [
+        "@types/**"
+      ],
       "groupName": "typescript-types",
       "automerge": true,
       "automergeType": "pr",
       "automergeStrategy": "squash"
     },
     {
-      "matchManagers": ["github-actions"],
-      "matchUpdateTypes": ["minor", "patch"],
+      "matchManagers": [
+        "cargo"
+      ],
+      "matchUpdateTypes": [
+        "patch"
+      ],
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeStrategy": "squash"
+    },
+    {
+      "matchManagers": [
+        "cargo"
+      ],
+      "matchUpdateTypes": [
+        "minor"
+      ],
+      "groupName": "cargo-minor",
+      "automerge": false
+    },
+    {
+      "matchManagers": [
+        "cargo"
+      ],
+      "matchPackageNames": [
+        "axum",
+        "tokio",
+        "tower",
+        "hyper"
+      ],
+      "groupName": "axum-ecosystem",
+      "automerge": false,
+      "dependencyDashboardApproval": true
+    },
+    {
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
       "groupName": "github-actions",
       "automerge": true,
       "automergeType": "pr",
       "automergeStrategy": "squash"
     },
     {
-      "matchUpdateTypes": ["major"],
-      "labels": ["major-update"],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "labels": [
+        "major-update"
+      ],
       "automerge": false,
       "dependencyDashboardApproval": true
     }

@@ -1,4 +1,4 @@
-name: Create Release
+name: Release Portfolio
 
 on:
   workflow_dispatch:
@@ -18,9 +18,14 @@ on:
         required: false
         type: string
 
+concurrency:
+  group: release-portfolio
+  cancel-in-progress: false
+
 jobs:
   release:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     permissions:
       contents: write
     steps:
@@ -31,23 +36,27 @@ jobs:
       - name: Get latest tag
         id: latest_tag
         run: |
-          latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          # Tags are app-prefixed since the monorepo merge. The fallback is the
+          # last pre-monorepo tag, used only until portfolio-v* tags exist.
+          latest_tag=$(git describe --tags --abbrev=0 --match 'portfolio-v*' 2>/dev/null || echo "portfolio-v3.0.8")
           echo "Latest tag: $latest_tag"
           echo "tag=$latest_tag" >> $GITHUB_OUTPUT
 
-          current_version=${latest_tag#v}
+          current_version=${latest_tag#portfolio-v}
           echo "current_version=$current_version" >> $GITHUB_OUTPUT
 
       - name: Setup pnpm
         uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
         with:
-          version: 11.18.0
+          # Version comes from the app's packageManager field, not from here.
+          package_json_file: apps/portfolio/package.json
 
       - name: Setup Node.js
         uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
         with:
           node-version: 24.18.1
           cache: pnpm
+          cache-dependency-path: apps/portfolio/pnpm-lock.yaml
 
       - name: Calculate new version
         id: new_version
@@ -79,7 +88,7 @@ jobs:
           echo "Current version: $current_version"
           echo "New version: $new_version"
           echo "version=$new_version" >> $GITHUB_OUTPUT
-          echo "tag=v$new_version" >> $GITHUB_OUTPUT
+          echo "tag=portfolio-v$new_version" >> $GITHUB_OUTPUT
 
       - name: Check if tag already exists
         run: |
@@ -94,6 +103,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Update package.json version
+        working-directory: apps/portfolio
         run: |
           pnpm version ${{ steps.new_version.outputs.version }} --no-git-tag-version
           git add package.json
@@ -127,9 +137,11 @@ jobs:
           echo "Production branch updated with ${{ steps.new_version.outputs.tag }}"
 
       - name: Install dependencies
+        working-directory: apps/portfolio
         run: pnpm install --frozen-lockfile
 
       - name: Build application for production
+        working-directory: apps/portfolio
         env:
           VITE_SITE_URL: https://utazon.fr
           VITE_UTAZON_API_URL: ${{ secrets.VITE_UTAZON_API_URL }}
@@ -140,6 +152,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          workingDirectory: apps/portfolio
           command: pages deploy dist --project-name=utazon-portfolio --branch=production --commit-dirty=true
 
       - name: Send Discord notification
@@ -157,7 +170,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               tag_name: '${{ steps.new_version.outputs.tag }}',
-              name: 'Release ${{ steps.new_version.outputs.tag }}',
+              name: 'Portfolio ${{ steps.new_version.outputs.version }}',
               body: `Portfolio ${{ steps.new_version.outputs.tag }}`,
               draft: false,
               prerelease: false
