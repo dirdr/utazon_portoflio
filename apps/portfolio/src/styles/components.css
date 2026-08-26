@@ -134,10 +134,6 @@
     pointer-events: none;
     transition-property: opacity;
     transition-timing-function: ease-in-out;
-    /* Keep it on its own compositing layer so Safari does not recompute the
-       painted bounds partway through the fade. */
-    will-change: opacity;
-    backface-visibility: hidden;
   }
 
   /* Separate rule: two height declarations in one block get collapsed by the

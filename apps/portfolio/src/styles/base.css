@@ -45,6 +45,20 @@
     background-color: var(--color-background);
   }
 
+  /* A real painted box rather than only the canvas background. WebKit
+     composites a promoted fixed layer separately from the canvas, so during a
+     page transition the strip outside that layer had nothing painting it and
+     flashed through. This sits below the intro video (z-index -20) and never
+     animates, so the page reads black at every edge, always. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: -10vh 0;
+    z-index: -30;
+    background-color: var(--color-background);
+    pointer-events: none;
+  }
+
   body {
     @apply text-foreground font-neue;
     /* Transparent on purpose. The rule above already paints the page colour on
