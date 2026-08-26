@@ -1,3 +1,4 @@
+import { readAheadMargin } from "../utils/readAhead";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 interface IntersectionPreloaderConfig {
@@ -15,7 +16,7 @@ interface IntersectionPreloaderResult {
 export const useIntersectionPreloader = (
   config: IntersectionPreloaderConfig = {},
 ): IntersectionPreloaderResult => {
-  const { rootMargin = "100px", threshold = 0.1, onIntersect } = config;
+  const { rootMargin = readAheadMargin(), threshold = 0.1, onIntersect } = config;
 
   const [isIntersecting, setIsIntersecting] = useState(false);
   const isIntersectingRef = useRef(false);

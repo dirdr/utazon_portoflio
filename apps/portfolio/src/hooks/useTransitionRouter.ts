@@ -1,7 +1,9 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useLocation } from "wouter";
 import {
-  getRouteAssets,
+  getRouteBlockingAssets,
+  getRouteDeferredAssets,
+  warmImages,
   shouldPreloadRoute,
   getRouteVideoKeys,
 } from "../config/routeAssets";
@@ -129,7 +131,10 @@ export const useTransitionRouter = (config: TransitionConfig = {}) => {
     const newLocation = state.pendingLocation;
 
     const shouldPreload = shouldPreloadRoute(newLocation);
-    const cacheUrls = shouldPreload ? getRouteAssets(newLocation) : [];
+    const cacheUrls = shouldPreload ? getRouteBlockingAssets(newLocation) : [];
+    // Everything below the fold warms alongside the transition rather than
+    // gating it; the placeholders cover the gap if a fetch is still in flight.
+    if (shouldPreload) warmImages(getRouteDeferredAssets(newLocation));
 
     setState((prev) => ({ ...prev, progress: 30 }));
 

@@ -24,11 +24,12 @@ export const ShowcaseList = ({ showcases, project }: ShowcaseListProps) => {
   return (
     <ShowcaseRevealContext.Provider value={ready}>
       <div className="space-y-4 lg:space-y-8">
-        {sortedShowcases.map((showcase) => (
+        {sortedShowcases.map((showcase, index) => (
           <ShowcaseRenderer
             key={showcase.id}
             showcase={showcase}
             project={project}
+            priority={index === 0}
           />
         ))}
       </div>

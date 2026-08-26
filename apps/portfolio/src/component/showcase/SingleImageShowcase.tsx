@@ -7,12 +7,14 @@ interface SingleImageShowcaseProps {
   data: SingleImageShowcaseData;
   className?: string;
   border?: boolean;
+  priority?: boolean;
 }
 
 export const SingleImageShowcase = ({
   data,
   className,
   border = false,
+  priority = false,
 }: SingleImageShowcaseProps) => {
   const { image } = data;
 
@@ -21,6 +23,7 @@ export const SingleImageShowcase = ({
       <ShowcaseImage
         src={image.src}
         alt={image.alt}
+        priority={priority}
         className="w-full h-auto object-contain"
         frameClassName={cn(
           border && SHOWCASE_STYLES.borderRadius,

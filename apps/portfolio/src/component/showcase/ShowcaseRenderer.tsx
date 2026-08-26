@@ -11,16 +11,33 @@ import { Container } from "../layout/Container";
 interface ShowcaseRendererProps {
   showcase: ShowcaseData;
   project?: Project;
+  /** First showcase on the page: its image is the LCP candidate. */
+  priority?: boolean;
 }
 
-export const ShowcaseRenderer = ({ showcase }: ShowcaseRendererProps) => {
+export const ShowcaseRenderer = ({
+  showcase,
+  priority = false,
+}: ShowcaseRendererProps) => {
   const renderShowcase = () => {
     switch (showcase.type) {
       case "image-single":
-        return <SingleImageShowcase data={showcase} border={true} />;
+        return (
+          <SingleImageShowcase
+            data={showcase}
+            border={true}
+            priority={priority}
+          />
+        );
 
       case "image-grid":
-        return <GridImagesShowcase data={showcase} border={true} />;
+        return (
+          <GridImagesShowcase
+            data={showcase}
+            border={true}
+            priority={priority}
+          />
+        );
 
       case "video":
         return <VideoShowcase data={showcase} border={true} />;

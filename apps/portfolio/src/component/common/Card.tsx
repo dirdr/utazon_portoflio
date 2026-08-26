@@ -67,7 +67,6 @@ const CardComponent = ({
   const preloader = useProjectGridPreloader({
     projectId: project.id,
     hasVideo: !!thumbnail,
-    rootMargin: "200px",
     threshold: 0.1,
   });
 

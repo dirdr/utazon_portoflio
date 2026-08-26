@@ -3,6 +3,7 @@ import { allProjectsSortedByPriority, getProjectById } from "../data/projects";
 import backgroundImage from "../assets/images/background.webp";
 import backgroundMobileImage from "../assets/images/background_mobile.png";
 import { extractProjectVideoKeys } from "../utils/extractProjectVideoKeys";
+import { extractProjectImages } from "../utils/extractProjectImages";
 
 export interface RouteAssetConfig {
   images?: string[];
@@ -67,7 +68,10 @@ export const getDynamicRouteAssets = (
     const project = getProjectById(projectId);
 
     return {
-      images: project?.background ? [project.background] : [],
+      images: [
+        ...(project?.background ? [project.background] : []),
+        ...(project ? extractProjectImages(project) : []),
+      ],
       videos: [],
       videoKeys: project ? extractProjectVideoKeys(project) : [],
       priority: "high",
@@ -95,11 +99,34 @@ export const getRouteAssets = (
     config = ROUTE_ASSETS[route] || { images: [] };
   }
 
-  return [
-    ...(config.images || []),
-    ...(config.videos || []),
-    ...(config.fonts || []),
-  ];
+  return config.images || [];
+};
+
+/**
+ * How many images a route waits on before its transition completes. The rest
+ * are fetched straight after, without gating the fade.
+ */
+const BLOCKING_IMAGE_COUNT = 4;
+
+/** Images worth waiting for: roughly the first screenful. */
+export const getRouteBlockingAssets = (
+  route: string,
+  params?: Record<string, string>,
+): string[] => getRouteAssets(route, params).slice(0, BLOCKING_IMAGE_COUNT);
+
+/** Everything below the fold, warmed in the background. */
+export const getRouteDeferredAssets = (
+  route: string,
+  params?: Record<string, string>,
+): string[] => getRouteAssets(route, params).slice(BLOCKING_IMAGE_COUNT);
+
+/** Fire-and-forget warm-up; never awaited, never blocks a transition. */
+export const warmImages = (urls: string[]): void => {
+  urls.forEach((url) => {
+    const img = new Image();
+    img.decoding = "async";
+    img.src = url;
+  });
 };
 
 /**

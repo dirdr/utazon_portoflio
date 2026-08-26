@@ -7,12 +7,14 @@ interface GridImagesShowcaseProps {
   data: GridImagesShowcaseData;
   className?: string;
   border?: boolean;
+  priority?: boolean;
 }
 
 export const GridImagesShowcase = ({
   data,
   className,
   border = false,
+  priority = false,
 }: GridImagesShowcaseProps) => {
   const { images } = data;
 
@@ -24,6 +26,7 @@ export const GridImagesShowcase = ({
             <ShowcaseImage
               src={image.src}
               alt={image.alt}
+              priority={priority && index === 0}
               className="w-full aspect-video object-cover"
               frameClassName={cn(
                 border && SHOWCASE_STYLES.borderRadius,

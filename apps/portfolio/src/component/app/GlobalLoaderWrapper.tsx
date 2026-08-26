@@ -4,7 +4,12 @@ import { useAppLoading } from "../../contexts/AppLoadingContext";
 import { GlobalLoader } from "../loader/GlobalLoader";
 import { useBackgroundImageStore } from "../../hooks/useBackgroundImageStore";
 import { useCanvasReadiness } from "../../hooks/useCanvasReadiness";
-import { getRouteAssets, shouldPreloadRoute } from "../../config/routeAssets";
+import {
+  getRouteBlockingAssets,
+  getRouteDeferredAssets,
+  warmImages,
+  shouldPreloadRoute,
+} from "../../config/routeAssets";
 import { isMobile } from "../../utils/mobileDetection";
 import { getBackgroundForRoute } from "../../config/routeBackgroundConfig";
 import { useState, useCallback, useEffect, useRef } from "react";
@@ -112,7 +117,10 @@ export const GlobalLoaderWrapper = ({
 
           // Verify route-specific cache URLs
           const shouldPreload = shouldPreloadRoute(location);
-          const cacheUrls = shouldPreload ? getRouteAssets(location) : [];
+          const cacheUrls = shouldPreload ? getRouteBlockingAssets(location) : [];
+    // Everything below the fold warms alongside the transition rather than
+    // gating it; the placeholders cover the gap if a fetch is still in flight.
+    if (shouldPreload) warmImages(getRouteDeferredAssets(location));
 
           if (cacheUrls.length > 0) {
             await verifyCacheUrls(cacheUrls);

@@ -1,6 +1,7 @@
 import { useCallback, useRef, useState, useEffect } from "react";
 import { useIntersectionPreloader } from "./useIntersectionPreloader";
 import { isMobile } from "../utils/mobileDetection";
+import { readAheadMargin } from "../utils/readAhead";
 import { useAssetPrefetch } from "../contexts/AssetPrefetchContext";
 
 interface ProjectAssets {
@@ -29,7 +30,7 @@ export const useProjectGridPreloader = (
   const {
     projectId,
     hasVideo = true,
-    rootMargin = "200px",
+    rootMargin = readAheadMargin(),
     threshold = 0.1,
   } = config;
 
