@@ -35,8 +35,6 @@ const ROUTE_BACKGROUNDS: Record<string, RouteBackgroundConfig> = {
 
 /**
  * Get background configuration for a route
- * @param route - The route path (e.g., '/projects')
- * @returns Background image URL or empty string for no background
  */
 export const getBackgroundForRoute = (route: string): string => {
   // Handle dynamic routes (e.g., /projects/some-project)

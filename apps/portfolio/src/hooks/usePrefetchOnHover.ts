@@ -2,53 +2,18 @@ import { useCallback, useRef } from "react";
 import { useAssetPrefetch } from "../contexts/AssetPrefetchContext";
 
 interface UsePrefetchOnHoverOptions {
-  /**
-   * Debounce delay in milliseconds
-   * @default 150
-   */
   debounceMs?: number;
-
-  /**
-   * Whether to enable prefetching
-   * @default true
-   */
   enabled?: boolean;
 }
 
 interface UsePrefetchOnHoverResult {
-  /**
-   * Call on mouse enter
-   */
   onMouseEnter: () => void;
-
-  /**
-   * Call on mouse leave
-   */
   onMouseLeave: () => void;
 }
 
 /**
- * Hook for debounced hover-based prefetching
- *
- * Prefetches project videos after 150ms hover delay
- * Cancels prefetch if user leaves before delay completes
- *
- * @param projectId - ID of project to prefetch
- * @param options - Configuration options
- * @returns Mouse event handlers
- *
- * @example
- * ```tsx
- * const Card = ({ projectId }) => {
- *   const { onMouseEnter, onMouseLeave } = usePrefetchOnHover(projectId);
- *
- *   return (
- *     <div onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
- *       {/* Card content *\/}
- *     </div>
- *   );
- * };
- * ```
+ * Prefetch a project's videos once a hover outlasts the debounce, so a cursor
+ * sweeping across the grid does not fire a request per card.
  */
 export function usePrefetchOnHover(
   projectId: string,

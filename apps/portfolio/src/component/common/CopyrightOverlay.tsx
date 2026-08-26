@@ -17,11 +17,6 @@ export interface CopyrightOverlayProps {
  *
  * Displays small white text at the bottom of the video
  * without any background, for a clean minimal look.
- *
- * @example
- * ```tsx
- * <CopyrightOverlay translationKey="copyright.videoCopyright" />
- * ```
  */
 export const CopyrightOverlay = ({
   translationKey,

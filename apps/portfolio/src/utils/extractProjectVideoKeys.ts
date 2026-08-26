@@ -58,9 +58,6 @@ function extractShowcaseVideoKeys(showcase: ShowcaseData): string[] {
 
 /**
  * Extract all backend video keys from a list of showcases
- *
- * @param showcases - Showcases to scan
- * @returns Array of unique video keys that require presigned URLs
  */
 export function extractShowcasesVideoKeys(showcases: ShowcaseData[]): string[] {
   const allKeys: string[] = [];
@@ -77,16 +74,6 @@ export function extractShowcasesVideoKeys(showcases: ShowcaseData[]): string[] {
  *
  * Filters only videos that require presigned URLs (backend videos)
  * Excludes local videos (starting with "/") and external URLs (starting with "http")
- *
- * @param project - Project object with showcases
- * @returns Array of unique video keys that require presigned URLs
- *
- * @example
- * ```ts
- * const project = getProjectById("fooh");
- * const keys = extractProjectVideoKeys(project);
- * // ["fooh/details1.mp4", "fooh/details2.mp4"]
- * ```
  */
 export function extractProjectVideoKeys(project: Project): string[] {
   if (!project.showcases || project.showcases.length === 0) {

@@ -3,43 +3,18 @@ import { apiClient } from "../services/api";
 import { presignedUrlCache } from "../services/PresignedUrlCache";
 
 interface UsePresignedVideoUrlResult {
-  /** The resolved video URL (presigned, local, or external) */
   url: string | null;
-  /** True while fetching presigned URL */
   loading: boolean;
-  /** Error if presigned URL fetch failed */
   error: Error | null;
-  /** Manually refresh the presigned URL */
   refresh: () => Promise<void>;
 }
 
 /**
- * Hook to manage presigned video URL lifecycle
+ * Resolve a video source to a playable URL.
  *
- * Handles three types of video sources:
- * - Local videos (starts with "/"): Returned as-is
- * - External URLs (starts with "http"): Returned as-is
- * - Backend videos (anything else): Fetches presigned URL from API
- *
- * Features:
- * - Automatic caching with expiration tracking
- * - Returns cached URL immediately if available
- * - Silent background fetching for better UX
- * - Clean error handling
- *
- * @param src - Video source path or URL
- * @returns Object with url, loading state, error state, and refresh function
- *
- * @example
- * ```tsx
- * const VideoPlayer = ({ src }) => {
- *   const { url, loading, error } = usePresignedVideoUrl(src);
- *
- *   if (loading) return <Skeleton />;
- *   if (error) return <ErrorMessage />;
- *   return <ReactPlayer url={url} />;
- * };
- * ```
+ * A leading "/" is a local file and a leading "http" is external; both pass
+ * through untouched. Anything else is an R2 object key and gets a presigned
+ * URL from the API, cached until it nears expiry.
  */
 export function usePresignedVideoUrl(
   src: string | null | undefined,
@@ -139,21 +114,7 @@ export function usePresignedVideoUrl(
 }
 
 /**
- * Utility function to prefetch presigned URLs for multiple videos
- * Useful for preloading videos before they're needed
- *
- * @param objectKeys - Array of R2 object keys to prefetch
- * @returns Promise that resolves when all URLs are fetched
- *
- * @example
- * ```tsx
- * useEffect(() => {
- *   prefetchPresignedUrls([
- *     "fooh/details.mp4",
- *     "dals/carousel/pirate.mp4"
- *   ]);
- * }, []);
- * ```
+ * Warm the presigned URL cache for several object keys at once.
  */
 export async function prefetchPresignedUrls(
   objectKeys: string[],

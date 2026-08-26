@@ -21,9 +21,6 @@ export type PrefetchPriority = "high" | "medium" | "low";
 interface AssetPrefetchContextType {
   /**
    * Prefetch presigned URLs for multiple video keys
-   * @param keys - Array of R2 object keys
-   * @param priority - Priority level (high/medium/low)
-   * @returns Promise that resolves when all URLs are fetched or cached
    */
   prefetchVideos: (
     keys: string[],
@@ -32,16 +29,11 @@ interface AssetPrefetchContextType {
 
   /**
    * Check if a video URL is already cached
-   * @param key - R2 object key
-   * @returns true if cached and not expired
    */
   isVideoCached: (key: string) => boolean;
 
   /**
    * Prefetch all videos for a specific project
-   * @param projectId - Project ID
-   * @param priority - Priority level
-   * @returns Promise that resolves when all project videos are fetched
    */
   prefetchProject: (
     projectId: string,

@@ -62,9 +62,6 @@ function warmVideo(url: string): Promise<void> {
  * frame for the leading showcases only. The page reveals in one go instead of
  * letting tiles pop in over a black background, without waiting on clips the
  * reader has not scrolled to yet.
- *
- * @param showcases - Showcases rendered on the page, in display order
- * @returns true once the leading clips are ready, errored, or timed out
  */
 export function useShowcaseMediaReady(showcases: ShowcaseData[]): boolean {
   const allKeys = useMemo(

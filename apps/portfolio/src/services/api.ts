@@ -42,8 +42,6 @@ class ApiClient {
 
   /**
    * Fetch a presigned URL for streaming video from R2 storage
-   * @param objectKey - The R2 object key (e.g., "fooh/details.mp4")
-   * @returns Presigned URL and expiration time in seconds
    */
   async getPresignedVideoUrl(
     objectKey: string,

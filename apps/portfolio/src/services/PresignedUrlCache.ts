@@ -15,9 +15,6 @@ class PresignedUrlCache {
 
   /**
    * Store a presigned URL with expiration tracking
-   * @param objectKey - The R2 object key (e.g., "fooh/details.mp4")
-   * @param url - The presigned URL from the API
-   * @param expiresIn - Expiration time in seconds from API response
    */
   set(objectKey: string, url: string, expiresIn: number): void {
     const now = Date.now();
@@ -32,8 +29,6 @@ class PresignedUrlCache {
 
   /**
    * Retrieve a cached presigned URL if it exists and hasn't expired
-   * @param objectKey - The R2 object key
-   * @returns The presigned URL or null if not cached or expired
    */
   get(objectKey: string): string | null {
     const cached = this.cache.get(objectKey);
@@ -52,8 +47,6 @@ class PresignedUrlCache {
 
   /**
    * Check if a cached URL has expired (with safety margin)
-   * @param objectKey - The R2 object key
-   * @returns True if expired or about to expire
    */
   isExpired(objectKey: string): boolean {
     const cached = this.cache.get(objectKey);
@@ -68,7 +61,6 @@ class PresignedUrlCache {
 
   /**
    * Remove a specific entry from the cache
-   * @param objectKey - The R2 object key
    */
   clear(objectKey: string): void {
     this.cache.delete(objectKey);
