@@ -230,11 +230,6 @@
     will-change: transform;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .skeleton::after {
-      animation: none;
-    }
-  }
 }
 
 /* One reveal for the whole showcase area, once its leading media is warm. */
@@ -253,22 +248,3 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .showcase-reveal {
-    animation: none;
-  }
-}
-
-/* Site-wide honouring of the OS "reduce motion" setting. Decorative motion is
-   neutralised rather than removed, so layout and JS sequencing (which is timer
-   driven, never transitionend driven) behave exactly the same. */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}

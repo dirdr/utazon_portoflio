@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 interface PageTransitionOverlayProps {
@@ -16,32 +16,55 @@ export const PageTransitionOverlay = ({
     "hidden" | "fading-in" | "visible" | "fading-out"
   >("hidden");
 
+  const visibleSinceRef = useRef(0);
+  const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  const fadeMs = duration / 2;
+  // Mirrors the router's black-screen floor, so a route that resolves instantly
+  // still reads as a deliberate fade rather than a flicker.
+  const minVisibleMs = duration / 3;
+
+  useEffect(() => {
+    const timers = timersRef.current;
+    return () => {
+      timers.forEach(clearTimeout);
+      timers.length = 0;
+    };
+  }, []);
+
   useEffect(() => {
     if (isTransitioning && phase === "hidden") {
       setPhase("fading-in");
 
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
+          visibleSinceRef.current = Date.now();
           setPhase("visible");
         });
       });
-    } else if (!isTransitioning && phase === "visible") {
-      setPhase("fading-out");
-
-      setTimeout(() => {
-        setPhase("hidden");
-      }, duration / 2);
+      return;
     }
-  }, [isTransitioning, phase, duration]);
+
+    if (!isTransitioning && phase === "visible") {
+      const held = Date.now() - visibleSinceRef.current;
+      const wait = Math.max(0, minVisibleMs - held);
+
+      const start = setTimeout(() => {
+        setPhase("fading-out");
+        const end = setTimeout(() => setPhase("hidden"), fadeMs);
+        timersRef.current.push(end);
+      }, wait);
+
+      timersRef.current.push(start);
+    }
+  }, [isTransitioning, phase, fadeMs, minVisibleMs]);
 
   useEffect(() => {
     if (phase === "visible") {
-      const timer = setTimeout(() => {
-        onFadeInComplete?.();
-      }, duration / 2);
+      const timer = setTimeout(() => onFadeInComplete?.(), fadeMs);
       return () => clearTimeout(timer);
     }
-  }, [phase, duration, onFadeInComplete]);
+  }, [phase, fadeMs, onFadeInComplete]);
 
   const isOpaque = phase === "visible";
   const isActive = phase !== "hidden";
@@ -52,7 +75,7 @@ export const PageTransitionOverlay = ({
   return createPortal(
     <div
       className="page-transition-overlay"
-      style={{ transitionDuration: `${duration / 2}ms` }}
+      style={{ transitionDuration: `${fadeMs}ms` }}
       data-active={isActive}
       data-opaque={isOpaque}
     />,

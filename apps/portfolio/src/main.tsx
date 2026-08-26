@@ -1,5 +1,4 @@
 import ReactDOM from "react-dom/client";
-import { MotionConfig } from "motion/react";
 import { ReactLenis } from "lenis/react";
 import "lenis/dist/lenis.css";
 import App from "./App.tsx";
@@ -62,19 +61,21 @@ ReactDOM.createRoot(rootElement).render(
     options={{
       wheelMultiplier: 1.2,
       touchMultiplier: 1.5,
+      // lenis 1.3.26 began honouring prefers-reduced-motion by default, which
+      // routes user scroll through scrollTo with lerp 1 and drops the easing.
+      // Motion is the point of this site, so it opts out deliberately rather
+      // than degrading to an instant-jump scroll.
+      respectReducedMotion: false,
     }}
   >
-    {/* "user" defers to the OS setting for every motion component. */}
-    <MotionConfig reducedMotion="user">
-      <AppLoadingProvider>
-        <CursorTrailProvider>
-          <CanvasReadinessProvider>
-            <GlobalLoaderWrapper>
-              <App />
-            </GlobalLoaderWrapper>
-          </CanvasReadinessProvider>
-        </CursorTrailProvider>
-      </AppLoadingProvider>
-    </MotionConfig>
+    <AppLoadingProvider>
+      <CursorTrailProvider>
+        <CanvasReadinessProvider>
+          <GlobalLoaderWrapper>
+            <App />
+          </GlobalLoaderWrapper>
+        </CanvasReadinessProvider>
+      </CursorTrailProvider>
+    </AppLoadingProvider>
   </ReactLenis>,
 );
