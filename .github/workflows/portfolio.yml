@@ -1,8 +1,11 @@
 name: Portfolio
 
+# push is main-only on purpose: a PR branch push already triggers the
+# pull_request run below, so listening on "**" here would run the whole
+# pipeline twice for every commit on a PR.
 on:
   push:
-    branches: ["**"]
+    branches: [main]
     paths:
       - "apps/portfolio/**"
       - ".github/workflows/portfolio.yml"
@@ -14,7 +17,8 @@ on:
 
 concurrency:
   group: portfolio-${{ github.ref }}
-  cancel-in-progress: true
+  # Never cancel a run on main: it may be midway through a Pages deploy.
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 defaults:
   run:
@@ -24,6 +28,7 @@ jobs:
   quality-checks:
     name: Quality Checks (Lint, Type-check, Build)
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       contents: read
     steps:
@@ -51,11 +56,22 @@ jobs:
       - name: Run type checking
         run: pnpm tsc --noEmit
 
-      - name: Build application (validation)
+      - name: Build application
         env:
           VITE_SITE_URL: https://integration.utazon.fr
           VITE_UTAZON_API_URL: ${{ secrets.VITE_UTAZON_API_URL }}
         run: pnpm run build
+
+      # Hand the built site to deploy-preview so it ships exactly what was
+      # checked here, rather than a second build of the same commit.
+      - name: Upload build output
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: portfolio-dist
+          path: apps/portfolio/dist
+          retention-days: 1
+          if-no-files-found: error
 
   deploy-preview:
     name: Deploy Preview
@@ -67,9 +83,9 @@ jobs:
       && github.event_name == 'push'
       && !startsWith(github.event.head_commit.message, 'chore: bump version')
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: read
-      deployments: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
@@ -86,14 +102,15 @@ jobs:
           cache: pnpm
           cache-dependency-path: apps/portfolio/pnpm-lock.yaml
 
+      # Installed for the pinned wrangler in devDependencies, not to rebuild.
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build application
-        env:
-          VITE_SITE_URL: https://integration.utazon.fr
-          VITE_UTAZON_API_URL: ${{ secrets.VITE_UTAZON_API_URL }}
-        run: pnpm run build
+      - name: Download build output
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: portfolio-dist
+          path: apps/portfolio/dist
 
       - name: Deploy to Cloudflare Pages (Preview)
         uses: cloudflare/wrangler-action@ebbaa1584979971c8614a24965b4405ff95890e0 # v4.0.0

@@ -1,8 +1,11 @@
 name: Backend
 
+# push is main-only on purpose: a PR branch push already triggers the
+# pull_request run below, so listening on "**" here would run the whole
+# pipeline twice for every commit on a PR.
 on:
   push:
-    branches: ["**"]
+    branches: [main]
     paths:
       - "apps/backend/**"
       - ".github/workflows/backend.yml"
@@ -14,7 +17,9 @@ on:
 
 concurrency:
   group: backend-${{ github.ref }}
-  cancel-in-progress: true
+  # Never cancel a run on main: it may be between the GHCR push and the
+  # IAC bump, which would leave the cluster on the previous image.
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 env:
   CARGO_TERM_COLOR: always
@@ -27,6 +32,7 @@ jobs:
   fmt:
     name: Format
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: read
     steps:
@@ -39,6 +45,7 @@ jobs:
   clippy:
     name: Clippy
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     permissions:
       contents: read
     steps:
@@ -49,11 +56,13 @@ jobs:
       - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
         with:
           workspaces: apps/backend
+          save-if: ${{ github.ref == 'refs/heads/main' }}
       - run: cargo clippy --all-targets --all-features -- -D warnings
 
   test:
     name: Test
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     permissions:
       contents: read
     steps:
@@ -62,11 +71,13 @@ jobs:
       - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
         with:
           workspaces: apps/backend
+          save-if: ${{ github.ref == 'refs/heads/main' }}
       - run: cargo test --verbose
 
   docker:
     name: Docker Build & Push
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     needs: [fmt, clippy, test]
     permissions:
