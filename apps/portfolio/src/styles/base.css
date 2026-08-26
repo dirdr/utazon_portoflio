@@ -27,6 +27,17 @@
     overflow-x: hidden;
   }
 
+  /* "hidden" forces the other axis to auto, making these scroll containers.
+     iOS Safari then clips fixed-position children of body, which is where the
+     page transition overlay is portalled. "clip" suppresses the same
+     horizontal scroll without establishing a scroll container. */
+  @supports (overflow: clip) {
+    html,
+    body {
+      overflow-x: clip;
+    }
+  }
+
   /* Anything the overlay or the page does not paint (rubber-band overscroll,
      a browser-chrome gap) then reads as black rather than exposing content.
      This colour reaches the canvas, which paints below every layer. */
