@@ -13,6 +13,10 @@ import { ANIMATION_CLASSES } from "../../constants/animations";
 import { OVERLAY_Z_INDEX } from "../../constants/overlayZIndex";
 import { isMobile } from "../../utils/mobileDetection";
 
+// Generous enough for a 4K clip on a cold cache; the outgoing video is
+// still playing while we wait, so this is not a visible stall.
+const READY_TIMEOUT_MS = 10000;
+
 export interface VideoBackgroundRef {
   startVideo: () => void;
   setMuted: (muted: boolean) => void;
@@ -190,31 +194,34 @@ export const VideoBackground = forwardRef<
               nextVideo.removeEventListener("error", handleError);
               if (timer) clearTimeout(timer);
             };
+            const settle = (ok: boolean) => {
+              if (settled) return;
+              settled = true;
+              cleanup();
+              if (ok) resolve(undefined);
+              else reject(new Error("Video load failed"));
+            };
+            // Wait for HAVE_CURRENT_DATA rather than canplaythrough, which
+            // mobile Safari often withholds. Never settle without a decoded
+            // frame: this layer gets faded in immediately afterwards, and
+            // revealing an empty element shows a black screen.
             const handleReady = () => {
-              if (settled) return;
-              settled = true;
-              cleanup();
-              resolve(undefined);
+              if (nextVideo.readyState >= 2) settle(true);
             };
-            const handleError = () => {
-              if (settled) return;
-              settled = true;
-              cleanup();
-              reject(new Error("Video load failed"));
-            };
+            const handleError = () => settle(false);
 
-            // Resolve on HAVE_CURRENT_DATA rather than canplaythrough, which
-            // mobile Safari often withholds. The caller awaits this before
-            // swapping layers, so the old code could hang the intro forever;
-            // the timeout guarantees the sequence always moves on.
-            timer = setTimeout(handleReady, 3000);
+            // A cap so the sequence can never hang, but it still refuses to
+            // swap in a frameless layer; the caller falls back to playing the
+            // source on the primary element instead.
+            timer = setTimeout(
+              () => settle(nextVideo.readyState >= 2),
+              READY_TIMEOUT_MS,
+            );
 
             nextVideo.addEventListener("loadeddata", handleReady);
             nextVideo.addEventListener("canplay", handleReady);
             nextVideo.addEventListener("error", handleError, { once: true });
             nextVideo.load();
-
-            if (nextVideo.readyState >= 2) handleReady();
           });
 
           await nextVideo.play();
