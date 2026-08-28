@@ -37,7 +37,7 @@
     "three": "0.185.1",
     "three-stdlib": "2.36.1",
     "wouter": "3.9.0",
-    "zustand": "5.0.14"
+    "zustand": "5.0.15"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
